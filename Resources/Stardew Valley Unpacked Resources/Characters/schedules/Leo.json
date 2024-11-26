@@ -1,0 +1,6 @@
+{
+  "rain": "900 IslandHut 7 7 0/1100 IslandEast 21 11 2/1400 IslandHut 7 9 2 square_3_3/1700 IslandHut 6 6 0/1900 IslandHut 4 8 0/2100 IslandHut 11 10 1 leo_sleep",
+  "Tue": "900 IslandHut 7 7 0/1030 IslandSouth 38 31 2/1330 IslandEast 7 44 2/1700 IslandNorth 53 71 2/2000 IslandHut 11 10 1 leo_sleep",
+  "Sun": "900 IslandHut 7 7 0/930 IslandShrine 21 23 2/1400 IslandEast 21 11 2/1700 IslandHut 6 6 0/2100 IslandHut 11 10 1 leo_sleep",
+  "spring": "900 IslandHut 7 7 0/1030 IslandEast 21 11 2/1200 IslandSouth 7 9 2/1500 IslandNorth 14 15 0/2000 IslandHut 11 10 1 leo_sleep"
+}

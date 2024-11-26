@@ -1,0 +1,22 @@
+{
+  "RandomNegativeItemNoun": "szemét#ócska#béna#gagyi",
+  "RandomPositiveAdjective_Child": "menő#mókás#laza#jó#szép#szuper#nagyszerű",
+  "RandomPositiveAdjective_AdultMale": "érdekes#lenyűgöző#laza#mókás#nagyszerű#fantasztikus",
+  "RandomPositiveAdjective_AdultFemale": "csodálatos#lenyűgöző#szívmelengető#varázslatos#hihetetlen#szerethető#lélegzetelállító#örömteli",
+  "RandomPositiveAdjective_PlaceOrEvent": "csodálatos#lenyűgöző#szívmelengető#varázslatos#hihetetlen#szerethető#lélegzetelállító#örömteli",
+  "RandomDeliciousAdjective": "ízletes#finom#csodálatos#kielégítő#laktató#pompás#étvágygerjesztő#elbűvölő",
+  "RandomDeliciousAdjective_Child": "fini",
+  "RandomNegativeFoodAdjective_Child": "undi",
+  "RandomNegativeFoodAdjective_Polite": "...érdekes#...szokatlan#...más#...eredeti",
+  "RandomNegativeFoodAdjective": "csúnya#undorító#visszataszító#hitvány#gyűlöletes#émelyítő#borzasztó#visszataszító#gyomorforgató#bűzös#förtelmes#orrfacsaró",
+  "RandomSlightlyPositiveFoodAdjective": "jó#ehető#finom",
+  "ChildTerm_Male": "fiú",
+  "ChildTerm_Female": "lány",
+  "Pronoun_Male": "fiú",
+  "Pronoun_Female": "lány",
+  "QuestionDialogue_Yes": "Igen",
+  "QuestionDialogue_No": "Nem",
+  "GenericPlayerTerm": "gazda",
+  "Possessive_Pronoun_Male": "ő",
+  "Possessive_Pronoun_Female": "ő"
+}

@@ -1,0 +1,11 @@
+{
+  "rain": "GOTO spring",
+  "GreenRain": "0 Saloon 6 23 2",
+  "SquidFest": "800 Trailer 15 4 2 pam_sit_down/1100 Beach 20 24 2 \"Strings\\1_6_Strings:SquidFest_Pam\"/2200 bed",
+  "DesertFestival_2": "610 Trailer 15 4 2 pam_sit_down/900 Desert 16 42 0 \"Strings\\1_6_Strings:DesertFestival_Pam\"/2430 bed",
+  "DesertFestival": "610 Trailer 15 4 2 pam_sit_down/720 BusStop 21 10 2/2450 Trailer 15 4 2 pam_sleep",
+  "spring_25": "800 Trailer 15 4 2 pam_sit_down/1130 Hospital 4 17 2 pam_sit_down \"Strings\\schedules\\Pam:spring_25.000\"/1330 Hospital 4 6 1 \"Strings\\schedules\\Pam:spring_25.001\"/1600 Saloon 7 18 1/2400 Trailer 15 4 2 pam_sleep",
+  "bus": "800 Trailer 15 4 2 pam_sit_down/830 BusStop 21 10 2/1700 Saloon 7 18 1/2400 Trailer 15 4 2 pam_sleep",
+  "spring": "800 Trailer 15 4 2 pam_sit_down/1200 JojaMart 6 19 1/1600 Saloon 7 18 1/2400 Trailer 15 4 2 pam_sleep",
+  "JojaMart_Replacement": "SeedShop 2 24 3"
+}

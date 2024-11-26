@@ -1,0 +1,22 @@
+{
+  "RandomNegativeItemNoun": "ordure#poubelle#vieillerie#cochonnerie#camelote",
+  "RandomPositiveAdjective_Child": "cool#drôle#soigné#sympa#habile#chouette#génial",
+  "RandomPositiveAdjective_AdultMale": "intéressant#excitant#soigné#drôle#sympa#chouette",
+  "RandomPositiveAdjective_AdultFemale": "merveilleuse#incroyable#réconfortante#irrésistible#incroyable#charmante#excitante#agréable",
+  "RandomPositiveAdjective_PlaceOrEvent": "merveilleux#incroyable#réconfortant#féerique#incroyable#charmant#exaltant#agréable",
+  "RandomDeliciousAdjective": "délicieux#savoureux#merveilleux#satisfaisant#exquis#succulent#appétissant#goûteux",
+  "RandomDeliciousAdjective_Child": "délicieux",
+  "RandomNegativeFoodAdjective_Child": "dégoûtant",
+  "RandomNegativeFoodAdjective_Polite": "... intéressant#... inhabituel#... différent#... atypique",
+  "RandomNegativeFoodAdjective": "mauvais#dégoûtant#ignoble#révoltant#écoeurant#horrible#répugnant#affreux#odieux#infect#horrible#nauséabond",
+  "RandomSlightlyPositiveFoodAdjective": "décent#bon#comestible",
+  "ChildTerm_Male": "garçon",
+  "ChildTerm_Female": "fille",
+  "Pronoun_Male": "lui",
+  "Pronoun_Female": "elle",
+  "QuestionDialogue_Yes": "Oui",
+  "QuestionDialogue_No": "Non",
+  "GenericPlayerTerm": "Fermier",
+  "Possessive_Pronoun_Male": "son",
+  "Possessive_Pronoun_Female": "sa"
+}

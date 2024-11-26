@@ -1,0 +1,22 @@
+{
+  "RandomNegativeItemNoun": "basura#bazofia#porquería#mugre#asquerosidad",
+  "RandomPositiveAdjective_Child": "guay#divertido#excelente#fabuloso#fantástico#súper#genial",
+  "RandomPositiveAdjective_AdultMale": "interesante#emocionante#estupendo#divertido#genial#tremendo",
+  "RandomPositiveAdjective_AdultFemale": "maravillosa#sorprendente#conmovedora#mágica#increíble#encantadora#excitante#deliciosa",
+  "RandomPositiveAdjective_PlaceOrEvent": "maravilloso#sorprendente#conmovedor#mágico#increíble#encantador#excitante#delicioso",
+  "RandomDeliciousAdjective": "delicioso#muy rico#maravilloso#increíble#sustancioso#exquisito#apetitoso#delicioso",
+  "RandomDeliciousAdjective_Child": "rico",
+  "RandomNegativeFoodAdjective_Child": "asqueroso",
+  "RandomNegativeFoodAdjective_Polite": "... interesante#... distinto#... diferente#... poco convencional",
+  "RandomNegativeFoodAdjective": "desagradable#asqueroso#repugnante#horrible#vomitivo#nauseabundo#a cloaca#repulsivo#vomitivo#terrible#horrendo#pútrido",
+  "RandomSlightlyPositiveFoodAdjective": "pasable#bueno#comestible",
+  "ChildTerm_Male": "niño",
+  "ChildTerm_Female": "niña",
+  "Pronoun_Male": "él",
+  "Pronoun_Female": "ella",
+  "QuestionDialogue_Yes": "Sí",
+  "QuestionDialogue_No": "No",
+  "GenericPlayerTerm": "granjero^granjera",
+  "Possessive_Pronoun_Male": "su",
+  "Possessive_Pronoun_Female": "su"
+}

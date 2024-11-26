@@ -1,0 +1,22 @@
+{
+  "RandomNegativeItemNoun": "spazzatura#immondizia#robaccia#schifezza#porcheria",
+  "RandomPositiveAdjective_Child": "forte#divertente#in gamba#come si deve#eccezionale#super#incredibile",
+  "RandomPositiveAdjective_AdultMale": "interessante#capace#bravo#divertente#abile#incredibile",
+  "RandomPositiveAdjective_AdultFemale": "meravigliosa#eccezionale#dolce#magica#incredibile#adorabile#divertente#deliziosa",
+  "RandomPositiveAdjective_PlaceOrEvent": "eccezionale#stupefacente#confortante#impagabile#incredibile#adorabile#entusiasmante#speciale",
+  "RandomDeliciousAdjective": "squisito#delizioso#stupendo#da acquolina#incantevole#sublime#appetitoso#magnifico",
+  "RandomDeliciousAdjective_Child": "buonissimo",
+  "RandomNegativeFoodAdjective_Child": "schifoso",
+  "RandomNegativeFoodAdjective_Polite": "...interessante#...particolare#...differente#...non convenzionale",
+  "RandomNegativeFoodAdjective": "tremendo#schifoso#disgustoso#terribile#rivoltante#vomitevole#orrendo#ripugnante#nauseabondo#marcio#orribile#putrido",
+  "RandomSlightlyPositiveFoodAdjective": "decente#mangiabile#passabile",
+  "ChildTerm_Male": "il bambino",
+  "ChildTerm_Female": "la bambina",
+  "Pronoun_Male": "chiamato",
+  "Pronoun_Female": "chiamata",
+  "QuestionDialogue_Yes": "Sì",
+  "QuestionDialogue_No": "No",
+  "GenericPlayerTerm": "tu della fattoria",
+  "Possessive_Pronoun_Male": "il suo",
+  "Possessive_Pronoun_Female": "il suo"
+}

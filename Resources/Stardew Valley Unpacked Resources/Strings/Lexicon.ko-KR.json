@@ -1,0 +1,22 @@
+{
+  "RandomNegativeItemNoun": "쓰레기#음식물 찌꺼기#오물#똥",
+  "RandomPositiveAdjective_Child": "착한#좋은#밝은#멋진",
+  "RandomPositiveAdjective_AdultMale": "재밌는#멋진#깔끔한#대단한#훌륭한",
+  "RandomPositiveAdjective_AdultFemale": "멋진#사랑스런#마음을 따뜻하게 해주는#굉장한#대단한#훌륭한",
+  "RandomPositiveAdjective_PlaceOrEvent": "사랑스런#멋진#마음을 따뜻하게 해주는#굉장한#마법 같은#사랑스런#놀라운#신나는",
+  "RandomDeliciousAdjective": "구수한#맛있는#만족스런#훌륭한#구미를 돋게 하는#기분 좋은",
+  "RandomDeliciousAdjective_Child": "맛난",
+  "RandomNegativeFoodAdjective_Child": "지독한",
+  "RandomNegativeFoodAdjective_Polite": "...신기한#...색다른#...특이한#...평범하진 않은",
+  "RandomNegativeFoodAdjective": "끔찍한#형편없는#더러운#구역질나는#역겨운#혐오스러운#악취나는",
+  "RandomSlightlyPositiveFoodAdjective": "괜찮은#나쁘지 않은#먹을만한",
+  "ChildTerm_Male": "남자아이",
+  "ChildTerm_Female": "여자아이",
+  "Pronoun_Male": "그의",
+  "Pronoun_Female": "그녀의",
+  "QuestionDialogue_Yes": "네",
+  "QuestionDialogue_No": "아니요",
+  "GenericPlayerTerm": "농부",
+  "Possessive_Pronoun_Male": "그의",
+  "Possessive_Pronoun_Female": "그녀의"
+}

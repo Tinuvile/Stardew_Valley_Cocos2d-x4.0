@@ -1,0 +1,5 @@
+{
+  "spring": "630 SandyHouse 2 5 2",
+  "DesertFestival": "630 SandyHouse 2 5 2/830 Desert 22 52 2 \"Strings\\1_6_Strings:DesertFestival_Sandy\"/2400 bed",
+  "fall_15": "MAIL ccVault/GOTO spring/630 SandyHouse 2 5 2/a1200 SandyHouse 3 5 1 \"Strings\\schedules\\Sandy:Sandy_Birthday_Greeting\"/1300 Desert 2 51 2 \"Strings\\schedules\\Sandy:Sandy_Birthday_Hangout\"/1500 Desert 11 18 0 \"Strings\\schedules\\Sandy:Sandy_Birthday_Lake\"/1700 Desert 7 33 2 \"Strings\\schedules\\Sandy:Sandy_Birthday_Bones\"/1800 Desert 25 30 2 \"Strings\\schedules\\Sandy:Sandy_Birthday_Hangout\"/1900 37 25 1 \"Strings\\schedules\\Sandy:Sandy_Birthday_Camel\"/2000 Desert 7 55 2 \"Strings\\schedules\\Sandy:Sandy_Birthday_Hangout\"/a2330 Desert 29 24 3 \"Strings\\schedules\\Sandy:Sandy_Birthday_Bye\"/2400 Desert 29 24 3 sandy_wave/2410 SandyHouse 2 5 2"
+}

@@ -1,0 +1,22 @@
+{
+  "RandomNegativeItemNoun": "çöp#yararsız#önemsiz#dökük#ıvır zıvır",
+  "RandomPositiveAdjective_Child": "havalı#eğlenceli#düzgün#güzel#şık#süper",
+  "RandomPositiveAdjective_AdultMale": "ilginç#heyecanlı#düzgün#eğlenceli#harika#müthiş",
+  "RandomPositiveAdjective_AdultFemale": "harika#şaşırtıcı#hoş#büyülü#inanılmaz#güzel#canlandırıcı#keyifli",
+  "RandomPositiveAdjective_PlaceOrEvent": "harika#şaşırtıcı#hoş#büyülü#inanılmaz#güzel#canlandırıcı#keyifli",
+  "RandomDeliciousAdjective": "lezzetli#leziz#harika#doyurucu#keyifli#nefis#şahane#tatlı",
+  "RandomDeliciousAdjective_Child": "lezzetli",
+  "RandomNegativeFoodAdjective_Child": "iğrenç",
+  "RandomNegativeFoodAdjective_Polite": "...ilginç#...olağan dışı#...farklı#...alışılmamış",
+  "RandomNegativeFoodAdjective": "pis#berbat#iğrenç#aşağılık#tiksindirici#bıktırıcı#korkunç#itici#bayıltıcı#rezalet#kokuşmuş#korkunç",
+  "RandomSlightlyPositiveFoodAdjective": "yeterli#iyi#yenilebilir",
+  "ChildTerm_Male": "oğlan",
+  "ChildTerm_Female": "kız",
+  "Pronoun_Male": "Ona",
+  "Pronoun_Female": "Ona",
+  "QuestionDialogue_Yes": "Evet",
+  "QuestionDialogue_No": "Hayır",
+  "GenericPlayerTerm": "çiftçi",
+  "Possessive_Pronoun_Male": "onun",
+  "Possessive_Pronoun_Female": "onun"
+}

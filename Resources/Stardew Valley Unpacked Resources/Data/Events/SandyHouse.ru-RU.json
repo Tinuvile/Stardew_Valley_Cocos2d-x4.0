@@ -1,0 +1,3 @@
+{
+  "67/m 10": "none/4 5/farmer 4 9 0 Sandy 2 5 2/skippable/move farmer 0 -2 0/emote Sandy 8/speak Sandy \"Это... Покупатель?\"/speed Sandy 4/move Sandy 2 0 2/speed Sandy 4/move Sandy 0 1 2/emote Sandy 16/speak Sandy \"Привет! Добро пожаловать в «Оазис Сэнди» !#$b#Эй, ты совсем как ${тот новенький фермер, о котором^та новая девица с фермы, о которой}$ мне Эмили писала!#$b#Значит... из долины Стардью снова ходит автобус!$h#$b#О, я так рада!$h\"/emote Sandy 32/move Sandy 0 -1 0/move Sandy -2 0 2/emote Sandy 32/end dialogue Sandy \"Заходи почаще, мне тут так скучно.\""
+}

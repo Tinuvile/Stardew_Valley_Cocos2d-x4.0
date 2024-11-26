@@ -1,0 +1,22 @@
+{
+  "RandomNegativeItemNoun": "lixo#porcaria#droga#cocô",
+  "RandomPositiveAdjective_Child": "legal#agradável#gentil#interessante#chique#especial#excelente",
+  "RandomPositiveAdjective_AdultMale": "interessante#divertido#dez#legal#ótimo#maravilhoso",
+  "RandomPositiveAdjective_AdultFemale": "maravilhosa#sensacional#tocante#encantadora#incrível#amável#de tirar o fôlego#linda",
+  "RandomPositiveAdjective_PlaceOrEvent": "maravilhosa#sensacional#tocante#encantadora#incrível#amável#de tirar o fôlego#linda",
+  "RandomDeliciousAdjective": "delicioso#gostoso#maravilhoso#satisfatório#perfeito#apetitoso#saboroso#delicioso",
+  "RandomDeliciousAdjective_Child": "gostoso",
+  "RandomNegativeFoodAdjective_Child": "nojento",
+  "RandomNegativeFoodAdjective_Polite": "... interessante#... incomum#... diferente#... pouco convencional",
+  "RandomNegativeFoodAdjective": "horrível#asqueroso#nojento#repugnante#hediondo#atroz#terrível#repulsivo#nauseante#péssimo#horrendo#podre",
+  "RandomSlightlyPositiveFoodAdjective": "decente#bom#comestível",
+  "ChildTerm_Male": "menino",
+  "ChildTerm_Female": "menina",
+  "Pronoun_Male": "ele",
+  "Pronoun_Female": "ela",
+  "QuestionDialogue_Yes": "Sim",
+  "QuestionDialogue_No": "Não",
+  "GenericPlayerTerm": "fazendeiroobj",
+  "Possessive_Pronoun_Male": "dele",
+  "Possessive_Pronoun_Female": "dela"
+}

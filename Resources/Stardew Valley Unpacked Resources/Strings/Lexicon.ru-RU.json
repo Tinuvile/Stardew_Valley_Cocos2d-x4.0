@@ -1,0 +1,22 @@
+{
+  "RandomNegativeItemNoun": "мусор#отбросы#дрянь#ерунда#помои",
+  "RandomPositiveAdjective_Child": "крутой#хороший#классный#замечательный#клевый#здоровский#отличный",
+  "RandomPositiveAdjective_AdultMale": "интересный#замечательный#хороший#прекрасный#отличный#потрясающий",
+  "RandomPositiveAdjective_AdultFemale": "чудесная#удивительная#приятная#волшебная#невероятная#чудная#головокружительная#дивная",
+  "RandomPositiveAdjective_PlaceOrEvent": "чудесная#удивительная#приятная#волшебная#невероятная#чудная#головокружительная#дивная",
+  "RandomDeliciousAdjective": "бесподобно#вкусно#чудесно#хорошо#сытно#отменно#аппетитно#чудно",
+  "RandomDeliciousAdjective_Child": "вкусно",
+  "RandomNegativeFoodAdjective_Child": "гадость",
+  "RandomNegativeFoodAdjective_Polite": "... интересно#... необычно#... уникально#... нестандартно",
+  "RandomNegativeFoodAdjective": "противно#мерзко#отвратительно#жалко#омерзительно#тошнотворно#ужасно#гадко#мерзостно#премерзко#ужасно#зловонно",
+  "RandomSlightlyPositiveFoodAdjective": "неплохо#хорошо#съедобно",
+  "ChildTerm_Male": "мальчик",
+  "ChildTerm_Female": "девочка",
+  "Pronoun_Male": "его",
+  "Pronoun_Female": "ее",
+  "QuestionDialogue_Yes": "Да",
+  "QuestionDialogue_No": "Нет",
+  "GenericPlayerTerm": "фермер",
+  "Possessive_Pronoun_Male": "его",
+  "Possessive_Pronoun_Female": "ее"
+}
