@@ -1,3 +1,8 @@
+/*
+做UI和做地图的同学自行修改一下200行的场景跳转函数GameBegin::menuNewCallback(Ref* pSender)
+*/
+
+
 #include "GameBeginUI.h"
 #include "CreateCharacterUI.h"
 
