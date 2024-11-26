@@ -9,8 +9,7 @@
  ****************************************************************************/
 
 #include "AppDelegate.h"
-#include "Player.h"
-#include "myhouse.h"
+#include "GameBeginUI.h"
 
  // #define USE_AUDIO_ENGINE 1   // 如果需要使用音频引擎，可以取消注释这一行
 
@@ -87,7 +86,7 @@ void AppDelegate::runScene(cocos2d::Director* director) {
   
 
     // 运行该场景一
-    director->runWithScene(myhouse::create());
+    director->runWithScene(GameBegin::create());
 
 }
 
