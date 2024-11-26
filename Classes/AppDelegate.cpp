@@ -23,7 +23,8 @@
  ****************************************************************************/
 
 #include "AppDelegate.h"
-#include "HelloWorldScene.h"
+#include "GameBeginUI.h"
+// #include "HelloWorldScene.h"
 
 // #define USE_AUDIO_ENGINE 1
 
@@ -54,7 +55,6 @@ AppDelegate::~AppDelegate()
 // it will affect all platforms
 void AppDelegate::initGLContextAttrs()
 {
-    // set OpenGL context attributes: red,green,blue,alpha,depth,stencil,multisamplesCount
     GLContextAttrs glContextAttrs = {8, 8, 8, 8, 24, 8, 0};
 
     GLView::setGLContextAttrs(glContextAttrs);
@@ -73,7 +73,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto glview = director->getOpenGLView();
     if(!glview) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-        glview = GLViewImpl::createWithRect("Stardew_Valley_Cocos2d-x4.0", cocos2d::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
+        // 调整窗口大小至mediumResolutionSize
+        glview = GLViewImpl::createWithRect("Stardew_Valley_Cocos2d-x4.0", cocos2d::Rect(0, 0, mediumResolutionSize.width, mediumResolutionSize.height));
 #else
         glview = GLViewImpl::create("Stardew_Valley_Cocos2d-x4.0");
 #endif
@@ -108,7 +109,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
 
     // create a scene. it's an autorelease object
-    auto scene = HelloWorld::createScene();
+    auto scene = GameBegin::createScene();
 
     // run
     director->runWithScene(scene);
