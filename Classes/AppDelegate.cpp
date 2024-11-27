@@ -83,10 +83,10 @@ void AppDelegate::runScene(cocos2d::Director* director) {
     // 获取当前视图的可见大小和原点位置
     auto visibleSize = Director::getInstance()->getVisibleSize();  // 获取屏幕可视区域的大小
     Vec2 origin = Director::getInstance()->getVisibleOrigin();  // 获取屏幕原点的位置（左下角）
-  
-
+    
+     
     // 运行该场景一
-    director->runWithScene(GameBegin::create());
+    director->runWithScene(BeginScene::create());
 
 }
 
