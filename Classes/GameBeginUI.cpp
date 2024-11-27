@@ -22,13 +22,13 @@ bool BeginScene::init()
 
 void BeginScene::playSplashAnimation()
 {
-    // 1. 加载精灵帧  
-    cocos2d::Vector<cocos2d::SpriteFrame*> animationFrames;
+    // 1. 加载精灵帧
+    cocos2d::Vector<cocos2d::SpriteFrame* >animationFrames1;
     for (int i = 2; i <= 7; ++i) {
         std::string frameName = "UIresource/some/fircat" + std::to_string(i) + ".png";
         auto frame = cocos2d::SpriteFrame::create(frameName, cocos2d::Rect(0, 0, 83, 67));
         if (frame) {
-            animationFrames.pushBack(frame);
+            animationFrames1.pushBack(frame);
         }
         else {
             CCLOG("Error loading frame: %s", frameName.c_str());
@@ -36,45 +36,71 @@ void BeginScene::playSplashAnimation()
     }
 
     // 2. 创建动画对象  
-    auto animation = cocos2d::Animation::createWithSpriteFrames(animationFrames, 0.1f); // 0.1秒为每帧的持续时间  
+    auto animation1 = cocos2d::Animation::createWithSpriteFrames(animationFrames1, 0.3f); // 0.3秒为每帧的持续时间  
 
     // 3. 创建精灵并播放动画  
     auto visibleSize = Director::getInstance()->getVisibleSize();
 
     // 使用第一帧创建精灵  
-    auto sprite = cocos2d::Sprite::createWithSpriteFrame(animationFrames.at(0));
+    auto sprite1 = cocos2d::Sprite::createWithSpriteFrame(animationFrames1.at(0));
 
     // 设定锚点为中心位置  
-    sprite->setAnchorPoint(cocos2d::Vec2(0.5f, 0.5f));
+    sprite1->setAnchorPoint(cocos2d::Vec2(0.5f, 0.5f));
 
-    // 确保初始位置在中心  
-    sprite->setPosition(visibleSize / 2);
-    this->addChild(sprite); // 添加到场景  
+    // 确定初始位置  
+    sprite1->setPosition(visibleSize.width / 2.5 - 170, visibleSize.height / 2.5);
+    this->addChild(sprite1); // 添加到场景  
+
+
+    //第二部分动画制作，类似第一部分
+
+    cocos2d::Vector<cocos2d::SpriteFrame*> animationFrames2;
+    std::string frameName1 = "UIresource/some/fircon2.png";
+    auto frame1 = SpriteFrame::create("UIresource/some/fircon2.png", Rect(0, 0, 110, 57));
+    auto frame2 = SpriteFrame::create("UIresource/some/fircon1.png", Rect(0, 0, 107, 54));
+
+    animationFrames2.pushBack(frame1);
+    animationFrames2.pushBack(frame2);
+    auto animation2 = cocos2d::Animation::createWithSpriteFrames(animationFrames2, 0.3f); // 0.3秒为每帧的持续时间  
+
+    auto sprite2 = cocos2d::Sprite::createWithSpriteFrame(animationFrames2.at(0));
+
+    sprite2->setAnchorPoint(cocos2d::Vec2(0.5f, 0.5f));
+
+    sprite2->setPosition(visibleSize.width / 2.5 + 250, visibleSize.height / 2 + 30);
+    this->addChild(sprite2); // 添加到场景  
+
+
 
     // 4. 使用动画播放  
-    auto animate = cocos2d::Animate::create(animation);
-    auto animateSequence = Sequence::create(
-        animate,
-        CallFunc::create([this, sprite]() {
+    auto animate1 = cocos2d::Animate::create(animation1);
+    auto animateSequence1 = Sequence::create(
+        animate1,
+        CallFunc::create([this, sprite1]() {
             // 确保在动画结束后仍保持在中心位置  
             auto visibleSize = Director::getInstance()->getVisibleSize();
-            sprite->setPosition(visibleSize / 2); // 确保精灵位置在屏幕中心  
+            sprite1->setPosition(visibleSize.width / 2.5 - 170, visibleSize.height / 2.5); // 确定精灵位置在原处  
             onAnimationComplete();
             }),
         nullptr
     );
+    auto animate2 = cocos2d::Animate::create(animation2);
+    auto repeatAnimate2 = Repeat::create(animate2, 3);
 
-    sprite->runAction(animateSequence); // 播放动画  
-
+    sprite1->setScale(3.0f);  // 设置整个动画的缩放
+    sprite2->setScale(3.0f);  // 设置整个动画的缩放
+    sprite1->runAction(animateSequence1); // 播放动画  
+    sprite2->runAction(repeatAnimate2); // 播放动画  
     // 添加日志以跟踪位置  
-    sprite->runAction(RepeatForever::create(Sequence::create(
+    sprite1->runAction(RepeatForever::create(Sequence::create(
         DelayTime::create(0.1),
-        CallFunc::create([sprite]() {
-            CCLOG("Current Position: %f, %f", sprite->getPositionX(), sprite->getPositionY());
+        CallFunc::create([sprite1]() {
+            CCLOG("Current Position: %f, %f", sprite1->getPositionX(), sprite1->getPositionY());
             }),
         nullptr
     )));
 }
+
 
 void BeginScene::onAnimationComplete()
 {
@@ -103,10 +129,10 @@ bool GameBegin::init()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
     // 创建菜单项  
-    auto BeginItem = createMenuItem("UIresource/start1.png", "UIresource/start1.png", CC_CALLBACK_1(GameBegin::menuNewCallback, this), visibleSize, origin, -180.0f);
-    auto LoadItem = createMenuItem("UIresource/load1.png", "UIresource/load1.png", CC_CALLBACK_1(GameBegin::menuNewCallback, this), visibleSize, origin, -85.0f);
-    auto coopItem = createMenuItem("UIresource/coop1.png", "UIresource/coop1.png", CC_CALLBACK_1(GameBegin::menuNewCallback, this), visibleSize, origin, 85.0f);
-    auto closeItem = createMenuItem("UIresource/quit1.png", "UIresource/quit1.png", CC_CALLBACK_1(GameBegin::menuCloseCallback, this), visibleSize, origin, 180.0f);
+    auto BeginItem = createMenuItem("UIresource/start1.png", "UIresource/start1.png", CC_CALLBACK_1(GameBegin::menuNewCallback, this), visibleSize.width, origin, -180.0f, -185.0f);
+    auto LoadItem = createMenuItem("UIresource/load1.png", "UIresource/load1.png", CC_CALLBACK_1(GameBegin::menuNewCallback, this), visibleSize.width, origin, -85.0f, -37.0f);
+    auto coopItem = createMenuItem("UIresource/coop1.png", "UIresource/coop1.png", CC_CALLBACK_1(GameBegin::menuNewCallback, this), visibleSize.width, origin, 85.0f, 37.0f);
+    auto closeItem = createMenuItem("UIresource/quit1.png", "UIresource/quit1.png", CC_CALLBACK_1(GameBegin::menuCloseCallback, this), visibleSize.width, origin, 180.0f, 185.0f);
 
     // 创建菜单  
     auto menu = Menu::create(BeginItem, LoadItem, coopItem, closeItem, nullptr);
@@ -123,12 +149,24 @@ bool GameBegin::init()
     return true;
 }
 
-MenuItemImage* GameBegin::createMenuItem(const std::string& normalImage, const std::string& selectedImage, const ccMenuCallback& callback, const Size& visibleSize, const Vec2& origin, float offsetX)
+MenuItemImage* GameBegin::createMenuItem(const std::string& normalImage, const std::string& selectedImage, const ccMenuCallback& callback, const float& Width, const Vec2& origin, float offsetX, const float& n_itemWidth)
 {
     auto item = MenuItemImage::create(normalImage, selectedImage, callback);
+    /*
+    //这里简单写一点自适应大小的写法，目前写法应该不会出错，但如果窗口过小会重叠。
+    //获取图片原始尺寸
+    Size itemSize = item->getContentSize();
+    // 获取屏幕可视区域的大小
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    // 设置图标的缩放比率
+    float scaleX = visibleSize.width / itemSize.width / 8;
+    float scaleY = visibleSize.height / itemSize.height / 8;
+    // 使用 setScale 来缩放图片
+    item->setScale(std::min(scaleX, scaleY));  // 保持宽高比
+    */
     if (item) {
         item->setScale(3.0f);
-        float x = origin.x + visibleSize.width / 2 + offsetX;
+        float x = origin.x + Width / 2 + offsetX + n_itemWidth;
         float y = origin.y + 100.0f;
         item->setPosition(Vec2(x, y));
     }
