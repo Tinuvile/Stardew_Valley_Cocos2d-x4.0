@@ -10,13 +10,19 @@
 class BeginScene : public cocos2d::Scene
 {
 public:
-    // implement the "static create()" method manually
-
+    // implement the "static create()" method manually  
     CREATE_FUNC(BeginScene);
-    void playSplashAnimation();
-    void onAnimationComplete();
-    virtual bool init();
 
+    static cocos2d::Scene* createScene();
+
+    // Initializes the scene  
+    virtual bool init() override;
+
+    // Plays the splash screen animation  
+    void playSplashAnimation();
+
+    // Called when the animation completes  
+    void onAnimationComplete();
 };
 
 #endif // __SPLASH_SCENE_H__
@@ -39,6 +45,14 @@ public:
 
     // implement the "static create()" method manually
     CREATE_FUNC(GameBegin);
+
+private:
+    // Helper methods  
+    cocos2d::MenuItemImage* createMenuItem(const std::string& normalImage, const std::string& selectedImage, const cocos2d::ccMenuCallback& callback, const cocos2d::Size& visibleSize, const cocos2d::Vec2& origin, float offsetX);
+    void addBackground(const cocos2d::Size& visibleSize, const cocos2d::Vec2& origin);
+    void addLogo(const cocos2d::Size& visibleSize, const cocos2d::Vec2& origin);
+    void addMouseListener(cocos2d::MenuItemImage* BeginItem, cocos2d::MenuItemImage* LoadItem, cocos2d::MenuItemImage* coopItem, cocos2d::MenuItemImage* closeItem);
+    void updateMenuItem(cocos2d::MenuItemImage* item, const cocos2d::Vec2& mousePos, const std::string& normalImage, const std::string& selectedImage);
 };
 
 #endif // __GameBegin_UI_H__

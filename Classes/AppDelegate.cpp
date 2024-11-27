@@ -88,7 +88,7 @@ void AppDelegate::runScene(cocos2d::Director* director) {
     
      
     // 运行该场景一
-    director->runWithScene(GameBegin::create());
+    director->runWithScene(BeginScene::create());
 
 }
 
