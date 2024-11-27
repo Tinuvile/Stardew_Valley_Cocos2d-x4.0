@@ -45,38 +45,42 @@ bool Town::init()
 
     // 创建并初始化 Label 来显示角色的位置
     _positionLabel = Label::createWithTTF("Position: (0, 0)", "fonts/Marker Felt.ttf", 24);
-    if (_positionLabel)
+   if (_positionLabel)
     {
-        _positionLabel->setPosition(Vec2(origin.x + 100, origin.y + visibleSize.height - 30));  // 设置位置
-        this->addChild(_positionLabel, 10);  // 将标签添加到场景中，层级为 2
+        _positionLabel->setPosition(Vec2(origin.x + 150, origin.y + visibleSize.height - 50));  // 设置位置
+        this->addChild(_positionLabel, 10);  
         _positionLabel->setScale(0.7f);
     }
 
     // 设置计时器标签
     _timerLabel = Label::createWithTTF("Timer: 60", "fonts/Marker Felt.ttf", 24);
-    _timerLabel->setPosition(Vec2(origin.x + 100, origin.y + visibleSize.height - 70));
+    _timerLabel->setPosition(Vec2(origin.x + 150, origin.y + visibleSize.height - 90));
     this->addChild(_timerLabel, 10);
 
+    // 设置任务领取处的标签
+    In_gettask = Sprite::create("opendoor.png");
+    this->addChild(In_gettask, 10);
+    In_gettask->setScale(0.5f);
+    In_gettask->setVisible(false);
 
     // 设置背景图片
-    auto background_real = Sprite::create("Townup.png");  // 场景 1 的背景图
+    auto background_real = Sprite::create("Town/Town.png");  // 场景 1 的背景图
     background_real->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
     this->addChild(background_real,1);
     background_real->setScale(0.7f);
 
 
     // 设置背景图片
-    auto background_up = Sprite::create("Townupmost.png");  // 场景 1 的背景图
+    auto background_up = Sprite::create("Town/Townup.png");  // 场景 1 的背景图
     background_up->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
     this->addChild(background_up, 7);
     background_up->setScale(0.7f);
  
 
-    auto background = Sprite::create("Town.png");
+    auto background = Sprite::create("Town/Town_path.png");
     this->addChild(background, 5);
     background->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
     background->setScale(0.7f);
-    background->setTag(1);
 
     Vec2 spritePosition = background->getPosition();   // 获取精灵的位置（中心点）
     CCLOG("spritePosition: (%f, %f)", spritePosition.x, spritePosition.y);
@@ -91,7 +95,7 @@ bool Town::init()
     CCLOG("leftBottomPosition: (%f, %f)", leftBottomPosition.x, leftBottomPosition.y);
 
     Image img;
-    if (img.initWithImageFile("Town.png"))
+    if (img.initWithImageFile("Town/Town_path.png"))
     {
         int width = img.getWidth();
         int height = img.getHeight();
@@ -127,7 +131,6 @@ bool Town::init()
     player1->setPosition(Vec2(visibleSize.width / 2 + 43, visibleSize.height / 2 - 72));  // 设置玩家初始位置
     player1->setScale(0.7f);
     player1->setAnchorPoint(Vec2(0.5f, 0.2f));
-    player1->setTag(2);
 
     // 计算背景精灵的缩放后范围
     float scaledWidth = background->getContentSize().width * background->getScaleX();
@@ -179,6 +182,13 @@ void Town::checkPlayerPosition(Player* player)
     // 更新计时器显示
     _timerLabel->setString("Timer: " + std::to_string(remainingTime / 60));
 
+    if (Get_Task.containsPoint(playerPos)) {
+        In_gettask->setPosition(Vec2(playerPos.x + 35, playerPos.y + 10));
+        In_gettask->setVisible(true);
+    }
+    else {
+        In_gettask->setVisible(false);
+    }
 
     // 遍历所有轮廓点，检查玩家是否接近某个轮廓点
     for (const auto& point : nonTransparentPixels)
