@@ -87,6 +87,7 @@ void AppDelegate::runScene(cocos2d::Director* director) {
   
 
     // 运行该场景一
+
     auto scene_town = Town::create();
     director->runWithScene(scene_town);
 

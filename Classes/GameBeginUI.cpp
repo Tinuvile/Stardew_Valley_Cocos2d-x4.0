@@ -1,10 +1,12 @@
 /*
-做UI和做地图的同学自行修改一下200行的场景跳转函数GameBegin::menuNewCallback(Ref* pSender)
+做UI和做地图的同学自行修改一下GameBeginUI.cpp文件200行的场景跳转函数GameBegin::menuNewCallback(Ref* pSender)
 */
 
 
 #include "GameBeginUI.h"
 #include "CreateCharacterUI.h"
+#include "Player.h"
+#include "myhouse.h"
 
 USING_NS_CC;
 
@@ -47,6 +49,7 @@ bool GameBegin::init()
     }
     else
     {
+        // 这里调整成根据窗口大小适应缩放
         float scaleFactor = 0.6f;  // 设置图标的缩放比率
         GameBegin->setScale(scaleFactor); // 进行缩放
 
@@ -196,11 +199,11 @@ bool GameBegin::init()
     return true;
 }
 
-// 新功能：跳转到新场景  
+// 跳转到新场景  
 void GameBegin::menuNewCallback(Ref* pSender)
 {
     // Director::getInstance()->replaceScene(CreateCharacter::createScene()); // 跳转到 CreateCharacterUI 场景@谭
-    // Director::getInstance()->replaceScene(主地图部分); // 进入到主地图
+    // Director::getInstance()->replaceScene(myhouse::create()); // 进入到主地图
 }
 
 void GameBegin::menuCloseCallback(Ref* pSender)
