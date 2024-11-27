@@ -6,7 +6,6 @@
 #include "GameBeginUI.h"
 #include "CreateCharacterUI.h"
 #include "Player.h"
-#include "myhouse.h"
 
 USING_NS_CC;
 

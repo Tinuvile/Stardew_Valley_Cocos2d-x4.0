@@ -71,7 +71,7 @@ bool Town::init()
 
 
     // ÉèÖÃ±³¾°Í¼Æ¬
-    auto background_up = Sprite::create("Town/Townup.png");  // ³¡¾° 1 µÄ±³¾°Í¼
+    auto background_up = Sprite::create("Town/Town_up.png");  // ³¡¾° 1 µÄ±³¾°Í¼
     background_up->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
     this->addChild(background_up, 7);
     background_up->setScale(0.7f);
