@@ -14,7 +14,7 @@ bool Player::init()
     }
 
     // 加载角色的图片
-    this->initWithFile("character1/player_stop.png");
+    this->initWithFile("character/player_stop.png");
 
     // 创建键盘事件监听器
     auto keyboardListener = EventListenerKeyboard::create();
@@ -50,14 +50,14 @@ void Player::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 
     float X = this->getPositionX();
     float Y = this->getPositionY();
-
+    
     // 判断按下的方向键，并更新角色的移动状态
     if (keyCode == EventKeyboard::KeyCode::KEY_UP_ARROW && !moveUp)  // 上箭头
     {
         moveUp = true;
 
         this->setPositionY(this->getPositionY() + speed);  // 只移动一次
-        this->setTexture("character1/player_up.png");
+        this->setTexture("character/player_up.png");
 
     }
     else if (keyCode == EventKeyboard::KeyCode::KEY_DOWN_ARROW && !moveDown)  // 下箭头
@@ -65,7 +65,7 @@ void Player::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
         moveDown = true;
 
         this->setPositionY(this->getPositionY() - speed);
-        this->setTexture("character1/player_down.png");
+        this->setTexture("character/player_down.png");
 
     }
     else if (keyCode == EventKeyboard::KeyCode::KEY_LEFT_ARROW && !moveLeft)  // 左箭头
@@ -73,7 +73,7 @@ void Player::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
         moveLeft = true;
 
         this->setPositionX(this->getPositionX() - speed);  // 只移动一次
-        this->setTexture("character1/player_left.png");
+        this->setTexture("character/player_left.png");
 
     }
     else if (keyCode == EventKeyboard::KeyCode::KEY_RIGHT_ARROW && !moveRight)  // 右箭头
@@ -81,7 +81,7 @@ void Player::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
         moveRight = true;
 
         this->setPositionX(this->getPositionX() + speed);  // 只移动一次
-        this->setTexture("character1/player_right.png");
+        this->setTexture("character/player_right.png");
 
     }
 }
@@ -92,21 +92,21 @@ void Player::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
     if (keyCode == EventKeyboard::KeyCode::KEY_UP_ARROW)  // 上箭头
     {
         moveUp = false;
-        this->setTexture("character1/player_stop.png");  // 切换到“下走”图像
+        this->setTexture("character/player_stop.png");  // 切换到“下走”图像
     }
     else if (keyCode == EventKeyboard::KeyCode::KEY_DOWN_ARROW)  // 下箭头
     {
         moveDown = false;
-        this->setTexture("character1/player_stop.png");  // 切换到“下走”图像
+        this->setTexture("character/player_stop.png");  // 切换到“下走”图像
     }
     else if (keyCode == EventKeyboard::KeyCode::KEY_LEFT_ARROW)  // 左箭头
     {
         moveLeft = false;
-        this->setTexture("character1/player_stop.png");  // 切换到“下走”图像
+        this->setTexture("character/player_stop.png");  // 切换到“下走”图像
     }
     else if (keyCode == EventKeyboard::KeyCode::KEY_RIGHT_ARROW)  // 右箭头
     {
         moveRight = false;
-        this->setTexture("character1/player_stop.png");  // 切换到“下走”图像
+        this->setTexture("character/player_stop.png");  // 切换到“下走”图像
     }
 }

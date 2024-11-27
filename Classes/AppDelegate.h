@@ -23,7 +23,7 @@
 
   /************************************ 全局变量声明区 ******************************************/
   // 设定游戏画面大小：1600, 1280
-static cocos2d::Size designResolutionSize = cocos2d::Size(1600, 1280);  // 设计分辨率
+static cocos2d::Size designResolutionSize = cocos2d::Size(1080, 720);  // 设计分辨率
 
 
 
