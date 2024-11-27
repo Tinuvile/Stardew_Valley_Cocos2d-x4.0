@@ -48,7 +48,7 @@ public:
 
 private:
     // Helper methods  
-    cocos2d::MenuItemImage* createMenuItem(const std::string& normalImage, const std::string& selectedImage, const cocos2d::ccMenuCallback& callback, const cocos2d::Size& visibleSize, const cocos2d::Vec2& origin, float offsetX);
+    cocos2d::MenuItemImage* createMenuItem(const std::string& normalImage, const std::string& selectedImage, const cocos2d::ccMenuCallback& callback, const float& Width, const cocos2d::Vec2& origin, float offsetX, const float& n_itemWidth);
     void addBackground(const cocos2d::Size& visibleSize, const cocos2d::Vec2& origin);
     void addLogo(const cocos2d::Size& visibleSize, const cocos2d::Vec2& origin);
     void addMouseListener(cocos2d::MenuItemImage* BeginItem, cocos2d::MenuItemImage* LoadItem, cocos2d::MenuItemImage* coopItem, cocos2d::MenuItemImage* closeItem);
