@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>F:\Stardew_Valley_Cocos2d-x4.0\build\Debug\ZERO_CHECK</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>F:\Stardew_Valley_Cocos2d-x4.0\build\Debug\SYNC_RESOURCE-Stardew_Valley_Cocos2d-x4.0</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>F:\Stardew_Valley_Cocos2d-x4.0\build\bin\Stardew_Valley_Cocos2d-x4.0\Debug\Stardew_Valley_Cocos2d-x4.0.exe</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>F:\Stardew_Valley_Cocos2d-x4.0\build\Debug\Test.exe</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles />
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
+</Project>
