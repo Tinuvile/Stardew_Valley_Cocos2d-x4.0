@@ -22,90 +22,55 @@ bool BeginScene::init()
 
 void BeginScene::playSplashAnimation()
 {
-    // 1. 加载精灵帧
-    cocos2d::Vector<cocos2d::SpriteFrame* >animationFrames1;
-    for (int i = 2; i <= 7; ++i) {
-        std::string frameName = "UIresource/some/fircat" + std::to_string(i) + ".png";
-        auto frame = cocos2d::SpriteFrame::create(frameName, cocos2d::Rect(0, 0, 83, 67));
-        if (frame) {
-            animationFrames1.pushBack(frame);
-        }
-        else {
-            CCLOG("Error loading frame: %s", frameName.c_str());
-        }
-    }
+    //动画制作
 
-    // 2. 创建动画对象  
-    auto animation1 = cocos2d::Animation::createWithSpriteFrames(animationFrames1, 0.3f); // 0.3秒为每帧的持续时间  
+    cocos2d::Vector<cocos2d::SpriteFrame*> animationFrames;
+    std::string frameName1 = "UIresource/hebing1.png";
+    auto frame1 = SpriteFrame::create("UIresource/hebing1.png", Rect(0, 0, 214, 67));
+    auto frame2 = SpriteFrame::create("UIresource/hebing2.png", Rect(0, 0, 220, 69));
+    auto frame3 = SpriteFrame::create("UIresource/hebing3.png", Rect(0, 0, 214, 67));
+    auto frame4 = SpriteFrame::create("UIresource/hebing4.png", Rect(0, 0, 220, 69));
+    auto frame5 = SpriteFrame::create("UIresource/hebing5.png", Rect(0, 0, 214, 67));
+    auto frame6 = SpriteFrame::create("UIresource/hebing6.png", Rect(0, 0, 220, 69));
+    animationFrames.pushBack(frame1);
+    animationFrames.pushBack(frame2);
+    animationFrames.pushBack(frame3);
+    animationFrames.pushBack(frame4);
+    animationFrames.pushBack(frame5);
+    animationFrames.pushBack(frame6);
+    auto animation = cocos2d::Animation::createWithSpriteFrames(animationFrames, 0.2f); // 0.2秒为每帧的持续时间  
 
-    // 3. 创建精灵并播放动画  
+    auto sprite = cocos2d::Sprite::createWithSpriteFrame(animationFrames.at(0));
+
+    sprite->setAnchorPoint(cocos2d::Vec2(0.5f, 0.5f));
+
     auto visibleSize = Director::getInstance()->getVisibleSize();
-
-    // 使用第一帧创建精灵  
-    auto sprite1 = cocos2d::Sprite::createWithSpriteFrame(animationFrames1.at(0));
-
-    // 设定锚点为中心位置  
-    sprite1->setAnchorPoint(cocos2d::Vec2(0.5f, 0.5f));
-
-    // 确定初始位置  
-    sprite1->setPosition(visibleSize.width / 2.5 - 170, visibleSize.height / 2.5);
-    this->addChild(sprite1); // 添加到场景  
-
-
-    //第二部分动画制作，类似第一部分
-
-    cocos2d::Vector<cocos2d::SpriteFrame*> animationFrames2;
-    std::string frameName1 = "UIresource/some/fircon2.png";
-    auto frame1 = SpriteFrame::create("UIresource/some/fircon2.png", Rect(0, 0, 110, 57));
-    auto frame2 = SpriteFrame::create("UIresource/some/fircon1.png", Rect(0, 0, 107, 54));
-
-    animationFrames2.pushBack(frame1);
-    animationFrames2.pushBack(frame2);
-    auto animation2 = cocos2d::Animation::createWithSpriteFrames(animationFrames2, 0.3f); // 0.3秒为每帧的持续时间  
-
-    auto sprite2 = cocos2d::Sprite::createWithSpriteFrame(animationFrames2.at(0));
-
-    sprite2->setAnchorPoint(cocos2d::Vec2(0.5f, 0.5f));
-
-    sprite2->setPosition(visibleSize.width / 2.5 + 250, visibleSize.height / 2 + 30);
-    this->addChild(sprite2); // 添加到场景  
-
-
+    sprite->setPosition(visibleSize.width / 2.5 + 150.0f , visibleSize.height / 2 );
+    this->addChild(sprite); // 添加到场景  
 
     // 4. 使用动画播放  
-    auto animate1 = cocos2d::Animate::create(animation1);
-    auto animateSequence1 = Sequence::create(
-        animate1,
-        CallFunc::create([this, sprite1]() {
+    auto animate = cocos2d::Animate::create(animation);
+    // 在动画完成后让精灵透明
+    auto fadeOut = FadeOut::create(1.0f); // 1秒逐渐消失
+    auto sequence1 = Sequence::create(animate, fadeOut, nullptr); // 动画完成后执行FadeOut
+    auto animateSequence = Sequence::create(
+        sequence1,
+        CallFunc::create([this, sprite]() {
             // 确保在动画结束后仍保持在中心位置  
             auto visibleSize = Director::getInstance()->getVisibleSize();
-            sprite1->setPosition(visibleSize.width / 2.5 - 170, visibleSize.height / 2.5); // 确定精灵位置在原处  
+            sprite->setPosition(visibleSize.width / 2.5 + 150.0f, visibleSize.height / 2); // 确定精灵位置在原处  
             onAnimationComplete();
             }),
         nullptr
     );
-    auto animate2 = cocos2d::Animate::create(animation2);
-    auto repeatAnimate2 = Repeat::create(animate2, 3);
-
-    sprite1->setScale(3.0f);  // 设置整个动画的缩放
-    sprite2->setScale(3.0f);  // 设置整个动画的缩放
-    sprite1->runAction(animateSequence1); // 播放动画  
-    sprite2->runAction(repeatAnimate2); // 播放动画  
-    // 添加日志以跟踪位置  
-    sprite1->runAction(RepeatForever::create(Sequence::create(
-        DelayTime::create(0.1),
-        CallFunc::create([sprite1]() {
-            CCLOG("Current Position: %f, %f", sprite1->getPositionX(), sprite1->getPositionY());
-            }),
-        nullptr
-    )));
+    sprite->setScale(3.0f);  // 设置整个动画的缩放
+    sprite->runAction(animateSequence); // 播放动画   
 }
 
 
 void BeginScene::onAnimationComplete()
 {
-    // 动画播放完后，切换到主菜单，并带过渡效果  
-    Director::getInstance()->replaceScene(TransitionFade::create(1.0f, GameBegin::createScene()));
+    Director::getInstance()->replaceScene(GameBegin::createScene());
 }
 
 Scene* GameBegin::createScene()
@@ -125,7 +90,14 @@ bool GameBegin::init()
         return false;
     }
 
+    // 动画播放完后，切换到主菜单
     auto visibleSize = Director::getInstance()->getVisibleSize();
+    auto layer = cocos2d::LayerColor::create(cocos2d::Color4B(255, 255, 255, 255),
+        visibleSize.width,
+        visibleSize.height);
+    this->addChild(layer, 5);
+    // 使用 fadeIn 动画，使层从透明到完全不透明
+    layer->runAction(cocos2d::FadeTo::create(2.0f, 0)); // 2秒内从透明到完全不透明
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
     // 创建菜单项  
