@@ -1,5 +1,5 @@
-#ifndef __NpcRelationship_H__
-#define __NpcRelationship_H__
+#ifndef NPC_RELATIONSHIP_H  
+#define NPC_RELATIONSHIP_H  
 
 #include <unordered_map>
 #include <string>
@@ -40,4 +40,4 @@ private:
 	static const int MAX_RELATIONSHIP = 100;
 };
 
-#endif
+#endif  // NPC_RELATIONSHIP_H
