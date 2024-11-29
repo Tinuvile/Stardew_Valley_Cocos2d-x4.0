@@ -10,7 +10,6 @@ static void problemLoading(const char* filename)
 {
     printf("Error while loading: %s\n", filename);
 }
-
 bool BeginScene::init()
 {
     if (!Scene::init())
@@ -56,9 +55,10 @@ void BeginScene::playSplashAnimation()
 
     // 4. 使用动画播放  
     auto animate = cocos2d::Animate::create(animation);
+    auto repeat = Repeat::create ( animate , 3 );  // 动画重复3次
     // 在动画完成后让精灵透明
     auto fadeOut = FadeOut::create(1.0f); // 1.0秒逐渐消失
-    auto sequence1 = Sequence::create(animate, fadeOut, nullptr); // 动画完成后执行FadeOut
+    auto sequence1 = Sequence::create(repeat, fadeOut, nullptr); // 动画完成后执行FadeOut
     auto animateSequence = Sequence::create(
         sequence1,
         CallFunc::create([this, sprite]() {
@@ -75,7 +75,6 @@ void BeginScene::playSplashAnimation()
 
 void BeginScene::onAnimationComplete()
 {
-    //Director::getInstance()->replaceScene(GameBegin::createScene());
     Director::getInstance()->replaceScene(NextScene::create());
 }
 
@@ -96,30 +95,36 @@ bool NextScene::init()
     this->addChild(layer, 5);
     // 使用 fadeIn 动画，使层从透明到完全不透明
     layer->runAction(cocos2d::FadeTo::create(2.0f, 0)); // 2秒内从透明到完全不透明
-    addBackground(visibleSize, origin);
-    addmoun_tree(visibleSize, origin);
+    addLogo_sec  (visibleSize , origin);
+    cloudsAni ( 1.0f );
+    this->schedule ( [this]( float dt ) {
+        cloudsAni ( dt );
+     } , 20.0f , "create_sprite_key" );
+    addfirstscene(visibleSize , origin);
     birdfly();
     return true;
 }
-void NextScene::addBackground(const Size& visibleSize, const Vec2& origin)
+
+void NextScene::addfirstscene(const cocos2d::Size& visibleSize, const cocos2d::Vec2& origin)
 {
-    //auto background = Sprite::create("Stardew Valley Unpacked Resources/LooseSprites/stardewPanorama.png");
-    auto background = Sprite::create("UIresource/background1.png");
+    //添加背景
+    auto background = Sprite::create ( "UIresource/background2.png" );
     if (background) {
-        float scaleX = visibleSize.width / background->getContentSize().width;
-        float scaleY = visibleSize.height / background->getContentSize().height;
-        float scaleFactor = std::max(scaleX, scaleY);
-        background->setScale(scaleFactor);
-        background->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
-        this->addChild(background, 0);
+        /*
+        float scaleX = visibleSize.width / background->getContentSize ().width;
+        float scaleY = visibleSize.height / background->getContentSize ().height;
+        float scaleFactor = std::max ( scaleX , scaleY );
+        background->setScale ( scaleFactor );
+        background->setPosition ( Vec2 ( visibleSize.width / 2 + origin.x , visibleSize.height / 2 + origin.y ) );
+        */
+        background->setContentSize ( Size ( visibleSize.width , visibleSize.height * 2 ) );
+        background->setPosition    ( Vec2 ( visibleSize.width / 2 + origin.x , origin.y + visibleSize.height ) );
+        this->addChild ( background , 0 );
     }
     else {
-        problemLoading("'background1.png'");
+        problemLoading ( "'background.png'" );
     }
-}
 
-void NextScene::addmoun_tree(const cocos2d::Size& visibleSize, const cocos2d::Vec2& origin)
-{
     auto mountain1 = Sprite::create("UIresource/mountainfront.png");
     auto mountain2 = Sprite::create("UIresource/mountainbehind.png");
     auto treeleft  = Sprite::create("UIresource/treeleft.png");
@@ -135,7 +140,7 @@ void NextScene::addmoun_tree(const cocos2d::Size& visibleSize, const cocos2d::Ve
         // 根据计算出的比例设置精灵的缩放
         mountain1->setScale(2 * scaleX); // 或者使用 setScale(scaleX, scaleY);
         mountain1->setPosition(Vec2(visibleSize.width / 2 + origin.x, origin.y + visibleSize.height * 0.25));
-        this->addChild(mountain1, 2);
+        this->addChild(mountain1, 3);
     }
     else {
         problemLoading("'mountain1.png'");
@@ -150,7 +155,7 @@ void NextScene::addmoun_tree(const cocos2d::Size& visibleSize, const cocos2d::Ve
         // 根据计算出的比例设置精灵的缩放
         mountain2->setScale(2 * scaleX);
         mountain2->setPosition(Vec2(visibleSize.width / 2 + origin.x - visibleSize.width * 0.05, origin.y + visibleSize.height * 0.35));
-        this->addChild(mountain2, 1);
+        this->addChild(mountain2, 2);
     }
     else {
         problemLoading("'mountain2.png'");
@@ -184,10 +189,10 @@ void NextScene::addmoun_tree(const cocos2d::Size& visibleSize, const cocos2d::Ve
         float scaleY = maxHeight / spriteSize.height;
         // 使用 setScale 来缩放图片
         treeright->setScale(std::min(scaleX, scaleY));  // 保持宽高比
-        // 设置锚点为左下角
+        // 设置锚点为右下角
         treeright->setAnchorPoint(Vec2(1, 0));
-        // 将精灵的位置设置为屏幕左下角
-        treeright->setPosition(Vec2(visibleSize.width, 0));
+        // 将精灵的位置设置为屏幕右下角
+        treeright->setPosition(Vec2(visibleSize.width + origin.x , 0));
         this->addChild(treeright, 4);
     }
     else {
@@ -214,7 +219,7 @@ void NextScene::birdfly()
     auto animate1 = cocos2d::Animate::create(animation1);
     auto animate2 = cocos2d::Animate::create(animation2);
     // 计算重复的次数，使总时间符合要求
-    float totalDuration = 5.0f;  // 设定总时间
+    float totalDuration = 4.5f;  // 设定总时间
     int repeatCount1 = totalDuration / animation1->getDuration();
     auto repeatedAction1 = Repeat::create(animate1, repeatCount1);
     int repeatCount2 = totalDuration / animation2->getDuration();
@@ -232,8 +237,10 @@ void NextScene::birdfly()
      auto spawnAction2 = Spawn::create(repeatedAction2, moveAction2, nullptr);
      auto sequence = Sequence::create(
          spawnAction1,
+         //鸟飞出屏幕后开始进行转场
          CallFunc::create([this, sprite1]() {
-         AnimationComplete(); }),
+             scenechangedown();
+              }),
          nullptr);
      sprite1->runAction(sequence); // 循环播放动画
      sprite2->runAction(spawnAction2);  // 循环播放动画
@@ -244,69 +251,122 @@ void NextScene::birdfly()
     this->addChild(sprite2, 3);
 }
 
-void  NextScene::AnimationComplete()
+void NextScene::addLogo_sec ( const Size& visibleSize , const Vec2& origin )
 {
-    Director::getInstance()->replaceScene(TransitionFade::create(2.0f, GameBegin::createScene()));
+    auto logo = Sprite::create ( "UIresource/title.png" );
+    if (logo) {
+        Size logoSize = logo->getContentSize ();
+        float maxWidth = visibleSize.width * 0.7f;
+        float maxHeight = visibleSize.height * 0.7f;
+        float scaleX = maxWidth / logoSize.width;
+        float scaleY = maxHeight / logoSize.height;
+        logo->setScale ( std::min ( scaleX , scaleY ) );
+        logo->setPosition( Vec2 ( visibleSize.width / 2 + origin.x , visibleSize.height / 4 * 2.5 + origin.y + visibleSize.height) );
+        this->addChild ( logo , 2 );
+    }
+    else {
+        problemLoading ( "'title.png'" );
+    }
 }
-/////////////////////
-//以下为GameBegin实现部分，用于实现主菜单界面
-Scene* GameBegin::createScene()
+void NextScene::cloudsAni ( float dt )
 {
-    return GameBegin::create();
-}
-
-
-bool GameBegin::init()
-{
-    if (!Scene::init())
-    {
-        return false;
+    auto visibleSize = Director::getInstance ()->getVisibleSize ();
+    Vec2 origin = Director::getInstance ()->getVisibleOrigin ();
+    auto cloud0 = Sprite::create ( "UIresource/Cloud.png" );
+    auto clouds = Sprite::create ( "UIresource/Clouds.png" );
+    if (cloud0) {
+        Size spriteSize = cloud0->getContentSize ();
+        // 计算缩放比例
+        float maxWidth = visibleSize.width * 0.6f;
+        float maxHeight = visibleSize.height * 0.6f;
+        float scaleX = maxWidth / spriteSize.width;
+        float scaleY = maxHeight / spriteSize.height;
+        // 使用 setScale 来缩放图片
+        cloud0->setScale ( std::min ( scaleX , scaleY ) );  // 保持宽高比
+        // 设置锚点为右下角
+        cloud0->setAnchorPoint ( Vec2 ( 1 , 0 ) );
+        // 将精灵的位置设置为屏幕右下角靠上一点靠右一点
+        cloud0->setPosition ( Vec2 ( visibleSize.width * 1.5 + origin.x , visibleSize.height / 1.8 + origin.y ) );
+        this->addChild ( cloud0 , 1 );
+    }
+    else {
+        problemLoading ( "'Cloud.png'" );
+    }
+    if (clouds) {
+        Size cloudsSize = clouds->getContentSize ();
+        float maxWidth = visibleSize.width * 1.1f;
+        float maxHeight = visibleSize.height * 1.1f;
+        float scaleX = maxWidth / cloudsSize.width;
+        float scaleY = maxHeight / cloudsSize.height;
+        clouds->setScale ( std::min ( scaleX , scaleY ) );
+        cloud0->setAnchorPoint ( Vec2 ( 1 , 0 ) );
+        clouds->setPosition ( Vec2 ( visibleSize.width * 1.8 + origin.x , visibleSize.height * 0.8 + origin.y + visibleSize.height ) );
+        this->addChild ( clouds , 1 );
+    }
+    else {
+        problemLoading ( "'Clouds.png'" );
     }
 
-    auto visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    // 添加背景和logo  
-    addBackground(visibleSize, origin);
-    addLogo(visibleSize, origin);
+    // 计算精灵移动的目标位置（屏幕的左侧）
+    auto moveTo_0 = cocos2d::MoveTo::create ( 50.0f , cocos2d::Vec2 ( 0 , cloud0->getPosition ().y ) );
+    auto moveTo_s = cocos2d::MoveTo::create ( 50.0f , cocos2d::Vec2 ( -visibleSize.width * 0.6 , clouds->getPosition ().y ) );
+    cloud0->runAction ( cocos2d::RepeatForever::create ( moveTo_0 ) );
+    clouds->runAction ( cocos2d::RepeatForever::create ( moveTo_s ) );
+}
+void NextScene::scenechangedown ()
+{
+    auto visibleSize = Director::getInstance ()->getVisibleSize ();
+    Vec2 origin = Director::getInstance ()->getVisibleOrigin ();
+    // 获取当前运行的场景
+    auto scene = Director::getInstance ()->getRunningScene ();
+
+    // 定义向下移动的位移量，需要向下移动整个可视区域
+    Vec2 moveDistance = Vec2 ( 0 , -visibleSize.height );
+
+    // 创建 MoveBy 动作，设置时间为 5 秒
+    auto moveAction = MoveBy::create ( 5.0f , moveDistance );
+
+    scene->runAction ( moveAction );
+
 
     // 创建菜单项  
-    auto BeginItem = createMenuItem("UIresource/start1.png", "UIresource/start1.png", CC_CALLBACK_1(GameBegin::menuNewCallback, this), origin, -visibleSize.width * 0.338);
-    auto LoadItem = createMenuItem("UIresource/load1.png", "UIresource/load1.png", CC_CALLBACK_1(GameBegin::menuNewCallback, this), origin, -visibleSize.width * 0.113);
-    auto coopItem = createMenuItem("UIresource/coop1.png", "UIresource/coop1.png", CC_CALLBACK_1(GameBegin::menuNewCallback, this),  origin, visibleSize.width * 0.113);
-    auto closeItem = createMenuItem("UIresource/quit1.png", "UIresource/quit1.png", CC_CALLBACK_1(GameBegin::menuCloseCallback, this), origin, visibleSize.width * 0.338);
+    auto BeginItem = createMenuItem ( "UIresource/start1.png" , "UIresource/start1.png" , CC_CALLBACK_1 ( NextScene::menuNewCallback , this ) , origin , -visibleSize.width * 0.338 );
+    auto LoadItem = createMenuItem ( "UIresource/load1.png" , "UIresource/load1.png" , CC_CALLBACK_1 ( NextScene::menuNewCallback , this ) , origin , -visibleSize.width * 0.113 );
+    auto coopItem = createMenuItem ( "UIresource/coop1.png" , "UIresource/coop1.png" , CC_CALLBACK_1 ( NextScene::menuNewCallback , this ) , origin , visibleSize.width * 0.113 );
+    auto closeItem = createMenuItem ( "UIresource/quit1.png" , "UIresource/quit1.png" , CC_CALLBACK_1 ( NextScene::menuCloseCallback , this ) , origin , visibleSize.width * 0.338 );
 
     // 使用延时和顺序动画来显示菜单项
-    auto delay1 = DelayTime::create(1.0f); // 1秒延迟
-    auto delay2 = DelayTime::create(1.0f); // 1秒延迟
-    auto delay3 = DelayTime::create(1.0f); // 1秒延迟
+    auto delay0 = DelayTime::create ( 5.0f ); // 5秒延迟
+    auto delay1 = DelayTime::create ( 1.0f ); // 1秒延迟
+    auto delay2 = DelayTime::create ( 1.0f ); // 1秒延迟
+    auto delay3 = DelayTime::create ( 1.0f ); // 1秒延迟
 
-    auto showBeginItem = FadeIn::create(1.0f);  // 开始按钮渐现
-    auto showLoadItem = FadeIn::create(1.0f);   // 加载按钮渐现
-    auto showCoopItem = FadeIn::create(1.0f);   // 合作按钮渐现
-    auto showCloseItem = FadeIn::create(1.0f);  // 退出按钮渐现
+    auto showBeginItem = FadeIn::create ( 0.5f );  // 开始按钮渐现
+    auto showLoadItem  = FadeIn::create ( 0.5f );   // 加载按钮渐现
+    auto showCoopItem  = FadeIn::create ( 0.5f );   // 合作按钮渐现
+    auto showCloseItem = FadeIn::create ( 0.5f );  // 退出按钮渐现
 
-    auto sequence1 = Sequence::create(showBeginItem, nullptr);         // sprite1 直接渐显
-    auto sequence2 = Sequence::create(delay1, showLoadItem, nullptr);  // sprite2 在等待 1 秒后渐显
-    auto sequence3 = Sequence::create(delay1, delay2, showCoopItem, nullptr); // sprite3 在等待 2 秒后渐显
-    auto sequence4 = Sequence::create(delay1, delay2, delay3, showCloseItem, nullptr); // sprite3 在等待 3 秒后渐显
+    auto sequence1 = Sequence::create ( delay0 , showBeginItem , nullptr );                             // BeginItem 最先渐显
+    auto sequence2 = Sequence::create ( delay0 , delay1 , showLoadItem , nullptr );                     // LoadItem 在等待 1 秒后渐显
+    auto sequence3 = Sequence::create ( delay0 , delay1 , delay2 , showCoopItem , nullptr );            // CoopItem 在等待 2 秒后渐显
+    auto sequence4 = Sequence::create ( delay0 , delay1 , delay2 , delay3 , showCloseItem , nullptr );  // CloseItem 在等待 3 秒后渐显
 
-    BeginItem->runAction(sequence1->clone());
-    LoadItem->runAction(sequence2->clone());
-    coopItem->runAction(sequence3->clone());
-    closeItem->runAction(sequence4->clone());
+    BeginItem->runAction ( sequence1->clone () );
+    LoadItem->runAction  ( sequence2->clone () );
+    coopItem->runAction  ( sequence3->clone () );
+    closeItem->runAction ( sequence4->clone () );
 
     // 创建菜单  
-    auto menu = Menu::create(BeginItem, LoadItem, coopItem, closeItem, nullptr);
-    menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 1);
+    auto menu = Menu::create ( BeginItem , LoadItem , coopItem , closeItem , nullptr );
+    menu->setPosition ( Vec2 ( 0 , visibleSize.height ) );
+    this->addChild ( menu , 3 );
 
     // 添加鼠标监听器  
-    addMouseListener(BeginItem, LoadItem, coopItem, closeItem);
-
-    return true;
+    addMouseListener ( BeginItem , LoadItem , coopItem , closeItem );
 }
 
-MenuItemImage* GameBegin::createMenuItem(const std::string& normalImage, const std::string& selectedImage, const ccMenuCallback& callback, const Vec2& origin, float offsetX)
+
+MenuItemImage* NextScene::createMenuItem(const std::string& normalImage, const std::string& selectedImage, const ccMenuCallback& callback, const Vec2& origin, float offsetX)
 {
     auto item = MenuItemImage::create(normalImage, selectedImage, callback);
     auto visibleSize = Director::getInstance()->getVisibleSize();
@@ -332,56 +392,36 @@ MenuItemImage* GameBegin::createMenuItem(const std::string& normalImage, const s
     return item;
 }
 
-void GameBegin::addBackground(const Size& visibleSize, const Vec2& origin)
-{
-    auto background = Sprite::create("UIresource/background2.png");
-    if (background) {
-        float scaleX = visibleSize.width / background->getContentSize().width;
-        float scaleY = visibleSize.height / background->getContentSize().height;
-        float scaleFactor = std::max(scaleX, scaleY);
-        background->setScale(scaleFactor);
-        background->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
-        this->addChild(background, 0);
-    }
-    else {
-        problemLoading("'Cloudy_Ocean.png'");
-    }
-}
-
-void GameBegin::addLogo(const Size& visibleSize, const Vec2& origin)
-{
-    auto logo = Sprite::create("UIresource/title.png");
-    if (logo) {
-        Size logoSize = logo->getContentSize();
-        float maxWidth = visibleSize.width * 0.7f;
-        float maxHeight = visibleSize.height * 0.7f;
-        float scaleX = maxWidth / logoSize.width;
-        float scaleY = maxHeight / logoSize.height;
-        logo->setScale(std::min(scaleX, scaleY));
-        logo->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 4 * 2.5 + origin.y));
-        this->addChild(logo, 1);
-    }
-    else {
-        problemLoading("'title.png'");
-    }
-}
-
-void GameBegin::addMouseListener(MenuItemImage* BeginItem, MenuItemImage* LoadItem, MenuItemImage* coopItem, MenuItemImage* closeItem)
+void NextScene::addMouseListener(MenuItemImage* BeginItem, MenuItemImage* LoadItem, MenuItemImage* coopItem, MenuItemImage* closeItem)
 {
     auto listener = EventListenerMouse::create();
     listener->onMouseMove = [this, BeginItem, LoadItem, coopItem, closeItem](EventMouse* event) {
         Vec2 mousePos = Vec2(event->getCursorX(), event->getCursorY());
 
         updateMenuItem(BeginItem, mousePos, "UIresource/start1.png", "UIresource/start2.png");
-        updateMenuItem(LoadItem, mousePos, "UIresource/load1.png", "UIresource/load2.png");
-        updateMenuItem(coopItem, mousePos, "UIresource/coop1.png", "UIresource/coop2.png");
-        updateMenuItem(closeItem, mousePos, "UIresource/quit1.png", "UIresource/quit2.png");
+        updateMenuItem(LoadItem,  mousePos, "UIresource/load1.png" , "UIresource/load2.png" );
+        updateMenuItem(coopItem,  mousePos, "UIresource/coop1.png" , "UIresource/coop2.png" );
+        updateMenuItem(closeItem, mousePos, "UIresource/quit1.png" , "UIresource/quit2.png" );
         };
-
+    listener->onMouseDown = [this , BeginItem , LoadItem , coopItem , closeItem]( EventMouse* event ) {
+        Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
+        if (BeginItem->getBoundingBox ().containsPoint ( mousePos )) {
+            menuNewCallback ( BeginItem );  // 如果点击的是 BeginItem，则调用回调
+        }
+        else if (LoadItem->getBoundingBox ().containsPoint ( mousePos )) {
+            menuNewCallback ( LoadItem );  // 如果点击的是 LoadItem，则调用回调
+        }
+        else if (coopItem->getBoundingBox ().containsPoint ( mousePos )) {
+            menuNewCallback ( coopItem );  // 如果点击的是 coopItem，则调用回调
+        }
+        else if (closeItem->getBoundingBox ().containsPoint ( mousePos )) {
+            menuCloseCallback( closeItem );  // 如果点击的是 closeItem，则调用回调
+        }
+    };
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
-void GameBegin::updateMenuItem(MenuItemImage* item, const Vec2& mousePos, const std::string& normalImage, const std::string& selectedImage)
+void NextScene::updateMenuItem(MenuItemImage* item, const Vec2& mousePos, const std::string& normalImage, const std::string& selectedImage)
 {
     Size itemSize = item->getContentSize();
     auto visibleSize = Director::getInstance()->getVisibleSize();
@@ -404,12 +444,12 @@ void GameBegin::updateMenuItem(MenuItemImage* item, const Vec2& mousePos, const 
 }
 
 // 跳转到新场景  
-void GameBegin::menuNewCallback(Ref* pSender)
+void NextScene::menuNewCallback(Ref* pSender)
 {
     Director::getInstance()->replaceScene(Town::create()); // 进入到主地图  
 }
 
-void GameBegin::menuCloseCallback(Ref* pSender)
+void NextScene::menuCloseCallback(Ref* pSender)
 {
     Director::getInstance()->end();
 }
