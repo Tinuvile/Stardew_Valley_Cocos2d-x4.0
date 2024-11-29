@@ -229,8 +229,8 @@ void NextScene::birdfly()
     int repeatCount2 = totalDuration / animation2->getDuration();
     auto repeatedAction2 = Repeat::create(animate2, repeatCount2);
     // 创建移动动作
-    auto moveAction1 = MoveBy::create(5.0f, Vec2(-visibleSize.width / 2, 0)); // 2秒内沿X轴移动
-    auto moveAction2 = MoveBy::create(5.0f, Vec2(-visibleSize.width / 2, 0)); // 2秒内沿X轴移动
+    auto moveAction1 = MoveBy::create(5.0f, Vec2(-visibleSize.width / 1.5, 0)); // 5秒内沿X轴移动
+    auto moveAction2 = MoveBy::create(5.0f, Vec2(-visibleSize.width / 1.5, 0)); // 5秒内沿X轴移动
     // 创建精灵并播放动画
      auto sprite1 = cocos2d::Sprite::createWithSpriteFrame(animFrames.at(0));
      auto sprite2 = cocos2d::Sprite::createWithSpriteFrame(animFrames.at(0));
