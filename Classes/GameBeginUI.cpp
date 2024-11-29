@@ -126,9 +126,13 @@ void NextScene::addfirstscene(const cocos2d::Size& visibleSize, const cocos2d::V
     }
 
     auto mountain1 = Sprite::create("UIresource/mountainfront.png");
+    mountain1->setTag ( 101 );
     auto mountain2 = Sprite::create("UIresource/mountainbehind.png");
+    mountain2->setTag ( 102 );
     auto treeleft  = Sprite::create("UIresource/treeleft.png");
+    treeleft->setTag (  103 );
     auto treeright = Sprite::create("UIresource/treeright.png");
+    treeright->setTag ( 104 );
     if (mountain1) {
         // 获取精灵的原始尺寸
         Size spriteSize = mountain1->getContentSize();
@@ -323,11 +327,24 @@ void NextScene::scenechangedown ()
     // 定义向下移动的位移量，需要向下移动整个可视区域
     Vec2 moveDistance = Vec2 ( 0 , -visibleSize.height );
 
-    // 创建 MoveBy 动作，设置时间为 5 秒
-    auto moveAction = MoveBy::create ( 5.0f , moveDistance );
+    // 创建 MoveBy 动作，设置时间为 8 秒
+    auto moveAction = MoveBy::create ( 8.0f , moveDistance );
 
-    scene->runAction ( moveAction );
 
+    auto mountain1 = this->getChildByTag ( 101 );
+    auto mountain2 = this->getChildByTag ( 102 );
+    auto treeleft = this->getChildByTag  ( 103 );
+    auto treeright = this->getChildByTag ( 104 );
+    auto moveDown1 = cocos2d::MoveBy::create ( 10.0f , cocos2d::Vec2 ( 0 , -visibleSize.height * 3 ) ); // 向下移动
+    auto moveDown2 = cocos2d::MoveBy::create ( 20.0f ,cocos2d::Vec2 ( 0 , -visibleSize.height * 3 ) );  // 向下移动
+    auto moveDown3 = cocos2d::MoveBy::create ( 8.0f , cocos2d::Vec2 ( 0 , -visibleSize.height * 3 ) );  // 向下移动
+    auto moveDown4 = cocos2d::MoveBy::create ( 8.0f , cocos2d::Vec2 ( 0 , -visibleSize.height * 3 ) );  // 向下移动
+
+    scene    ->runAction ( moveAction);
+    mountain1->runAction ( moveDown1 );
+    mountain2->runAction ( moveDown2 );
+    treeleft ->runAction ( moveDown3 );
+    treeright->runAction ( moveDown4 );
 
     // 创建菜单项  
     auto BeginItem = createMenuItem ( "UIresource/start1.png" , "UIresource/start1.png" , CC_CALLBACK_1 ( NextScene::menuNewCallback , this ) , origin , -visibleSize.width * 0.338 );
