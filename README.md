@@ -28,11 +28,18 @@
 * 完成中枢地图移动区域限制
 
 ### 2024/11/27
-* 开场动画与界面UI
+* 开场界面UI
 
 ### 2024/11/28
 * 角色人物关系类
 * 单元测试
+
+### 2024/11/29
+* 开场动画
+
+### 2024/11/30
+* 主角经济系统类
+* 鼠标事件类
 
 ## NpcRelationship接口
 
@@ -64,6 +71,40 @@ private:
 
     static const int MIN_RELATIONSHIP = -100; // 最小关系值  
     static const int MAX_RELATIONSHIP = 100;  // 最大关系值  
+};
+```
+## EconomicSystem接口与Item接口
+
+### 概述
+Item类中用于放置游戏中涉及到的所以可以买/卖的物品，根据需要和能找到的图片进行添加；EconomicSystem类用于管理主角的金币与买卖物品。
+
+### 类声明
+```cpp
+class EconomicSystem {
+public:
+    // 构造函数和析构函数  
+    EconomicSystem ();
+    ~EconomicSystem ();
+
+    // 增加金币的函数  
+    void addGold ( int amount );
+
+    // 减少金币的函数  
+    void subtractGold ( int amount );
+
+    // 读取拥有金币数量的函数  
+    int getGoldAmount () const;
+
+    // 购买函数  
+    void buyItem ( const string& itemName );
+
+    // 出售函数  
+    void sellItem ( const string& itemName );
+
+private:
+    // 保存金币数量  
+    int goldAmount;
+    Item itemManager;  // 创建 Item 对象  
 };
 ```
 
