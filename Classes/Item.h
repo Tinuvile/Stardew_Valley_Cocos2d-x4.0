@@ -1,23 +1,26 @@
-#ifndef ITEM_H  
-#define ITEM_H  
+#pragma once
+#include "cocos2d.h"
+#include <string>
 
-#include <unordered_map>  
-#include <string>  
-#include <stdexcept>  
-
-using namespace std;
-
+//抽象物品基类
 class Item {
+protected:
+    std::string name;
+    cocos2d::Sprite* icon;  //物品的图标创建的Sprite
+    int value;
+    bool usable;
 public:
-    // 构造函数  
-    Item ();
+    const int max_count_in_one_grid;
 
-    // 获取物品的价格  
-    int getPrice ( const string& itemName ) const;
+    Item ( const std::string& name , const std::string& icon_path , const int value = 1 , const int& num_limit = 99 );
 
-private:
-    // 物品价格表  
-    unordered_map<string , int> itemPrices;
+    virtual ~Item () {}
+
+
+    const std::string& GetName () const { return name; }
+    cocos2d::Sprite* GetIcon () const { return icon; }
+    const bool IsUsable () const { return usable; }
+    void SetUsable () { usable = true; }
+    void SetUnusable () { usable = false; }
+    virtual void Use () = 0;  // 每个物品的使用方法
 };
-
-#endif // ITEM_H

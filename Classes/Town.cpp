@@ -52,10 +52,11 @@ bool Town::init()
         _positionLabel->setScale(0.7f);
     }
 
+  
     // 设置计时器标签
     _timerLabel = Label::createWithTTF("Timer: 60", "fonts/Marker Felt.ttf", 24);
-    _timerLabel->setPosition(Vec2(origin.x + 150, origin.y + visibleSize.height - 90));
-    this->addChild(_timerLabel, 10);
+    _timerLabel->setPosition ( Vec2 ( origin.x + 150 , origin.y + visibleSize.height - 90 ) );
+    this->addChild ( _timerLabel , 10 );
 
     // 设置任务领取处的标签
     In_gettask = Sprite::create("opendoor.png");

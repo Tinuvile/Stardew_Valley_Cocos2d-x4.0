@@ -1,17 +1,10 @@
-#include "Item.h"  
+#include"Item.h"
 
-// 构造函数  
-Item::Item () {
-    // 初始化物品及其价格
-    // 示例 
-    itemPrices["Sword"] = 50;   // 剑的价格
-}
-
-// 获取物品的价格  
-int Item::getPrice ( const string& itemName ) const {
-    auto it = itemPrices.find ( itemName );
-    if (it != itemPrices.end ()) {
-        return it->second;
+Item::Item ( const std::string& name , const std::string& icon_path , const int value = 1 , const int& num_limit = 99 )
+    :name ( name ) , max_count_in_one_grid ( num_limit ) , value ( value ) , usable ( false ) {
+    icon = cocos2d::Sprite::create ( icon_path );
+    if (icon == nullptr) {
+        CCLOG ( "fail to create Sprite with file path:%s" , icon_path );
     }
-    throw invalid_argument ( "Item not found." );
+    icon->autorelease ();
 }
