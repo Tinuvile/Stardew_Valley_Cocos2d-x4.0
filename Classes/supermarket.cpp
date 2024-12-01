@@ -1,6 +1,6 @@
 #include "AppDelegate.h"
-#include "Town.h"
 #include "supermarket.h"
+#include "Town.h"
 #include "Player.h"
 #include "physics/CCPhysicsWorld.h"
 #include "ui/CocosGUI.h"
@@ -11,16 +11,14 @@ extern int remainingTime;
 extern Player* player1;
 extern Town* town;
 extern supermarket* seedshop;
-extern std::map <std::pair<std::string, Vec2>, bool> T_lastplace;
 
+supermarket::supermarket() {}
 
-Town::Town() {}
+supermarket::~supermarket() {}
 
-Town::~Town() {}
-
-bool Town::init()
+bool supermarket::init()
 {
-
+    
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
@@ -42,21 +40,26 @@ bool Town::init()
         _positionLabel->setScale(2.3f);
     }
 
+    // 初始化开门键
+    opendoor = Sprite::create("opendoor.png");
+    this->addChild(opendoor, 11);
+    opendoor->setVisible(false);
+
     // 设置背景图片
-    auto background_real = Sprite::create("Town/Town.png");
-    background_real->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
+    auto background_real = Sprite::create("supermarket/supermarket.png");
+    background_real->setPosition(Vec2(visibleSize.width / 2 + 1700, visibleSize.height / 2 + 370));
     this->addChild(background_real, 1);
-    background_real->setScale(1.7f);
+    background_real->setScale(6.7f);
 
-    auto background_up = Sprite::create("Town/Town_up.png");
-    background_up->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
+    auto background_up = Sprite::create("supermarket/supermarket_up.png");
+    background_up->setPosition(Vec2(visibleSize.width / 2 + 1700, visibleSize.height / 2 + 370));
     this->addChild(background_up, 7);
-    background_up->setScale(1.7f);
+    background_up->setScale(6.7f);
 
-    auto background = Sprite::create("Town/Town_path.png");
+    auto background = Sprite::create("supermarket/supermarket_path.png");
     this->addChild(background, 5);
-    background->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
-    background->setScale(1.7f);
+    background->setPosition(Vec2(visibleSize.width / 2 + 1700, visibleSize.height / 2 + 370));
+    background->setScale(6.7f);
 
 
     Vec2 spritePosition = background->getPosition();   // 获取精灵的位置（中心点）
@@ -71,7 +74,7 @@ bool Town::init()
    
 
     Image img;
-    if (img.initWithImageFile("Town/Town_path.png"))
+    if (img.initWithImageFile("supermarket/supermarket_path.png"))
     {
         int width = img.getWidth();
         int height = img.getHeight();
@@ -80,9 +83,9 @@ bool Town::init()
         unsigned char* data = img.getData();
 
         // 遍历所有像素，检查是否有内容（透明度大于0）
-        for (int y = 0; y < height; y = y + 8)
+        for (int y = 0; y < height; y = y + 4)
         {
-            for (int x = 0; x < width; x = x + 8)
+            for (int x = 0; x < width; x = x + 4)
             {
                 // 获取当前像素的 RGBA 值
                 int index = (y * width + x) * 4;  // 每个像素占用 4 个字节 (RGBA)
@@ -100,28 +103,8 @@ bool Town::init()
     }
 
 
-    // 初始化开门键
-    opendoor = Sprite::create("opendoor.png");
-    this->addChild(opendoor, 11);
-
-    // 恢复玩家的状态
-    if (player1)
-    {
-        for (auto& pair : T_lastplace) {
-            if (pair.second == true) {  // 检查 bool 值是否为 true
-                player1->setPosition(pair.first.second);
-                pair.second = false;
-            }
-        }
-        player1->speed = 1.5f;
-    }
-
     // 初始化角色并将其添加到场景
-    if (player1->getParent() == NULL) {
-        this->addChild(player1, 5);
-    }
-    player1->setScale(1.5f);
-    player1->setAnchorPoint(Vec2(0.5f, 0.2f));
+    this->addChild(player1, 5);
     player1->schedule([=](float dt) {
         player1->player1_move();
         }, 0.05f, "player1_move");
@@ -129,6 +112,10 @@ bool Town::init()
     player1->schedule([=](float dt) {
         player1->player_change();
         }, 0.3f, "player_change");
+    player1->setPosition(Vec2(visibleSize.width / 2 + 43, visibleSize.height / 2 - 101));  // 设置玩家初始位置
+    player1->setScale(3.1f);
+    player1->setAnchorPoint(Vec2(0.5f, 0.2f));
+    player1->speed = 2.5f;
 
     // 计算背景精灵的缩放后范围
     float scaledWidth = background->getContentSize().width * background->getScaleX();
@@ -141,26 +128,31 @@ bool Town::init()
     auto followAction = Follow::create(player1, followRect);
     this->runAction(followAction);
 
+
     // 定期更新玩家状态
     this->schedule([this](float dt) {
         this->checkPlayerPosition();  // 检查玩家是否接近轮廓点
         }, 0.01f, "check_position_key");
 
     auto listener = EventListenerMouse::create();
+
     listener->onMouseDown = [this](Event* event) {
        
         // 获取鼠标点击的位置
         auto mouseEvent = static_cast<EventMouse*>(event);
         Vec2 clickPos(mouseEvent->getCursorX(), mouseEvent->getCursorY());
         clickPos = this->convertToNodeSpace(clickPos);
+        // 调试输出鼠标位置
+        CCLOG("Mouse Position: (%f, %f)", clickPos.x, clickPos.y);
 
         // 判断点击位置是否在精灵范围内
         if (button != nullptr && button->getBoundingBox().containsPoint(clickPos)) {
+            CCLOG("Button clicked!");
             Director::getInstance()->end();
         }
         };
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, button);
 
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, button);
 
     // 设置键盘监听器
     auto listenerWithPlayer = EventListenerKeyboard::create();
@@ -169,7 +161,7 @@ bool Town::init()
             // 记录 Enter 键被按下
             if (keyCode == EventKeyboard::KeyCode::KEY_ENTER) {
                 isEnterKeyPressed = true;
-                CCLOG("Enter key pressed. ");
+                CCLOG("Enter key pressed.");
             }
         };
 
@@ -178,20 +170,21 @@ bool Town::init()
             // 释放 Enter 键时，设置为 false
             if (keyCode == EventKeyboard::KeyCode::KEY_ENTER) {
                 isEnterKeyPressed = false;
-                CCLOG("Enter key released. ");
+                CCLOG("Enter key released.");
             }
         };
 
     // 将监听器添加到事件分发器中
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listenerWithPlayer, this);
 
+
     return true;
 }
 
 
-Town* Town::create()
+supermarket* supermarket::create()
 {
-    Town* scene = new Town();
+    supermarket* scene = new supermarket();
     if (scene && scene->init())
     {
         scene->autorelease();
@@ -202,7 +195,7 @@ Town* Town::create()
 }
 
 // 检查玩家是否接近背景的轮廓点
-void Town::checkPlayerPosition()
+void supermarket::checkPlayerPosition()
 {
     // 获取玩家的位置
     Vec2 playerPos = player1->getPosition();
@@ -216,16 +209,17 @@ void Town::checkPlayerPosition()
 
 
     // 减少剩余时间
-    remainingTime = remainingTime--;
+    remainingTime--;
 
     // 更新计时器显示
     remainingTime--;
-    _timerLabel->setString("Timer: " + std::to_string(remainingTime / 60));
+    _timerLabel->setString("Timer: " + std::to_string(remainingTime / 600));
+
 
     // 更新标签位置
     float currentx = 0, currenty = 0;
-    if (playerPos.x <= -117) {
-        currentx = -117;
+    if (playerPos.x <= 743) {
+        currentx = 743;
     }
     else if (playerPos.x >= 1773) {
         currentx = 1773;
@@ -234,47 +228,39 @@ void Town::checkPlayerPosition()
         currentx = playerPos.x;
     }
 
-    if (playerPos.y >= 1498) {
-        currenty = 1498;
-    }
-    else if (playerPos.y <= -222) {
-        currenty = -222;
+    if (playerPos.y <= -82) {
+        currenty = -82;
     }
     else {
         currenty = playerPos.y;
     }
 
-    
-    _timerLabel->setPosition(currentx - 630, currenty + 570);
-    _positionLabel->setPosition(currentx - 570, currenty + 490);
-    button->setPosition(currentx + 730, currenty - 590);
+
+    _timerLabel->setPosition(currentx - 590, currenty + 570);
+    _positionLabel->setPosition(currentx - 530, currenty + 490);
+    button->setPosition(currentx + 690, currenty - 590);
    
     // 检查玩家是否进入目标区域，并且按下 Enter 键
-    if (Region_supermarket.containsPoint(playerPos)) {
+    if (Region_Out.containsPoint(playerPos)) {
         // 玩家进入目标区域
         opendoor->setVisible(true);
         opendoor->setPosition(playerPos.x + 110, playerPos.y + 30);
-        CCLOG("Player in target area");
+
 
         if (isEnterKeyPressed) {
-            for (auto& pair : T_lastplace) {
-                if (pair.first.first == "seedshop") {  // 检查 bool 值是否为 true
-                    pair.second = true;
-                }
-            }
             // 打印调试信息，检查 Enter 键的状态
             CCLOG("Player in target area, isEnterKeyPressed: %d", isEnterKeyPressed);
             // 调用场景切换逻辑
             player1->removeFromParent();
-            seedshop = supermarket::create();
-            Director::getInstance()->replaceScene(seedshop);
+            town = Town::create();
+            Director::getInstance()->replaceScene(town);
+          
         }
 
     }
     else {
         opendoor->setVisible(false);
-    }    
-        
+    }
 
     for (const auto& point : nonTransparentPixels)
     {
@@ -285,19 +271,22 @@ void Town::checkPlayerPosition()
         temp = playerPos;
         temp.x -= player1->speed;
         distance = temp.distance(point);
-        if (distance <= 17) {
+        if (distance <= 55) {
             player1->moveLeft = false;
+           
         }
         else {
             if (player1->leftpressed == false) {
                 player1->moveLeft = true;
             }
         }
-        
+
+
+
         temp = playerPos;
-        temp.y -= 10;
+        temp.y -= player1->speed;
         distance = temp.distance(point);
-        if (distance <= 15) {
+        if (distance <= 25) {
             player1->moveDown = false;
         }
         else {
@@ -307,9 +296,9 @@ void Town::checkPlayerPosition()
         }
 
         temp = playerPos;
-        temp.y += 10;
+        temp.y += player1->speed;
         distance = temp.distance(point);
-        if (distance <= 15) {
+        if (distance <= 45) {
             player1->moveUp = false;
         }
         else {
@@ -319,23 +308,22 @@ void Town::checkPlayerPosition()
         }
 
         temp = playerPos;
-        temp.x += 10;
+        temp.x += player1->speed;
         distance = temp.distance(point);
-        if (distance <= 15) {
+        if (distance <= 55) {
             player1->moveRight = false;
         }
-        else{
+        else {
             if (player1->rightpressed == false) {
                 player1->moveRight = true;
             }
         }
-       
+
     }
-    
+
+
 
 }
-
-
 
 
 

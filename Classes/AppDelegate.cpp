@@ -12,7 +12,7 @@
 #include "GameBeginUI.h"
 #include "Player.h"
 #include "Town.h"
-#include"GameBeginUI.h"
+#include "supermarket.h"
 
  // #define USE_AUDIO_ENGINE 1   // 如果需要使用音频引擎，可以取消注释这一行
 
@@ -22,6 +22,16 @@ using namespace cocos2d::experimental;  // 使用音频引擎的命名空间
 #endif
 
 USING_NS_CC;  // 使用cocos2d的命名空间
+
+/******************************** 全局变量声明区 ****************************************/
+int remainingTime = 60000;
+Player* player1 = nullptr;
+Town* town = NULL;
+supermarket* seedshop = NULL;
+std::map<std::pair<std::string, Vec2>, bool> T_lastplace;
+
+/****************************************************************************************/
+
 
 AppDelegate::AppDelegate() {
     // 构造函数：AppDelegate构造时会调用
@@ -82,15 +92,19 @@ bool AppDelegate::applicationDidFinishLaunching() {
 // 切换场景的函数
 void AppDelegate::runScene(cocos2d::Director* director) {
 
+    player1 = Player::create();
 
     // 获取当前视图的可见大小和原点位置
     auto visibleSize = Director::getInstance()->getVisibleSize();  // 获取屏幕可视区域的大小
     Vec2 origin = Director::getInstance()->getVisibleOrigin();  // 获取屏幕原点的位置（左下角）
   
-
-
-    // 运行该场景一
-    director->runWithScene(BeginScene::create());
+    std::pair<std::string, Vec2> key = { "initiation",Vec2(350,350)};
+    T_lastplace.insert(std::make_pair(key, true));
+    key = { "seedshop",Vec2(230,470) };
+    T_lastplace.insert(std::make_pair(key, false));
+    town = Town::create();
+    // 运行小镇场景
+    director->runWithScene(town);
 
 }
 

@@ -2,6 +2,8 @@
 
 USING_NS_CC;
 
+extern int remainingTime;
+
 Player::Player() : speed(10.0f) {}
 
 Player::~Player() {}
@@ -14,7 +16,7 @@ bool Player::init()
     }
 
     // 加载角色的图片
-    this->initWithFile("character/player_stop.png");
+    this->initWithFile("character1/player_down3.png");
 
     // 创建键盘事件监听器
     auto keyboardListener = EventListenerKeyboard::create();
@@ -28,7 +30,14 @@ bool Player::init()
     // 将监听器添加到事件派发器中
     _eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener, this);
 
-    
+    this->schedule([this](float dt) {
+        this->player1_move();
+        }, 0.05f, "player1_move");
+
+    this->schedule([this](float dt) {
+        this->player_change();
+        }, 0.3f, "player_change");
+
     return true;
 }
 
@@ -50,39 +59,25 @@ void Player::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 
     float X = this->getPositionX();
     float Y = this->getPositionY();
-    
+
     // 判断按下的方向键，并更新角色的移动状态
-    if (keyCode == EventKeyboard::KeyCode::KEY_UP_ARROW && !moveUp)  // 上箭头
+    if (keyCode == EventKeyboard::KeyCode::KEY_UP_ARROW && !uppressed)  // 上箭头
     {
-        moveUp = true;
-
-        this->setPositionY(this->getPositionY() + speed);  // 只移动一次
-        this->setTexture("character/player_up.png");
-
+        uppressed = true;
+        
     }
-    else if (keyCode == EventKeyboard::KeyCode::KEY_DOWN_ARROW && !moveDown)  // 下箭头
+    else if (keyCode == EventKeyboard::KeyCode::KEY_DOWN_ARROW && !downpressed)  // 下箭头
     {
-        moveDown = true;
-
-        this->setPositionY(this->getPositionY() - speed);
-        this->setTexture("character/player_down.png");
-
+      
+        downpressed = true;
     }
-    else if (keyCode == EventKeyboard::KeyCode::KEY_LEFT_ARROW && !moveLeft)  // 左箭头
+    else if (keyCode == EventKeyboard::KeyCode::KEY_LEFT_ARROW && !leftpressed)  // 左箭头
     {
-        moveLeft = true;
-
-        this->setPositionX(this->getPositionX() - speed);  // 只移动一次
-        this->setTexture("character/player_left.png");
-
+        leftpressed = true;
     }
-    else if (keyCode == EventKeyboard::KeyCode::KEY_RIGHT_ARROW && !moveRight)  // 右箭头
+    else if (keyCode == EventKeyboard::KeyCode::KEY_RIGHT_ARROW && !rightpressed)  // 右箭头
     {
-        moveRight = true;
-
-        this->setPositionX(this->getPositionX() + speed);  // 只移动一次
-        this->setTexture("character/player_right.png");
-
+        rightpressed = true;
     }
 }
 
@@ -91,22 +86,126 @@ void Player::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
     // 判断松开的方向键，并更新角色的移动状态
     if (keyCode == EventKeyboard::KeyCode::KEY_UP_ARROW)  // 上箭头
     {
-        moveUp = false;
-        this->setTexture("character/player_stop.png");  // 切换到“下走”图像
+        this->look_state = 0;
+        this->setTexture("character1/player_up3.png");
+        uppressed = false;
+       
     }
     else if (keyCode == EventKeyboard::KeyCode::KEY_DOWN_ARROW)  // 下箭头
     {
-        moveDown = false;
-        this->setTexture("character/player_stop.png");  // 切换到“下走”图像
+        this->look_state = 0;
+        this->setTexture("character1/player_down3.png");
+        downpressed = false;
+       
     }
     else if (keyCode == EventKeyboard::KeyCode::KEY_LEFT_ARROW)  // 左箭头
     {
-        moveLeft = false;
-        this->setTexture("character/player_stop.png");  // 切换到“下走”图像
+        this->look_state = 0;
+        this->setTexture("character1/player_down3.png");
+        leftpressed = false;
+        
     }
     else if (keyCode == EventKeyboard::KeyCode::KEY_RIGHT_ARROW)  // 右箭头
     {
-        moveRight = false;
-        this->setTexture("character/player_stop.png");  // 切换到“下走”图像
+        this->look_state = 0;
+        this->setTexture("character1/player_right3.png");
+        rightpressed = false;
+        
     }
 }
+
+void Player::player1_move() {
+
+    if (this->leftpressed && this->moveLeft) {
+
+        if (this->look_state == 0) {
+            this->look_state++;
+            return;
+        }
+        this->setPositionX(this->getPositionX() - speed);
+
+    }
+    else if (this->downpressed && this->moveDown) {
+
+        if (this->look_state == 0) {
+            this->look_state++;
+            return;
+        }
+        this->setPositionY(this->getPositionY() - speed);
+
+    }
+    else if (this->uppressed && this->moveUp) {
+        if (this->look_state == 0) {
+            this->look_state++;
+            return;
+        }
+        this->setPositionY(this->getPositionY() + speed);
+
+    }
+    else if (this->rightpressed && this->moveRight) {
+        if (this->look_state == 0) {
+            this->look_state++;
+            return;
+        }
+        this->setPositionX(this->getPositionX() + speed);
+
+    }
+
+}
+
+void Player::player_change() {
+
+    if (this->leftpressed && this->moveLeft) {
+
+        if (this->look_state % 2 == 1) {
+            this->look_state++;
+            this->setTexture("character1/player_left1.png");
+
+        }
+        else {
+            this->look_state++;
+            this->setTexture("character1/player_left2.png");
+        }
+
+    }
+    else if (this->downpressed && this->moveDown) {
+
+        if (this->look_state % 2 == 1) {
+            this->look_state++;
+            this->setTexture("character1/player_down1.png");
+
+        }
+        else {
+            this->look_state++;
+            this->setTexture("character1/player_down2.png");
+        }
+
+    }
+    else if (this->uppressed && this->moveUp) {
+
+        if (this->look_state % 2 == 1) {
+            this->look_state++;
+            this->setTexture("character1/player_up1.png");
+
+        }
+        else {
+            this->look_state++;
+            this->setTexture("character1/player_up2.png");
+        }
+
+    }
+    else if (this->rightpressed && this->moveRight) {
+
+        if (this->look_state % 2 == 1) {
+            this->look_state++;
+            this->setTexture("character1/player_right1.png");
+
+        }
+        else {
+            this->look_state++;
+            this->setTexture("character1/player_right2.png");
+        }
+
+    }
+}
+

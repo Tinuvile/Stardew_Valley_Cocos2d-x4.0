@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 #include "AppDelegate.h"
 
+USING_NS_CC;
 
 class Player : public cocos2d::Sprite
 {
@@ -11,7 +12,7 @@ public:
     Player();
     ~Player();
 
-    // 创建 Player 对象的工厂方法
+    // 创建 Player 对象的方法
     static Player* create();
 
     // 按键按下时触发的回调函数
@@ -23,10 +24,16 @@ public:
 
     bool moveLeft, moveDown, moveUp, moveRight;
 
-    Player* player;
+    bool leftpressed = false, downpressed = false, uppressed = false, rightpressed = false;
 
     // 角色的移动速度
     float speed;
+
+    int look_state = 0;
+
+    void player1_move();
+
+    void player_change();
 
 
 private:
