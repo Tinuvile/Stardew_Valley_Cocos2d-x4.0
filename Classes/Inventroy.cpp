@@ -45,7 +45,7 @@ bool Inventory::AddItem ( const Item& item , const int& add_num ) {
 	return remaining <= 0;
 }
 
-int Inventory::RemoveItem ( const int& position , const int& remove_num = 1 ) {
+int Inventory::RemoveItem ( const int& position , const int& remove_num ) {
 	auto it = package.find ( position );
 	if (it != package.end ()) {
 		if (it->second.second > remove_num) {

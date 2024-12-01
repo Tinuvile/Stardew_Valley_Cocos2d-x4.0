@@ -88,8 +88,6 @@ void AppDelegate::runScene(cocos2d::Director* director) {
     Vec2 origin = Director::getInstance()->getVisibleOrigin();  // 获取屏幕原点的位置（左下角）
   
 
-    auto game_begin = GameBegin::create();
-
 
     // 运行该场景一
     director->runWithScene(BeginScene::create());
