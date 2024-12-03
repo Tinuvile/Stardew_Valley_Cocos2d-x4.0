@@ -106,6 +106,8 @@ void AppDelegate::runScene(cocos2d::Director* director) {
     // 运行小镇场景
     director->runWithScene(town);
 
+    //director->runWithScene ( Town::create () );
+
 }
 
 // 当应用程序进入后台时调用

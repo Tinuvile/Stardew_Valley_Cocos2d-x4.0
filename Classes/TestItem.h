@@ -18,5 +18,3 @@ private:
     // 物品价格表  
     unordered_map<string , int> itemPrices;
 };
-
-#endif // ITEM_H

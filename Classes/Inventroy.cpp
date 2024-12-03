@@ -8,7 +8,7 @@ Inventory::~Inventory () {}
 
 bool Inventory::AddItem ( const Item& item ) {
 	for (auto& pair : package) {
-		if (pair.second.first->GetName () == item.GetName ()
+		if (pair.second.first->CanBeDepositTogether(item)
 			&& pair.second.second < item.max_count_in_one_grid) {
 			++pair.second.second;
 			return true;
@@ -16,7 +16,7 @@ bool Inventory::AddItem ( const Item& item ) {
 	}
 	int size = package.size ();
 	if (size < capacity) {
-		package[++size] = std::make_pair ( std::make_shared<Item> ( item ) , 1 );
+		package[++size] = std::make_pair ( item.GetCopy() , 1);
 		return true;
 	}
 	return false;
@@ -25,7 +25,7 @@ bool Inventory::AddItem ( const Item& item ) {
 bool Inventory::AddItem ( const Item& item , const int& add_num ) {
 	int remaining = add_num;
 	for (auto & pair : package) {
-		if (pair.second.first->GetName () == item.GetName ()
+		if (pair.second.first->CanBeDepositTogether ( item )
 			&& pair.second.second < item.max_count_in_one_grid) {
 			int space_left = item.max_count_in_one_grid - pair.second.second;
 			int to_add = std::min ( remaining , space_left );
@@ -40,7 +40,7 @@ bool Inventory::AddItem ( const Item& item , const int& add_num ) {
 	while (remaining > 0 && size < capacity) {
 		int to_add = std::min ( remaining , item.max_count_in_one_grid );
 		remaining -= to_add;
-		package[++size] = std::make_pair ( std::make_shared<Item> ( item ) , (to_add) );
+		package[++size] = std::make_pair ( item.GetCopy() , (to_add));
 	}
 	return remaining <= 0;
 }
@@ -77,6 +77,17 @@ std::shared_ptr<Item> Inventory::GetSelectedItem ()const {
 	return nullptr;
 }
 
+std::shared_ptr<Item> Inventory::GetSelectedItemCopy () {
+	if (selected_position >= 1 && selected_position <= kRowSize) {
+		auto it = package.find ( selected_position );
+		if (it != package.end ()) {
+			auto item_copy = it->second.first->GetCopy();
+			return item_copy;
+		}
+	}
+	return nullptr;
+}
+
 int Inventory::SetSelectedItem (const int new_position) {
 	if (new_position == selected_position) {
 		return 0;
@@ -100,3 +111,14 @@ int Inventory::SetSelectedItem (const int new_position) {
 	return -1;
 }
 
+void Inventory::DisplayPackageInCCLOG () {
+	CCLOG ( "PACKAGE_INFO\n" );
+	for (const auto& it : package) {
+		int position = it.first;
+		CCLOG ( "%s" , typeid(it.second.first).name() );
+		std::string name = it.second.first->GetName ();
+		int num = it.second.second;
+		int value = it.second.first->GetValue ();
+		CCLOG ( "pos: %d  name: %s num: %d value: %d\n" , position , name , num ,value);
+	}
+}

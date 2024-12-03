@@ -38,6 +38,9 @@ public:
 	//获取`selected_position`的Item
 	//未找到则返回nullptr
 	std::shared_ptr<Item> GetSelectedItem ()const;
+	//获取`selected_position`的Item的副本（用于如种子种植等需要获取多个不同Item实例的场景)
+	//未找到或拷贝失败则返回nullptr
+	std::shared_ptr<Item> GetSelectedItemCopy ();
 	//在`new_position`合法时，将`selected_position`设置为`new_position`
 	// 合法的`new_position`应当为在[1,kRowSize]间的整数（只能设置物品栏最顶一栏的位置为`selected_position`
 	//若原`selected_position`处有Item，更新其为unusable状态
@@ -54,4 +57,7 @@ public:
 		this->package = other.package;
 		return *this;
 	}
+
+	//向控制台输出Package信息，仅用于调试
+	void DisplayPackageInCCLOG ();
 };
