@@ -6,7 +6,6 @@ Item::Item ( const std::string& name , const std::string& icon_path , const int 
     if (icon == nullptr) {
         CCLOG ( "fail to create Sprite with file path:%s" , icon_path );
     }
-    icon->autorelease ();
 }
 
 Item::Item ( const Item& other )
