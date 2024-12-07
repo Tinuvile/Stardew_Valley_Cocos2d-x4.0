@@ -1,30 +1,21 @@
-#include"Item.h"
+#include "Item.h"
 
 Item::Item ( const std::string& name , const std::string& icon_path , const int value , const int& num_limit )
-    :name ( name ) , max_count_in_one_grid ( num_limit ) , value ( value ) , usable ( false ) {
-    icon = cocos2d::Sprite::create ( icon_path );
-    if (icon == nullptr) {
-        CCLOG ( "fail to create Sprite with file path:%s" , icon_path );
-    }
+    :name ( name ) , initial_pic ( icon_path ) , max_count_in_one_grid ( num_limit ) , value ( value ) , usable ( false ) {
 }
 
 Item::Item ( const Item& other )
-    : name ( other.name ) , max_count_in_one_grid ( other.max_count_in_one_grid ) , value ( other.value )
+    : name ( other.name ) , initial_pic ( other.initial_pic ) , max_count_in_one_grid ( other.max_count_in_one_grid ) , value ( other.value )
     , usable ( false ) {
-    icon = cocos2d::Sprite::createWithTexture ( other.GetIcon ()->getTexture () );
-    if (icon == nullptr) {
-        CCLOG ( "fail to create Sprite with other's Texture" );
-    }
-    icon->autorelease ();
 }
 
-void Item::SetIcon ( const std::string& file_source ) {
-    icon->setTexture ( file_source );
-}
+
 
 std::shared_ptr<Item> Item::GetCopy () const {
-    auto copy = std::make_shared<Item> ( *this );
+    auto copy = std::make_shared<Item> ( *this );  // 使用Item的复制构造函数
     return copy;
 }
 
-void Item::Use () {}
+void Item::Use () {
+    // 物品的使用逻辑（根据实际需要实现）
+}

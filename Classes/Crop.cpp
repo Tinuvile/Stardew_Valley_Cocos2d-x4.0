@@ -1,13 +1,16 @@
 #include"Crop.h"
 
-Crop::Crop ( const std::string& crop_name , const std::string& icon_path , const std::string& season ,
+Crop::Crop ( const std::string& crop_name , const std::string& initial_pic ,
+		const std::string& growing_pic , const std::string& mature_pic , const std::string& season ,
 		const Phase& current_phase , const int value , const int growth_progress ,
 		const bool is_harvestable , const int mature_limit )
-	:Item ( crop_name , icon_path , value ) , season ( season ) , mature_needed ( mature_limit ) , phase ( current_phase ) ,
+	:Item ( crop_name , initial_pic , value ) , growing_pic ( growing_pic ) , mature_pic ( mature_pic ) ,
+	season ( season ) , mature_needed ( mature_limit ) , phase ( current_phase ) ,
 	growth_progress ( growth_progress ) , harvestable ( is_harvestable ) , watered ( false ) {}
 
 Crop::Crop ( const Crop& other )
-	:Item ( other ) , season ( other.season ) , mature_needed ( other.mature_needed ) , phase ( other.phase ) ,
+	:Item ( other ) , growing_pic(other.growing_pic), mature_pic(other.mature_pic),
+	season ( other.season ) , mature_needed ( other.mature_needed ) , phase ( other.phase ) ,
 	growth_progress ( other.growth_progress ) , harvestable ( other.harvestable ) , watered ( other.watered ) {}
 
 void Crop::Water () {
@@ -17,6 +20,11 @@ void Crop::Water () {
 }
 
 std::shared_ptr<Item> Crop::GetCopy () const {
+	auto copy = std::make_shared<Crop> ( *this );
+	return copy;
+}
+
+std::shared_ptr<Crop> Crop::GetCropCopy () const {
 	auto copy = std::make_shared<Crop> ( *this );
 	return copy;
 }

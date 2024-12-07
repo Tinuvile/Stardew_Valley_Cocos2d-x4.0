@@ -23,8 +23,13 @@ private:
     bool harvestable;         //是否可收获
     bool watered;             //当天是否浇过水 每天更新为false
 public:
+    //存放作物不同时期对应的图片路径
+    const std::string growing_pic;
+    const std::string mature_pic;
+
     //作物类
-    Crop ( const std::string& crop_name , const std::string& icon_path , const std::string& season ,
+    Crop ( const std::string& crop_name , const std::string& initial_pic , 
+        const std::string& growing_pic ,const std::string& mature_pic , const std::string& season ,
         const Phase& current_phase = SEED , const int value = 1 , const int growth_progress = 0 ,
         const bool is_harvestable = false , const int mature_limit = 4 );
     Crop ( const Crop& other );
@@ -62,13 +67,11 @@ public:
     //避免手动调用new和delete可能出现的问题
     virtual std::shared_ptr<Item> GetCopy () const ; 
 
+    std::shared_ptr<Crop> GetCropCopy () const;
+
     //收获
     //此处仅提供能否收获的条件判断和销毁对应Crop对象的操作
     
-    // ！！！
-    // 若对应实例的icon(Sprite*类)为某场景的child节点
-    // 使用前先将其从该场景的子节点中去除（通过GetIcon接口获取对应Sprite*)
-    // 避免可能造成的问题
     
     //获取物品操作需进一步结合玩家类
     //对应实例不可收获或传入的shared_ptr<Crop>为空均返回false
@@ -79,12 +82,9 @@ public:
     //铲除
     //提供销毁对应Crop对象的操作
 
-    // ！！！
-    // 若对应实例的icon(Sprite*类)为某场景的child节点
-    // 使用前先将其从该场景的子节点中去除（通过GetIcon接口获取对应Sprite*)
-    // 避免可能造成的问题
 
     //若传入的shared_ptr<Crop>为空返回false
     //否则销毁对应对象并返回true
     static bool Remove ( std::shared_ptr<Crop> to_remove );
 };
+

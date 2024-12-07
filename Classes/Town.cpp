@@ -9,6 +9,7 @@
 #include"Item.h"
 #include"Crop.h"
 
+
 USING_NS_CC;
 
 extern int remainingTime;
@@ -24,6 +25,7 @@ Town::~Town() {}
 
 bool Town::init()
 {
+
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
