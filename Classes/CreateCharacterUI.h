@@ -17,9 +17,11 @@ private:
     void BackgroundAdd ();
     void optionFace ();
     cocos2d::Sprite* directions ( const std::string& normalImage , const cocos2d::Vec2& origin , const cocos2d::Vec2& position );
-    void mouseListen ( cocos2d::Sprite* leftarrow , cocos2d::Sprite* rightarrow , cocos2d::Sprite* male , cocos2d::Sprite* female, cocos2d::Sprite* xuanzhong, cocos2d::Sprite* displaycharacter );
+    void mouseListen ( cocos2d::Sprite* leftarrow , cocos2d::Sprite* rightarrow , cocos2d::Sprite* male  , cocos2d::Sprite* female , cocos2d::Sprite* xuanzhong , cocos2d::Sprite* displaycharacter);
     void updateItems ( cocos2d::Sprite* item , const std::string& normalImage , cocos2d::Event* event , const int Magnification );
     void textIn ();
+    void favoranimal ();
+    void checkTextFields ( ui::TextField* textfield1 , ui::TextField* textfield2 , ui::TextField* textfield3 );
     ui::TextField* createTextIn ( float sizex , float sizey , const Vec2& Pos);
     // implement the "static create()" method manually
 };

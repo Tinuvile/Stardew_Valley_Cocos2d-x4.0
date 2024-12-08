@@ -69,11 +69,11 @@ void CreateCharacter::optionFace () {
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     Vec2 origin = Director::getInstance ()->getVisibleOrigin ();
 
-    auto optionface = Sprite::create ( "UIresource/create/daybg.png" );
+    auto optionface = Sprite::create ( "UIresource/create/create.png" );
     optionface->setTag ( 201 );
     if (optionface == nullptr)
     {
-        problemLoading ( "'daybg.png'" );
+        problemLoading ( "'create.png'" );
     }
     else
     {
@@ -287,10 +287,22 @@ void CreateCharacter::textIn () {
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     Vec2 origin = Director::getInstance ()->getVisibleOrigin ();
     auto optionface = this->getChildByTag ( 201 );
-    auto textBox = Sprite::create ( "UIresource/create/textBox.png" );
+    auto textBox1 = Sprite::create ( "UIresource/create/textBox.png" );
+    auto nameLabel = cocos2d::Label::createWithSystemFont ( "Name" , "Arial" , 25 );
+    nameLabel->setTag ( 10 );
+    nameLabel->setTextColor ( cocos2d::Color4B::RED );  // 初始颜色是红色
+    this->addChild ( nameLabel , 2 );
     auto textBox2 = Sprite::create ( "UIresource/create/textBox.png" );
+    auto Farmname = cocos2d::Label::createWithSystemFont ( "Farm name" , "Arial" , 25 );
+    Farmname->setTag ( 20 );
+    Farmname->setTextColor ( cocos2d::Color4B::RED );  // 初始颜色是红色
+    this->addChild ( Farmname , 2 );
     auto textBox3 = Sprite::create ( "UIresource/create/textBox.png" );
-    if (textBox == nullptr)
+    auto Favoritethings = cocos2d::Label::createWithSystemFont ( "Favorite things" , "Arial" , 25 );
+    Favoritethings->setTag ( 30 );
+    Favoritethings->setTextColor ( cocos2d::Color4B::RED );  // 初始颜色是红色
+    this->addChild ( Favoritethings , 2 );
+    if (textBox1 == nullptr)
     {
         // 示例图片
         problemLoading ( "'textBox.png'" );
@@ -298,8 +310,8 @@ void CreateCharacter::textIn () {
     else
     {
         // 获取原始图片的宽高
-        float originalWidth = textBox->getContentSize ().width;
-        float originalHeight = textBox->getContentSize ().height;
+        float originalWidth = textBox1->getContentSize ().width;
+        float originalHeight = textBox1->getContentSize ().height;
 
         // 根据屏幕宽度和图片原始宽高计算比例
         float scaleX = visibleSize.width / originalWidth;
@@ -307,25 +319,37 @@ void CreateCharacter::textIn () {
 
         // 选择最小的缩放比例，以保证图片完全显示在屏幕上且不变形
         float scale = std::min ( scaleX , scaleY );
-        textBox->setScale ( scale / 8 );
+        textBox1->setScale ( scale / 8 );
         textBox2->setScale ( scale / 8 );
         textBox3->setScale ( scale / 8 );
-        Vec2 Pos = Vec2 ( visibleSize.width / 2 + optionface->getContentSize ().width * 0.2 , visibleSize.height / 2 + optionface->getContentSize ().height * 0.3 );
-        Vec2 Pos2 = Vec2 ( visibleSize.width / 2 + optionface->getContentSize ().width * 0.2 , visibleSize.height / 2 + optionface->getContentSize ().height * 0.2 );
-        Vec2 Pos3 = Vec2 ( visibleSize.width / 2 + optionface->getContentSize ().width * 0.2 , visibleSize.height / 2 + optionface->getContentSize ().height * 0.1 );
-        textBox->setPosition ( Pos );
+        Vec2 Pos1 = Vec2 ( visibleSize.width / 2 + optionface->getContentSize ().width * 0.2 , visibleSize.height / 2.05 + optionface->getContentSize ().height * 0.3 );
+        Vec2 Pos2 = Vec2 ( visibleSize.width / 2 + optionface->getContentSize ().width * 0.2 , visibleSize.height / 2.05 + optionface->getContentSize ().height * 0.2 );
+        Vec2 Pos3 = Vec2 ( visibleSize.width / 2 + optionface->getContentSize ().width * 0.2 , visibleSize.height / 2.05 + optionface->getContentSize ().height * 0.1 );
+        textBox1->setPosition ( Pos1 );
+        nameLabel->setPosition ( Pos1.x * 0.8 , Pos1.y );
         textBox2->setPosition ( Pos2 );
+        Farmname->setPosition ( Pos2.x * 0.8 , Pos2.y );
         textBox3->setPosition ( Pos3 );
+        Favoritethings->setPosition ( Pos3.x * 0.8 , Pos3.y );
         // add the sprite as a child to this layer
-        this->addChild ( textBox , 2 );
+        this->addChild ( textBox1 , 2 );
         this->addChild ( textBox2 , 2 );
         this->addChild ( textBox3 , 2 );
-        auto textField1 = createTextIn ( originalWidth * scale , originalHeight * scale , Pos );
+        auto textField1 = createTextIn ( originalWidth * scale , originalHeight * scale , Pos1 );
         auto textField2 = createTextIn ( originalWidth * scale , originalHeight * scale , Pos2 );
         auto textField3 = createTextIn ( originalWidth * scale , originalHeight * scale , Pos3 );
         this->addChild ( textField1 , 3 );
         this->addChild ( textField2 , 3 );
         this->addChild ( textField3 , 3 );
+        textField1->addEventListener ( [=]( cocos2d::Ref* sender , cocos2d::ui::TextField::EventType type ) {
+            checkTextFields ( textField1 , textField2 , textField3 );
+            } );
+        textField2->addEventListener ( [=]( cocos2d::Ref* sender , cocos2d::ui::TextField::EventType type ) {
+            checkTextFields ( textField1 , textField2 , textField3 );
+            } );
+        textField3->addEventListener ( [=]( cocos2d::Ref* sender , cocos2d::ui::TextField::EventType type ) {
+            checkTextFields ( textField1 , textField2 , textField3 );
+            } );
     }
 }
 ui::TextField* CreateCharacter::createTextIn ( float sizex , float sizey, const Vec2& Pos ) {
@@ -352,6 +376,104 @@ ui::TextField* CreateCharacter::createTextIn ( float sizex , float sizey, const 
         }
     } );
     return textField;
+}
+void CreateCharacter::checkTextFields ( ui::TextField* textfield1 , ui::TextField* textfield2, ui::TextField* textfield3 ) {
+    std::string text1 = textfield1->getString ();
+    std::string text2 = textfield2->getString ();
+    std::string text3 = textfield3->getString ();
+    auto namelable = getChildByTag ( 10 );
+    auto farmname= getChildByTag ( 20 );
+    auto favanimal = getChildByTag ( 30 );
+    if (!text1.empty ()) {
+        namelable->setColor ( cocos2d::Color3B::BLACK );
+    }
+    if (!text2.empty ()) {
+        farmname->setColor ( cocos2d::Color3B::BLACK );
+    }
+    if (!text3.empty ()) {
+        favanimal->setColor ( cocos2d::Color3B::BLACK );
+    }
+    // 检查三个文本框是否都有内容
+    if (!text1.empty () && !text2.empty () && !text3.empty ())
+    {
+    }
+    else
+    {
+        // 如果任一文本框为空，恢复精灵为原始颜色;
+    }
+}
+void CreateCharacter::favoranimal () {
+    auto visibleSize = Director::getInstance ()->getVisibleSize ();
+    Vec2 origin = Director::getInstance ()->getVisibleOrigin ();
+
+    //文字添加
+    auto favanimal = cocos2d::Label::createWithSystemFont ( "Favorite animal" , "Arial" , 25 );
+    favanimal->setTextColor ( cocos2d::Color4B::BLACK);  // 初始颜色是红色
+    Vec2 Pos = Vec2 ( visibleSize.width / 2.0  , visibleSize.height / 2.05 );
+    favanimal->setPosition ( Pos );
+    this->addChild ( favanimal , 2 );
+
+    //箭头添加
+    Vec2 leftPos = Vec2 ( visibleSize.width / 1.7 , visibleSize.height / 2.05 );
+    auto leftarrow = directions ( "UIresource/create/left.png" , origin , leftPos );
+    Vec2 rightPos = Vec2 ( visibleSize.width / 1.4 , visibleSize.height / 2.05 );
+    auto rightarrow = directions ( "UIresource/create/right.png" , origin , rightPos );
+    //动物图片添加
+    auto animal = Sprite::create ( "UIresource/create/like1.png" );
+    if (animal == nullptr)
+    {
+        problemLoading ( "'like1.png'" );
+    }
+    else
+    {
+        float originalWidth = animal->getContentSize ().width;
+        float originalHeight = animal->getContentSize ().height;
+        float scaleX = visibleSize.width / originalWidth;
+        float scaleY = visibleSize.height / originalHeight;
+        float scale = std::min ( scaleX , scaleY );
+        animal->setScale ( scale / 18 );
+        Vec2 Pos = Vec2 ( (leftPos.x + rightPos.x) / 2 , leftPos.y );
+        animal->setPosition ( Pos );
+        // add the sprite as a child to this layer
+        this->addChild ( animal , 2 );
+    }
+    auto listener = EventListenerMouse::create ();
+    listener->onMouseMove = [this , leftarrow , rightarrow]( EventMouse* event ) {
+        updateItems ( leftarrow , "UIresource/create/left.png" , event , 18 );
+        updateItems ( rightarrow , "UIresource/create/right.png" , event , 18 );
+        };
+    cocos2d::Vec2 anchor1 = leftarrow->getAnchorPoint ();
+    cocos2d::Vec2 anchor2 = rightarrow->getAnchorPoint ();
+    listener->onMouseDown = [this , leftarrow , rightarrow, anchor1 , anchor2,animal]( EventMouse* event ) {
+        static int count = 1;
+        Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
+        if (leftarrow->getBoundingBox ().containsPoint ( mousePos )) {
+            mousedowncallback ( leftarrow , leftarrow );
+            count--;
+            if (count <= 0)
+                count = 6;
+            std::string like = StringUtils::format ( "UIresource/create/like%d.png" , count );
+            animal->setTexture ( like );
+        }
+        else if (rightarrow->getBoundingBox ().containsPoint ( mousePos )) {
+            count++;
+            if (count >= 6)
+                count = 1;
+            std::string like = StringUtils::format ( "UIresource/create/like%d.png" , count );
+            animal->setTexture ( like );
+            mousedowncallback ( rightarrow , rightarrow );
+        }
+        };
+    listener->onMouseUp = [this , leftarrow , rightarrow ]( EventMouse* event ) {
+        Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
+        if (leftarrow->getBoundingBox ().containsPoint ( mousePos )) {
+            mouseupcallback ( leftarrow , leftarrow );
+        }
+        else if (rightarrow->getBoundingBox ().containsPoint ( mousePos )) {
+            mouseupcallback ( rightarrow , rightarrow );
+        }
+        };
+    _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , this );
 }
 void CreateCharacter::updateItems( cocos2d::Sprite* item , const std::string& normalImage , cocos2d::Event* event ,const int Magnification )
 {
@@ -405,6 +527,7 @@ bool CreateCharacter::init()
     BackgroundAdd ();
     cloudAni ( 1.0f );
     optionFace ();
+    favoranimal ();
     textIn ();
     return true;
 }
