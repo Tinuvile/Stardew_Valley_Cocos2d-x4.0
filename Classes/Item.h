@@ -8,8 +8,10 @@ protected:
     std::string name;
     int value;
     bool usable;
-    Item ( const std::string& name , const std::string& path1 , const int value = 1 , const int& num_limit = 99 );
+    
 public:
+    Item ( const std::string& name , const std::string& path1 , const int value = 1 , const int& num_limit = 99 );
+
     //若需创建Sprite所用的图片地址
     const std::string initial_pic;
     // 每个背包格子中最大物品数量

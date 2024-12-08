@@ -37,6 +37,11 @@ bool Town::init()
     // 创建 Inventory 实例  
     inventory = new Inventory ();
 
+    // 添加物品到库存  
+    Item Grass ( "Grass" , "Item/Grass/grass-0.png" ); 
+    inventory->AddItem ( Grass );
+
+
     // 设置计时器标签
     _timerLabel = Label::createWithTTF("Timer: 60", "fonts/Marker Felt.ttf", 24);
     this->addChild(_timerLabel, 10);
@@ -171,21 +176,20 @@ bool Town::init()
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, button);
 
 
-
+    /*
     // 创建 NPC  
     NPC* npc1 = NPCreate::CreateNPC ( "NPC1" , Vec2 ( 300 , 400 ) , "npc/Abigail/Abigail-0.png" ); // NPC 1  
     NPC* npc2 = NPCreate::CreateNPC ( "NPC2" , Vec2 ( 500 , 600 ) , "npc/Abigail/Abigail-1.png" ); // NPC 2  
     NPC* npc3 = NPCreate::CreateNPC ( "NPC3" , Vec2 ( 700 , 300 ) , "npc/Abigail/Abigail-2.png" ); // NPC 3  
   
-    npc1->GetSprite ()->setScale ( player1->getScale () );
-    npc2->GetSprite ()->setScale ( player1->getScale () );
-    npc3->GetSprite ()->setScale ( player1->getScale () );
+    npc1->GetSprite ()->setScale ( player1->getScale () * 2.2 );
+    npc2->GetSprite ()->setScale ( player1->getScale () * 2.2 );
+    npc3->GetSprite ()->setScale ( player1->getScale () * 2.2 );
 
     this->addChild ( npc1->GetSprite () , 5 ); // 添加 NPC 1 到场景  
     this->addChild ( npc2->GetSprite () , 5 ); // 添加 NPC 2 到场景  
     this->addChild ( npc3->GetSprite () , 5 ); // 添加 NPC 3 到场景 
-
-
+    */  
 
 
     // 设置键盘监听器

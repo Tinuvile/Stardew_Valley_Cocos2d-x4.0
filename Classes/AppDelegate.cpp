@@ -30,7 +30,6 @@ Player* player1 = nullptr;
 Town* town = NULL;
 supermarket* seedshop = NULL;
 std::map<std::pair<std::string, Vec2>, bool> T_lastplace;
-
 /****************************************************************************************/
 
 

@@ -2,7 +2,7 @@
 #define ECONOMIC_SYSTEM_H  
 
 #include <string>  
-#include "TestItem.h"  // 包含 TestItem.h 以获取 item 的价格  
+#include "Item.h"  // 包含 TestItem.h 以获取 item 的价格  
 
 using namespace std;
 
@@ -30,7 +30,7 @@ public:
 private:
     // 保存金币数量  
     int goldAmount;
-    TestItem itemManager;  // 创建 Item 对象  
+    Item itemManager;  // 创建 Item 对象  
 };
 
 #endif  // ECONOMIC_SYSTEM_H
