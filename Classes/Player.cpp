@@ -17,7 +17,6 @@ bool Player::init()
 
     // 加载角色的图片
     this->initWithFile("character1/player_down3.png");
-
     // 创建键盘事件监听器
     auto keyboardListener = EventListenerKeyboard::create();
 

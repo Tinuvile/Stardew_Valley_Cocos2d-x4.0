@@ -2,6 +2,7 @@
 #pragma once  
 #include "cocos2d.h"  
 #include "Inventory.h"  
+#include "AppDelegate.h"
 
 class InventoryUI : public cocos2d::Layer {
 public:

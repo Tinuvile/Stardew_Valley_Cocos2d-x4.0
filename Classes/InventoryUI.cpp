@@ -2,7 +2,9 @@
 #include "InventoryUI.h"  
 #include "ui/CocosGUI.h"  
 #include "Item.h"  
+#include "AppDelegate.h"
 
+extern Player* player1;
 USING_NS_CC;
 static void problemLoading ( const char* filename )
 {
@@ -10,12 +12,12 @@ static void problemLoading ( const char* filename )
     printf ( "Depending on how you compiled you might have to add 'Resources/' in front of filenames in CreateCharacterScene.cpp\n" );
 }
 void InventoryUI::backgroundcreate(){
+    Vec2 position = player1->getPosition ();
     // 创建一个半透明的黑色遮罩
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
-    auto darkLayer = cocos2d::LayerColor::create ( cocos2d::Color4B ( 0 , 0 , 0 , 120 ) , 5 * visibleSize.width , 5 * visibleSize.height );  // 黑色，透明度为180
-    darkLayer->setPosition ( cocos2d::Vec2 ( -visibleSize.width / 2 , -visibleSize.height / 3 ) ); // 可以设置遮罩层的位置
+    auto darkLayer = cocos2d::LayerColor::create ( cocos2d::Color4B ( 0 , 0 , 0 , 120 ) , 5 * visibleSize.width , 5 * visibleSize.height );  // 黑色，透明度为120
+    darkLayer->setPosition ( position - visibleSize / 2 );// 设置遮罩层的位置
     this->addChild ( darkLayer , 0 );
-    Vec2 origin = Director::getInstance ()->getVisibleOrigin ();
     auto bag = Sprite::create ( "UIresource/beibao/bag.png" );
     bag->setTag ( 101 );
     if (bag == nullptr)
@@ -27,22 +29,18 @@ void InventoryUI::backgroundcreate(){
         // 获取原始图片的宽高
         float originalWidth = bag->getContentSize ().width;
         float originalHeight = bag->getContentSize ().height;
-
         // 根据屏幕宽度和图片原始宽高计算比例
         float scaleX = visibleSize.width / originalWidth;
         float scaleY = visibleSize.height / originalHeight;
-
         // 选择最小的缩放比例，以保证图片完全显示在屏幕上且不变形
         float scale = std::min ( scaleX , scaleY );
         bag->setScale ( scale / 1.5 );
-        Vec2 Pos = Vec2 ( visibleSize.width / 4.5 + origin.x , visibleSize.height / 3 + origin.y );
-        bag->setPosition ( Pos );
-
-        // add the sprite as a child to this layer
+        bag->setPosition ( position );
         this->addChild ( bag , 1 );
     }
 }
 void InventoryUI::Itemblock ( Inventory* inventory ) {
+    Vec2 position = player1->getPosition ();
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     Vec2 origin = Director::getInstance ()->getVisibleOrigin ();
     _inventory = inventory;
@@ -70,7 +68,7 @@ void InventoryUI::Itemblock ( Inventory* inventory ) {
             slot->setScale ( scale / 16.5 );
             float bagWidth = bag->getContentSize ().width;
             float bagHeight = bag->getContentSize ().height;
-            slot->setPosition ( visibleSize.width / 4.5 + origin.x - bagWidth * 2.086 + (originalWidth * scale / 16.5 + 5) * i , visibleSize.height / 1.8 + origin.y - m * (originalHeight * scale / 16.5 + 10) ); // 计算槽位位置  
+            slot->setPosition ( position.x - bagWidth * 2.086 + (originalWidth * scale / 16.5 + 5) * i , position.y + bagHeight * 1.9 - m * (originalHeight * scale / 16.5 + 10) ); // 计算槽位位置  
             slot->setTag ( i + 1 ); // 设置槽位的标签  
             this->addChild ( slot , 2 );
             _itemSlots.pushBack ( slot );
