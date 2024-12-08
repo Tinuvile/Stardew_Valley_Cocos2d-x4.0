@@ -110,19 +110,12 @@ void NextScene::addfirstscene(const cocos2d::Size& visibleSize, const cocos2d::V
     //添加背景
     auto background = Sprite::create ( "UIresource/background2.png" );
     if (background) {
-        /*
-        float scaleX = visibleSize.width / background->getContentSize ().width;
-        float scaleY = visibleSize.height / background->getContentSize ().height;
-        float scaleFactor = std::max ( scaleX , scaleY );
-        background->setScale ( scaleFactor );
-        background->setPosition ( Vec2 ( visibleSize.width / 2 + origin.x , visibleSize.height / 2 + origin.y ) );
-        */
         background->setContentSize ( Size ( visibleSize.width , visibleSize.height * 2 ) );
         background->setPosition    ( Vec2 ( visibleSize.width / 2 + origin.x , origin.y + visibleSize.height ) );
         this->addChild ( background , 0 );
     }
     else {
-        problemLoading ( "'background.png'" );
+        problemLoading ( "'background2.png'" );
     }
 
     auto mountain1 = Sprite::create("UIresource/mountainfront.png");
@@ -335,10 +328,10 @@ void NextScene::scenechangedown ()
     auto mountain2 = this->getChildByTag ( 102 );
     auto treeleft = this->getChildByTag  ( 103 );
     auto treeright = this->getChildByTag ( 104 );
-    auto moveDown1 = cocos2d::MoveBy::create ( 10.0f , cocos2d::Vec2 ( 0 , -visibleSize.height * 3 ) ); // 向下移动
-    auto moveDown2 = cocos2d::MoveBy::create ( 20.0f ,cocos2d::Vec2 ( 0 , -visibleSize.height * 3 ) );  // 向下移动
-    auto moveDown3 = cocos2d::MoveBy::create ( 8.0f , cocos2d::Vec2 ( 0 , -visibleSize.height * 3 ) );  // 向下移动
-    auto moveDown4 = cocos2d::MoveBy::create ( 8.0f , cocos2d::Vec2 ( 0 , -visibleSize.height * 3 ) );  // 向下移动
+    auto moveDown1 = cocos2d::MoveBy::create ( 20.0f , cocos2d::Vec2 ( 0 , -visibleSize.height * 3 ) ); // 向下移动
+    auto moveDown2 = cocos2d::MoveBy::create ( 40.0f ,cocos2d::Vec2 ( 0 , -visibleSize.height * 3 ) );  // 向下移动
+    auto moveDown3 = cocos2d::MoveBy::create ( 15.0f , cocos2d::Vec2 ( 0 , -visibleSize.height * 3 ) );  // 向下移动
+    auto moveDown4 = cocos2d::MoveBy::create ( 15.0f , cocos2d::Vec2 ( 0 , -visibleSize.height * 3 ) );  // 向下移动
 
     scene    ->runAction ( moveAction);
     mountain1->runAction ( moveDown1 );
@@ -463,7 +456,8 @@ void NextScene::updateMenuItem(MenuItemImage* item, const Vec2& mousePos, const 
 // 跳转到新场景  
 void NextScene::menuNewCallback(Ref* pSender)
 {
-    Director::getInstance()->replaceScene(Town::create()); // 进入到主地图  
+    //Director::getInstance()->replaceScene(Town::create()); // 进入到主地图  
+    Director::getInstance ()->replaceScene ( TransitionFade::create ( 3.0f , CreateCharacter::create () ) ); // 进入到人物创建界面 
 }
 
 void NextScene::menuCloseCallback(Ref* pSender)

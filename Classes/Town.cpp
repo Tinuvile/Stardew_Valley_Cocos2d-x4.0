@@ -190,13 +190,23 @@ bool Town::init()
                 CCLOG("Enter key released. ");
             }
         };
-      
     listenerWithPlayer->onKeyPressed = [this]( EventKeyboard::KeyCode keyCode , Event* event ) {
         // 其他键的处理  
-        if (keyCode == EventKeyboard::KeyCode::KEY_P) {
-            CCLOG ( "P key pressed. Showing inventory." );
-            auto inventoryUI = InventoryUI::create ( inventory ); 
-            this->addChild ( inventoryUI , 20 ); // 将 InventoryUI 添加到 Town 的上层  
+
+        if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
+            static InventoryUI* currentInventoryUI = nullptr;  // 保存当前显示的 InventoryUI
+            // 如果当前没有打开 InventoryUI，则打开它
+            if (currentInventoryUI == nullptr) {
+                CCLOG ( "Opening inventory." );
+                currentInventoryUI = InventoryUI::create ( inventory );
+                this->addChild ( currentInventoryUI , 11 );  // 将 InventoryUI 添加到 Town 的上层
+            }
+            // 如果已经打开 InventoryUI，则关闭它
+            else {
+                CCLOG ( "Closing inventory." );
+                this->removeChild ( currentInventoryUI , true );  // 从当前场景中移除 InventoryUI
+                currentInventoryUI = nullptr;  // 重置指针
+            }
         }
         };
 

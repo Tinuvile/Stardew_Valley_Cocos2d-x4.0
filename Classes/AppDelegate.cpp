@@ -13,6 +13,7 @@
 #include "Player.h"
 #include "Town.h"
 #include "supermarket.h"
+#include "CreateCharacterUI.h"
 
  // #define USE_AUDIO_ENGINE 1   // 如果需要使用音频引擎，可以取消注释这一行
 
@@ -102,12 +103,13 @@ void AppDelegate::runScene(cocos2d::Director* director) {
     T_lastplace.insert(std::make_pair(key, true));
     key = { "seedshop",Vec2(230,470) };
     T_lastplace.insert(std::make_pair(key, false));
-    town = Town::create();
-    // 运行小镇场景
-    director->runWithScene(town);
+    director->runWithScene ( Town::create () );
 
-    //director->runWithScene ( Town::create () );
 
+    //开局UI运行
+    //director->runWithScene ( BeginScene::create () );
+    //创建人物界面运行
+    //director->runWithScene ( CreateCharacter::create () );
 }
 
 // 当应用程序进入后台时调用

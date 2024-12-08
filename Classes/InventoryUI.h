@@ -7,7 +7,8 @@ class InventoryUI : public cocos2d::Layer {
 public:
     virtual bool init ( Inventory* inventory );
     static InventoryUI* create ( Inventory* inventory );
-
+    void backgroundcreate ();
+    void Itemblock ( Inventory* inventory );
     void updateDisplay (); // 更新显示内容  
 
 private:

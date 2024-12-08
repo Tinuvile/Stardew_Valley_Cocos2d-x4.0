@@ -2,10 +2,9 @@
 
 #include "cocos2d.h"
 
-#ifndef _SCENE_H__
-#define _SCENE_H__
+#ifndef _SCENE_SEC_H__
+#define _SCENE_SEC_H__
 
-#include "cocos2d.h"
 
 class BeginScene : public cocos2d::Scene
 {
@@ -22,11 +21,6 @@ private:
     // Called when the animation completes  
     void onAnimationComplete();
 };
-
-#endif // _SCENE_H__
-
-#ifndef _SCENE_SEC_H__
-#define _SCENE_SEC_H__
 
 class NextScene : public cocos2d::Scene
 {
