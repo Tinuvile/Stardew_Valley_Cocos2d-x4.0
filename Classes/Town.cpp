@@ -8,6 +8,7 @@
 #include"Inventory.h"
 #include"Item.h"
 #include"Crop.h"
+#include "InventoryUI.h"
 
 
 USING_NS_CC;
@@ -33,6 +34,8 @@ bool Town::init()
     button = cocos2d::Sprite::create("CloseNormal.png");
     this->addChild(button, 11);
 
+    // 创建 Inventory 实例  
+    inventory = new Inventory ();
 
     // 设置计时器标签
     _timerLabel = Label::createWithTTF("Timer: 60", "fonts/Marker Felt.ttf", 24);
@@ -186,6 +189,15 @@ bool Town::init()
                 isEnterKeyPressed = false;
                 CCLOG("Enter key released. ");
             }
+        };
+      
+    listenerWithPlayer->onKeyPressed = [this]( EventKeyboard::KeyCode keyCode , Event* event ) {
+        // 其他键的处理  
+        if (keyCode == EventKeyboard::KeyCode::KEY_P) {
+            CCLOG ( "P key pressed. Showing inventory." );
+            auto inventoryUI = InventoryUI::create ( inventory ); 
+            this->addChild ( inventoryUI , 20 ); // 将 InventoryUI 添加到 Town 的上层  
+        }
         };
 
     // 将监听器添加到事件分发器中

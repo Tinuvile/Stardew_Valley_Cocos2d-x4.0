@@ -6,6 +6,7 @@
 #include "AppDelegate.h"
 #include "physics/CCPhysicsWorld.h"
 #include "ui/CocosGUI.h"
+#include "Inventory.h"
 
 USING_NS_CC;
 
@@ -56,7 +57,7 @@ private:
 
     bool isEnterKeyPressed = false;
 
-
+    Inventory* inventory;
 };
 
 #endif // __BACKGROUND1_H__
