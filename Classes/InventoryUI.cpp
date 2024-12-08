@@ -60,11 +60,11 @@ void InventoryUI::updateDisplay () {
         slot->setVisible ( true ); // 确保显示所有槽位  
 
         // 获取槽位物品  
-        auto item = _inventory->GetSelectedItem (); // 或者使用 `_inventory->package[i + 1]`  
+        auto item = _inventory->GetSelectedItem ();  
 
         // 更新槽位视觉表现  
         if (item) {
-            // 假设 Item 有一个方法可以返回它的图片路径  
+            // 图片路径  
             auto itemSprite = Sprite::create ( item->initial_pic );
             itemSprite->setPosition ( slot->getContentSize () / 2 );
             slot->addChild ( itemSprite );
