@@ -34,13 +34,22 @@ bool Town::init()
     button = cocos2d::Sprite::create("CloseNormal.png");
     this->addChild(button, 11);
 
+    
     // 创建 Inventory 实例  
     inventory = new Inventory ();
 
     // 添加物品到库存  
-    Item Grass ( "Grass" , "Item/Grass/grass-0.png" ); 
-    inventory->AddItem ( Grass );
+    Item Grass ( "Grass" , "Item/Grass/grass-0.png" , 1 , 99 );
 
+    bool addedSuccessfully = inventory->AddItem ( Grass );
+    if (addedSuccessfully) {
+        inventory->SetSelectedItem ( 1 ); // 假设您想选择第一个槽位
+        CCLOG ( "Item 'Grass' added successfully." );
+    }
+    else {
+        CCLOG ( "Failed to add item 'Grass'. Inventory might be full." );
+    }
+    
 
     // 设置计时器标签
     _timerLabel = Label::createWithTTF("Timer: 60", "fonts/Marker Felt.ttf", 24);

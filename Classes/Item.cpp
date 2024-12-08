@@ -9,8 +9,6 @@ Item::Item ( const Item& other )
     , usable ( false ) {
 }
 
-
-
 std::shared_ptr<Item> Item::GetCopy () const {
     auto copy = std::make_shared<Item> ( *this );  // 使用Item的复制构造函数
     return copy;
