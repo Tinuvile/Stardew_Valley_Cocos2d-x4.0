@@ -20,7 +20,7 @@ bool InventoryUI::init ( Inventory* inventory ) {
 
     // 初始化物品槽 Sprite  
     for (int i = 0; i < kRowSize; ++i) {
-        auto slot = Sprite::create ( "item_slot.png" );
+        auto slot = Sprite::create ( "HelloWorld.png" );
         slot->setPosition ( 100 + i * 50 , 300 ); // 计算槽位位置  
         slot->setTag ( i + 1 ); // 设置槽位的标签  
         this->addChild ( slot );
