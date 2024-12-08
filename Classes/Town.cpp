@@ -9,7 +9,7 @@
 #include"Item.h"
 #include"Crop.h"
 #include "InventoryUI.h"
-
+#include "NPCreate.h"
 
 USING_NS_CC;
 
@@ -77,7 +77,7 @@ bool Town::init()
         spritePosition.x - background->getScaleX() * spriteSize.width / 2,   // 中心点 x 坐标减去宽度的一半
         spritePosition.y - background->getScaleY() * spriteSize.height / 2   // 中心点 y 坐标减去高度的一半
     );
-   
+    
 
     Image img;
     if (img.initWithImageFile("Town/Town_path.png"))
@@ -169,6 +169,23 @@ bool Town::init()
         }
         };
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, button);
+
+
+
+    // 创建 NPC  
+    NPC* npc1 = NPCreate::CreateNPC ( "NPC1" , Vec2 ( 300 , 400 ) , "npc/Abigail/Abigail-0.png" ); // NPC 1  
+    NPC* npc2 = NPCreate::CreateNPC ( "NPC2" , Vec2 ( 500 , 600 ) , "npc/Abigail/Abigail-1.png" ); // NPC 2  
+    NPC* npc3 = NPCreate::CreateNPC ( "NPC3" , Vec2 ( 700 , 300 ) , "npc/Abigail/Abigail-2.png" ); // NPC 3  
+  
+    npc1->GetSprite ()->setScale ( player1->getScale () );
+    npc2->GetSprite ()->setScale ( player1->getScale () );
+    npc3->GetSprite ()->setScale ( player1->getScale () );
+
+    this->addChild ( npc1->GetSprite () , 5 ); // 添加 NPC 1 到场景  
+    this->addChild ( npc2->GetSprite () , 5 ); // 添加 NPC 2 到场景  
+    this->addChild ( npc3->GetSprite () , 5 ); // 添加 NPC 3 到场景 
+
+
 
 
     // 设置键盘监听器
