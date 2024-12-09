@@ -44,7 +44,7 @@ bool Town::init()
 
     bool addedSuccessfully = inventory->AddItem ( Grass );
     if (addedSuccessfully) {
-        inventory->SetSelectedItem ( 1 ); // 假设您想选择第一个槽位
+        inventory->SetSelectedItem ( 1 );
         CCLOG ( "Item 'Grass' added successfully." );
     }
     else {
@@ -53,7 +53,7 @@ bool Town::init()
 
     addedSuccessfully = inventory->AddItem ( Tools );
     if (addedSuccessfully) {
-        inventory->SetSelectedItem ( 2 ); // 假设您想选择第一个槽位
+        inventory->SetSelectedItem ( 2 );
         CCLOG ( "Item 'Grass' added successfully." );
     }
     else {
@@ -62,7 +62,7 @@ bool Town::init()
 
     addedSuccessfully = inventory->AddItem ( Tools );
     if (addedSuccessfully) {
-        inventory->SetSelectedItem ( 2 ); // 假设您想选择第一个槽位
+        inventory->SetSelectedItem ( 2 );
         CCLOG ( "Item 'Grass' added successfully." );
     }
     else {
@@ -220,47 +220,42 @@ bool Town::init()
     */  
 
 
-    // 设置键盘监听器
-    auto listenerWithPlayer = EventListenerKeyboard::create();
-    listenerWithPlayer->onKeyPressed = [this](EventKeyboard::KeyCode keyCode, Event* event)
-        {
-            // 记录 Enter 键被按下
-            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER || keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER) {
-                isEnterKeyPressed = true;
-                CCLOG("Enter key pressed. ");
-            }
-        };
-
-    listenerWithPlayer->onKeyReleased = [this](EventKeyboard::KeyCode keyCode, Event* event)
-        {
-            // 释放 Enter 键时，设置为 false
-            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER || keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER) {
-                isEnterKeyPressed = false;
-                CCLOG("Enter key released. ");
-            }
-        };
+    // 设置键盘监听器  
+    auto listenerWithPlayer = EventListenerKeyboard::create ();
     listenerWithPlayer->onKeyPressed = [this]( EventKeyboard::KeyCode keyCode , Event* event ) {
-        // 其他键的处理  
-
+        // 记录 Enter 键被按下  
+        if (keyCode == EventKeyboard::KeyCode::KEY_ENTER || keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER) {
+            isEnterKeyPressed = true;
+            CCLOG ( "Enter key pressed." );
+        }
+        // 处理其他按键  
         if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
-            static InventoryUI* currentInventoryUI = nullptr;  // 保存当前显示的 InventoryUI
-            // 如果当前没有打开 InventoryUI，则打开它
+            static InventoryUI* currentInventoryUI = nullptr;  // 保存当前显示的 InventoryUI  
+            // 如果当前没有打开 InventoryUI，则打开它  
             if (currentInventoryUI == nullptr) {
                 CCLOG ( "Opening inventory." );
                 currentInventoryUI = InventoryUI::create ( inventory );
-                this->addChild ( currentInventoryUI , 11 );  // 将 InventoryUI 添加到 Town 的上层
+                this->addChild ( currentInventoryUI , 11 );  // 将 InventoryUI 添加到 Town 的上层  
             }
-            // 如果已经打开 InventoryUI，则关闭它
+            // 如果已经打开 InventoryUI，则关闭它  
             else {
                 CCLOG ( "Closing inventory." );
-                this->removeChild ( currentInventoryUI , true );  // 从当前场景中移除 InventoryUI
-                currentInventoryUI = nullptr;  // 重置指针
+                this->removeChild ( currentInventoryUI , true );  // 从当前场景中移除 InventoryUI  
+                currentInventoryUI = nullptr;  // 重置指针  
             }
         }
         };
 
-    // 将监听器添加到事件分发器中
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listenerWithPlayer, this);
+    listenerWithPlayer->onKeyReleased = [this]( EventKeyboard::KeyCode keyCode , Event* event ) {
+        // 释放 Enter 键时，设置为 false  
+        if (keyCode == EventKeyboard::KeyCode::KEY_ENTER || keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER) {
+            isEnterKeyPressed = false;
+            CCLOG ( "Enter key released." );
+        }
+        };
+
+    // 将监听器添加到事件分发器中  
+    _eventDispatcher->addEventListenerWithSceneGraphPriority ( listenerWithPlayer , this );
 
     return true;
 }
