@@ -9,11 +9,6 @@
  ****************************************************************************/
 
 #include "AppDelegate.h"
-#include "GameBeginUI.h"
-#include "Player.h"
-#include "Town.h"
-#include "supermarket.h"
-#include "CreateCharacterUI.h"
 
  // #define USE_AUDIO_ENGINE 1   // 如果需要使用音频引擎，可以取消注释这一行
 
@@ -24,14 +19,32 @@ using namespace cocos2d::experimental;  // 使用音频引擎的命名空间
 
 USING_NS_CC;  // 使用cocos2d的命名空间
 
-/******************************** 全局变量声明区 ****************************************/
-int remainingTime = 60000;
-Player* player1 = nullptr;
-Town* town = NULL;
-supermarket* seedshop = NULL;
-std::map<std::pair<std::string, Vec2>, bool> T_lastplace;
-/****************************************************************************************/
+// 在此文件中定义并初始化全局变量
+int remainingTime = 0;
+int day = 1;
+CropBasicInformation WHEAT("crop/wheat1.png", "crop/wheat2.png", "crop/wheat3.png", "All");
+CropBasicInformation CORN("crop/corn1.png", "crop/corn2.png", "crop/corn3.png", "Spring");
+CropBasicInformation POTATO("crop/potato1.png", "crop/potato2.png", "crop/potato3.png", "All");
+CropBasicInformation PUMPKIN("crop/pumpkin1.png", "crop/pumpkin2.png", "crop/pumpkin3.png", "Summer");
+CropBasicInformation BLUEBERRY("crop/blueberry1.png", "crop/blueberry2.png", "crop/blueberry3.png", "Autumn");
 
+//Crop wheat("wheat", "Unkown", "All");   
+//Crop corn("corn", "Unkown", "Spring", Phase::SEED, 50, 0, false, 6);
+//Crop potato("potato", "Unkown", "All", Phase::SEED, 30, 0, false, 4);
+//Crop pumpkin("pumpkin", "Unkown", "Autumn", Phase::SEED, 70, 0, false, 6);
+//Crop blueberry("blueberry", "Unkown", "Summer", Phase::SEED, 100, 0, false, 7);
+
+std::string Season = "Spring";
+std::map<std::string, int> season;
+// std::vector<std::shared_ptr<Crop>> Crop_information;
+std::map<std::string, CropBasicInformation> cropbasicinformation;
+
+// 全局指针变量定义
+Player* player1 = nullptr;
+Town* town = nullptr;
+supermarket* seedshop = nullptr;
+farm* Farm = nullptr;
+std::map<std::pair<std::string, Vec2>, bool> T_lastplace;
 
 AppDelegate::AppDelegate() {
     // 构造函数：AppDelegate构造时会调用
@@ -91,24 +104,17 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
 // 切换场景的函数
 void AppDelegate::runScene(cocos2d::Director* director) {
+    
+    Initialize();
 
-    player1 = Player::create();
+    // 测试运行农场
+    Farm = farm::create();
+    director->runWithScene(Farm);
 
-    // 获取当前视图的可见大小和原点位置
-    auto visibleSize = Director::getInstance()->getVisibleSize();  // 获取屏幕可视区域的大小
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();  // 获取屏幕原点的位置（左下角）
-  
-    std::pair<std::string, Vec2> key = { "initiation",Vec2(350,350)};
-    T_lastplace.insert(std::make_pair(key, true));
-    key = { "seedshop",Vec2(230,470) };
-    T_lastplace.insert(std::make_pair(key, false));
-    director->runWithScene ( Town::create () );
+    // 测试运行家
+    // auto test = Myhouse::create();
+    // director->runWithScene(test); 
 
-
-    //开局UI运行
-    //director->runWithScene ( BeginScene::create () );
-    //创建人物界面运行
-    //director->runWithScene ( CreateCharacter::create () );
 }
 
 // 当应用程序进入后台时调用
@@ -128,3 +134,31 @@ void AppDelegate::applicationWillEnterForeground() {
     AudioEngine::resumeAll();  // 恢复所有音频（如果启用了音频引擎）
 #endif
 }
+
+void AppDelegate::Initialize() {
+
+    // 创建人物
+    player1 = Player::create();
+
+    // 初始化存储作物信息的数组
+    cropbasicinformation.insert({ "wheat", WHEAT });
+    cropbasicinformation.insert({ "corn", CORN });
+    cropbasicinformation.insert({ "potato", POTATO });
+    cropbasicinformation.insert({ "pumpkin", PUMPKIN });
+    cropbasicinformation.insert({ "blueberry", BLUEBERRY });
+
+    // 初始化小镇各地址坐标
+    std::pair<std::string, Vec2> key = { "initiation",Vec2(350,350) };
+    T_lastplace.insert(std::make_pair(key, true));
+    key = { "seedshop",Vec2(230,470) };
+    T_lastplace.insert(std::make_pair(key, false));
+
+    // 初始化季节
+    season.insert({ "Spring", 1 });
+    season.insert({ "Summer", 2 });
+    season.insert({ "Autumn", 3 });
+    season.insert({ "Winter", 4 });
+
+}
+
+
