@@ -59,6 +59,15 @@ bool Town::init()
     else {
         CCLOG ( "Failed to add item 'Grass'. Inventory might be full." );
     }
+
+    addedSuccessfully = inventory->AddItem ( Tools );
+    if (addedSuccessfully) {
+        inventory->SetSelectedItem ( 2 ); // 假设您想选择第一个槽位
+        CCLOG ( "Item 'Grass' added successfully." );
+    }
+    else {
+        CCLOG ( "Failed to add item 'Grass'. Inventory might be full." );
+    }
     
 
     // 设置计时器标签

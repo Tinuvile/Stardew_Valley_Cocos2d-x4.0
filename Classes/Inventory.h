@@ -62,6 +62,15 @@ public:
 		return nullptr; // 如果没有找到 Item，返回 nullptr  
 	}
 
+	// 获取指定位置中的物品个数  
+	int GetItemCountAt ( int position ) const {
+		auto it = package.find ( position );
+		if (it != package.end ()) {
+			return it->second.second; // 返回该位置的物品个数  
+		}
+		return 0; // 如果该位置没有物品，返回 0  
+	}
+
 
 	//在`new_position`合法时，将`selected_position`设置为`new_position`
 	// 合法的`new_position`应当为在[1,kRowSize]间的整数（只能设置物品栏最顶一栏的位置为`selected_position`

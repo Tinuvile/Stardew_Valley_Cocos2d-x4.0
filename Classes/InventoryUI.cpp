@@ -131,7 +131,11 @@ void InventoryUI::updateDisplay () {
         slot->setVisible ( true ); // 确保显示所有槽位  
 
         // 获取槽位物品  
-        auto item = _inventory->GetItemAt ( i + 1 ); // 获取特定槽位的物品，注意槽位从1开始  
+        auto item = _inventory->GetItemAt ( i + 1 ); // 获取特定槽位的物品，注意槽位从1开始 
+
+        // 获取物品数量   
+        int itemCount = _inventory->GetItemCountAt(i + 1); // 获取该槽位的物品数量  
+
         if (item) {
             CCLOG ( "Item in slot %d: %s" , i + 1 , item->GetName ().c_str () );
         }
@@ -160,9 +164,27 @@ void InventoryUI::updateDisplay () {
 
             // 根据 item 里的数量来设置数量标签（如果需要）。  
             // 可以在这里创建一个 Label 显示数量  
+            auto countLabel = static_cast<Label*>(slot->getChildByTag ( 200 + i )); // 使用槽位的标签生成数量标签的唯一ID  
+            if (!countLabel) {
+                // 如果标签不存在，创建新的标签  
+                countLabel = Label::createWithSystemFont ( std::to_string ( itemCount ) , "Arial" , 20 );
+                countLabel->setPosition ( slot->getPosition ().x , slot->getPosition ().y - slot->getContentSize ().height / 2 - 10 ); // 设置位置在槽位下方  
+                countLabel->setTag ( 200 + i ); // 设置标签  
+                this->addChild ( countLabel , 4 ); // 添加到层级中  
+            }
+            else {
+                // 如果标签存在，更新数量  
+                countLabel->setString ( std::to_string ( itemCount ) );
+            }
         }
         else {
             slot->removeAllChildren (); // 清空槽位  
+
+            // 清除数量标签  
+            auto countLabel = static_cast<Label*>(slot->getChildByTag ( 200 + i ));
+            if (countLabel) {
+                countLabel->removeFromParent (); // 移除数量标签  
+            }
         }
     }
 
