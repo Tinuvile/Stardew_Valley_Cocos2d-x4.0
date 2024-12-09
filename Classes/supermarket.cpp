@@ -4,7 +4,6 @@
 #include "Player.h"
 #include "physics/CCPhysicsWorld.h"
 #include "ui/CocosGUI.h"
-#include "StoreManager.h"
 
 USING_NS_CC;
 
@@ -26,8 +25,6 @@ bool supermarket::init()
     button = cocos2d::Sprite::create("CloseNormal.png");
     this->addChild(button, 11);
 
-    StoreManager* storeManager = new StoreManager ();
-    storeManager->initStore ();
 
     // 设置计时器标签
     _timerLabel = Label::createWithTTF("Timer: 60", "fonts/Marker Felt.ttf", 24);

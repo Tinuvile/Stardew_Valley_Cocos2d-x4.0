@@ -5,6 +5,7 @@
 #include "Item.h"  
 #include "cocos2d.h"  
 #include "tuple"
+#include "memory"
 
 class StoreManager {
 public:
@@ -12,11 +13,11 @@ public:
     ~StoreManager ();
 
     bool initStore ();
-    void StoreManager::addItemToStore ( Item& item , int index );
+    void StoreManager::addItemToStore ( Item item , int index );
     void addItemsToStore ();
 
 private:
-    Inventory* storeInventory;
+    std::unique_ptr<Inventory> storeInventory;
 };
 
 #endif // STORE_MANAGER_H

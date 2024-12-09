@@ -3,12 +3,12 @@
 
 USING_NS_CC;
 
-StoreManager::StoreManager () {
-    storeInventory = new Inventory ();
+StoreManager::StoreManager ()
+    : storeInventory ( std::make_unique<Inventory> () ) { // 在构造列表中使用 std::make_unique  
 }
 
 StoreManager::~StoreManager () {
-    delete storeInventory; // 确保释放内存  
+    // 不需要显示 delete，unique_ptr 会自动释放资源  
 }
 
 bool StoreManager::initStore () {
@@ -16,7 +16,7 @@ bool StoreManager::initStore () {
     return true; // 可以根据需要返回其他状态信息  
 }
 
-void StoreManager::addItemToStore ( Item& item , int index ) {
+void StoreManager::addItemToStore ( Item item , int index ) {
     bool addedSuccessfully = storeInventory->AddItem ( item );
     if (addedSuccessfully) {
         storeInventory->SetSelectedItem ( index );

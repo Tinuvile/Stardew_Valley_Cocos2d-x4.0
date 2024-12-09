@@ -167,8 +167,9 @@ void InventoryUI::updateDisplay () {
             auto countLabel = static_cast<Label*>(slot->getChildByTag ( 200 + i )); // 使用槽位的标签生成数量标签的唯一ID  
             if (!countLabel) {
                 // 如果标签不存在，创建新的标签  
-                countLabel = Label::createWithSystemFont ( std::to_string ( itemCount ) , "Arial" , 20 );
-                countLabel->setPosition ( slot->getPosition ().x , slot->getPosition ().y - slot->getContentSize ().height / 2 - 10 ); // 设置位置在槽位下方  
+                countLabel = Label::createWithSystemFont ( std::to_string ( itemCount ) , "fonts/Arial Bold.ttf" , 20 );
+                countLabel->setTextColor ( Color4B ( 255 , 153 , 0 , 255 ) );
+                countLabel->setPosition ( slot->getPosition ().x+slot->getContentSize ().width*1.7 , slot->getPosition ().y - slot->getContentSize ().height * 1.7 ); // 设置位置在槽位下方  
                 countLabel->setTag ( 200 + i ); // 设置标签  
                 this->addChild ( countLabel , 4 ); // 添加到层级中  
             }

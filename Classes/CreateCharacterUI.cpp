@@ -288,17 +288,17 @@ void CreateCharacter::textIn () {
     Vec2 origin = Director::getInstance ()->getVisibleOrigin ();
     auto optionface = this->getChildByTag ( 201 );
     auto textBox1 = Sprite::create ( "UIresource/create/textBox.png" );
-    auto nameLabel = cocos2d::Label::createWithSystemFont ( "Name" , "Arial" , 25 );
+    auto nameLabel = cocos2d::Label::createWithSystemFont ( "Name" , "fonts/Arial Bold.ttf" , 25 );
     nameLabel->setTag ( 10 );
     nameLabel->setTextColor ( cocos2d::Color4B::RED );  // 初始颜色是红色
     this->addChild ( nameLabel , 2 );
     auto textBox2 = Sprite::create ( "UIresource/create/textBox.png" );
-    auto Farmname = cocos2d::Label::createWithSystemFont ( "Farm name" , "Arial" , 25 );
+    auto Farmname = cocos2d::Label::createWithSystemFont ( "Farm name" , "fonts/Arial Bold.ttf" , 25 );
     Farmname->setTag ( 20 );
     Farmname->setTextColor ( cocos2d::Color4B::RED );  // 初始颜色是红色
     this->addChild ( Farmname , 2 );
     auto textBox3 = Sprite::create ( "UIresource/create/textBox.png" );
-    auto Favoritethings = cocos2d::Label::createWithSystemFont ( "Favorite things" , "Arial" , 25 );
+    auto Favoritethings = cocos2d::Label::createWithSystemFont ( "Favorite things" , "fonts/Arial Bold.ttf" , 25 );
     Favoritethings->setTag ( 30 );
     Favoritethings->setTextColor ( cocos2d::Color4B::RED );  // 初始颜色是红色
     this->addChild ( Favoritethings , 2 );
@@ -407,7 +407,7 @@ void CreateCharacter::favoranimal () {
     Vec2 origin = Director::getInstance ()->getVisibleOrigin ();
 
     //文字添加
-    auto favanimal = cocos2d::Label::createWithSystemFont ( "Favorite animal" , "Arial" , 25 );
+    auto favanimal = cocos2d::Label::createWithSystemFont ( "Favorite animal" , "fonts/Arial Bold.ttf" , 25 );
     favanimal->setTextColor ( cocos2d::Color4B::BLACK);  // 初始颜色是红色
     Vec2 Pos = Vec2 ( visibleSize.width / 2.0  , visibleSize.height / 2.05 );
     favanimal->setPosition ( Pos );
