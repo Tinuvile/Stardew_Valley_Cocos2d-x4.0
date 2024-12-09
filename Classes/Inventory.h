@@ -53,16 +53,6 @@ public:
 	//未找到或拷贝失败则返回nullptr
 	std::shared_ptr<Item> GetSelectedItemCopy ();
 
-
-	std::shared_ptr<Item> GetItemAt ( int position ) const {
-		auto it = package.find ( position );
-		if (it != package.end ()) {
-			return it->second.first; // 返回存储的 Item  
-		}
-		return nullptr; // 如果没有找到 Item，返回 nullptr  
-	}
-
-
 	//在`new_position`合法时，将`selected_position`设置为`new_position`
 	// 合法的`new_position`应当为在[1,kRowSize]间的整数（只能设置物品栏最顶一栏的位置为`selected_position`
 	//若原`selected_position`处有Item，更新其为unusable状态
