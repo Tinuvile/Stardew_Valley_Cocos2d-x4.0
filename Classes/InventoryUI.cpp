@@ -125,48 +125,47 @@ void InventoryUI::updateDisplay () {
         return; // 退出方法  
     }
 
-    for (int m = 0; m < 3; m++) {
-        // 获取当前选择的物品的槽位  
-        for (int i = 0; i < kRowSize; ++i) {
-            auto slot = _itemSlots.at ( i );
-            slot->setVisible ( true ); // 确保显示所有槽位  
+    // 获取当前选择的物品的槽位  
+    for (int i = 0; i < kRowSize; ++i) {
+        auto slot = _itemSlots.at ( i );
+        slot->setVisible ( true ); // 确保显示所有槽位  
 
-            // 获取槽位物品  
-            auto item = _inventory->GetSelectedItem (); // 获取不同槽位的物品，使用 i 获取相应槽位的物品  
-            if (item) {
-                CCLOG ( "Selected item: %s" , item->GetName ().c_str () );
+        // 获取槽位物品  
+        auto item = _inventory->GetItemAt ( i + 1 ); // 获取特定槽位的物品，注意槽位从1开始  
+        if (item) {
+            CCLOG ( "Item in slot %d: %s" , i + 1 , item->GetName ().c_str () );
+        }
+        else {
+            CCLOG ( "No item in slot %d" , i + 1 );
+        }
+
+        // 如果需要获取特定槽位的物品，使用 GetItemAt(int position) 定义新函数  
+
+        // 更新槽位视觉表现  
+        if (item) {
+            // 清除之前的子节点  
+            slot->removeAllChildren ();
+
+            // 图片路径  
+            auto itemSprite = Sprite::create ( item->initial_pic );
+            if (itemSprite) {
+                itemSprite->setPosition ( slot->getContentSize () / 2 );
+                itemSprite->setScale ( 0.6f );
+                slot->addChild ( itemSprite , 3 );
+                CCLOG ( "Loading item sprite: %s" , item->initial_pic.c_str () );
             }
             else {
-                CCLOG ( "No item is selected." );
+                CCLOG ( "Error loading item sprite: %s" , item->initial_pic.c_str () );
             }
 
-            // 如果需要获取特定槽位的物品，使用 GetItemAt(int position) 定义新函数  
-
-            // 更新槽位视觉表现  
-            if (item) {
-                // 清除之前的子节点  
-                slot->removeAllChildren ();
-
-                // 图片路径  
-                auto itemSprite = Sprite::create ( item->initial_pic );
-                if (itemSprite) {
-                    itemSprite->setPosition ( slot->getContentSize () / 2 );
-                    itemSprite->setScale ( 0.6f );
-                    slot->addChild ( itemSprite , 3 );
-                    CCLOG ( "Loading item sprite: %s" , item->initial_pic.c_str () );
-                }
-                else {
-                    CCLOG ( "Error loading item sprite: %s" , item->initial_pic.c_str () );
-                }
-
-                // 根据 item 里的数量来设置数量标签（如果需要）。  
-                // 可以在这里创建一个 Label 显示数量  
-            }
-            else {
-                slot->removeAllChildren (); // 清空槽位  
-            }
+            // 根据 item 里的数量来设置数量标签（如果需要）。  
+            // 可以在这里创建一个 Label 显示数量  
+        }
+        else {
+            slot->removeAllChildren (); // 清空槽位  
         }
     }
+
     // 更新物品信息标签  
     if (_itemLabel) { // 检查 _itemLabel 是否为 nullptr  
         if (auto selectedItem = _inventory->GetSelectedItem ()) {
