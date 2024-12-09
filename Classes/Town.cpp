@@ -10,6 +10,7 @@
 #include"Crop.h"
 #include "InventoryUI.h"
 #include "NPCreate.h"
+#include "InventoryManager.h"
 
 USING_NS_CC;
 
@@ -34,41 +35,9 @@ bool Town::init()
     button = cocos2d::Sprite::create("CloseNormal.png");
     this->addChild(button, 11);
 
-    
-    // 创建 Inventory 实例  
-    inventory = new Inventory ();
-
-    // 添加物品到库存  
-    Item Grass ( "Grass" , "Item/Grass/grass-0.png" , 1 , 99 );
-    Item Tools ( "Tools" , "Item/Tools/tools-16.png" , 1 , 99 );
-
-    bool addedSuccessfully = inventory->AddItem ( Grass );
-    if (addedSuccessfully) {
-        inventory->SetSelectedItem ( 1 );
-        CCLOG ( "Item 'Grass' added successfully." );
-    }
-    else {
-        CCLOG ( "Failed to add item 'Grass'. Inventory might be full." );
-    }
-
-    addedSuccessfully = inventory->AddItem ( Tools );
-    if (addedSuccessfully) {
-        inventory->SetSelectedItem ( 2 );
-        CCLOG ( "Item 'Grass' added successfully." );
-    }
-    else {
-        CCLOG ( "Failed to add item 'Grass'. Inventory might be full." );
-    }
-
-    addedSuccessfully = inventory->AddItem ( Tools );
-    if (addedSuccessfully) {
-        inventory->SetSelectedItem ( 2 );
-        CCLOG ( "Item 'Grass' added successfully." );
-    }
-    else {
-        CCLOG ( "Failed to add item 'Grass'. Inventory might be full." );
-    }
-    
+    // 物品
+    InventoryManager* inventoryManager = new InventoryManager ();
+    inventoryManager->initInventory ();
 
     // 设置计时器标签
     _timerLabel = Label::createWithTTF("Timer: 60", "fonts/Marker Felt.ttf", 24);
@@ -404,11 +373,4 @@ void Town::checkPlayerPosition()
        
     }
     
-
 }
-
-
-
-
-
-
