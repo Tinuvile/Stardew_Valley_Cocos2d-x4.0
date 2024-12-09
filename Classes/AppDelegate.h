@@ -12,60 +12,8 @@
 #define  _APP_DELEGATE_H_
 
 #include "cocos2d.h"  // 引入 Cocos2d-x 引擎的主头文件
-#include "GameBeginUI.h"
-#include "Inventory.h"
-#include "Town.h"
-#include "supermarket.h"
-#include "farm.h"
-#include "Myhouse.h"
 #include "Player.h"
 #include "Crop.h"
-#include "Item.h"
-#include "BasicInformation.h"
-#include "memory"
-#define Daytime 43200
-
-USING_NS_CC;
-
-class Player;
-class Town;
-class farm;
-class supermarket;
-class Myhouse;
-class Crop;
-class Item;
-class CropBasicInformation;
-
-/******************************** 全局变量声明区 ***************************************/
-extern int remainingTime;  // 声明，不初始化
-extern int day;
-extern std::string Season;
-extern std::map<std::string, int> season;
-// 每种作物的基本信息
-extern std::map<std::string, CropBasicInformation> cropbasicinformation;
-extern std::map<std::pair<std::string, Vec2>, bool> T_lastplace;
-// 已经种植的作物的状态信息
-// extern std::vector<std::shared_ptr<Crop>> Crop_information;
-// 初始化各作物的基本信息
-extern CropBasicInformation WHEAT; 
-extern CropBasicInformation CORN; 
-extern CropBasicInformation POTATO;
-extern CropBasicInformation PUMPKIN;
-extern CropBasicInformation BLUEBERRY;
-
-// extern Crop wheat; 
-// extern Crop corn;
-// extern Crop potato;
-// extern Crop pumpkin;
-// extern Crop blueberry;
-
-
-extern Player* player1;  // 声明指针变量，不初始化
-extern Town* town;
-extern supermarket* seedshop;
-extern farm* Farm;
-
-/**************************************************************************************/
  /**
   @brief    Cocos2d 应用程序的委托类（AppDelegate）
 
@@ -76,6 +24,7 @@ extern farm* Farm;
   /************************************ 全局变量声明区 ******************************************/
   // 设定游戏画面大小：1600, 1280
 static cocos2d::Size designResolutionSize = cocos2d::Size(1600, 1280);  // 设计分辨率
+
 
 
 class AppDelegate : private cocos2d::Application  // 继承自 cocos2d::Application 类，并私有化继承
@@ -110,8 +59,6 @@ public:
     virtual void applicationWillEnterForeground();
 
     void runScene(cocos2d::Director* director);
-
-    void Initialize();
 
 };
 
