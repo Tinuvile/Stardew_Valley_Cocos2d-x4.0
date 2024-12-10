@@ -3,13 +3,14 @@
 
 #include <string>  
 #include "Item.h"
+#include "Inventory.h"
 
 using namespace std;
 
 class EconomicSystem {
 public:
     // 构造函数和析构函数  
-    EconomicSystem ();
+    EconomicSystem ( Inventory* mybag , Inventory* goods );
     ~EconomicSystem ();
 
     // 增加金币的函数  
@@ -25,12 +26,15 @@ public:
     void buyItem ( const string& itemName );
 
     // 出售函数  
-    void sellItem ( const string& itemName );
+    void sellItem ( const string& itemName , int count = 1 );
 
 private:
     // 保存金币数量  
-    int goldAmount;
-    Item itemManager;  // 创建 Item 对象  
+    int goldAmount; 
+
+    Inventory* _mybag; // 指向自己背包实例的指针  
+
+    Inventory* _goods; // 指向商品实例的指针  
 };
 
 #endif  // ECONOMIC_SYSTEM_H

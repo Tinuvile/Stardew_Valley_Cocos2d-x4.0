@@ -37,46 +37,28 @@ bool Town::init()
 
     // 背包中的初始物品添加
     inventory->AddItem ( Bamboo_Pole );
-    inventory->SetSelectedItem ( 1 );
     
     inventory->AddItem ( Apple_Sapling );
-    inventory->SetSelectedItem ( 2 );
 
     inventory->AddItem ( Apple_Sapling );
-    inventory->SetSelectedItem ( 2 );
 
     inventory->AddItem ( Potato_Seeds );
-    inventory->SetSelectedItem ( 3 );
 
     inventory->AddItem ( Carrot_Seeds );
-    inventory->SetSelectedItem ( 4 );
 
     inventory->AddItem ( Cauliflower_Seeds );
-    inventory->SetSelectedItem ( 5 );
 
     inventory->AddItem ( Coffee_Bean );
-    inventory->SetSelectedItem ( 6 );
 
     inventory->AddItem ( Garlic_Seeds );
-    inventory->SetSelectedItem ( 7 );
 
     inventory->AddItem ( Jazz_Seeds );
-    inventory->SetSelectedItem ( 8 );
 
     inventory->AddItem ( Kale_Seeds );
-    inventory->SetSelectedItem ( 9 );
 
     inventory->AddItem ( Parsnip_Seeds );
-    inventory->SetSelectedItem ( 10 );
 
     inventory->AddItem ( Rhubarb_Seeds );
-    inventory->SetSelectedItem ( 11 );
-
-    inventory->AddItem ( Rice_Shoot );
-    inventory->SetSelectedItem ( 12 );
-
-    inventory->AddItem ( Strawberry_Seeds );
-    inventory->SetSelectedItem ( 13 );
 
 
     // 设置计时器标签
