@@ -2,7 +2,7 @@
 #define ECONOMIC_SYSTEM_H  
 
 #include <string>  
-#include "Item.h"  // 包含 TestItem.h 以获取 item 的价格  
+#include "Item.h"
 
 using namespace std;
 

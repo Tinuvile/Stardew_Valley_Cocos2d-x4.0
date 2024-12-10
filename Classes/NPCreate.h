@@ -29,6 +29,8 @@ public:
     // NPC移动
     void NPC::MoveToPosition ( const cocos2d::Vec2& targetPosition );
 
+    void NPC::StartRandomMovement ();
+
     void NPC::RandomMove ();
 
     bool NPC::IsPositionValid ( const cocos2d::Vec2& targetPosition , const cocos2d::Vec2& direction );
@@ -54,6 +56,10 @@ protected:
 
     // 动画帧路径  
     std::vector<std::vector<std::string>> animations; // [0]: up, [1]: down, [2]: left, [3]: right 
+
+    std::string currentAnimationName; // 跟踪当前动画名称
+
+    cocos2d::Vec2 currentDirection; // 当前移动方向  
 };
 
 // NPC 创建类  

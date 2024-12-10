@@ -4,7 +4,8 @@
 NPC::NPC ( const std::string& name , const cocos2d::Vec2& position , 
     const std::vector<std::vector<std::string>>& animationFrames, 
     const std::vector<cocos2d::Vec2>& validPositions )
-    : name ( name ) , position ( position ) , animations ( animationFrames ) , nonTransparentPixels ( validPositions ) {
+    : name ( name ) , position ( position ) , animations ( animationFrames ) ,
+    nonTransparentPixels ( validPositions ) , currentAnimationName ( "" ) {
 
     CCLOG ( "Number of valid positions: %zu" , nonTransparentPixels.size () );
 
@@ -15,7 +16,7 @@ NPC::NPC ( const std::string& name , const cocos2d::Vec2& position ,
     }
     this->sprite->setPosition ( position );
     // 设置 NPC 的缩放  
-    this->sprite->setScale ( 2.8f ); 
+    this->sprite->setScale ( 3.0f ); 
 
     // 创建四个方向的动画  
     CreateAnimation ( "upAnimation" , animations[0] , 0.3f );
@@ -23,11 +24,6 @@ NPC::NPC ( const std::string& name , const cocos2d::Vec2& position ,
     CreateAnimation ( "leftAnimation" , animations[2] , 0.3f );
     CreateAnimation ( "rightAnimation" , animations[3] , 0.3f );
 
-    // 随机移动的调度  
-    schedule ( [this]( float dt ) {
-        CCLOG ( "RandomMove called" );
-        RandomMove ();
-    } , 2.0f , "random_move_key" ); // 每 0.3 秒随机移动一次
 }
 
 void NPC::RandomMove () {
@@ -35,10 +31,10 @@ void NPC::RandomMove () {
 
     // 定义可移动的方向，分别为上、下、左、右  
     std::vector<cocos2d::Vec2> directions = {
-        cocos2d::Vec2 ( 0, 4 ),    // 上  
-        cocos2d::Vec2 ( 0, -4 ),   // 下  
-        cocos2d::Vec2 ( -4, 0 ),   // 左  
-        cocos2d::Vec2 ( 4, 0 )     // 右  
+        cocos2d::Vec2 ( 0, 50 ),    // 上  
+        cocos2d::Vec2 ( 0, -50 ),   // 下  
+        cocos2d::Vec2 ( -50, 0 ),   // 左  
+        cocos2d::Vec2 ( 50, 0 )     // 右  
     };
 
     // 随机选择一个方向  
@@ -70,7 +66,7 @@ bool NPC::IsPositionValid ( const cocos2d::Vec2& targetPosition , const cocos2d:
 
         // 检查该位置是否在 nonTransparentPixels 区域内  
         for (const auto& pixel : nonTransparentPixels) {
-            if (pixel.distance ( checkPosition ) < 20) { // 如果在距离内，表示该位置不透明  
+            if (pixel.distance ( checkPosition ) < 36) { // 如果在距离内，表示该位置不透明  
                 CCLOG ( "Found non-transparent pixel at: (%f, %f)" , checkPosition.x , checkPosition.y );
                 isTransparent = false; // 发现不透明像素  
                 break;
@@ -101,9 +97,13 @@ void NPC::CreateAnimation ( const std::string& animationName , const std::vector
 
 
 void NPC::PlayAnimation ( const std::string& animationName , bool loop ) {
+    // 在播放新的动画前，停止当前动画  
+    this->sprite->stopAllActions (); // 丢弃所有动画
+
     auto animation = cocos2d::AnimationCache::getInstance ()->getAnimation ( animationName );
     if (animation) {
         auto animateAction = cocos2d::Animate::create ( animation );
+
         // 如果循环播放，我们使用 RepeatForever  
         if (loop) {
             auto repeatAction = cocos2d::RepeatForever::create ( animateAction );
@@ -120,28 +120,42 @@ void NPC::MoveToPosition ( const cocos2d::Vec2& targetPosition ) {
     CCLOG ( "Moving to position: (%f, %f)" , targetPosition.x , targetPosition.y );
 
     // 判断朝向并播放对应动画  
+    std::string animationName;
     if (targetPosition.x < position.x) {
-        PlayAnimation ( "leftAnimation" , true );
+        animationName = "leftAnimation";
     }
     else if (targetPosition.x > position.x) {
-        PlayAnimation ( "rightAnimation" , true );
+        animationName = "rightAnimation";
     }
     else if (targetPosition.y < position.y) {
-        PlayAnimation ( "downAnimation" , true );
+        animationName = "downAnimation";
     }
     else if (targetPosition.y > position.y) {
-        PlayAnimation ( "upAnimation" , true );
+        animationName = "upAnimation";
+    }
+
+    
+
+    // 只在当前动画不是目标动画时播放动画  
+    if (currentAnimationName != animationName) {
+        PlayAnimation ( animationName , true );
+        currentAnimationName = animationName; // 跟踪当前动画名称  
     }
 
     // 创建一个移动动作  
-    auto moveAction = cocos2d::MoveTo::create ( 2.0f , targetPosition );
+    auto moveAction = cocos2d::MoveTo::create ( 6.0f , targetPosition );
     auto moveDone = cocos2d::CallFunc::create ( [this , targetPosition]() {
         position = targetPosition; // 更新当前位置  
-        // 在移动结束后播放停止动画，如果需要  
-        // PlayAnimation("standAnimation", true);  
+        // 可以播放停止动画  
+        currentAnimationName = ""; // 移动完成后重置动画状态  
     } );
 
     this->sprite->runAction ( cocos2d::Sequence::create ( moveAction , moveDone , nullptr ) );
+
+    if (moveAction->isDone ()) {
+        PlayAnimation ( "standAnimation" , true ); // 在移动完成后播放站立动画  
+        currentAnimationName = "standAnimation"; // 更新状态  
+    }
 }
 
 

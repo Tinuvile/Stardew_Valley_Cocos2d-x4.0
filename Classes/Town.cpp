@@ -49,6 +49,36 @@ bool Town::init()
     inventory->AddItem ( Potato_Seeds );
     inventory->SetSelectedItem ( 3 );
 
+    inventory->AddItem ( Carrot_Seeds );
+    inventory->SetSelectedItem ( 4 );
+
+    inventory->AddItem ( Cauliflower_Seeds );
+    inventory->SetSelectedItem ( 5 );
+
+    inventory->AddItem ( Coffee_Bean );
+    inventory->SetSelectedItem ( 6 );
+
+    inventory->AddItem ( Garlic_Seeds );
+    inventory->SetSelectedItem ( 7 );
+
+    inventory->AddItem ( Jazz_Seeds );
+    inventory->SetSelectedItem ( 8 );
+
+    inventory->AddItem ( Kale_Seeds );
+    inventory->SetSelectedItem ( 9 );
+
+    inventory->AddItem ( Parsnip_Seeds );
+    inventory->SetSelectedItem ( 10 );
+
+    inventory->AddItem ( Rhubarb_Seeds );
+    inventory->SetSelectedItem ( 11 );
+
+    inventory->AddItem ( Rice_Shoot );
+    inventory->SetSelectedItem ( 12 );
+
+    inventory->AddItem ( Strawberry_Seeds );
+    inventory->SetSelectedItem ( 13 );
+
 
     // 设置计时器标签
     _timerLabel = Label::createWithTTF("Timer: 60", "fonts/Marker Felt.ttf", 24);
@@ -166,7 +196,7 @@ bool Town::init()
     // 定期更新玩家状态
     this->schedule([this](float dt) {
         this->checkPlayerPosition();  // 检查玩家是否接近轮廓点
-        }, 0.01f, "check_position_key");
+        }, 0.1f, "check_position_key");
 
 
 
@@ -186,9 +216,14 @@ bool Town::init()
         auto abigailSprite = abigail->GetSprite ();
         if (abigailSprite) {
             CCLOG ( "Abigail sprite created successfully at position: (%f, %f)" , abigailSprite->getPositionX () , abigailSprite->getPositionY () );
-            this->addChild ( abigailSprite , 10 ); // 确保添加到场景中 
+            this->addChild ( abigailSprite , 5 ); // 确保添加到场景中 
 
-            abigail->RandomMove (); // 直接调用 RandomMove 方法
+            
+
+            // 使用调度器每 6.0 秒调用 RandomMove  
+            this->schedule ( [abigail]( float dt ) {
+                abigail->RandomMove ();
+            } , 1.0f , "random_move_key" ); // 每 6.0 秒随机移动一次
         }
         else {
             CCLOG ( "Abigail sprite is nullptr." );
