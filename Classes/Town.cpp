@@ -10,6 +10,7 @@
 #include"Crop.h"
 #include "InventoryUI.h"
 #include "NPCreate.h"
+#include "Generaltem.h"
 
 USING_NS_CC;
 
@@ -34,38 +35,19 @@ bool Town::init()
     button = cocos2d::Sprite::create("CloseNormal.png");
     this->addChild(button, 11);
 
-    
+    // 背包中的初始物品添加
     inventory = new Inventory ();
+    inventory->AddItem ( Bamboo_Pole );
+    inventory->SetSelectedItem ( 1 );
+    
+    inventory->AddItem ( Apple_Sapling );
+    inventory->SetSelectedItem ( 2 );
 
-    Item Grass ( "Grass" , "Item/Grass/grass-0.png" , 1 , 99 );
-    Item Tools ( "Tools" , "Item/Tools/tools-16.png" , 1 , 99 );
+    inventory->AddItem ( Apple_Sapling );
+    inventory->SetSelectedItem ( 2 );
 
-    bool addedSuccessfully = inventory->AddItem ( Grass );
-    if (addedSuccessfully) {
-        inventory->SetSelectedItem ( 1 );
-        CCLOG ( "Item 'Grass' added successfully." );
-    }
-    else {
-        CCLOG ( "Failed to add item 'Grass'. Inventory might be full." );
-    }
-
-    addedSuccessfully = inventory->AddItem ( Tools );
-    if (addedSuccessfully) {
-        inventory->SetSelectedItem ( 2 );
-        CCLOG ( "Item 'Grass' added successfully." );
-    }
-    else {
-        CCLOG ( "Failed to add item 'Grass'. Inventory might be full." );
-    }
-
-    addedSuccessfully = inventory->AddItem ( Tools );
-    if (addedSuccessfully) {
-        inventory->SetSelectedItem ( 2 );
-        CCLOG ( "Item 'Grass' added successfully." );
-    }
-    else {
-        CCLOG ( "Failed to add item 'Grass'. Inventory might be full." );
-    }
+    inventory->AddItem ( Potato_Seeds );
+    inventory->SetSelectedItem ( 3 );
 
 
     // 设置计时器标签

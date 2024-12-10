@@ -1,5 +1,5 @@
-// InventoryUI.cpp  
-#include "InventoryUI.h"  
+// StoreUI.cpp  
+#include "StoreUI.h"  
 #include "ui/CocosGUI.h"  
 #include "Item.h"  
 #include "AppDelegate.h"
@@ -11,7 +11,7 @@ static void problemLoading ( const char* filename )
     printf ( "Error while loading: %s\n" , filename );
     printf ( "Depending on how you compiled you might have to add 'Resources/' in front of filenames in CreateCharacterScene.cpp\n" );
 }
-void InventoryUI::backgroundcreate(){
+void StoreUI::backgroundcreate () {
     Vec2 position = player1->getPosition ();
     // 创建一个半透明的黑色遮罩
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
@@ -39,7 +39,7 @@ void InventoryUI::backgroundcreate(){
         this->addChild ( bag , 1 );
     }
 }
-void InventoryUI::Itemblock ( Inventory* inventory ) {
+void StoreUI::Itemblock ( Inventory* inventory ) {
     Vec2 position = player1->getPosition ();
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     Vec2 origin = Director::getInstance ()->getVisibleOrigin ();
@@ -84,7 +84,7 @@ void InventoryUI::Itemblock ( Inventory* inventory ) {
         }
     }
 }
-bool InventoryUI::init ( Inventory* inventory ) {
+bool StoreUI::init ( Inventory* inventory ) {
     if (!Layer::init ()) {
         return false;
     }
@@ -109,8 +109,8 @@ bool InventoryUI::init ( Inventory* inventory ) {
     return true;
 }
 
-InventoryUI* InventoryUI::create ( Inventory* inventory ) {
-    InventoryUI* ret = new InventoryUI ();
+StoreUI* StoreUI::create ( Inventory* inventory ) {
+    StoreUI* ret = new StoreUI ();
     if (ret && ret->init ( inventory )) {
         ret->autorelease ();
         return ret;
@@ -119,7 +119,7 @@ InventoryUI* InventoryUI::create ( Inventory* inventory ) {
     return nullptr;
 }
 
-void InventoryUI::updateDisplay () {
+void StoreUI::updateDisplay () {
     if (!_inventory) {
         CCLOG ( "Warning: _inventory is nullptr" );
         return; // 退出方法  
@@ -134,7 +134,7 @@ void InventoryUI::updateDisplay () {
         auto item = _inventory->GetItemAt ( i + 1 ); // 获取特定槽位的物品，注意槽位从1开始 
 
         // 获取物品数量   
-        int itemCount = _inventory->GetItemCountAt(i + 1); // 获取该槽位的物品数量  
+        int itemCount = _inventory->GetItemCountAt ( i + 1 ); // 获取该槽位的物品数量  
 
         if (item) {
             CCLOG ( "Item in slot %d: %s" , i + 1 , item->GetName ().c_str () );
@@ -169,7 +169,7 @@ void InventoryUI::updateDisplay () {
                 // 如果标签不存在，创建新的标签  
                 countLabel = Label::createWithSystemFont ( std::to_string ( itemCount ) , "fonts/Arial Bold.ttf" , 20 );
                 countLabel->setTextColor ( Color4B ( 255 , 153 , 0 , 255 ) );
-                countLabel->setPosition ( slot->getPosition ().x+slot->getContentSize ().width*1.7 , slot->getPosition ().y - slot->getContentSize ().height * 1.7 ); // 设置位置在槽位下方  
+                countLabel->setPosition ( slot->getPosition ().x + slot->getContentSize ().width * 1.7 , slot->getPosition ().y - slot->getContentSize ().height * 1.7 ); // 设置位置在槽位下方  
                 countLabel->setTag ( 200 + i ); // 设置标签  
                 this->addChild ( countLabel , 4 ); // 添加到层级中  
             }
@@ -203,7 +203,7 @@ void InventoryUI::updateDisplay () {
     }
 }
 
-void InventoryUI::onItemSlotClicked ( cocos2d::Ref* sender ) {
+void StoreUI::onItemSlotClicked ( cocos2d::Ref* sender ) {
     auto slot = static_cast<Sprite*>(sender);
     int position = slot->getTag (); // 获取槽位位置  
 

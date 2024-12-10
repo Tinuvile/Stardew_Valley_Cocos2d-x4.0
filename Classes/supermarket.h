@@ -6,6 +6,8 @@
 #include "AppDelegate.h"
 #include "physics/CCPhysicsWorld.h"
 #include "ui/CocosGUI.h"
+#include "Inventory.h"
+#include "Generaltem.h"
 
 class supermarket : public cocos2d::Scene
 {
@@ -47,6 +49,8 @@ private:
     cocos2d::Menu* menu;
 
     bool  isEnterKeyPressed = false;
+
+    Inventory* StoreItem;
 
 };
 
