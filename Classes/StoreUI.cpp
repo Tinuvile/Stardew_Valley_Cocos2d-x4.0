@@ -20,6 +20,7 @@ void StoreUI::backgroundcreate () {
     darkLayer->setPosition ( position - visibleSize / 2 );// 设置遮罩层的位置
     this->addChild ( darkLayer , 0 );
 
+    //背包
     auto mybag = Sprite::create ( "UIresource/supermarket/wupinlan.png" );
     mybag->setTag ( 101 );
     if (mybag == nullptr)
@@ -95,6 +96,24 @@ void StoreUI::backgroundcreate () {
     welcome->setTextColor ( cocos2d::Color4B::BLACK );  // 初始颜色是黑色
     welcome->setPosition ( Vec2 ( position.x - visibleSize.width / 2.7 , position.y * 1.15 ) );
     this->addChild ( welcome , 2 );
+
+    //拥有金币框
+    auto moneyFrame = Sprite::create ( "UIresource/supermarket/moneyFrame.png" );
+    if (moneyFrame == nullptr)
+    {
+        problemLoading ( "'moneyFrame.png'" );
+    }
+    else
+    {
+        float originalWidth = moneyFrame->getContentSize ().width;
+        float originalHeight = moneyFrame->getContentSize ().height;
+        float scaleX = visibleSize.width / originalWidth;
+        float scaleY = visibleSize.height / originalHeight;
+        float scale = std::min ( scaleX , scaleY );
+        moneyFrame->setScale ( scale / 4 );
+        moneyFrame->setPosition ( Vec2 ( position.x - visibleSize.width * 0.1 , position.y - visibleSize.height * 0.042 ) );
+        this->addChild ( moneyFrame , 1 );
+    }
 }
 
 void StoreUI::ProductDisplay ( Inventory* mybag , Inventory* goods ) {
@@ -159,11 +178,11 @@ void StoreUI::ProductDisplay ( Inventory* mybag , Inventory* goods ) {
             auto Item_name = cocos2d::Label::createWithSystemFont ( itemname , "fonts/Comic Sans MS.ttf" , 30 );
             Item_name->setAnchorPoint ( Vec2 ( 0 , 0.5 ) );
             Item_name->setTextColor ( cocos2d::Color4B::BLACK );  // 初始颜色是红色
-            Item_name->setPosition ( Vec2 ( 380 , 357 - offsetY ) );
+            Item_name->setPosition ( Vec2 ( 380 , 350 - offsetY ) );
             scrollView->addChild ( Item_name , 2 );
 
             //添加物品图片
-            itemSprite->setPosition ( Vec2 ( 290 , 357 - offsetY ) );
+            itemSprite->setPosition ( Vec2 ( 290 , 350 - offsetY ) );
             itemSprite->setScale ( 0.7f );
             scrollView->addChild ( itemSprite , 2 );
 
@@ -173,7 +192,7 @@ void StoreUI::ProductDisplay ( Inventory* mybag , Inventory* goods ) {
             auto item_value = cocos2d::Label::createWithSystemFont ( ItemValue , "fonts/Comic Sans MS.ttf" , 30 );
             item_value->setAnchorPoint ( Vec2 ( 0 , 0.5 ) );
             item_value->setTextColor ( cocos2d::Color4B::BLACK );  // 初始颜色是红色
-            item_value->setPosition ( Vec2 ( 1080 , 357 - offsetY ) );
+            item_value->setPosition ( Vec2 ( 1080 , 350 - offsetY ) );
             scrollView->addChild ( item_value , 2 );
             CCLOG ( "Loading item sprite: %s" , item->initial_pic.c_str () );
         }
@@ -187,6 +206,10 @@ void StoreUI::ProductDisplay ( Inventory* mybag , Inventory* goods ) {
 
     // 将滚动视图添加到场景中
     this->addChild ( scrollView , 2 );
+}
+
+void StoreUI::moneyDisplay () {
+    auto visibleSize = Director::getInstance ()->getVisibleSize ();
 }
 
 bool StoreUI::init ( Inventory* mybag , Inventory* goods ) {
