@@ -17,6 +17,8 @@ public:
 
     void updateDisplay (); // 更新显示内容  
 
+    void moneyDisplay ();
+
 private:
     Inventory* _mybag; // 指向自己背包实例的指针  
 
