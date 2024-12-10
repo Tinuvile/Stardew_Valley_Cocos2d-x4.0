@@ -21,7 +21,6 @@ public:
     // 按键释放时触发的回调函数
     void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
 
-
     bool moveLeft, moveDown, moveUp, moveRight;
 
     bool leftpressed = false, downpressed = false, uppressed = false, rightpressed = false;
@@ -35,10 +34,11 @@ public:
 
     void player_change();
 
+    bool init ();
 
 private:
     // 初始化角色
-    bool init();
+    // bool init();
 
 };
 

@@ -168,6 +168,40 @@ bool Town::init()
         this->checkPlayerPosition();  // 检查玩家是否接近轮廓点
         }, 0.01f, "check_position_key");
 
+
+
+
+
+    std::vector<std::vector<std::string>> abigailAnimations = {
+    {"npc/Abigail/Abigail-8.png", "npc/Abigail/Abigail-9.png", "npc/Abigail/Abigail-10.png", "npc/Abigail/Abigail-11.png"},
+    {"npc/Abigail/Abigail-0.png", "npc/Abigail/Abigail-1.png", "npc/Abigail/Abigail-2.png", "npc/Abigail/Abigail-3.png"},
+    {"npc/Abigail/Abigail-14.png", "npc/Abigail/Abigail-13.png", "npc/Abigail/Abigail-14.png", "npc/Abigail/Abigail-15.png"},
+    {"npc/Abigail/Abigail-4.png", "npc/Abigail/Abigail-5.png", "npc/Abigail/Abigail-6.png", "npc/Abigail/Abigail-7.png"}
+    };
+
+    // 创建 NPC 示例  
+    auto abigail = NPCreate::CreateNPC ( "Abigail" , cocos2d::Vec2 ( -100,400 ) , abigailAnimations , nonTransparentPixels );
+    if (abigail) {
+        CCLOG ( "NPC Abigail created successfully." );
+        auto abigailSprite = abigail->GetSprite ();
+        if (abigailSprite) {
+            CCLOG ( "Abigail sprite created successfully at position: (%f, %f)" , abigailSprite->getPositionX () , abigailSprite->getPositionY () );
+            this->addChild ( abigailSprite , 10 ); // 确保添加到场景中 
+
+            abigail->RandomMove (); // 直接调用 RandomMove 方法
+        }
+        else {
+            CCLOG ( "Abigail sprite is nullptr." );
+        }
+    }
+    else {
+        CCLOG ( "Failed to create NPC Abigail." );
+    }
+
+
+
+
+
     auto listener = EventListenerMouse::create();
     listener->onMouseDown = [this](Event* event) {
        
@@ -182,23 +216,6 @@ bool Town::init()
         }
         };
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, button);
-
-
-    /*
-    // 创建 NPC  
-    NPC* npc1 = NPCreate::CreateNPC ( "NPC1" , Vec2 ( 300 , 400 ) , "npc/Abigail/Abigail-0.png" ); // NPC 1  
-    NPC* npc2 = NPCreate::CreateNPC ( "NPC2" , Vec2 ( 500 , 600 ) , "npc/Abigail/Abigail-1.png" ); // NPC 2  
-    NPC* npc3 = NPCreate::CreateNPC ( "NPC3" , Vec2 ( 700 , 300 ) , "npc/Abigail/Abigail-2.png" ); // NPC 3  
-  
-    npc1->GetSprite ()->setScale ( player1->getScale () * 2.2 );
-    npc2->GetSprite ()->setScale ( player1->getScale () * 2.2 );
-    npc3->GetSprite ()->setScale ( player1->getScale () * 2.2 );
-
-    this->addChild ( npc1->GetSprite () , 5 ); // 添加 NPC 1 到场景  
-    this->addChild ( npc2->GetSprite () , 5 ); // 添加 NPC 2 到场景  
-    this->addChild ( npc3->GetSprite () , 5 ); // 添加 NPC 3 到场景 
-    */  
-
 
     // 设置键盘监听器  
     auto listenerWithPlayer = EventListenerKeyboard::create ();
@@ -239,7 +256,6 @@ bool Town::init()
 
     return true;
 }
-
 
 Town* Town::create()
 {
