@@ -12,6 +12,7 @@ extern int remainingTime;
 extern Player* player1;
 extern Town* town;
 extern supermarket* seedshop;
+extern Inventory* inventory;
 
 supermarket::supermarket() {}
 
@@ -428,7 +429,7 @@ bool supermarket::init()
                 // 如果当前没有打开 StoreUI，则打开它  
                 if (currentStoreUI == nullptr) {
                     CCLOG ( "Opening inventory." );
-                    currentStoreUI = StoreUI::create ( StoreItem );
+                    currentStoreUI = StoreUI::create ( inventory , StoreItem );
                     this->addChild ( currentStoreUI , 11 );  // 将 InventoryUI 添加到 Town 的上层  
                 }
                 // 如果已经打开 InventoryUI，则关闭它  

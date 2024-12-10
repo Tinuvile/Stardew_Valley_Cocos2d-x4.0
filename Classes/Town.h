@@ -57,7 +57,6 @@ private:
 
     bool isEnterKeyPressed = false;
 
-    Inventory* inventory;
 };
 
 #endif // __BACKGROUND1_H__

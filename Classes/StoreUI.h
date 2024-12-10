@@ -6,14 +6,21 @@
 
 class StoreUI : public cocos2d::Layer {
 public:
-    virtual bool init ( Inventory* inventory );
-    static StoreUI* create ( Inventory* inventory );
+    virtual bool init ( Inventory* mybag , Inventory* goods );
+    static StoreUI* create ( Inventory* mybag , Inventory* goods );
+    //背景图展示
     void backgroundcreate ();
-    void Itemblock ( Inventory* inventory );
+    //商品展示
+    void ProductDisplay ( Inventory* mybag , Inventory* goods );
+
+    void Itemblock ( Inventory* mybag , Inventory* goods );
+
     void updateDisplay (); // 更新显示内容  
 
 private:
-    Inventory* _inventory; // 指向 Inventory 实例的指针  
+    Inventory* _mybag; // 指向自己背包实例的指针  
+
+    Inventory* _goods; // 指向商品实例的指针  
 
     cocos2d::Label* _itemLabel;  // 显示物品信息的标签 
 

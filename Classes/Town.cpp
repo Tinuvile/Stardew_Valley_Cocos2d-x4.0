@@ -19,7 +19,7 @@ extern Player* player1;
 extern Town* town;
 extern supermarket* seedshop;
 extern std::map <std::pair<std::string, Vec2>, bool> T_lastplace;
-
+extern Inventory* inventory;
 
 Town::Town() {}
 
@@ -36,7 +36,6 @@ bool Town::init()
     this->addChild(button, 11);
 
     // 背包中的初始物品添加
-    inventory = new Inventory ();
     inventory->AddItem ( Bamboo_Pole );
     inventory->SetSelectedItem ( 1 );
     
