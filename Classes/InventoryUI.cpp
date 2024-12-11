@@ -5,6 +5,7 @@
 #include "AppDelegate.h"
 
 extern Player* player1;
+
 USING_NS_CC;
 static void problemLoading ( const char* filename )
 {
@@ -18,11 +19,11 @@ void InventoryUI::backgroundcreate(){
     auto darkLayer = cocos2d::LayerColor::create ( cocos2d::Color4B ( 0 , 0 , 0 , 120 ) , 5 * visibleSize.width , 5 * visibleSize.height );  // 黑色，透明度为120
     darkLayer->setPosition ( position - visibleSize / 2 );// 设置遮罩层的位置
     this->addChild ( darkLayer , 0 );
-    auto bag = Sprite::create ( "UIresource/beibao/newbag1.png" );
+    auto bag = Sprite::create ( "UIresource/beibao/newbag2.png" );
     bag->setTag ( 101 );
     if (bag == nullptr)
     {
-        problemLoading ( "'newbag1.png'" );
+        problemLoading ( "'newbag2.png'" );
     }
     else
     {
@@ -90,6 +91,8 @@ bool InventoryUI::init ( Inventory* inventory ) {
     }
     backgroundcreate ();
 
+    Buttons_switching ();
+
     Itemblock ( inventory );
 
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
@@ -108,7 +111,58 @@ bool InventoryUI::init ( Inventory* inventory ) {
 
     return true;
 }
+void InventoryUI::Buttons_switching () {
+    Vec2 position = player1->getPosition ();
+    auto visibleSize = Director::getInstance ()->getVisibleSize ();
+    //图标显示
+    auto bagkey = Sprite::create ( "UIresource/beibao/bagkey.png" );
+    auto Skillkey = Sprite::create ( "UIresource/beibao/Skillkey.png" );
+    auto intimacykey = Sprite::create ( "UIresource/beibao/intimacykey.png" );
+    if (bagkey == nullptr)
+    {
+        problemLoading ( "'bagkey.png'" );
+    }
+    else
+    {
+        // 获取原始图片的宽高
+        float originalWidth = bagkey->getContentSize ().width;
+        float originalHeight = bagkey->getContentSize ().height;
+        // 根据屏幕宽度和图片原始宽高计算比例
+        float scaleX = visibleSize.width / originalWidth;
+        float scaleY = visibleSize.height / originalHeight;
+        // 选择最小的缩放比例，以保证图片完全显示在屏幕上且不变形
+        float scale = std::min ( scaleX , scaleY );
+        bagkey->setScale ( scale / 16.5 );
+        bagkey->setPosition ( Vec2 ( position.x - visibleSize.width * 0.25 , position.y + visibleSize.height * 0.305 ) );//0.305是选中时位置
+        Skillkey->setScale ( scale / 16.5 );
+        Skillkey->setPosition ( Vec2 ( position.x - visibleSize.width * 0.19 , position.y + visibleSize.height * 0.315 ) );//0.315是未选中时位置
+        intimacykey->setScale ( scale / 16.5 );
+        intimacykey->setPosition ( Vec2 ( position.x - visibleSize.width * 0.13 , position.y + visibleSize.height * 0.315 ) );//0.315是未选中时位置
+        this->addChild ( bagkey , 1 );
+        this->addChild ( Skillkey , 1 );
+        this->addChild ( intimacykey , 1 );
+    }
 
+    //动画以及切换Layer
+    auto listener = EventListenerMouse::create ();
+    listener->onMouseDown = [this, bagkey, Skillkey,intimacykey]( EventMouse* event ) {
+        Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
+        mousePos = this->convertToNodeSpace ( mousePos );
+        //CCLOG ( "X:%f,Y:%f" , event->getCursorX () , event->getCursorY () );
+        if (bagkey->getBoundingBox ().containsPoint ( mousePos )) {
+        }
+        else if (Skillkey->getBoundingBox ().containsPoint ( mousePos )) {
+
+        }
+        else if (intimacykey->getBoundingBox ().containsPoint ( mousePos )) {
+            CCLOG ( "Clicked on intimacykey" );
+            // 移除当前的Layer
+            this->removeFromParent ();
+            Director::getInstance ()->getRunningScene ()->addChild ( intimacyUI::create () , 10 );
+        }
+        };
+    _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , this );
+}
 InventoryUI* InventoryUI::create ( Inventory* inventory ) {
     InventoryUI* ret = new InventoryUI ();
     if (ret && ret->init ( inventory )) {

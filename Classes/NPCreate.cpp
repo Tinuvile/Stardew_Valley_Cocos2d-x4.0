@@ -117,7 +117,7 @@ void NPC::PlayAnimation ( const std::string& animationName , bool loop ) {
 
 
 void NPC::MoveToPosition ( const cocos2d::Vec2& targetPosition ) {
-    CCLOG ( "Moving to position: (%f, %f)" , targetPosition.x , targetPosition.y );
+    //CCLOG ( "Moving to position: (%f, %f)" , targetPosition.x , targetPosition.y );
 
     // 判断朝向并播放对应动画  
     std::string animationName;

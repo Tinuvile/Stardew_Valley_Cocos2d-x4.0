@@ -227,7 +227,8 @@ bool Town::init()
         Vec2 clickPos(mouseEvent->getCursorX(), mouseEvent->getCursorY());
         clickPos = this->convertToNodeSpace(clickPos);
 
-        // 检查是否点击了 Abigail   
+        // 检查是否点击了 Abigail  
+        // 检查是否点击了 Abigail  
         if (abigail) {
             auto abigailSprite = abigail->GetSprite ();
             if (abigailSprite && abigailSprite->getBoundingBox ().containsPoint ( clickPos )) {

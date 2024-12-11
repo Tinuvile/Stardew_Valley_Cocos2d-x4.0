@@ -39,7 +39,7 @@ void intimacyUI::backgroundcreate () {
         // 选择最小的缩放比例，以保证图片完全显示在屏幕上且不变形
         float scale = std::min ( scaleX , scaleY );
         IntimacyFace->setScale ( scale / 1.5 );
-        IntimacyFace->setPosition ( position );
+        IntimacyFace->setPosition ( Vec2 ( position.x , position.y + 10 ) );
         this->addChild ( IntimacyFace , 15 );
     }
 }
