@@ -1,24 +1,19 @@
-//intimacy.h
+//intimacyUI.h
+//人物亲密度界面
 #pragma once
 #include "cocos2d.h"  
-#include "Inventory.h"  
+#include "NpcRelationship.h"  
 #include "AppDelegate.h"
+#include "InventoryUI.h"
+
 class intimacyUI : public cocos2d::Layer {
 public:
     virtual bool init ();
     static intimacyUI* create ();
     void backgroundcreate ();
-    void Itemblock ();
-    void updateDisplay (); // 更新显示内容  
+    void Buttons_switching ();
 
-private:
-    Inventory* _inventory; // 指向 Inventory 实例的指针  
-
-    cocos2d::Label* _itemLabel;  // 显示物品信息的标签 
-
-    cocos2d::Vector<cocos2d::Sprite*> _itemSlots; // 存储物品槽的 Sprite  
-
-    int _selectedSlot; // 当前选中的槽位  
+private:  
 
     void onItemSlotClicked ( cocos2d::Ref* sender ); // 物品槽的点击事件处理  
 };
