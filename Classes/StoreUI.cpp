@@ -14,8 +14,8 @@ static void problemLoading ( const char* filename )
 
 void StoreUI::backgroundcreate () {
     Vec2 position = player1->getPosition ();
-    // 创建一个半透明的黑色遮罩
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
+    // 创建一个半透明的黑色遮罩
     auto darkLayer = cocos2d::LayerColor::create ( cocos2d::Color4B ( 0 , 0 , 0 , 120 ) , 5 * visibleSize.width , 5 * visibleSize.height );  // 黑色，透明度为120
     darkLayer->setPosition ( position - visibleSize / 2 );// 设置遮罩层的位置
     this->addChild ( darkLayer , 0 );
@@ -147,6 +147,7 @@ void StoreUI::ProductDisplay ( Inventory* mybag , Inventory* goods ) {
     scrollView->setContentSize ( Size ( 1230 , 400 ) ); // 设置ScrollView 宽度，高度
     scrollView->setPosition ( Vec2 ( position.x - visibleSize.width * 0.389 , position.y + visibleSize.height * 0.01368 ) ); // 设置位置
     scrollView->setBounceEnabled ( true ); // 启用弹性效果
+    scrollView->setScrollBarEnabled ( false );    // 禁用垂直和水平滑动条
 
     // 计算商品的总高度  
     float totalItemHeight = 0;
@@ -182,6 +183,7 @@ void StoreUI::ProductDisplay ( Inventory* mybag , Inventory* goods ) {
 
         // 设置新的位置  
         innerContainer->setPositionY ( newPosY );
+
         };
     // 将监听器添加到事件分发器
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , this );
@@ -231,6 +233,71 @@ void StoreUI::ProductDisplay ( Inventory* mybag , Inventory* goods ) {
     this->addChild ( scrollView , 2 );
 }
 
+void StoreUI::SliderDisplay () {
+    Vec2 position = player1->getPosition ();
+    auto visibleSize = Director::getInstance ()->getVisibleSize ();
+    //滑动条和滑动块
+    auto Sliders = Sprite::create ( "UIresource/supermarket/huadongtiao.png" );
+    if (Sliders == nullptr)
+    {
+        problemLoading ( "'huadongtiao.png'" );
+    }
+    else
+    {
+        float originalWidth = Sliders->getContentSize ().width;
+        float originalHeight = Sliders->getContentSize ().height;
+        float scaleX = visibleSize.width / originalWidth;
+        float scaleY = visibleSize.height / originalHeight;
+        float scale = std::min ( scaleX , scaleY );
+        Sliders->setScale ( scale / 2.4 );
+        Sliders->setPosition ( Vec2 ( position.x + visibleSize.width * 0.48 , position.y + visibleSize.height * 0.16 ) );
+        this->addChild ( Sliders , 5 );
+    }
+    auto Slider = Sprite::create ( "UIresource/supermarket/huadongkuai.png" );
+    if (Slider == nullptr)
+    {
+        problemLoading ( "'huadongkuai.png'" );
+    }
+    else
+    {
+        float originalWidth = Slider->getContentSize ().width;
+        float originalHeight = Slider->getContentSize ().height;
+        float scaleX = visibleSize.width / originalWidth;
+        float scaleY = visibleSize.height / originalHeight;
+        float scale = std::min ( scaleX , scaleY );
+        Slider->setScale ( scale / 29 );
+        Slider->setPosition ( Vec2 ( position.x + visibleSize.width * 0.478 , position.y + visibleSize.height * 0.34375 ) );
+        this->addChild ( Slider , 6 );
+    }
+    // 监听滚轮事件
+    auto listener = cocos2d::EventListenerMouse::create ();
+    listener->onMouseScroll = [Slider]( cocos2d::EventMouse* event ) {
+        float _minY = 505;
+        float _maxY = 979;
+
+        // 获取滚轮滚动的增量（单位：像素）
+        float scrollDelta = event->getScrollY ();
+
+        // 获取当前精灵的位置
+        cocos2d::Vec2 currentPos = Slider->getPosition ();
+
+        // 根据滚轮的滚动方向来调整精灵的位置
+        float newY = currentPos.y - scrollDelta * 24; // 每次滚动24像素
+
+        // 限制精灵的垂直位置在[minY, maxY]范围内
+        if (newY < _minY)
+            newY = _minY;
+        if (newY > _maxY)
+            newY = _maxY;
+
+        // 设置新的位置
+        Slider->setPosition ( cocos2d::Vec2 ( currentPos.x , newY ) );
+        };
+
+    // 获取当前事件分发器并添加监听器
+    _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , this );
+}
+
 void StoreUI::moneyDisplay () {
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
 }
@@ -240,7 +307,10 @@ bool StoreUI::init ( Inventory* mybag , Inventory* goods ) {
         return false;
     }
     backgroundcreate ();
+
     ProductDisplay ( mybag , goods );
+
+    SliderDisplay ();
 
     Itemblock ( mybag , goods );
 

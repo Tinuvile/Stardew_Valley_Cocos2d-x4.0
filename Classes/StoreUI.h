@@ -18,6 +18,7 @@ public:
 
     void moneyDisplay ();
 
+    void SliderDisplay ();
 private:
     Inventory* _mybag; // 指向自己背包实例的指针  
 
