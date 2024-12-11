@@ -171,7 +171,7 @@ void InventoryUI::updateDisplay () {
                 countLabel->setTextColor ( Color4B ( 255 , 153 , 0 , 255 ) );
                 countLabel->setPosition ( slot->getPosition ().x+slot->getContentSize ().width*1.7 , slot->getPosition ().y - slot->getContentSize ().height * 1.7 ); // 设置位置在槽位下方  
                 countLabel->setTag ( 200 + i ); // 设置标签  
-                this->addChild ( countLabel , 4 ); // 添加到层级中  
+                slot->addChild ( countLabel , 4 ); // 添加到层级中  
             }
             else {
                 // 如果标签存在，更新数量  
