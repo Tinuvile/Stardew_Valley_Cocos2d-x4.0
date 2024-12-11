@@ -113,7 +113,7 @@ std::string getNPCportraits ( std::string name , std::string status ) {
 
 
     // 如果给定 NPC 名称在映射中存在  
-    if (npcPortraits.find ( name ) != npcPortraits.end ()) { 
+    if (npcPortraits.find ( name ) != npcPortraits.end ()) {
         // 返回相应状态的头像路径  
         return npcPortraits[name][status];
     }
