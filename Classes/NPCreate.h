@@ -29,8 +29,6 @@ public:
     // NPCÒÆ¶¯
     void NPC::MoveToPosition ( const cocos2d::Vec2& targetPosition );
 
-    void NPC::StartRandomMovement ();
-
     void NPC::RandomMove ();
 
     bool NPC::IsPositionValid ( const cocos2d::Vec2& targetPosition , const cocos2d::Vec2& direction );
