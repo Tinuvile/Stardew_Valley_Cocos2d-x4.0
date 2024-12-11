@@ -1,4 +1,8 @@
-  #include "cocos2d.h"  
+// NPCreate.h  
+#ifndef NPCREATE_H  
+#define NPCREATE_H  
+
+#include "cocos2d.h"  
 #include <string>  
 #include <vector>
 #include <cstdlib>
@@ -75,3 +79,5 @@ public:
 
     cocos2d::AnimationCache* animationCache; // ±£´æ¶¯»­ 
 };
+
+#endif // NPCREATE_H
