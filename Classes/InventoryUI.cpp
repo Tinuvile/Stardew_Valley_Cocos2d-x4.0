@@ -18,11 +18,11 @@ void InventoryUI::backgroundcreate(){
     auto darkLayer = cocos2d::LayerColor::create ( cocos2d::Color4B ( 0 , 0 , 0 , 120 ) , 5 * visibleSize.width , 5 * visibleSize.height );  // 黑色，透明度为120
     darkLayer->setPosition ( position - visibleSize / 2 );// 设置遮罩层的位置
     this->addChild ( darkLayer , 0 );
-    auto bag = Sprite::create ( "UIresource/beibao/bag.png" );
+    auto bag = Sprite::create ( "UIresource/beibao/newbag1.png" );
     bag->setTag ( 101 );
     if (bag == nullptr)
     {
-        problemLoading ( "'bag.png'" );
+        problemLoading ( "'newbag1.png'" );
     }
     else
     {
@@ -36,7 +36,7 @@ void InventoryUI::backgroundcreate(){
         float scale = std::min ( scaleX , scaleY );
         bag->setScale ( scale / 1.5 );
         bag->setPosition ( position );
-        this->addChild ( bag , 1 );
+        this->addChild ( bag , 0 );
     }
 }
 void InventoryUI::Itemblock ( Inventory* inventory ) {
@@ -51,7 +51,7 @@ void InventoryUI::Itemblock ( Inventory* inventory ) {
     for (int m = 0; m < 3; m++)
     {
         for (int i = 0; i < kRowSize; ++i) {
-            auto slot = Sprite::create ( "UIresource/beibao/wupincao.png" );
+            auto slot = Sprite::create ( "UIresource/beibao/itemblock.png" );
             auto bag = getChildByTag ( 101 );
             // 获取原始图片的宽高
             float originalWidth = slot->getContentSize ().width;
@@ -64,7 +64,7 @@ void InventoryUI::Itemblock ( Inventory* inventory ) {
             slot->setScale ( scale / 16.5 );
             float bagWidth = bag->getContentSize ().width;
             float bagHeight = bag->getContentSize ().height;
-            slot->setPosition ( position.x - bagWidth * 2.086 + (originalWidth * scale / 16.5 + 5) * i , position.y + bagHeight * 1.9 - m * (originalHeight * scale / 16.5 + 10) ); // 计算槽位位置  
+            slot->setPosition ( position.x - bagWidth * 0.545 + (originalWidth * scale / 16.5 + 5) * i , position.y + bagHeight * 1.73 / 3.643 - m * (originalHeight * scale / 16.5 + 10) ); // 计算槽位位置  
             slot->setTag ( i + 1 ); // 设置槽位的标签  
             this->addChild ( slot , 2 );
 
@@ -120,6 +120,7 @@ InventoryUI* InventoryUI::create ( Inventory* inventory ) {
 }
 
 void InventoryUI::updateDisplay () {
+    Vec2 position = player1->getPosition ();
     if (!_inventory) {
         CCLOG ( "Warning: _inventory is nullptr" );
         return; // 退出方法  
@@ -154,7 +155,7 @@ void InventoryUI::updateDisplay () {
             auto itemSprite = Sprite::create ( item->initial_pic );
             if (itemSprite) {
                 itemSprite->setPosition ( slot->getContentSize () / 2 );
-                itemSprite->setScale ( 0.2f );
+                itemSprite->setScale ( 0.7f );
                 slot->addChild ( itemSprite , 3 );
                 CCLOG ( "Loading item sprite: %s" , item->initial_pic.c_str () );
             }
@@ -167,9 +168,9 @@ void InventoryUI::updateDisplay () {
             auto countLabel = static_cast<Label*>(slot->getChildByTag ( 200 + i )); // 使用槽位的标签生成数量标签的唯一ID  
             if (!countLabel) {
                 // 如果标签不存在，创建新的标签  
-                countLabel = Label::createWithSystemFont ( std::to_string ( itemCount ) , "fonts/Arial Bold.ttf" , 20 );
+                countLabel = Label::createWithSystemFont ( std::to_string ( itemCount ) , "fonts/Comic Sans MS.ttf" , 20 );
                 countLabel->setTextColor ( Color4B ( 255 , 153 , 0 , 255 ) );
-                countLabel->setPosition ( slot->getPosition ().x+slot->getContentSize ().width*1.7 , slot->getPosition ().y - slot->getContentSize ().height * 1.7 ); // 设置位置在槽位下方  
+                countLabel->setPosition ( slot->getContentSize ().width * 0.8 ,  slot->getContentSize ().height * 0.2 ); // 设置位置在槽位右下方  
                 countLabel->setTag ( 200 + i ); // 设置标签  
                 slot->addChild ( countLabel , 4 ); // 添加到层级中  
             }

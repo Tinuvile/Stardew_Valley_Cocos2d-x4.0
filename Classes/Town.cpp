@@ -186,10 +186,10 @@ bool Town::init()
     // 创建 NPC 示例  
     auto abigail = NPCreate::CreateNPC ( "Abigail" , cocos2d::Vec2 ( -100 , 400 ) , abigailAnimations , nonTransparentPixels );
     if (abigail) {
-        CCLOG ( "NPC Abigail created successfully." );
+        // CCLOG ( "NPC Abigail created successfully." );
         auto abigailSprite = abigail->GetSprite ();
         if (abigailSprite) {
-            CCLOG ( "Abigail sprite created successfully at position: (%f, %f)" , abigailSprite->getPositionX () , abigailSprite->getPositionY () );
+            // CCLOG ( "Abigail sprite created successfully at position: (%f, %f)" , abigailSprite->getPositionX () , abigailSprite->getPositionY () );
             this->addChild ( abigailSprite , 5 ); // 确保添加到场景中  
 
             // 使用调度器每 1.0 秒调用 RandomMove  
@@ -202,7 +202,7 @@ bool Town::init()
                     // 获取当前精灵的位置和大小  
                     Vec2 position = abigailSprite->getPosition ();
                     Size size = abigailSprite->getContentSize ();
-                    CCLOG ( "Abigail's current position: (%f, %f)" , position.x , position.y ); // 打印位置  
+                    // CCLOG ( "Abigail's current position: (%f, %f)" , position.x , position.y ); // 打印位置  
                 }
             } , 1.0f , "random_move_key" ); // 每 1.0 秒随机移动一次  
         }
