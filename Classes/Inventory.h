@@ -71,6 +71,33 @@ public:
 		return 0; // 如果该位置没有物品，返回 0  
 	}
 
+	// 获取背包中指定名称的 Item  
+	Item Inventory::GetItemByName ( const std::string& itemName ) const {
+		for (const auto& entry : package) {
+			if (entry.second.first->GetName () == itemName) {
+				return *(entry.second.first); // 返回找到的 Item  
+			}
+		}
+	}
+
+	// 使用 Item 和数量移除物品  
+	int Inventory::RemoveItem ( const Item& item , const int& remove_num ) {
+		for (auto it = package.begin (); it != package.end (); ++it) {
+			if (it->second.first->GetName () == item.GetName ()) {
+				// 如果移除数量超过现有数量  
+				if (remove_num >= it->second.second) {
+					package.erase ( it ); // 清空该格子  
+					return 1; // 清空格子  
+				}
+				else {
+					it->second.second -= remove_num; // 减少数量  
+					return 0; // 正常移除  
+				}
+			}
+		}
+		return -1; // 没有找到该物品  
+	}
+
 
 	//在`new_position`合法时，将`selected_position`设置为`new_position`
 	// 合法的`new_position`应当为在[1,kRowSize]间的整数（只能设置物品栏最顶一栏的位置为`selected_position`

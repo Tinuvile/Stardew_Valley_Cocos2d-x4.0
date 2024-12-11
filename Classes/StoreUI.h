@@ -1,5 +1,4 @@
-// StoreUI.h  
-#pragma once  
+// StoreUI.h    
 #include "cocos2d.h"  
 #include "Inventory.h"  
 #include "AppDelegate.h"

@@ -144,12 +144,24 @@ void StoreUI::ProductDisplay ( Inventory* mybag , Inventory* goods ) {
     auto scrollView = cocos2d::ui::ScrollView::create ();
     scrollView->setDirection ( cocos2d::ui::ScrollView::Direction::VERTICAL ); // 设置为垂直滚动
     scrollView->setContentSize ( Size ( 1230 , 400 ) ); // ScrollView 宽度与 Productcolumn 一致，高度为 Productcolumn 的两倍
-    scrollView->setInnerContainerSize ( Size ( 1230 , 400 ) );
+    // scrollView->setInnerContainerSize ( Size ( 1230 , 400 ) );
     scrollView->setPosition ( Vec2 ( 220 , visibleSize.height / 2.3 ) ); // 设置位置
     scrollView->setBounceEnabled ( true ); // 启用弹性效果
 
+    // 计算商品的总高度  
+    float totalItemHeight = 0;
+    const int itemCount = 24; // 假设您有 24 个商品  
+    const float itemHeight = 105; // 每个商品的高度  
+    totalItemHeight = itemCount * itemHeight; // 计算总高度  
+
+    // 设置内部容器的大小  
+    scrollView->setInnerContainerSize ( Size ( 1230 , totalItemHeight ) ); // 设置内部容器的大小
+
+
     // 监听鼠标滚轮事件
     auto listener = cocos2d::EventListenerMouse::create ();
+    
+    /*
     listener->onMouseScroll = [scrollView]( cocos2d::EventMouse* event ) {
         // 获取鼠标滚轮的偏移量
         float scrollDelta = event->getScrollY ();
@@ -158,6 +170,35 @@ void StoreUI::ProductDisplay ( Inventory* mybag , Inventory* goods ) {
         auto innerContainer = scrollView->getInnerContainer ();
         innerContainer->setPositionY ( innerContainer->getPositionY () + scrollDelta * 105 );  // 控制灵敏度
         };
+    */
+
+    
+    listener->onMouseScroll = [scrollView]( cocos2d::EventMouse* event ) {
+        // 获取鼠标滚轮的偏移量  
+        float scrollDelta = event->getScrollY ();
+
+        // 获取当前的 innerContainer  
+        auto innerContainer = scrollView->getInnerContainer ();
+
+        // 计算新的 Y 位置  
+        float currentPosY = innerContainer->getPositionY ();
+        float newPosY = currentPosY + scrollDelta * 105; // 调整灵敏度  
+
+        // 限制滚动的上下边界  
+        float lowerLimit = scrollView->getContentSize ().height - innerContainer->getContentSize ().height;
+        float upperLimit = 0;
+
+        // 输出调试信息  
+        CCLOG ( "currentPosY: %f, newPosY: %f, lowerLimit: %f, upperLimit: %f" , currentPosY , newPosY , lowerLimit , upperLimit );
+
+        // 使用 std::max 和 std::min 确保 newPosY 在边界内  
+        newPosY = std::max ( newPosY , lowerLimit );
+        newPosY = std::min ( newPosY , upperLimit );
+
+        // 设置新的位置  
+        innerContainer->setPositionY ( newPosY );
+        };
+    
 
     // 将监听器添加到事件分发器
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , this );
