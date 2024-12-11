@@ -271,9 +271,9 @@ void StoreUI::SliderDisplay () {
     }
     // 监听滚轮事件
     auto listener = cocos2d::EventListenerMouse::create ();
-    listener->onMouseScroll = [Slider]( cocos2d::EventMouse* event ) {
-        float _minY = 505;
-        float _maxY = 979;
+    listener->onMouseScroll = [Slider,position,visibleSize]( cocos2d::EventMouse* event ) {
+        float _minY = position.y + visibleSize.height * 0.34375 - 20 * 23.8;
+        float _maxY = position.y + visibleSize.height * 0.34375;
 
         // 获取滚轮滚动的增量（单位：像素）
         float scrollDelta = event->getScrollY ();
@@ -282,7 +282,7 @@ void StoreUI::SliderDisplay () {
         cocos2d::Vec2 currentPos = Slider->getPosition ();
 
         // 根据滚轮的滚动方向来调整精灵的位置
-        float newY = currentPos.y - scrollDelta * 24; // 每次滚动24像素
+        float newY = currentPos.y - scrollDelta * 23.8; // 每次滚动的像素
 
         // 限制精灵的垂直位置在[minY, maxY]范围内
         if (newY < _minY)
