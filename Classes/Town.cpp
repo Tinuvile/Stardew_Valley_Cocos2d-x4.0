@@ -226,8 +226,7 @@ bool Town::init()
         Vec2 clickPos(mouseEvent->getCursorX(), mouseEvent->getCursorY());
         clickPos = this->convertToNodeSpace(clickPos);
 
-        // 检查是否点击了 Abigail  
-        // 检查是否点击了 Abigail  
+        // 检查是否点击了 Abigail    
         if (abigail) {
             auto abigailSprite = abigail->GetSprite ();
             if (abigailSprite && abigailSprite->getBoundingBox ().containsPoint ( clickPos )) {
@@ -237,6 +236,14 @@ bool Town::init()
                 // 计算玩家与 Abigail 之间的距离  
                 float distance = playerPos.distance ( abigailSprite->getPosition () );
 
+                // 打开 InventoryUI  
+                static InventoryUI* currentInventoryUI = nullptr; // 保存当前显示的 InventoryUI  
+                if (currentInventoryUI == nullptr) {
+                    currentInventoryUI = InventoryUI::create ( inventory );
+                    this->addChild ( currentInventoryUI , 11 ); // 将 InventoryUI 添加到 Town 的上层  
+                }
+
+                /*
                 // 检查距离是否在允许的范围内  
                 if (distance <= interactionRadius) {
                     CCLOG ( "Abigail clicked and player is within range! Opening InventoryUI." );
@@ -250,6 +257,7 @@ bool Town::init()
                 else {
                     CCLOG ( "Player is too far from Abigail to interact." );
                 }
+                */
             }
         }
     };
