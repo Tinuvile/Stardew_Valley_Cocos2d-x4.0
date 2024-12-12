@@ -6,15 +6,24 @@
 #include "AppDelegate.h"
 #include "InventoryUI.h"
 
-class intimacyUI : public cocos2d::Layer {
+extern Inventory* inventory;
+
+class intimacyUI : public cocos2d::Layer
+{
 public:
     virtual bool init ();
+
     static intimacyUI* create ();
+
     void backgroundcreate ();
+
     void Buttons_switching ();
 
-private:  
 
+    //滚动人物框
+    void charactersSlider ();
+
+private:  
     void onItemSlotClicked ( cocos2d::Ref* sender ); // 物品槽的点击事件处理  
 };
-                            
+                       
