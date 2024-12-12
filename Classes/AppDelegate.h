@@ -118,8 +118,6 @@ public:
 
     void Initialize();
 
-    void Initialize ();
-
 };
 
 #endif // _APP_DELEGATE_H_  // 结束防止头文件被多次包含的宏
