@@ -48,6 +48,8 @@ private:
 
     bool  isEnterKeyPressed = false;
 
+    Inventory* StoreItem;
+
 };
 
-#endif 
+#endif // __BACKGROUND1_H__

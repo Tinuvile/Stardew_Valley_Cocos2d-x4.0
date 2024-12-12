@@ -34,6 +34,15 @@ bool Town::init()
     this->addChild(_timerLabelS, 10);
     _timerLabelS->setScale(2.3f);
 
+    // 背包中的初始物品添加
+    inventory->AddItem ( Bamboo_Pole );
+
+    inventory->AddItem ( Apple_Sapling );
+
+    inventory->AddItem ( Apple_Sapling );
+
+    inventory->AddItem ( Potato_Seeds );
+
     inventory->AddItem ( Carrot_Seeds );
 
     inventory->AddItem ( Cauliflower_Seeds );
@@ -49,13 +58,6 @@ bool Town::init()
     inventory->AddItem ( Parsnip_Seeds );
 
     inventory->AddItem ( Rhubarb_Seeds );
-
-
-    // 设置计时器标签
-    _timerLabel = Label::createWithTTF("Timer: 60", "fonts/Marker Felt.ttf", 24);
-    this->addChild(_timerLabel, 10);
-    _timerLabel->setPosition(Vec2(0, Director::getInstance()->getVisibleSize().height));
-    _timerLabel->setScale(2.3f);
 
     // 创建并初始化 Label 来显示角色的位置
     _positionLabel = Label::createWithTTF("Position: (0, 0)", "fonts/Marker Felt.ttf", 24);
@@ -172,44 +174,125 @@ bool Town::init()
         this->checkPlayerPosition();  // 检查玩家是否接近轮廓点
         }, 0.01f, "check_position_key");
 
-    auto listener = EventListenerMouse::create();
-    listener->onMouseDown = [this](Event* event) {
-       
+    // 使用 getAbigailAnimations() 获取 NPC 动画帧  
+    auto abigailAnimations = getAbigailAnimations ();
+    // 创建 NPC 示例  
+    auto abigail = NPCreate::CreateNPC ( "Abigail" , cocos2d::Vec2 ( -100 , 400 ) , abigailAnimations , nonTransparentPixels );
+    if (abigail) {
+        // CCLOG ( "NPC Abigail created successfully." );
+        auto abigailSprite = abigail->GetSprite ();
+        if (abigailSprite) {
+            // CCLOG ( "Abigail sprite created successfully at position: (%f, %f)" , abigailSprite->getPositionX () , abigailSprite->getPositionY () );
+            this->addChild ( abigailSprite , 5 ); // 确保添加到场景中  
+
+            // 使用调度器每 1.0 秒调用 RandomMove  
+            this->schedule ( [abigail]( float dt ) {
+                abigail->RandomMove ();
+
+                // 获取 Abigail 的当前位置  
+                auto abigailSprite = abigail->GetSprite (); // 获取精灵  
+                if (abigailSprite) {
+                    // 获取当前精灵的位置和大小  
+                    Vec2 position = abigailSprite->getPosition ();
+                    Size size = abigailSprite->getContentSize ();
+                    // CCLOG ( "Abigail's current position: (%f, %f)" , position.x , position.y ); // 打印位置  
+                }
+            } , 1.0f , "random_move_key" ); // 每 1.0 秒随机移动一次  
+        }
+        else {
+            CCLOG ( "Abigail sprite is nullptr." );
+        }
+    }
+    else {
+        CCLOG ( "Failed to create NPC Abigail." );
+    }
+
+    // 允许的交互半径  
+    const float interactionRadius = 30.0f;
+
+    // 鼠标事件监听器
+    auto listener = EventListenerMouse::create ();
+    listener->onMouseDown = [this , abigail , interactionRadius]( Event* event ) {
+
         // 获取鼠标点击的位置
         auto mouseEvent = static_cast<EventMouse*>(event);
-        Vec2 clickPos(mouseEvent->getCursorX(), mouseEvent->getCursorY());
-        clickPos = this->convertToNodeSpace(clickPos);
+        Vec2 clickPos ( mouseEvent->getCursorX () , mouseEvent->getCursorY () );
+        clickPos = this->convertToNodeSpace ( clickPos );
 
-        // 判断点击位置是否在精灵范围内
-        if (button != nullptr && button->getBoundingBox().containsPoint(clickPos)) {
-            Director::getInstance()->end();
+        // 检查是否点击了 Abigail   
+        if (abigail) {
+            auto abigailSprite = abigail->GetSprite ();
+            if (abigailSprite && abigailSprite->getBoundingBox ().containsPoint ( clickPos )) {
+                // 获取玩家的位置  
+                Vec2 playerPos = player1->getPosition ();
+
+                // 计算玩家与 Abigail 之间的距离  
+                float distance = playerPos.distance ( abigailSprite->getPosition () );
+
+                // 打开 InventoryUI  
+                static InventoryUI* currentInventoryUI = nullptr; // 保存当前显示的 InventoryUI  
+                if (currentInventoryUI == nullptr) {
+                    currentInventoryUI = InventoryUI::create ( inventory );
+                    this->addChild ( currentInventoryUI , 11 ); // 将 InventoryUI 添加到 Town 的上层  
+                }
+
+                /*
+                // 检查距离是否在允许的范围内
+                if (distance <= interactionRadius) {
+                    CCLOG ( "Abigail clicked and player is within range! Opening InventoryUI." );
+                    // 打开 InventoryUI
+                    static InventoryUI* currentInventoryUI = nullptr; // 保存当前显示的 InventoryUI
+                    if (currentInventoryUI == nullptr) {
+                        currentInventoryUI = InventoryUI::create ( inventory );
+                        this->addChild ( currentInventoryUI , 11 ); // 将 InventoryUI 添加到 Town 的上层
+                    }
+                }
+                else {
+                    CCLOG ( "Player is too far from Abigail to interact." );
+                }
+                */
+            }
         }
         };
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, button);
 
+    _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , button );
 
-    // 设置键盘监听器
-    auto listenerWithPlayer = EventListenerKeyboard::create();
-    listenerWithPlayer->onKeyPressed = [this](EventKeyboard::KeyCode keyCode, Event* event)
-        {
-            // 记录 Enter 键被按下
-            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER) {
-                isEnterKeyPressed = true;
-                CCLOG("Enter key pressed. ");
+    // 设置键盘监听器  
+    auto listenerWithPlayer = EventListenerKeyboard::create ();
+    listenerWithPlayer->onKeyPressed = [this]( EventKeyboard::KeyCode keyCode , Event* event ) {
+        // 记录 Enter 键被按下  
+        if (keyCode == EventKeyboard::KeyCode::KEY_ENTER || keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER) {
+            isEnterKeyPressed = true;
+            CCLOG ( "Enter key pressed." );
+        }
+        // 处理其他按键  
+        if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
+            static InventoryUI* currentInventoryUI = nullptr;  // 保存当前显示的 InventoryUI  
+            // 如果当前没有打开 InventoryUI，则打开它  
+            if (currentInventoryUI == nullptr) {
+                CCLOG ( "Opening inventory." );
+                currentInventoryUI = InventoryUI::create ( inventory );
+                this->addChild ( currentInventoryUI , 11 );  // 将 InventoryUI 添加到 Town 的上层  
             }
+            // 如果已经打开 InventoryUI，则关闭它  
+            else {
+                CCLOG ( "Closing inventory." );
+                this->removeChild ( currentInventoryUI , true );  // 从当前场景中移除 InventoryUI  
+                currentInventoryUI = nullptr;  // 重置指针  
+            }
+        }
         };
 
-    listenerWithPlayer->onKeyReleased = [this](EventKeyboard::KeyCode keyCode, Event* event)
-        {
-            // 释放 Enter 键时，设置为 false
-            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER) {
-                isEnterKeyPressed = false;
-                CCLOG("Enter key released. ");
-            }
+    listenerWithPlayer->onKeyReleased = [this]( EventKeyboard::KeyCode keyCode , Event* event ) {
+        // 释放 Enter 键时，设置为 false  
+        if (keyCode == EventKeyboard::KeyCode::KEY_ENTER || keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER) {
+            isEnterKeyPressed = false;
+            CCLOG ( "Enter key released." );
+        }
         };
 
-    // 将监听器添加到事件分发器中
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listenerWithPlayer, this);
+    // 将监听器添加到事件分发器中  
+    _eventDispatcher->addEventListenerWithSceneGraphPriority ( listenerWithPlayer , this );
 
     return true;
 }
