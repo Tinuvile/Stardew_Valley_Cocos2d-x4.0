@@ -1,6 +1,8 @@
 //intimacyUI.h
 //人物亲密度界面
-#pragma once
+#ifndef __INTIMACYUI_H_  
+#define __INTIMACYUI_H_  
+
 #include "cocos2d.h"  
 #include "NpcRelationship.h"  
 #include "AppDelegate.h"
@@ -26,4 +28,5 @@ public:
 private:  
     void onItemSlotClicked ( cocos2d::Ref* sender ); // 物品槽的点击事件处理  
 };
-                       
+    
+#endif // __INTIMACYUI_H_ 

@@ -17,12 +17,10 @@
 #include "Ore.h"
 #include "Item.h"
 #include "BasicInformation.h"
-//#include "Generaltem.h"
-//#include "InventoryUI.h"
-//#include "StoreUI.h"
-//#include "NPCdata.h"
-//#include "NPCreate.h"
-//#include "NpcRelationship.h"
+#include "Generaltem.h"
+#include "NPCdata.h"
+#include "NPCreate.h"
+#include "NpcRelationship.h"
 #include"Livestock.h"
 #include"Cow.h"
 #include"Chicken.h"
@@ -48,6 +46,12 @@ extern bool IsNextDay;
 extern bool frombed;
 extern std::string Season;
 extern std::map<std::string , int> season;
+extern supermarket* seedshop;
+extern Town* town;
+extern Player* player1;
+extern farm* Farm;
+extern Myhouse* myhouse;
+extern Inventory* inventory;
 // 每种作物的基本信息
 extern std::map<std::string , Crop> cropbasicinformation;
 extern std::map<std::pair<std::string , Vec2> , bool> T_lastplace;

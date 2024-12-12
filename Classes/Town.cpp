@@ -4,6 +4,7 @@
 #include "supermarket.h"
 #include "Player.h"
 #include "ui/CocosGUI.h"
+#include "InventoryUI.h"
 
 USING_NS_CC;
 

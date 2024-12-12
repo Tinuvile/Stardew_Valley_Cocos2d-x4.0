@@ -1,3 +1,6 @@
+#ifndef __StoreUI_H_  
+#define __StoreUI_H_ 
+
 // StoreUI.h    
 #include "cocos2d.h"  
 #include "Inventory.h"  
@@ -32,3 +35,5 @@ private:
 
     void onItemSlotClicked ( cocos2d::Ref* sender ); // 物品槽的点击事件处理  
 };
+
+#endif // __StoreUI_H_
