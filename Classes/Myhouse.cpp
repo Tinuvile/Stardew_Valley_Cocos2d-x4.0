@@ -1,85 +1,84 @@
 #include "AppDelegate.h"
-#include "supermarket.h"
-#include "Town.h"
+#include "Myhouse.h"
+#include "farm.h"
+#include "Crop.h" 
 #include "Player.h"
-#include "Crop.h"
-#include "cocos2d.h"
+#include "physics/CCPhysicsWorld.h"
 #include "ui/CocosGUI.h"
+
 
 USING_NS_CC;
 
-supermarket::supermarket() {}
+Myhouse::Myhouse() {}
 
-supermarket::~supermarket() {}
+Myhouse::~Myhouse() {}
 
-bool supermarket::init()
+bool Myhouse::init()
 {
-    
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
     button = cocos2d::Sprite::create("CloseNormal.png");
     this->addChild(button, 11);
 
-
     // 设置计时器标签
-     // 设置计时器标签
     _timerLabelD = Label::createWithTTF("Day: 0", "fonts/Marker Felt.ttf", 24);
     this->addChild(_timerLabelD, 10);
-    _timerLabelD->setScale(2.3f);
+    _timerLabelD->setScale(1.3f);
+    _timerLabelD->setPosition(Vec2(50, 1250));
 
     _timerLabelH = Label::createWithTTF("0:00", "fonts/Marker Felt.ttf", 24);
     this->addChild(_timerLabelH, 10);
-    _timerLabelH->setScale(2.3f);
+    _timerLabelH->setScale(1.3f);
+    _timerLabelH->setPosition(Vec2(130, 1250));
 
     _timerLabelS = Label::createWithTTF("Spring", "fonts/Marker Felt.ttf", 24);
     this->addChild(_timerLabelS, 10);
-    _timerLabelS->setScale(2.3f);
+    _timerLabelS->setScale(1.3f);
+    _timerLabelS->setPosition(Vec2(210, 1250));
+
 
     // 创建并初始化 Label 来显示角色的位置
     _positionLabel = Label::createWithTTF("Position: (0, 0)", "fonts/Marker Felt.ttf", 24);
     if (_positionLabel)
     {
         this->addChild(_positionLabel, 10);
-        _positionLabel->setScale(2.3f);
+        _positionLabel->setScale(1.3f);
     }
 
-    // 初始化开门键
-    opendoor = Sprite::create("opendoor.png");
-    this->addChild(opendoor, 11);
-    opendoor->setVisible(false);
-    opendoor->setScale(1.7f);
+    _positionLabel->setPosition(130, 1200);
+    
+    
 
     // 设置背景图片
-    auto background_real = Sprite::create("supermarket/supermarket.png");
-    background_real->setPosition(Vec2(visibleSize.width / 2 + 1700, visibleSize.height / 2 + 370));
+    auto background_real = Sprite::create("Myhouse/myhouse.png");
+    background_real->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
     this->addChild(background_real, 1);
-    background_real->setScale(6.7f);
+    background_real->setScale(5.5f);
 
-    auto background_up = Sprite::create("supermarket/supermarket_up.png");
-    background_up->setPosition(Vec2(visibleSize.width / 2 + 1700, visibleSize.height / 2 + 370));
-    this->addChild(background_up, 7);
-    background_up->setScale(6.7f);
-
-    auto background = Sprite::create("supermarket/supermarket_path.png");
+    auto background = Sprite::create("Myhouse/myhouse_path.png");
     this->addChild(background, 5);
-    background->setPosition(Vec2(visibleSize.width / 2 + 1700, visibleSize.height / 2 + 370));
-    background->setScale(6.7f);
+    background->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
+    background->setScale(5.5f);
 
+    auto background_up = Sprite::create("Myhouse/myhouse_up.png");
+    background_up->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
+    this->addChild(background_up, 7);
+    background_up->setScale(5.5f);
 
     Vec2 spritePosition = background->getPosition();   // 获取精灵的位置（中心点）
     Size spriteSize = background->getContentSize();    // 获取精灵的尺寸（宽度和高度）
-  
+
 
     // 计算左下角的坐标
     Vec2 leftBottomPosition = Vec2(
         spritePosition.x - background->getScaleX() * spriteSize.width / 2,   // 中心点 x 坐标减去宽度的一半
         spritePosition.y - background->getScaleY() * spriteSize.height / 2   // 中心点 y 坐标减去高度的一半
     );
-   
+
 
     Image img;
-    if (img.initWithImageFile("supermarket/supermarket_path.png"))
+    if (img.initWithImageFile("Myhouse/myhouse_path.png"))
     {
         int width = img.getWidth();
         int height = img.getHeight();
@@ -88,9 +87,9 @@ bool supermarket::init()
         unsigned char* data = img.getData();
 
         // 遍历所有像素，检查是否有内容（透明度大于0）
-        for (int y = 0; y < height; y = y + 4)
+        for (int y = 0; y < height; y = y + 2)
         {
-            for (int x = 0; x < width; x = x + 4)
+            for (int x = 0; x < width; x = x + 2)
             {
                 // 获取当前像素的 RGBA 值
                 int index = (y * width + x) * 4;  // 每个像素占用 4 个字节 (RGBA)
@@ -109,7 +108,22 @@ bool supermarket::init()
 
 
     // 初始化角色并将其添加到场景
-    this->addChild(player1, 5);
+    if (player1->getParent() == NULL) {
+        this->addChild(player1, 11);
+        player1->setScale(2.7f);
+        player1->speed = 7.0f;
+        player1->setAnchorPoint(Vec2(0.5f, 0.2f));
+        if (frombed == false) {
+            player1->setPosition(650, 550);
+        }
+        else {
+            frombed = false;
+            player1->setPosition(1050, 550);
+        }
+    }
+
+
+    // 启动人物的定时器
     player1->schedule([=](float dt) {
         player1->player1_move();
         }, 0.05f, "player1_move");
@@ -117,10 +131,7 @@ bool supermarket::init()
     player1->schedule([=](float dt) {
         player1->player_change();
         }, 0.3f, "player_change");
-    player1->setPosition(Vec2(visibleSize.width / 2 + 43, visibleSize.height / 2 - 101));  // 设置玩家初始位置
-    player1->setScale(3.1f);
-    player1->setAnchorPoint(Vec2(0.5f, 0.2f));
-    player1->speed = 2.5f;
+
 
     // 计算背景精灵的缩放后范围
     float scaledWidth = background->getContentSize().width * background->getScaleX();
@@ -133,26 +144,21 @@ bool supermarket::init()
     auto followAction = Follow::create(player1, followRect);
     this->runAction(followAction);
 
-
     // 定期更新玩家状态
     this->schedule([this](float dt) {
         this->checkPlayerPosition();  // 检查玩家是否接近轮廓点
         }, 0.01f, "check_position_key");
 
     auto listener = EventListenerMouse::create();
-
     listener->onMouseDown = [this](Event* event) {
-       
+
         // 获取鼠标点击的位置
         auto mouseEvent = static_cast<EventMouse*>(event);
         Vec2 clickPos(mouseEvent->getCursorX(), mouseEvent->getCursorY());
         clickPos = this->convertToNodeSpace(clickPos);
-        // 调试输出鼠标位置
-        CCLOG("Mouse Position: (%f, %f)", clickPos.x, clickPos.y);
 
         // 判断点击位置是否在精灵范围内
         if (button != nullptr && button->getBoundingBox().containsPoint(clickPos)) {
-            CCLOG("Button clicked!");
             Director::getInstance()->end();
         }
         };
@@ -163,10 +169,9 @@ bool supermarket::init()
     auto listenerWithPlayer = EventListenerKeyboard::create();
     listenerWithPlayer->onKeyPressed = [this](EventKeyboard::KeyCode keyCode, Event* event)
         {
-            // 记录 Enter 键被按下
             if (keyCode == EventKeyboard::KeyCode::KEY_ENTER) {
                 isEnterKeyPressed = true;
-                CCLOG("Enter key pressed.");
+                CCLOG("Enter key pressed. ");
             }
         };
 
@@ -175,21 +180,19 @@ bool supermarket::init()
             // 释放 Enter 键时，设置为 false
             if (keyCode == EventKeyboard::KeyCode::KEY_ENTER) {
                 isEnterKeyPressed = false;
-                CCLOG("Enter key released.");
             }
         };
 
     // 将监听器添加到事件分发器中
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listenerWithPlayer, this);
 
-
     return true;
 }
 
 
-supermarket* supermarket::create()
+Myhouse* Myhouse::create()
 {
-    supermarket* scene = new supermarket();
+    Myhouse* scene = new Myhouse();
     if (scene && scene->init())
     {
         scene->autorelease();
@@ -199,9 +202,11 @@ supermarket* supermarket::create()
     return nullptr;
 }
 
+
 // 检查玩家是否接近背景的轮廓点
-void supermarket::checkPlayerPosition()
+void Myhouse::checkPlayerPosition()
 {
+
     // 获取玩家的位置
     Vec2 playerPos = player1->getPosition();
 
@@ -209,19 +214,17 @@ void supermarket::checkPlayerPosition()
     if (_positionLabel)
     {
         _positionLabel->setString("Position: (" + std::to_string(static_cast<int>(playerPos.x)) + ", " + std::to_string(static_cast<int>(playerPos.y)) + ")");
-    
-    }
 
+    }
 
     // 更新计时器显示
     remainingTime++;
     _timerLabelD->setString("Day: " + std::to_string(day));
     _timerLabelH->setString(std::to_string(remainingTime / 1800) + ":00");
     _timerLabelS->setString(Season);
-    if (remainingTime == 43200) {
+    if (remainingTime == 432000) {
 
         day++;
-
         IsNextDay = true;
 
         if (day == 8) {
@@ -236,6 +239,8 @@ void supermarket::checkPlayerPosition()
             }
             day = 1;
         }
+
+        remainingTime = 0;
 
         for (auto it = Crop_information.begin(); it != Crop_information.end();) {
 
@@ -269,62 +274,86 @@ void supermarket::checkPlayerPosition()
             }
         }
 
-
-        remainingTime = 0;
         player1->removeFromParent();
         auto nextday = Myhouse::create();
         Director::getInstance()->replaceScene(nextday);
 
 
-
     }
 
-    // 更新标签位置
-    float currentx = 0, currenty = 0;
-    if (playerPos.x <= 743) {
-        currentx = 743;
-    }
-    else if (playerPos.x >= 1773) {
-        currentx = 1773;
-    }
-    else {
-        currentx = playerPos.x;
-    }
-
-    if (playerPos.y <= -82) {
-        currenty = -82;
-    }
-    else {
-        currenty = playerPos.y;
-    }
-
-    _timerLabelD->setPosition(currentx - 710, currenty + 570);
-    _timerLabelH->setPosition(currentx - 570, currenty + 570);
-    _timerLabelS->setPosition(currentx - 430, currenty + 570);
-    _positionLabel->setPosition(currentx - 530, currenty + 490);
-    button->setPosition(currentx + 690, currenty - 590);
    
-    // 检查玩家是否进入目标区域，并且按下 Enter 键
-    if (Region_Out.containsPoint(playerPos)) {
-        // 玩家进入目标区域
-        opendoor->setVisible(true);
-        opendoor->setPosition(playerPos.x + 110, playerPos.y + 30);
 
-
+    // 是否进入农场
+    if (OutDoor.containsPoint(playerPos)) {
         if (isEnterKeyPressed) {
-            // 打印调试信息，检查 Enter 键的状态
-            CCLOG("Player in target area, isEnterKeyPressed: %d", isEnterKeyPressed);
-            // 调用场景切换逻辑
             player1->removeFromParent();
-            town = Town::create();
-            Director::getInstance()->replaceScene(town);
-          
+            auto NextSence = farm::create();
+            Director::getInstance()->replaceScene(NextSence);
         }
+    }
 
+    // 是否睡觉
+    if (GoBed.containsPoint(playerPos)) {
+        if (isEnterKeyPressed) {
+            
+            day++;
+
+            if (day == 8) {
+                if (Season == "Spring") {
+                    Season = "Summer";
+                }
+                else if (Season == "Summer") {
+                    Season = "Autumn";
+                }
+                else {
+                    Season = "Winter";
+                }
+                day = 1;
+            }
+
+            remainingTime = 0;
+
+            isEnterKeyPressed = false;
+
+            for (auto it = Crop_information.begin(); it != Crop_information.end();) {
+
+                auto crop = *it;  // 解引用迭代器以访问 Crop 对象
+
+                // 判断前一天是否浇水
+                if ((crop->watered == false) && (crop->GetPhase() != Phase::MATURE)) {
+                    // 判断是否已经进入枯萎状态
+                    if (crop->GetPhase() != Phase::SAPLESS) {
+                        crop->ChangePhase(Phase::SAPLESS);
+                        crop->ChangMatureNeeded(2); // 延迟两天收获
+                        it++;
+                    }
+                    else {
+                        // 删除元素并更新迭代器
+                        it = Crop_information.erase(it);
+                    }
+                   
+                }
+                else {
+                    // 更新状态
+                    crop->UpdateGrowth();
+                    it++;
+                }
+
+            }
+
+            for (auto& pair : F_lastplace) {
+                if (pair.first.first == "myhouse") {  // 检查 bool 值是否为 true
+                    pair.second = true;
+                }
+            }
+
+            frombed = true;
+            player1->removeFromParent();
+            auto nextday = Myhouse::create();
+            Director::getInstance()->replaceScene(nextday);
+        }
     }
-    else {
-        opendoor->setVisible(false);
-    }
+
 
     for (const auto& point : nonTransparentPixels)
     {
@@ -335,9 +364,8 @@ void supermarket::checkPlayerPosition()
         temp = playerPos;
         temp.x -= player1->speed;
         distance = temp.distance(point);
-        if (distance <= 55) {
+        if (distance <= 17) {
             player1->moveLeft = false;
-           
         }
         else {
             if (player1->leftpressed == false) {
@@ -345,12 +373,10 @@ void supermarket::checkPlayerPosition()
             }
         }
 
-
-
         temp = playerPos;
-        temp.y -= player1->speed;
+        temp.y -= 10;
         distance = temp.distance(point);
-        if (distance <= 25) {
+        if (distance <= 15) {
             player1->moveDown = false;
         }
         else {
@@ -360,9 +386,9 @@ void supermarket::checkPlayerPosition()
         }
 
         temp = playerPos;
-        temp.y += player1->speed;
+        temp.y += 10;
         distance = temp.distance(point);
-        if (distance <= 45) {
+        if (distance <= 15) {
             player1->moveUp = false;
         }
         else {
@@ -372,9 +398,9 @@ void supermarket::checkPlayerPosition()
         }
 
         temp = playerPos;
-        temp.x += player1->speed;
+        temp.x += 10;
         distance = temp.distance(point);
-        if (distance <= 55) {
+        if (distance <= 15) {
             player1->moveRight = false;
         }
         else {
@@ -386,8 +412,11 @@ void supermarket::checkPlayerPosition()
     }
 
 
-
 }
+
+
+
+
 
 
 
