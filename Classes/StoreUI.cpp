@@ -121,42 +121,35 @@ void StoreUI::ProductDisplay ( Inventory* mybag , Inventory* goods ) {
     Vec2 position = player1->getPosition ();
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     //商品框
-    auto Productcolumn = Sprite::create ( "UIresource/supermarket/wupinlan_final.png" );
-    if (Productcolumn == nullptr)
-    {
-        problemLoading ( "'wupinlan_final.png'" );
-    }
-    else
-    {
-        // 获取原始图片的宽高
-        float originalWidth = Productcolumn->getContentSize ().width;
-        float originalHeight = Productcolumn->getContentSize ().height;
-        // 根据屏幕宽度和图片原始宽高计算比例
-        float scaleX = visibleSize.width / originalWidth;
-        float scaleY = visibleSize.height / originalHeight;
-        // 选择最小的缩放比例，以保证图片完全显示在屏幕上且不变形
-        float scale = std::min ( scaleX , scaleY );
-        Productcolumn->setScale ( scale / 1.4 );
-        Productcolumn->setPosition ( Vec2 ( position.x + visibleSize.width / 9.5 , position.y + visibleSize.height * 0.1684 ) );
-        this->addChild ( Productcolumn , 0 );
-    }
+    auto Productcolumn = Sprite::create ( "UIresource/supermarket/wupinlan.png" );
+    // 获取原始图片的宽高
+    float originalWidth = Productcolumn->getContentSize ().width;
+    float originalHeight = Productcolumn->getContentSize ().height;
+    // 根据屏幕宽度和图片原始宽高计算比例
+    float scaleX = visibleSize.width / originalWidth;
+    float scaleY = visibleSize.height / originalHeight;
+    // 选择最小的缩放比例，以保证图片完全显示在屏幕上且不变形
+    float scale = std::min ( scaleX , scaleY );
+    Productcolumn->setScale ( scale / 1.4 );
+    Productcolumn->setPosition ( Vec2 ( position.x + visibleSize.width / 9.5 , position.y + visibleSize.height * 0.1684 ) );
+    this->addChild ( Productcolumn , 0 );
 
     //创建 ScrollView
     auto scrollView = cocos2d::ui::ScrollView::create ();
     scrollView->setDirection ( cocos2d::ui::ScrollView::Direction::VERTICAL ); // 设置为垂直滚动
-    scrollView->setContentSize ( Size ( 1230 , 400 ) ); // 设置ScrollView 宽度，高度
+    scrollView->setContentSize ( Size ( 1630 , 400 ) ); // 设置ScrollView 宽度，高度
     scrollView->setPosition ( Vec2 ( position.x - visibleSize.width * 0.389 , position.y + visibleSize.height * 0.01368 ) ); // 设置位置
     scrollView->setBounceEnabled ( true ); // 启用弹性效果
     scrollView->setScrollBarEnabled ( false );    // 禁用垂直和水平滑动条
 
     // 计算商品的总高度  
     float totalItemHeight = 0;
-    const int itemCount = 24; // 假设您有 24 个商品  
+    const int itemCount = 24; // 假设有24个商品  
     const float itemHeight = 105; // 每个商品的高度  
     totalItemHeight = itemCount * itemHeight; // 计算总高度  
 
     // 设置内部容器的大小  
-    scrollView->setInnerContainerSize ( Size ( 1230 , totalItemHeight ) ); // 设置内部容器的大小
+    scrollView->setInnerContainerSize ( Size ( 1630 , totalItemHeight ) ); // 设置内部容器的大小
 
     // 监听鼠标滚轮事件
     auto listener = cocos2d::EventListenerMouse::create ();
@@ -187,10 +180,16 @@ void StoreUI::ProductDisplay ( Inventory* mybag , Inventory* goods ) {
         };
     // 将监听器添加到事件分发器
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , this );
-    
+
     //每个商品
     float offsetY = 0;  // 用来存储商品间的纵向间距
     for (int i = 0; i < 24; ++i) {
+
+        auto itemframe = Sprite::create ( "UIresource/supermarket/goodframe.png" );
+        itemframe->setScale ( scale / 1.4 );
+        itemframe->setPosition ( Vec2 ( visibleSize.width * 0.4933 , 539 + visibleSize.height * 1.51 - offsetY ) );
+        scrollView->addChild ( itemframe , 1 );
+
         // 获取槽位物品 
         auto item = _goods->GetItemAt ( i + 1 ); // 获取特定槽位的物品，注意槽位从1开始 
         auto itemSprite = Sprite::create ( item->initial_pic );
@@ -204,11 +203,11 @@ void StoreUI::ProductDisplay ( Inventory* mybag , Inventory* goods ) {
             auto Item_name = cocos2d::Label::createWithSystemFont ( itemname , "fonts/Comic Sans MS.ttf" , 30 );
             Item_name->setAnchorPoint ( Vec2 ( 0 , 0.5 ) );
             Item_name->setTextColor ( cocos2d::Color4B::BLACK );  // 初始颜色
-            Item_name->setPosition ( Vec2 (  visibleSize.width * 0.2376 ,539+ visibleSize.height * 1.51 - offsetY ) );
+            Item_name->setPosition ( Vec2 ( visibleSize.width * 0.2386 , 539 + visibleSize.height * 1.51 - offsetY ) );
             scrollView->addChild ( Item_name , 2 );
 
             //添加物品图片
-            itemSprite->setPosition ( Vec2 ( visibleSize.width * 0.1813 ,539+ visibleSize.height * 1.51 - offsetY ) );
+            itemSprite->setPosition ( Vec2 ( visibleSize.width * 0.1783 , 539 + visibleSize.height * 1.51 - offsetY ) );
             itemSprite->setScale ( 0.7f );
             scrollView->addChild ( itemSprite , 2 );
 
@@ -218,15 +217,42 @@ void StoreUI::ProductDisplay ( Inventory* mybag , Inventory* goods ) {
             auto item_value = cocos2d::Label::createWithSystemFont ( ItemValue , "fonts/Comic Sans MS.ttf" , 30 );
             item_value->setAnchorPoint ( Vec2 ( 0 , 0.5 ) );
             item_value->setTextColor ( cocos2d::Color4B::BLACK );  // 初始颜色
-            item_value->setPosition ( Vec2 (visibleSize.width * 0.6750 , 539 + visibleSize.height * 1.51 - offsetY ) );
+            item_value->setPosition ( Vec2 ( visibleSize.width * 0.6750 , 539 + visibleSize.height * 1.51 - offsetY ) );
             scrollView->addChild ( item_value , 2 );
             CCLOG ( "Loading item sprite: %s" , item->initial_pic.c_str () );
         }
         else {
             CCLOG ( "Error loading item sprite: %s" , item->initial_pic.c_str () );
         }
-            // 更新下一个商品的位置偏移量
-            offsetY += 105;  // 105 是商品间的间距
+        // 添加鼠标事件  
+        auto listener = EventListenerMouse::create ();
+        listener->onMouseMove = [this , itemframe , scrollView , position]( EventMouse* event ) {
+            Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
+            mousePos = this->convertToNodeSpace ( mousePos );
+            // 获取滚动视图的位置和滚动偏移
+            Vec2 scrollViewPos = scrollView->getPosition ();
+            Vec2 innerContainerPos = scrollView->getInnerContainer ()->getPosition ();
+
+            // 获取滚动视图内物品框的矩形区域
+            Rect itemBoundingBox = itemframe->getBoundingBox ();
+
+            // 计算物品框在整个视图中的坐标
+            float adjustedPosY = itemBoundingBox.getMinY () + innerContainerPos.y;
+            float adjustedPosX = itemBoundingBox.getMinX () + innerContainerPos.x;
+
+            // 判断鼠标是否在物品框内
+            if (mousePos.x >= adjustedPosX && mousePos.x <= adjustedPosX + itemBoundingBox.size.width &&
+                mousePos.y >= adjustedPosY + position.y && mousePos.y <= position.y + adjustedPosY + itemBoundingBox.size.height) {
+                itemframe->setTexture ( "UIresource/supermarket/xuanzhong_frame.png" );
+            }
+            else {
+                itemframe->setTexture ( "UIresource/supermarket/goodframe.png" );
+            }
+            };
+        _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , itemframe );
+
+        // 更新下一个商品的位置偏移量
+        offsetY += 105;  // 105 是商品间的间距
     }
 
     // 将滚动视图添加到场景中

@@ -7,11 +7,13 @@
 extern Player* player1;
 
 USING_NS_CC;
+
 static void problemLoading ( const char* filename )
 {
     printf ( "Error while loading: %s\n" , filename );
     printf ( "Depending on how you compiled you might have to add 'Resources/' in front of filenames in CreateCharacterScene.cpp\n" );
 }
+
 void InventoryUI::backgroundcreate(){
     Vec2 position = player1->getPosition ();
     // 创建一个半透明的黑色遮罩
@@ -40,6 +42,7 @@ void InventoryUI::backgroundcreate(){
         this->addChild ( bag , 0 );
     }
 }
+
 void InventoryUI::Itemblock ( Inventory* inventory ) {
     Vec2 position = player1->getPosition ();
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
@@ -71,20 +74,10 @@ void InventoryUI::Itemblock ( Inventory* inventory ) {
 
             _itemSlots.pushBack ( slot );
 
-            // 添加触摸事件  
-            auto listener = EventListenerTouchOneByOne::create ();
-            listener->onTouchBegan = [this , slot]( Touch* touch , Event* event ) {
-                Vec2 location = touch->getLocation ();
-                if (slot->getBoundingBox ().containsPoint ( location )) {
-                    onItemSlotClicked ( slot );
-                    return true; // 处理这个事件  
-                }
-                return false; // 不处理这个事件  
-                };
-            _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , slot );
         }
     }
 }
+
 bool InventoryUI::init ( Inventory* inventory ) {
     if (!Layer::init ()) {
         return false;
@@ -111,6 +104,7 @@ bool InventoryUI::init ( Inventory* inventory ) {
 
     return true;
 }
+
 void InventoryUI::Buttons_switching () {
     Vec2 position = player1->getPosition ();
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
@@ -163,6 +157,7 @@ void InventoryUI::Buttons_switching () {
         };
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , this );
 }
+
 InventoryUI* InventoryUI::create ( Inventory* inventory ) {
     InventoryUI* ret = new InventoryUI ();
     if (ret && ret->init ( inventory )) {
@@ -180,66 +175,106 @@ void InventoryUI::updateDisplay () {
         return; // 退出方法  
     }
 
-    // 获取当前选择的物品的槽位  
-    for (int i = 0; i < kRowSize; ++i) {
-        auto slot = _itemSlots.at ( i );
-        slot->setVisible ( true ); // 确保显示所有槽位  
+    for (int m = 0; m < 3; m++) {
+        // 获取当前选择的物品的槽位  
+        for (int i = 0; i < kRowSize; ++i) {
+            int serial_number = i + m * 12;
+            auto slot = _itemSlots.at ( serial_number );
+            slot->setVisible ( true ); // 确保显示所有槽位  
 
-        // 获取槽位物品  
-        auto item = _inventory->GetItemAt ( i + 1 ); // 获取特定槽位的物品，注意槽位从1开始 
+            // 获取槽位物品  
+            auto item = _inventory->GetItemAt ( serial_number + 1 ); // 获取特定槽位的物品，注意槽位从1开始 
 
-        // 获取物品数量   
-        int itemCount = _inventory->GetItemCountAt(i + 1); // 获取该槽位的物品数量  
+            // 获取物品数量   
+            int itemCount = _inventory->GetItemCountAt ( serial_number + 1 ); // 获取该槽位的物品数量  
 
-        if (item) {
-            CCLOG ( "Item in slot %d: %s" , i + 1 , item->GetName ().c_str () );
-        }
-        else {
-            CCLOG ( "No item in slot %d" , i + 1 );
-        }
-
-        // 如果需要获取特定槽位的物品，使用 GetItemAt(int position) 定义新函数  
-
-        // 更新槽位视觉表现  
-        if (item) {
-            // 清除之前的子节点  
-            slot->removeAllChildren ();
-
-            // 图片路径  
-            auto itemSprite = Sprite::create ( item->initial_pic );
-            if (itemSprite) {
-                itemSprite->setPosition ( slot->getContentSize () / 2 );
-                itemSprite->setScale ( 0.7f );
-                slot->addChild ( itemSprite , 3 );
-                CCLOG ( "Loading item sprite: %s" , item->initial_pic.c_str () );
+            if (item) {
+                CCLOG ( "Item in slot %d: %s" , serial_number + 1 , item->GetName ().c_str () );
             }
             else {
-                CCLOG ( "Error loading item sprite: %s" , item->initial_pic.c_str () );
+                CCLOG ( "No item in slot %d" , serial_number + 1 );
             }
 
-            // 根据 item 里的数量来设置数量标签（如果需要）。  
-            // 可以在这里创建一个 Label 显示数量  
-            auto countLabel = static_cast<Label*>(slot->getChildByTag ( 200 + i )); // 使用槽位的标签生成数量标签的唯一ID  
-            if (!countLabel) {
-                // 如果标签不存在，创建新的标签  
-                countLabel = Label::createWithSystemFont ( std::to_string ( itemCount ) , "fonts/Comic Sans MS.ttf" , 20 );
-                countLabel->setTextColor ( Color4B ( 255 , 153 , 0 , 255 ) );
-                countLabel->setPosition ( slot->getContentSize ().width * 0.8 ,  slot->getContentSize ().height * 0.2 ); // 设置位置在槽位右下方  
-                countLabel->setTag ( 200 + i ); // 设置标签  
-                slot->addChild ( countLabel , 4 ); // 添加到层级中  
+            // 如果需要获取特定槽位的物品，使用 GetItemAt(int position) 定义新函数  
+
+            // 更新槽位视觉表现  
+            if (item) {
+                // 清除之前的子节点  
+                slot->removeAllChildren ();
+
+                // 图片路径  
+                auto itemSprite = Sprite::create ( item->initial_pic );
+                if (itemSprite) {
+                    itemSprite->setPosition ( slot->getContentSize () / 2 );
+                    itemSprite->setScale ( 0.7f );
+                    slot->addChild ( itemSprite , 3 );
+                    CCLOG ( "Loading item sprite: %s" , item->initial_pic.c_str () );
+                }
+                else {
+                    CCLOG ( "Error loading item sprite: %s" , item->initial_pic.c_str () );
+                }
+
+                // 根据 item 里的数量来设置数量标签（如果需要）。  
+                // 可以在这里创建一个 Label 显示数量  
+                auto countLabel = static_cast<Label*>(slot->getChildByTag ( 200 + serial_number )); // 使用槽位的标签生成数量标签的唯一ID  
+                if (!countLabel) {
+                    // 如果标签不存在，创建新的标签  
+                    countLabel = Label::createWithSystemFont ( std::to_string ( itemCount ) , "fonts/Comic Sans MS.ttf" , 20 );
+                    countLabel->setTextColor ( Color4B ( 255 , 153 , 0 , 255 ) );
+                    countLabel->setPosition ( slot->getContentSize ().width * 0.8 , slot->getContentSize ().height * 0.2 ); // 设置位置在槽位右下方  
+                    countLabel->setTag ( 200 + serial_number ); // 设置标签  
+                    slot->addChild ( countLabel , 4 ); // 添加到层级中  
+                }
+                else {
+                    // 如果标签存在，更新数量  
+                    countLabel->setString ( std::to_string ( itemCount ) );
+                }
+
+
+                // 添加触摸事件  
+                auto listener = EventListenerMouse::create ();
+
+                // 鼠标移动事件
+                listener->onMouseMove = [this , slot , itemSprite , countLabel]( EventMouse* event ) {
+                    Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
+                    mousePos = this->convertToNodeSpace ( mousePos );
+                    if (slot && slot->getBoundingBox ().containsPoint ( mousePos )) {
+                        itemSprite->setScale ( 1.1f );
+                        countLabel->setScale ( 1.5f );
+                    }
+                    else if (slot && itemSprite != currentItemSprite) {
+                        itemSprite->setScale ( 0.7f ); // 恢复原大小
+                        countLabel->setScale ( 1.0f );
+                    }
+                    };
+
+                // 添加鼠标按下事件  
+                listener->onMouseDown = [this , slot , itemSprite]( EventMouse* event ) {
+                    Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
+                    mousePos = this->convertToNodeSpace ( mousePos );
+
+                    // 检查鼠标是否点击了 slot  
+                    if (slot->getBoundingBox ().containsPoint ( mousePos )) {
+                        if (!isClick) {
+                            currentItemSprite = itemSprite; // 记录当前选择的物品
+                        }
+                        else {
+                            currentItemSprite = nullptr;
+                        }
+                        isClick = !isClick;
+                    }
+                    };
+
+                _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , itemSprite );
             }
             else {
-                // 如果标签存在，更新数量  
-                countLabel->setString ( std::to_string ( itemCount ) );
-            }
-        }
-        else {
-            slot->removeAllChildren (); // 清空槽位  
+                slot->removeAllChildren (); // 清空槽位  
 
-            // 清除数量标签  
-            auto countLabel = static_cast<Label*>(slot->getChildByTag ( 200 + i ));
-            if (countLabel) {
-                countLabel->removeFromParent (); // 移除数量标签  
+                // 清除数量标签  
+                auto countLabel = static_cast<Label*>(slot->getChildByTag ( 200 + i ));
+                if (countLabel) {
+                    countLabel->removeFromParent (); // 移除数量标签  
+                }
             }
         }
     }

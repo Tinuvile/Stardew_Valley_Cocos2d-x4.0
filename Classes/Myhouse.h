@@ -10,6 +10,7 @@
 
 USING_NS_CC;
 
+
 class Myhouse : public cocos2d::Scene
 {
 public:
@@ -23,19 +24,19 @@ public:
 
     // 判断角色的位置
     void checkPlayerPosition();
-    
+
     // 创建一个列表，用于保存所有非透明像素的坐标
     std::vector<cocos2d::Vec2> nonTransparentPixels;
 
     // 出门区域
-    Rect OutDoor;
+    Rect OutDoor = Rect(510, 210, 150, 70);
+    // 睡觉区域
     Rect GoBed = Rect(1035, 385, 245, 390);
-  
+
 
 private:
 
-  
-  
+
     // 用于显示计时的标签
     cocos2d::Label* _timerLabelD;
     cocos2d::Label* _timerLabelH;
@@ -47,9 +48,6 @@ private:
     /* 退出按钮 */
     Sprite* button;
 
-    /* 开门按钮 */
-    Sprite* opendoor;
-
     // 退出按钮
     cocos2d::MenuItemImage* closeItem;
 
@@ -57,7 +55,6 @@ private:
 
     bool isEnterKeyPressed = false;
 
-
 };
 
-#endif // __BACKGROUND1_H__
+#endif 

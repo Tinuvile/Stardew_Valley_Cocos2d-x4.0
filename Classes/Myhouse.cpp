@@ -1,9 +1,11 @@
 #include "AppDelegate.h"
 #include "Myhouse.h"
 #include "farm.h"
+#include "Crop.h" 
 #include "Player.h"
 #include "physics/CCPhysicsWorld.h"
 #include "ui/CocosGUI.h"
+
 
 USING_NS_CC;
 
@@ -13,17 +15,13 @@ Myhouse::~Myhouse() {}
 
 bool Myhouse::init()
 {
-
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
     button = cocos2d::Sprite::create("CloseNormal.png");
     this->addChild(button, 11);
-    button->setPosition(100, Director::getInstance()->getVisibleSize().width);
-
 
     // 设置计时器标签
-     // 设置计时器标签
     _timerLabelD = Label::createWithTTF("Day: 0", "fonts/Marker Felt.ttf", 24);
     this->addChild(_timerLabelD, 10);
     _timerLabelD->setScale(1.3f);
@@ -39,13 +37,18 @@ bool Myhouse::init()
     _timerLabelS->setScale(1.3f);
     _timerLabelS->setPosition(Vec2(210, 1250));
 
+
     // 创建并初始化 Label 来显示角色的位置
     _positionLabel = Label::createWithTTF("Position: (0, 0)", "fonts/Marker Felt.ttf", 24);
-    if (_positionLabel){
+    if (_positionLabel)
+    {
         this->addChild(_positionLabel, 10);
         _positionLabel->setScale(1.3f);
     }
+
     _positionLabel->setPosition(130, 1200);
+    
+    
 
     // 设置背景图片
     auto background_real = Sprite::create("Myhouse/myhouse.png");
@@ -63,17 +66,16 @@ bool Myhouse::init()
     this->addChild(background_up, 7);
     background_up->setScale(5.5f);
 
-
     Vec2 spritePosition = background->getPosition();   // 获取精灵的位置（中心点）
     Size spriteSize = background->getContentSize();    // 获取精灵的尺寸（宽度和高度）
-  
+
 
     // 计算左下角的坐标
     Vec2 leftBottomPosition = Vec2(
         spritePosition.x - background->getScaleX() * spriteSize.width / 2,   // 中心点 x 坐标减去宽度的一半
         spritePosition.y - background->getScaleY() * spriteSize.height / 2   // 中心点 y 坐标减去高度的一半
     );
-   
+
 
     Image img;
     if (img.initWithImageFile("Myhouse/myhouse_path.png"))
@@ -105,33 +107,23 @@ bool Myhouse::init()
     }
 
 
-    // 初始化开门键
-    opendoor = Sprite::create("opendoor.png");
-    this->addChild(opendoor, 11);
-    opendoor->setVisible(false);
-
-    // 恢复玩家的状态
-    if (player1)
-    {
-        for (auto& pair : T_lastplace) {
-            if (pair.second == true) {  // 检查 bool 值是否为 true
-                player1->setPosition(pair.first.second);
-                pair.second = false;
-            }
-        }
-        player1->speed = 1.5f;
-    }
-
-    cocos2d::log("transform");
-
     // 初始化角色并将其添加到场景
     if (player1->getParent() == NULL) {
-        cocos2d::log("player1->get");
-        this->addChild(player1, 5);
+        this->addChild(player1, 11);
+        player1->setScale(2.7f);
+        player1->speed = 7.0f;
+        player1->setAnchorPoint(Vec2(0.5f, 0.2f));
+        if (frombed == false) {
+            player1->setPosition(650, 550);
+        }
+        else {
+            frombed = false;
+            player1->setPosition(1050, 550);
+        }
     }
-    player1->setScale(2.7f);
-    player1->speed = 7.0f;
-    player1->setAnchorPoint(Vec2(0.5f, 0.2f));
+
+
+    // 启动人物的定时器
     player1->schedule([=](float dt) {
         player1->player1_move();
         }, 0.05f, "player1_move");
@@ -140,11 +132,18 @@ bool Myhouse::init()
         player1->player_change();
         }, 0.3f, "player_change");
 
+
     // 计算背景精灵的缩放后范围
     float scaledWidth = background->getContentSize().width * background->getScaleX();
     float scaledHeight = background->getContentSize().height * background->getScaleY();
 
-   
+    // 构造 Follow 的边界 Rect
+    auto followRect = cocos2d::Rect(leftBottomPosition.x, leftBottomPosition.y, scaledWidth, scaledHeight);
+
+    // 创建 Follow 动作并限制玩家在背景范围内移动
+    auto followAction = Follow::create(player1, followRect);
+    this->runAction(followAction);
+
     // 定期更新玩家状态
     this->schedule([this](float dt) {
         this->checkPlayerPosition();  // 检查玩家是否接近轮廓点
@@ -152,7 +151,7 @@ bool Myhouse::init()
 
     auto listener = EventListenerMouse::create();
     listener->onMouseDown = [this](Event* event) {
-       
+
         // 获取鼠标点击的位置
         auto mouseEvent = static_cast<EventMouse*>(event);
         Vec2 clickPos(mouseEvent->getCursorX(), mouseEvent->getCursorY());
@@ -163,14 +162,13 @@ bool Myhouse::init()
             Director::getInstance()->end();
         }
         };
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, button);
 
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, button);
 
     // 设置键盘监听器
     auto listenerWithPlayer = EventListenerKeyboard::create();
     listenerWithPlayer->onKeyPressed = [this](EventKeyboard::KeyCode keyCode, Event* event)
         {
-            // 记录 Enter 键被按下
             if (keyCode == EventKeyboard::KeyCode::KEY_ENTER) {
                 isEnterKeyPressed = true;
                 CCLOG("Enter key pressed. ");
@@ -182,7 +180,6 @@ bool Myhouse::init()
             // 释放 Enter 键时，设置为 false
             if (keyCode == EventKeyboard::KeyCode::KEY_ENTER) {
                 isEnterKeyPressed = false;
-                CCLOG("Enter key released. ");
             }
         };
 
@@ -205,9 +202,11 @@ Myhouse* Myhouse::create()
     return nullptr;
 }
 
+
 // 检查玩家是否接近背景的轮廓点
 void Myhouse::checkPlayerPosition()
 {
+
     // 获取玩家的位置
     Vec2 playerPos = player1->getPosition();
 
@@ -215,7 +214,7 @@ void Myhouse::checkPlayerPosition()
     if (_positionLabel)
     {
         _positionLabel->setString("Position: (" + std::to_string(static_cast<int>(playerPos.x)) + ", " + std::to_string(static_cast<int>(playerPos.y)) + ")");
-    
+
     }
 
     // 更新计时器显示
@@ -223,9 +222,10 @@ void Myhouse::checkPlayerPosition()
     _timerLabelD->setString("Day: " + std::to_string(day));
     _timerLabelH->setString(std::to_string(remainingTime / 1800) + ":00");
     _timerLabelS->setString(Season);
-    if (remainingTime == 43200) {
+    if (remainingTime == 432000) {
 
         day++;
+        IsNextDay = true;
 
         if (day == 8) {
             if (Season == "Spring") {
@@ -241,38 +241,119 @@ void Myhouse::checkPlayerPosition()
         }
 
         remainingTime = 0;
+
+        for (auto it = Crop_information.begin(); it != Crop_information.end();) {
+
+            auto crop = *it;  // 解引用迭代器以访问 Crop 对象
+
+            // 判断前一天是否浇水
+            if ((crop->watered == false) && (crop->GetPhase() != Phase::MATURE)) {
+                // 判断是否已经进入枯萎状态
+                if (crop->GetPhase() != Phase::SAPLESS) {
+                    crop->ChangePhase(Phase::SAPLESS);
+                    crop->ChangMatureNeeded(2); // 延迟两天收获
+                    it++;
+                }
+                else {
+                    // 删除元素并更新迭代器
+                    it = Crop_information.erase(it);
+                }
+
+            }
+            else {
+                // 更新状态
+                crop->UpdateGrowth();
+                it++;
+            }
+
+        }
+
+        for (auto& pair : F_lastplace) {
+            if (pair.first.first == "myhouse") {  // 检查 bool 值是否为 true
+                pair.second = true;
+            }
+        }
+
         player1->removeFromParent();
         auto nextday = Myhouse::create();
         Director::getInstance()->replaceScene(nextday);
 
-    }
-   
-     // 检查玩家是否进入目标区域，并且按下 enter 键
-    if (GoBed.containsPoint(playerPos)) {
-        // 玩家进入目标区域
-        opendoor->setVisible(true);
-        opendoor->setPosition(playerPos.x + 110, playerPos.y + 30);
-        
 
+    }
+
+   
+
+    // 是否进入农场
+    if (OutDoor.containsPoint(playerPos)) {
         if (isEnterKeyPressed) {
-            for (auto& pair : T_lastplace) {
-                if (pair.first.first == "seedshop") {  // 检查 bool 值是否为 true
+            player1->removeFromParent();
+            auto NextSence = farm::create();
+            Director::getInstance()->replaceScene(NextSence);
+        }
+    }
+
+    // 是否睡觉
+    if (GoBed.containsPoint(playerPos)) {
+        if (isEnterKeyPressed) {
+            
+            day++;
+
+            if (day == 8) {
+                if (Season == "Spring") {
+                    Season = "Summer";
+                }
+                else if (Season == "Summer") {
+                    Season = "Autumn";
+                }
+                else {
+                    Season = "Winter";
+                }
+                day = 1;
+            }
+
+            remainingTime = 0;
+
+            isEnterKeyPressed = false;
+
+            for (auto it = Crop_information.begin(); it != Crop_information.end();) {
+
+                auto crop = *it;  // 解引用迭代器以访问 Crop 对象
+
+                // 判断前一天是否浇水
+                if ((crop->watered == false) && (crop->GetPhase() != Phase::MATURE)) {
+                    // 判断是否已经进入枯萎状态
+                    if (crop->GetPhase() != Phase::SAPLESS) {
+                        crop->ChangePhase(Phase::SAPLESS);
+                        crop->ChangMatureNeeded(2); // 延迟两天收获
+                        it++;
+                    }
+                    else {
+                        // 删除元素并更新迭代器
+                        it = Crop_information.erase(it);
+                    }
+                   
+                }
+                else {
+                    // 更新状态
+                    crop->UpdateGrowth();
+                    it++;
+                }
+
+            }
+
+            for (auto& pair : F_lastplace) {
+                if (pair.first.first == "myhouse") {  // 检查 bool 值是否为 true
                     pair.second = true;
                 }
             }
-            // 打印调试信息，检查 Enter 键的状态
-            CCLOG("Player in target area, isEnterKeyPressed: %d", isEnterKeyPressed);
-            // 调用场景切换逻辑
-            //player1->removeFromParent();
-            //seedshop = supermarket::create();
-            //Director::getInstance()->replaceScene(seedshop);
-        }
 
+            frombed = true;
+            player1->removeFromParent();
+            auto nextday = Myhouse::create();
+            Director::getInstance()->replaceScene(nextday);
+        }
     }
-    else {
-        opendoor->setVisible(false);
-    }    
-        
+
 
     for (const auto& point : nonTransparentPixels)
     {
@@ -281,7 +362,7 @@ void Myhouse::checkPlayerPosition()
 
         Vec2 temp;
         temp = playerPos;
-        temp.x -= 23;
+        temp.x -= player1->speed;
         distance = temp.distance(point);
         if (distance <= 17) {
             player1->moveLeft = false;
@@ -291,11 +372,11 @@ void Myhouse::checkPlayerPosition()
                 player1->moveLeft = true;
             }
         }
-        
+
         temp = playerPos;
-        temp.y -= 23;
+        temp.y -= 10;
         distance = temp.distance(point);
-        if (distance <= 17) {
+        if (distance <= 15) {
             player1->moveDown = false;
         }
         else {
@@ -305,9 +386,9 @@ void Myhouse::checkPlayerPosition()
         }
 
         temp = playerPos;
-        temp.y += 23;
+        temp.y += 10;
         distance = temp.distance(point);
-        if (distance <= 23) {
+        if (distance <= 15) {
             player1->moveUp = false;
         }
         else {
@@ -317,21 +398,23 @@ void Myhouse::checkPlayerPosition()
         }
 
         temp = playerPos;
-        temp.x += 17;
+        temp.x += 10;
         distance = temp.distance(point);
         if (distance <= 15) {
             player1->moveRight = false;
         }
-        else{
+        else {
             if (player1->rightpressed == false) {
                 player1->moveRight = true;
             }
         }
-       
+
     }
-    
+
 
 }
+
+
 
 
 

@@ -1,26 +1,11 @@
 #include "AppDelegate.h"
 #include "Town.h"
-//#include "supermarket.h"
+#include "Crop.h"
+#include "supermarket.h"
 #include "Player.h"
-#include "physics/CCPhysicsWorld.h"
 #include "ui/CocosGUI.h"
 
-#include"Inventory.h"
-#include"Item.h"
-#include"Crop.h"
-#include "InventoryUI.h"
-#include "NPCreate.h"
-#include "Generaltem.h"
-#include "NPCData.h"
-
 USING_NS_CC;
-
-extern int remainingTime;
-extern Player* player1;
-extern Town* town;
-//extern supermarket* seedshop;
-extern std::map <std::pair<std::string, Vec2>, bool> T_lastplace;
-extern Inventory* inventory;
 
 Town::Town() {}
 
@@ -35,10 +20,24 @@ bool Town::init()
     button = cocos2d::Sprite::create("CloseNormal.png");
     this->addChild(button, 11);
 
-    //// 背包中的初始物品添加
-    //inventory->AddItem ( Bamboo_Pole );
-    //
-    //inventory->AddItem ( Apple_Sapling );
+
+    // 设置计时器标签
+    _timerLabelD = Label::createWithTTF("Day: 0", "fonts/Marker Felt.ttf", 24);
+    this->addChild(_timerLabelD, 10);
+    _timerLabelD->setScale(2.3f);
+
+    _timerLabelH = Label::createWithTTF("0:00", "fonts/Marker Felt.ttf", 24);
+    this->addChild(_timerLabelH, 10);
+    _timerLabelH->setScale(2.3f);
+
+    _timerLabelS = Label::createWithTTF("Spring", "fonts/Marker Felt.ttf", 24);
+    this->addChild(_timerLabelS, 10);
+    _timerLabelS->setScale(2.3f);
+
+    // 背包中的初始物品添加
+    inventory->AddItem ( Bamboo_Pole );
+
+    inventory->AddItem ( Apple_Sapling );
 
     //inventory->AddItem ( Apple_Sapling );
 
@@ -59,13 +58,6 @@ bool Town::init()
     //inventory->AddItem ( Parsnip_Seeds );
 
     //inventory->AddItem ( Rhubarb_Seeds );
-
-
-    // 设置计时器标签
-    _timerLabel = Label::createWithTTF("Timer: 60", "fonts/Marker Felt.ttf", 24);
-    this->addChild(_timerLabel, 10);
-    _timerLabel->setPosition(Vec2(0, Director::getInstance()->getVisibleSize().height));
-    _timerLabel->setScale(2.3f);
 
     // 创建并初始化 Label 来显示角色的位置
     _positionLabel = Label::createWithTTF("Position: (0, 0)", "fonts/Marker Felt.ttf", 24);
@@ -101,7 +93,7 @@ bool Town::init()
         spritePosition.x - background->getScaleX() * spriteSize.width / 2,   // 中心点 x 坐标减去宽度的一半
         spritePosition.y - background->getScaleY() * spriteSize.height / 2   // 中心点 y 坐标减去高度的一半
     );
-    
+   
 
     Image img;
     if (img.initWithImageFile("Town/Town_path.png"))
@@ -146,11 +138,14 @@ bool Town::init()
                 pair.second = false;
             }
         }
-        player1->speed = 1.5f;
+        player1->speed = 2.5f;
     }
+
+    cocos2d::log("transform");
 
     // 初始化角色并将其添加到场景
     if (player1->getParent() == NULL) {
+        cocos2d::log("player1->get");
         this->addChild(player1, 5);
     }
     player1->setScale(1.5f);
@@ -177,9 +172,7 @@ bool Town::init()
     // 定期更新玩家状态
     this->schedule([this](float dt) {
         this->checkPlayerPosition();  // 检查玩家是否接近轮廓点
-        }, 0.1f, "check_position_key");
-
-
+        }, 0.01f, "check_position_key");
 
     // 使用 getAbigailAnimations() 获取 NPC 动画帧  
     auto abigailAnimations = getAbigailAnimations ();
@@ -215,16 +208,16 @@ bool Town::init()
     }
 
     // 允许的交互半径  
-    const float interactionRadius = 30.0f;  
+    const float interactionRadius = 30.0f;
 
     // 鼠标事件监听器
-    auto listener = EventListenerMouse::create();
-    listener->onMouseDown = [this, abigail, interactionRadius](Event* event) {
-       
+    auto listener = EventListenerMouse::create ();
+    listener->onMouseDown = [this , abigail , interactionRadius]( Event* event ) {
+
         // 获取鼠标点击的位置
         auto mouseEvent = static_cast<EventMouse*>(event);
-        Vec2 clickPos(mouseEvent->getCursorX(), mouseEvent->getCursorY());
-        clickPos = this->convertToNodeSpace(clickPos);
+        Vec2 clickPos ( mouseEvent->getCursorX () , mouseEvent->getCursorY () );
+        clickPos = this->convertToNodeSpace ( clickPos );
 
         // 检查是否点击了 Abigail   
         if (abigail) {
@@ -244,14 +237,14 @@ bool Town::init()
                 }
 
                 /*
-                // 检查距离是否在允许的范围内  
+                // 检查距离是否在允许的范围内
                 if (distance <= interactionRadius) {
                     CCLOG ( "Abigail clicked and player is within range! Opening InventoryUI." );
-                    // 打开 InventoryUI  
-                    static InventoryUI* currentInventoryUI = nullptr; // 保存当前显示的 InventoryUI  
+                    // 打开 InventoryUI
+                    static InventoryUI* currentInventoryUI = nullptr; // 保存当前显示的 InventoryUI
                     if (currentInventoryUI == nullptr) {
                         currentInventoryUI = InventoryUI::create ( inventory );
-                        this->addChild ( currentInventoryUI , 11 ); // 将 InventoryUI 添加到 Town 的上层  
+                        this->addChild ( currentInventoryUI , 11 ); // 将 InventoryUI 添加到 Town 的上层
                     }
                 }
                 else {
@@ -260,9 +253,9 @@ bool Town::init()
                 */
             }
         }
-    };
+        };
 
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, button);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , button );
 
     // 设置键盘监听器  
     auto listenerWithPlayer = EventListenerKeyboard::create ();
@@ -304,6 +297,7 @@ bool Town::init()
     return true;
 }
 
+
 Town* Town::create()
 {
     Town* scene = new Town();
@@ -329,13 +323,71 @@ void Town::checkPlayerPosition()
     
     }
 
-
-    // 减少剩余时间
-    remainingTime = remainingTime--;
-
     // 更新计时器显示
-    remainingTime--;
-    _timerLabel->setString("Timer: " + std::to_string(remainingTime / 60));
+    remainingTime++;
+    _timerLabelD->setString("Day: " + std::to_string(day));
+    _timerLabelH->setString(std::to_string(remainingTime / 1800) + ":00");
+    _timerLabelS->setString(Season);
+    if (remainingTime == 43200) {
+
+        day++;
+
+        IsNextDay = true;
+
+        if (day == 8) {
+            if (Season == "Spring") {
+                Season = "Summer";
+            }
+            else if (Season == "Summer") {
+                Season = "Autumn";
+            }
+            else {
+                Season = "Winter";
+            }
+            day = 1;
+        }
+
+        for (auto it = Crop_information.begin(); it != Crop_information.end();) {
+
+            auto crop = *it;  // 解引用迭代器以访问 Crop 对象
+
+            // 判断前一天是否浇水
+            if ((crop->watered == false) && (crop->GetPhase() != Phase::MATURE)) {
+                // 判断是否已经进入枯萎状态
+                if (crop->GetPhase() != Phase::SAPLESS) {
+                    crop->ChangePhase(Phase::SAPLESS);
+                    crop->ChangMatureNeeded(2); // 延迟两天收获
+                    it++;
+                }
+                else {
+                    // 删除元素并更新迭代器
+                    it = Crop_information.erase(it);
+                }
+
+            }
+            else {
+                // 更新状态
+                crop->UpdateGrowth();
+                it++;
+            }
+
+        }
+
+        for (auto& pair : F_lastplace) {
+            if (pair.first.first == "myhouse") {  // 检查 bool 值是否为 true
+                pair.second = true;
+            }
+        }
+
+
+        remainingTime = 0;
+        player1->removeFromParent();
+        auto nextday = Myhouse::create();
+        Director::getInstance()->replaceScene(nextday);
+
+
+
+    }
 
     // 更新标签位置
     float currentx = 0, currenty = 0;
@@ -359,8 +411,9 @@ void Town::checkPlayerPosition()
         currenty = playerPos.y;
     }
 
-    
-    _timerLabel->setPosition(currentx - 630, currenty + 570);
+    _timerLabelD->setPosition(currentx - 710, currenty + 570);
+    _timerLabelH->setPosition(currentx - 570, currenty + 570);
+    _timerLabelS->setPosition(currentx - 430, currenty + 570);
     _positionLabel->setPosition(currentx - 570, currenty + 490);
     button->setPosition(currentx + 730, currenty - 590);
    
@@ -447,4 +500,11 @@ void Town::checkPlayerPosition()
        
     }
     
+
 }
+
+
+
+
+
+

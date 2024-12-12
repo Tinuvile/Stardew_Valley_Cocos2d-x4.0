@@ -2,6 +2,7 @@
 #define __farm_H__
 
 #include "cocos2d.h"
+#include "Barn.h"
 #include "Player.h"
 #include "Crop.h"
 #include "AppDelegate.h"
@@ -24,8 +25,7 @@ public:
     // 判断角色的位置
     void checkPlayerPosition();
 
-    // 种植作物
-    void plant_seed(Vec2 pos);
+   
 
     // 返回作物序号
     int getRegionNumber(Vec2 pos);
@@ -37,10 +37,19 @@ public:
     Rect Out_Farm = Rect(792, 1187, 36, 153);
 
     // 可种植区域(单块面积为 48 * 48 )
-    Rect plant_area = Rect(474, 467, 864, 510);
+    Rect plant_area = Rect(474, 467, 864, 510); 
+
+    // 可以进入家的区域
+    Rect myhouse_area = Rect(70, 920, 75, 30);       
+
+    // 可以进入畜棚的区域
+    Rect barn_area = Rect(20, 170, 70, 70);
+  
+    // 可以进入山洞的区域
+    Rect cave_area = Rect(635, 1185, 90, 40);
   
     // 恢复种植
-    // void AllInitialize_crop();
+    void AllInitialize_crop(); 
 
 private:
 
@@ -69,9 +78,9 @@ private:
     bool isWKeyPressed = false;
     // 判断收割G键是否按下
     bool isGKeyPressed = false;
-    bool isSpaceKeyPressed = false;
+  
 
 
 };
 
-#endif // __BACKGROUND1_H__
+#endif 

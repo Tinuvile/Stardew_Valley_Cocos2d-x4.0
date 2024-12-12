@@ -9,12 +9,6 @@
  ****************************************************************************/
 
 #include "AppDelegate.h"
-//#include "GameBeginUI.h"
-#include "Player.h"
-//#include "Town.h"
-#include "Barn.h"
-//#include "supermarket.h"
-//#include "CreateCharacterUI.h"
 
  // #define USE_AUDIO_ENGINE 1   // 如果需要使用音频引擎，可以取消注释这一行
 
@@ -29,155 +23,193 @@ USING_NS_CC;  // 使用cocos2d的命名空间
 // 在此文件中定义并初始化全局变量
 int remainingTime = 60000;
 int day = 1;
-//CropBasicInformation WHEAT ( "crop/wheat1.png" , "crop/wheat2.png" , "crop/wheat3.png" , "All" );
-//CropBasicInformation CORN ( "crop/corn1.png" , "crop/corn2.png" , "crop/corn3.png" , "Spring" );
-//CropBasicInformation POTATO ( "crop/potato1.png" , "crop/potato2.png" , "crop/potato3.png" , "All" );
-//CropBasicInformation PUMPKIN ( "crop/pumpkin1.png" , "crop/pumpkin2.png" , "crop/pumpkin3.png" , "Summer" );
-//CropBasicInformation BLUEBERRY ( "crop/blueberry1.png" , "crop/blueberry2.png" , "crop/blueberry3.png" , "Autumn" );
-//Crop wheat("wheat", "Unkown", "All");   
-//Crop corn("corn", "Unkown", "Spring", Phase::SEED, 50, 0, false, 6);
-//Crop potato("potato", "Unkown", "All", Phase::SEED, 30, 0, false, 4);
-//Crop pumpkin("pumpkin", "Unkown", "Autumn", Phase::SEED, 70, 0, false, 6);
-//Crop blueberry("blueberry", "Unkown", "Summer", Phase::SEED, 100, 0, false, 7);
+bool frombed = false;
+bool IsNextDay = false;
+
+Crop wheat ( "wheat" , "crop/wheat1.png" , "crop/wheat2.png" , "crop/wheat3.png" , "All" , Phase::SEED , 50 , 0 , false , 4 );
+Crop corn ( "corn" , "crop/corn1.png" , "crop/corn2.png" , "crop/corn3.png" , "Spring" , Phase::SEED , 50 , 0 , false , 6 );
+Crop potato ( "potato" , "crop/potato1.png" , "crop/potato2.png" , "crop/potato3.png" , "All" , Phase::SEED , 30 , 0 , false , 4 );
+Crop pumpkin ( "pumpkin" , "crop/pumpkin1.png" , "crop/pumpkin2.png" , "crop/pumpkin3.png" , "Autumn" , Phase::SEED , 70 , 0 , false , 6 );
+Crop blueberry ( "blueberry" , "crop/blueberry1.png" , "crop/blueberry2.png" , "crop/blueberry3.png" , "Summer" , Phase::SEED , 100 , 0 , false , 7 );
+
 std::string Season = "Spring";
 std::map<std::string , int> season;
-// std::vector<std::shared_ptr<Crop>> Crop_information;
-//std::map<std::string , CropBasicInformation> cropbasicinformation;
+std::vector<std::shared_ptr<Crop>> Crop_information;
+std::vector<std::shared_ptr<Ore>> Ore_information;
+std::vector<std::shared_ptr<Tree>> Tree_information;
+std::map<std::string , Crop> cropbasicinformation;
+std::map<std::pair<std::string , Vec2> , bool> T_lastplace;
+std::map<std::pair<std::string , Vec2> , bool> F_lastplace;
+
 // 全局指针变量定义
 Player* player1 = nullptr;
-//Town* town = nullptr;
-//supermarket* seedshop = nullptr;
+Town* town = nullptr;
+supermarket* seedshop = nullptr;
 farm* Farm = nullptr;
-std::map<std::pair<std::string , Vec2> , bool> T_lastplace;
-
+Myhouse* myhouse = nullptr;
 Inventory* inventory = new Inventory ();
-std::vector<std::pair<Rect,bool>> barn_space;
+std::vector<std::pair<Rect , bool>> barn_space;
 std::vector<Livestock*> livestocks;
 /****************************************************************************************/
 
 
-AppDelegate::AppDelegate() {
+AppDelegate::AppDelegate () {
     // 构造函数：AppDelegate构造时会调用
 }
 
-AppDelegate::~AppDelegate() {
+AppDelegate::~AppDelegate () {
     // 析构函数：程序结束时会调用
 #if USE_AUDIO_ENGINE
-    AudioEngine::end();  // 如果使用了音频引擎，停止音频引擎
+    AudioEngine::end ();  // 如果使用了音频引擎，停止音频引擎
 #endif
 }
 
 // 初始化 OpenGL 上下文属性
-void AppDelegate::initGLContextAttrs() {
+void AppDelegate::initGLContextAttrs () {
     // 设置OpenGL上下文的属性：红、绿、蓝、透明通道的位深，深度、模板和多重采样
     GLContextAttrs glContextAttrs = { 8, 8, 8, 8, 24, 8, 0 };  // 设置 OpenGL 上下文的颜色和深度缓冲等属性
 
-    GLView::setGLContextAttrs(glContextAttrs);  // 将设置的上下文属性应用到 GLView
+    GLView::setGLContextAttrs ( glContextAttrs );  // 将设置的上下文属性应用到 GLView
 }
 
 // 如果想通过包管理器安装更多包，不要修改或删除这个函数
-static int register_all_packages() {
+static int register_all_packages () {
     return 0;  // 标志位，用于包管理器
 }
 
 // 应用启动完成后调用
-bool AppDelegate::applicationDidFinishLaunching() {
+bool AppDelegate::applicationDidFinishLaunching () {
     // 初始化 Director（导演类，用于管理场景和绘制）
-    auto director = Director::getInstance();  // 获取 Director 实例
-    auto glview = director->getOpenGLView();  // 获取 OpenGL 视图
-    
+    auto director = Director::getInstance ();  // 获取 Director 实例
+    auto glview = director->getOpenGLView ();  // 获取 OpenGL 视图
+
     if (!glview) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-        glview = GLViewImpl::createWithRect("Startdew", cocos2d::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
+        glview = GLViewImpl::createWithRect ( "Startdew" , cocos2d::Rect ( 0 , 0 , designResolutionSize.width , designResolutionSize.height ) );
 #else
-        glview = GLViewImpl::create("Startdew");
+        glview = GLViewImpl::create ( "Startdew" );
 #endif
-        director->setOpenGLView(glview);
+        director->setOpenGLView ( glview );
     }
 
     // 打开 FPS 显示
-    director->setDisplayStats(true);  // 显示帧率统计信息
+    director->setDisplayStats ( true );  // 显示帧率统计信息
 
     // 设置帧率。默认值为 1.0/60，即 60 FPS
-    director->setAnimationInterval(1.0f / 60);  // 设置动画帧率为 60 FPS
+    director->setAnimationInterval ( 1.0f / 60 );  // 设置动画帧率为 60 FPS
 
     // 设置设计分辨率
-    glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::NO_BORDER);
-    director->setContentScaleFactor(1.0f);
+    glview->setDesignResolutionSize ( designResolutionSize.width , designResolutionSize.height , ResolutionPolicy::NO_BORDER );
+    director->setContentScaleFactor ( 1.0f );
 
-    register_all_packages();  // 注册所有的包
+    register_all_packages ();  // 注册所有的包
 
-    runScene(director);
+    runScene ( director );
 
     return true;  // 返回成功
 }
 
 // 切换场景的函数
-void AppDelegate::runScene(cocos2d::Director* director) {
+void AppDelegate::runScene ( cocos2d::Director* director ) {
 
     Initialize ();
-    player1 = Player::create();
+
+    player1 = Player::create ();
 
     // 获取当前视图的可见大小和原点位置
-    auto visibleSize = Director::getInstance()->getVisibleSize();  // 获取屏幕可视区域的大小
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();  // 获取屏幕原点的位置（左下角）
-  
-    std::pair<std::string, Vec2> key = { "initiation",Vec2(350,350)};
-    T_lastplace.insert(std::make_pair(key, true));
-    key = { "seedshop",Vec2(230,470) };
-    T_lastplace.insert(std::make_pair(key, false));
-    /*town = Town::create();*/
-    auto barn = Barn::create ();
+    auto visibleSize = Director::getInstance ()->getVisibleSize ();  // 获取屏幕可视区域的大小
+    Vec2 origin = Director::getInstance ()->getVisibleOrigin ();  // 获取屏幕原点的位置（左下角）
 
     //运行畜棚场景
-    director->runWithScene ( barn );
+   /* auto barn = Barn::create ();
+    director->runWithScene ( barn );*/
 
-    // 运行小镇场景
-    //director->runWithScene ( town );
+    // 运行农场场景
+    /*auto test = Cave::create();
+    director->runWithScene(test); */
+
+    // 运行森林
+    auto test = Forest::create();
+    director->runWithScene(test);
 
     //开局UI运行
     //director->runWithScene ( BeginScene::create () );
+   
     //创建人物界面运行
     //director->runWithScene ( CreateCharacter::create () );
 }
 
 void AppDelegate::Initialize () {
+    
     // 创建人物
     player1 = Player::create ();
+
     // 初始化存储作物信息的数组
-    //cropbasicinformation.insert ( { "wheat", WHEAT } );
-    //cropbasicinformation.insert ( { "corn", CORN } );
-    //cropbasicinformation.insert ( { "potato", POTATO } );
-    //cropbasicinformation.insert ( { "pumpkin", PUMPKIN } );
-    //cropbasicinformation.insert ( { "blueberry", BLUEBERRY } );
+    cropbasicinformation.insert ( { "wheat", wheat } ); 
+    cropbasicinformation.insert ( { "corn", corn } );
+    cropbasicinformation.insert ( { "potato", potato } );
+    cropbasicinformation.insert ( { "pumpkin", pumpkin } );
+    cropbasicinformation.insert ( { "blueberry", blueberry } );
+
+    // 初始化宝石信息
+    Ore Ruby("Ruby", "Ore/Ruby1.png", "Ore/Ruby2.png", 5, 5, Vec2(350, 500));                   // 红宝石
+    Ore_information.push_back(Ruby.GetOreCopy());
+    Ruby.position = Vec2(950, 750);
+    Ore_information.push_back(Ruby.GetOreCopy()); 
+
+    Ore Amethyst("Amethyst", "Ore/Amethyst1.png", "Ore/Amethyst2.png", 5, 5, Vec2(800, 250));   // 紫宝石
+    Ore_information.push_back(Amethyst.GetOreCopy());
+    Amethyst.position = Vec2(750, 850);
+    Ore_information.push_back(Amethyst.GetOreCopy());
+
+    Ore Emerald("Emerald", "Ore/Emerald1.png", "Ore/Emerald2.png", 5, 5, Vec2(900, 150));       // 绿宝石
+    Ore_information.push_back(Emerald.GetOreCopy());
+    Emerald.position = Vec2(1250, 350);
+    Ore_information.push_back(Emerald.GetOreCopy());
+
+    // 初始化树木信息
+    Tree tree("tree", "Tree/tree1.png", "Tree/tree2.png", "Tree/tree3.png", 15, 5, Vec2(50, 950));
+    Tree_information.push_back(tree.GetTreeCopy());
+    tree.position = Vec2(-400, 700);
+    Tree_information.push_back(tree.GetTreeCopy());
+    tree.position = Vec2(800, 1250);
+    Tree_information.push_back(tree.GetTreeCopy());
+    tree.position = Vec2(900, 1650);
+    Tree_information.push_back(tree.GetTreeCopy());
+    tree.position = Vec2(1300, 1550);
+    Tree_information.push_back(tree.GetTreeCopy());
+
     // 初始化小镇各地址坐标
     std::pair<std::string , Vec2> key = { "initiation",Vec2 ( 350,350 ) };
     T_lastplace.insert ( std::make_pair ( key , true ) );
     key = { "seedshop",Vec2 ( 230,470 ) };
     T_lastplace.insert ( std::make_pair ( key , false ) );
+
+
     // 初始化季节
     season.insert ( { "Spring", 1 } );
     season.insert ( { "Summer", 2 } );
     season.insert ( { "Autumn", 3 } );
     season.insert ( { "Winter", 4 } );
+
 }
 
 
 
 // 当应用程序进入后台时调用
-void AppDelegate::applicationDidEnterBackground() {
-    Director::getInstance()->stopAnimation();  // 停止动画
+void AppDelegate::applicationDidEnterBackground () {
+    Director::getInstance ()->stopAnimation ();  // 停止动画
 
 #if USE_AUDIO_ENGINE
-    AudioEngine::pauseAll();  // 暂停所有音频（如果启用了音频引擎）
+    AudioEngine::pauseAll ();  // 暂停所有音频（如果启用了音频引擎）
 #endif
 }
 
 // 当应用程序重新进入前台时调用
-void AppDelegate::applicationWillEnterForeground() {
-    Director::getInstance()->startAnimation();  // 恢复动画
+void AppDelegate::applicationWillEnterForeground () {
+    Director::getInstance ()->startAnimation ();  // 恢复动画
 
 #if USE_AUDIO_ENGINE
-    AudioEngine::resumeAll();  // 恢复所有音频（如果启用了音频引擎）
+    AudioEngine::resumeAll ();  // 恢复所有音频（如果启用了音频引擎）
 #endif
 }

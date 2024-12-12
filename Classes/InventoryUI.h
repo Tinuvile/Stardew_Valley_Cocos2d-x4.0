@@ -25,7 +25,12 @@ private:
 
     cocos2d::Vector<cocos2d::Sprite*> _itemSlots; // 存储物品槽的 Sprite  
 
-    int _selectedSlot; // 当前选中的槽位  
+    int _selectedSlot; // 当前选中的槽位 
 
     void onItemSlotClicked ( cocos2d::Ref* sender ); // 物品槽的点击事件处理  
+
+    bool isClick = false;  // 标志，表示是否被点击
+
+    Sprite* currentItemSprite = nullptr; // 标识当前选择的物品
+
 };

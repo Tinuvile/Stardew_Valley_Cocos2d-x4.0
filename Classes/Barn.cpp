@@ -1,6 +1,7 @@
 #include "AppDelegate.h"
 #include "Barn.h"
 #include "farm.h"
+#include "Crop.h"
 #include "Player.h"
 #include "physics/CCPhysicsWorld.h"
 #include "ui/CocosGUI.h"
@@ -44,24 +45,6 @@ bool Barn::init()
         }
     }
 
-    //创建测试家畜
-    Cow* test_cow = Cow::create ( barn_space[0].first );
-    livestocks.push_back ( test_cow );
-    this->addChild ( livestocks[0] , 10);
-
-    Chicken* test_chicken = Chicken::create ( barn_space[1].first );
-    livestocks.push_back ( test_chicken );
-    this->addChild ( livestocks[1] , 10 );
-
-    Sheep* test_sheep = Sheep::create ( barn_space[2].first );
-    livestocks.push_back ( test_sheep );
-    this->addChild ( livestocks[2] , 10 );
-
-    for (int i = 0; i < 9; i++) {
-        auto test_animal = Chicken::create ( barn_space[3 + i].first );
-        livestocks.push_back ( test_animal );
-        this->addChild ( livestocks[3 + i] , 10 );
-    }
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -158,6 +141,7 @@ bool Barn::init()
 
     }
 
+
     // 启动人物的定时器
     player1->schedule([=](float dt) {
         player1->player1_move();
@@ -221,16 +205,6 @@ bool Barn::init()
     // 将监听器添加到事件分发器中
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listenerWithPlayer, this);
 
-    // 设置鼠标监听器
-    auto mouse_listener = cocos2d::EventListenerMouse::create ();
-
-    // 鼠标点击事件的回调函数
-    mouse_listener->onMouseDown = CC_CALLBACK_1 ( Barn::GetProduction , this );
-
-    // 将监听器添加到事件分发器
-    _eventDispatcher->addEventListenerWithSceneGraphPriority ( mouse_listener , this );
-
-
     return true;
 }
 
@@ -270,7 +244,7 @@ void Barn::checkPlayerPosition()
     if (remainingTime == 432000) {
 
         day++;
-        /*IsNextDay = true;*/
+        IsNextDay = true;
 
         if (day == 8) {
             if (Season == "Spring") {
@@ -287,31 +261,37 @@ void Barn::checkPlayerPosition()
 
         remainingTime = 0;
 
-        //for (auto it = Crop_information.begin(); it != Crop_information.end(); /* no increment here */) {
+        for (auto it = Crop_information.begin(); it != Crop_information.end();) {
 
-        //    auto crop = *it;  // 解引用迭代器以访问 Crop 对象
+            auto crop = *it;  // 解引用迭代器以访问 Crop 对象
 
-        //     判断前一天是否浇水
-        //    if ((crop->watered == false) && (crop->GetPhase() != Phase::MATURE)) {
-        //         判断是否已经进入枯萎状态
-        //        if (crop->GetPhase() != Phase::SAPLESS) {
-        //            crop->ChangePhase(Phase::SAPLESS);
-        //            crop->ChangMatureNeeded(2); // 延迟两天收获
-        //        }
-        //        else {
-        //             删除元素并更新迭代器
-        //            it = Crop_information.erase(it);
-        //        }
-        //        ++it;
-        //        continue;  // 跳过后续代码，直接继续循环
-        //    }
-        //    else {
-        //         更新状态
-        //        crop->UpdateGrowth();
-        //    }
+            // 判断前一天是否浇水
+            if ((crop->watered == false) && (crop->GetPhase() != Phase::MATURE)) {
+                // 判断是否已经进入枯萎状态
+                if (crop->GetPhase() != Phase::SAPLESS) {
+                    crop->ChangePhase(Phase::SAPLESS);
+                    crop->ChangMatureNeeded(2); // 延迟两天收获
+                    it++;
+                }
+                else {
+                    // 删除元素并更新迭代器
+                    it = Crop_information.erase(it);
+                }
 
-        //    it++;
-        //}
+            }
+            else {
+                // 更新状态
+                crop->UpdateGrowth();
+                it++;
+            }
+
+        }
+
+        for (auto& pair : F_lastplace) {
+            if (pair.first.first == "myhouse") {  // 检查 bool 值是否为 true
+                pair.second = true;
+            }
+        }
 
         player1->removeFromParent();
         auto nextday = farm::create();
@@ -391,31 +371,7 @@ void Barn::checkPlayerPosition()
 
 }
 
-void Barn::GetProduction ( cocos2d::EventMouse* event ) {
-    // 判断是否是鼠标右键点击
-    if (event->getMouseButton () == cocos2d::EventMouse::MouseButton::BUTTON_RIGHT)
-    {
-        // 获取鼠标点击位置
-        cocos2d::Vec2 click_pos = this->convertToNodeSpace ( event->getLocationInView () );
 
-        //遍历livestocks
-        for (auto& livestock : livestocks) {
-            if (livestock->IsCanProduce ()) {
-                // 判断点击位置是否在 Sprite 内部
-                if (livestock->getBoundingBox ().containsPoint ( click_pos )) {
-                    CCLOG ( "Right-clicked on the produce_enabled livestock!" );
-                    auto product = livestock->ProduceProduct ();
-                    inventory->AddItem ( *product );
-                    inventory->DisplayPackageInCCLOG ();
-                    //更新对应livestock的can_produce状态为false
-                    livestock->SetCanProduce ( false );
-                }
-
-            }
-
-        }
-    }
-}
 
 
 

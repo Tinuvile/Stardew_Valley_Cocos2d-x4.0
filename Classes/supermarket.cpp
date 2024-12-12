@@ -2,17 +2,11 @@
 #include "supermarket.h"
 #include "Town.h"
 #include "Player.h"
-#include "physics/CCPhysicsWorld.h"
+#include "Crop.h"
+#include "cocos2d.h"
 #include "ui/CocosGUI.h"
-#include "StoreUI.h"
 
 USING_NS_CC;
-
-extern int remainingTime;
-extern Player* player1;
-extern Town* town;
-extern supermarket* seedshop;
-extern Inventory* inventory;
 
 supermarket::supermarket() {}
 
@@ -26,6 +20,21 @@ bool supermarket::init()
 
     button = cocos2d::Sprite::create("CloseNormal.png");
     this->addChild(button, 11);
+
+
+    // 设置计时器标签
+     // 设置计时器标签
+    _timerLabelD = Label::createWithTTF("Day: 0", "fonts/Marker Felt.ttf", 24);
+    this->addChild(_timerLabelD, 10);
+    _timerLabelD->setScale(2.3f);
+
+    _timerLabelH = Label::createWithTTF("0:00", "fonts/Marker Felt.ttf", 24);
+    this->addChild(_timerLabelH, 10);
+    _timerLabelH->setScale(2.3f);
+
+    _timerLabelS = Label::createWithTTF("Spring", "fonts/Marker Felt.ttf", 24);
+    this->addChild(_timerLabelS, 10);
+    _timerLabelS->setScale(2.3f);
 
     StoreItem = new Inventory ();
 
@@ -285,13 +294,6 @@ bool supermarket::init()
     StoreItem->SetSelectedItem ( 83 );
 
 
-
-    // 设置计时器标签
-    _timerLabel = Label::createWithTTF("Timer: 60", "fonts/Marker Felt.ttf", 24);
-    this->addChild(_timerLabel, 10);
-    _timerLabel->setPosition(Vec2(0, Director::getInstance()->getVisibleSize().height));
-    _timerLabel->setScale(2.3f);
-
     // 创建并初始化 Label 来显示角色的位置
     _positionLabel = Label::createWithTTF("Position: (0, 0)", "fonts/Marker Felt.ttf", 24);
     if (_positionLabel)
@@ -304,6 +306,7 @@ bool supermarket::init()
     opendoor = Sprite::create("opendoor.png");
     this->addChild(opendoor, 11);
     opendoor->setVisible(false);
+    opendoor->setScale(1.7f);
 
     // 设置背景图片
     auto background_real = Sprite::create("supermarket/supermarket.png");
@@ -484,13 +487,71 @@ void supermarket::checkPlayerPosition()
     }
 
 
-    // 减少剩余时间
-    remainingTime--;
-
     // 更新计时器显示
-    remainingTime--;
-    _timerLabel->setString("Timer: " + std::to_string(remainingTime / 600));
+    remainingTime++;
+    _timerLabelD->setString("Day: " + std::to_string(day));
+    _timerLabelH->setString(std::to_string(remainingTime / 1800) + ":00");
+    _timerLabelS->setString(Season);
+    if (remainingTime == 43200) {
 
+        day++;
+
+        IsNextDay = true;
+
+        if (day == 8) {
+            if (Season == "Spring") {
+                Season = "Summer";
+            }
+            else if (Season == "Summer") {
+                Season = "Autumn";
+            }
+            else {
+                Season = "Winter";
+            }
+            day = 1;
+        }
+
+        for (auto it = Crop_information.begin(); it != Crop_information.end();) {
+
+            auto crop = *it;  // 解引用迭代器以访问 Crop 对象
+
+            // 判断前一天是否浇水
+            if ((crop->watered == false) && (crop->GetPhase() != Phase::MATURE)) {
+                // 判断是否已经进入枯萎状态
+                if (crop->GetPhase() != Phase::SAPLESS) {
+                    crop->ChangePhase(Phase::SAPLESS);
+                    crop->ChangMatureNeeded(2); // 延迟两天收获
+                    it++;
+                }
+                else {
+                    // 删除元素并更新迭代器
+                    it = Crop_information.erase(it);
+                }
+
+            }
+            else {
+                // 更新状态
+                crop->UpdateGrowth();
+                it++;
+            }
+
+        }
+
+        for (auto& pair : F_lastplace) {
+            if (pair.first.first == "myhouse") {  // 检查 bool 值是否为 true
+                pair.second = true;
+            }
+        }
+
+
+        remainingTime = 0;
+        player1->removeFromParent();
+        auto nextday = Myhouse::create();
+        Director::getInstance()->replaceScene(nextday);
+
+
+
+    }
 
     // 更新标签位置
     float currentx = 0, currenty = 0;
@@ -511,8 +572,9 @@ void supermarket::checkPlayerPosition()
         currenty = playerPos.y;
     }
 
-
-    _timerLabel->setPosition(currentx - 590, currenty + 570);
+    _timerLabelD->setPosition(currentx - 710, currenty + 570);
+    _timerLabelH->setPosition(currentx - 570, currenty + 570);
+    _timerLabelS->setPosition(currentx - 430, currenty + 570);
     _positionLabel->setPosition(currentx - 530, currenty + 490);
     button->setPosition(currentx + 690, currenty - 590);
    
