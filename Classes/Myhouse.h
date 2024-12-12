@@ -1,38 +1,42 @@
-#ifndef __Town_H__
-#define __Town_H__
+#ifndef __Myhouse_H__
+#define __Myhouse_H__
 
 #include "cocos2d.h"
 #include "Player.h"
 #include "AppDelegate.h"
+#include "farm.h"
 #include "physics/CCPhysicsWorld.h"
 #include "ui/CocosGUI.h"
 
 USING_NS_CC;
 
-class Town : public cocos2d::Scene
+
+class Myhouse : public cocos2d::Scene
 {
 public:
 
-    Town();
-    ~Town();
+    Myhouse();
+    ~Myhouse();
 
     virtual bool init();
 
-    static Town* create();
+    static Myhouse* create();
 
     // 判断角色的位置
     void checkPlayerPosition();
-    
+
     // 创建一个列表，用于保存所有非透明像素的坐标
     std::vector<cocos2d::Vec2> nonTransparentPixels;
 
-    // 创建房子的区域
-    cocos2d::Rect Region_supermarket = Rect(163, 518, 130, 60);
-  
+    // 出门区域
+    Rect OutDoor = Rect(510, 210, 150, 70);
+    // 睡觉区域
+    Rect GoBed = Rect(1035, 385, 245, 390);
+
 
 private:
 
-  
+
     // 用于显示计时的标签
     cocos2d::Label* _timerLabelD;
     cocos2d::Label* _timerLabelH;
@@ -44,19 +48,13 @@ private:
     /* 退出按钮 */
     Sprite* button;
 
-    /* 开门按钮 */
-    Sprite* opendoor;
-
     // 退出按钮
     cocos2d::MenuItemImage* closeItem;
 
     cocos2d::Menu* menu;
 
-    cocos2d::Sprite* In_gettask;
-
     bool isEnterKeyPressed = false;
-
 
 };
 
-#endif // __BACKGROUND1_H__
+#endif 

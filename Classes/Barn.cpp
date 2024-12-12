@@ -1,6 +1,7 @@
 #include "AppDelegate.h"
 #include "Barn.h"
 #include "farm.h"
+#include "Crop.h"
 #include "Player.h"
 #include "physics/CCPhysicsWorld.h"
 #include "ui/CocosGUI.h"
@@ -229,31 +230,37 @@ void Barn::checkPlayerPosition()
 
         remainingTime = 0;
 
-        //for (auto it = Crop_information.begin(); it != Crop_information.end(); /* no increment here */) {
+        for (auto it = Crop_information.begin(); it != Crop_information.end();) {
 
-        //    auto crop = *it;  // 解引用迭代器以访问 Crop 对象
+            auto crop = *it;  // 解引用迭代器以访问 Crop 对象
 
-        //     判断前一天是否浇水
-        //    if ((crop->watered == false) && (crop->GetPhase() != Phase::MATURE)) {
-        //         判断是否已经进入枯萎状态
-        //        if (crop->GetPhase() != Phase::SAPLESS) {
-        //            crop->ChangePhase(Phase::SAPLESS);
-        //            crop->ChangMatureNeeded(2); // 延迟两天收获
-        //        }
-        //        else {
-        //             删除元素并更新迭代器
-        //            it = Crop_information.erase(it);
-        //        }
-        //        ++it;
-        //        continue;  // 跳过后续代码，直接继续循环
-        //    }
-        //    else {
-        //         更新状态
-        //        crop->UpdateGrowth();
-        //    }
+            // 判断前一天是否浇水
+            if ((crop->watered == false) && (crop->GetPhase() != Phase::MATURE)) {
+                // 判断是否已经进入枯萎状态
+                if (crop->GetPhase() != Phase::SAPLESS) {
+                    crop->ChangePhase(Phase::SAPLESS);
+                    crop->ChangMatureNeeded(2); // 延迟两天收获
+                    it++;
+                }
+                else {
+                    // 删除元素并更新迭代器
+                    it = Crop_information.erase(it);
+                }
 
-        //    it++;
-        //}
+            }
+            else {
+                // 更新状态
+                crop->UpdateGrowth();
+                it++;
+            }
+
+        }
+
+        for (auto& pair : F_lastplace) {
+            if (pair.first.first == "myhouse") {  // 检查 bool 值是否为 true
+                pair.second = true;
+            }
+        }
 
         player1->removeFromParent();
         auto nextday = farm::create();

@@ -9,11 +9,6 @@
  ****************************************************************************/
 
 #include "AppDelegate.h"
-#include "GameBeginUI.h"
-#include "Player.h"
-#include "Town.h"
-#include "supermarket.h"
-#include "CreateCharacterUI.h"
 
  // #define USE_AUDIO_ENGINE 1   // 如果需要使用音频引擎，可以取消注释这一行
 
@@ -24,14 +19,38 @@ using namespace cocos2d::experimental;  // 使用音频引擎的命名空间
 
 USING_NS_CC;  // 使用cocos2d的命名空间
 
-/******************************** 全局变量声明区 ****************************************/
-int remainingTime = 60000;
-Player* player1 = nullptr;
-Town* town = NULL;
-supermarket* seedshop = NULL;
+// 在此文件中定义并初始化全局变量
+int remainingTime = 0;
+int day = 1;
+bool frombed = false;
+bool IsNextDay = false;
+CropBasicInformation WHEAT("crop/wheat1.png", "crop/wheat2.png", "crop/wheat3.png", "All");
+CropBasicInformation CORN("crop/corn1.png", "crop/corn2.png", "crop/corn3.png", "Spring");
+CropBasicInformation POTATO("crop/potato1.png", "crop/potato2.png", "crop/potato3.png", "All");
+CropBasicInformation PUMPKIN("crop/pumpkin1.png", "crop/pumpkin2.png", "crop/pumpkin3.png", "Summer");
+CropBasicInformation BLUEBERRY("crop/blueberry1.png", "crop/blueberry2.png", "crop/blueberry3.png", "Autumn");
+
+Crop wheat("wheat", "crop/wheat1.png", "crop/wheat2.png", "crop/wheat3.png", "All", Phase::SEED, 50, 0, false, 4);
+Crop corn("corn", "crop/corn1.png", "crop/corn2.png", "crop/corn3.png", "Spring", Phase::SEED, 50, 0, false, 6);
+Crop potato("potato", "crop/potato1.png", "crop/potato2.png", "crop/potato3.png", "All", Phase::SEED, 30, 0, false, 4);
+Crop pumpkin("pumpkin", "crop/pumpkin1.png", "crop/pumpkin2.png", "crop/pumpkin3.png", "Autumn", Phase::SEED, 70, 0, false, 6);
+Crop blueberry("blueberry", "crop/blueberry1.png", "crop/blueberry2.png", "crop/blueberry3.png", "Summer", Phase::SEED, 100, 0, false, 7);
+
+std::string Season = "Spring";
+std::map<std::string, int> season;
+std::vector<std::shared_ptr<Crop>> Crop_information;
+std::vector<std::shared_ptr<Ore>> Ore_information;
+std::vector<std::shared_ptr<Tree>> Tree_information;
+std::map<std::string, Crop> cropbasicinformation;
 std::map<std::pair<std::string, Vec2>, bool> T_lastplace;
-Inventory* inventory = new Inventory ();//人物背包
-/****************************************************************************************/
+std::map<std::pair<std::string, Vec2>, bool> F_lastplace;
+
+// 全局指针变量定义
+Player* player1 = nullptr;
+Town* town = nullptr;
+supermarket* seedshop = nullptr;
+farm* Farm = nullptr;
+Myhouse* myhouse = nullptr;
 
 
 AppDelegate::AppDelegate() {
@@ -92,8 +111,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
 // 切换场景的函数
 void AppDelegate::runScene(cocos2d::Director* director) {
-
-    player1 = Player::create();
+    
+    Initialize();
 
     // 获取当前视图的可见大小和原点位置
     auto visibleSize = Director::getInstance()->getVisibleSize();  // 获取屏幕可视区域的大小
@@ -103,13 +122,29 @@ void AppDelegate::runScene(cocos2d::Director* director) {
     T_lastplace.insert(std::make_pair(key, true));
     key = { "seedshop",Vec2(230,470) };
     T_lastplace.insert(std::make_pair(key, false));
-    //director->runWithScene ( Town::create () );
-    director->runWithScene ( supermarket::create () );
+    director->runWithScene ( Town::create () );
+    // director->runWithScene ( supermarket::create () );
 
-    //开局UI运行
-    //director->runWithScene ( BeginScene::create () );
-    //创建人物界面运行
-    //director->runWithScene ( CreateCharacter::create () );
+    // 测试运行畜棚
+    /*auto test = Barn::create();
+    director->runWithScene(test);*/
+
+    // 测试运行矿洞
+    auto test = Cave::create();
+    director->runWithScene(test);
+
+    // 测试运行商店
+    /*auto test = supermarket::create();
+    director->runWithScene(test);*/
+
+    // 测试运行城镇
+    /*auto test = Town::create();
+    director->runWithScene(test);*/
+
+    // 测试运行森林
+    /*auto test = Forest::create();
+    director->runWithScene(test);*/
+
 }
 
 // 当应用程序进入后台时调用
@@ -129,3 +164,82 @@ void AppDelegate::applicationWillEnterForeground() {
     AudioEngine::resumeAll();  // 恢复所有音频（如果启用了音频引擎）
 #endif
 }
+
+void AppDelegate::Initialize() {
+
+    // 创建人物
+    player1 = Player::create();
+
+    // 初始化矿石信息
+    Ore RUBY("Ruby", "Ore/Ruby1.png", "Ore/Ruby2.png", 10, 3, Vec2(500 ,650));
+    Ore_information.push_back(RUBY.GetOreCopy());
+    Ore_information.back()->position = Vec2(500, 750);
+    Ore_information.push_back(RUBY.GetOreCopy());
+    Ore_information.back()->position = Vec2(450, 550);
+    Ore_information.push_back(RUBY.GetOreCopy());
+    Ore_information.back()->position = Vec2(1150, 450);
+    Ore Emerald("Emerald", "Ore/Emerald1.png", "Ore/Emerald2.png", 10, 3, Vec2(500, 650));
+    Ore_information.push_back(Emerald.GetOreCopy());
+    Ore_information.back()->position = Vec2(700, 950);
+    Ore_information.push_back(Emerald.GetOreCopy());
+    Ore_information.back()->position = Vec2(350, 350);
+    Ore_information.push_back(Emerald.GetOreCopy());
+    Ore_information.back()->position = Vec2(900, 300);
+    Ore Amethyst("Amethyst", "Ore/Amethyst1.png", "Ore/Amethyst2.png", 10, 3, Vec2(500, 650));
+    Ore_information.push_back(Amethyst.GetOreCopy());
+    Ore_information.back()->position = Vec2(550, 650);
+    Ore_information.push_back(Amethyst.GetOreCopy());
+    Ore_information.back()->position = Vec2(950, 950);
+    Ore_information.push_back(Amethyst.GetOreCopy());
+    Ore_information.back()->position = Vec2(1150, 750);
+
+    // 初始化树木信息
+    Tree temp1("tree1", "Tree/tree1.png", "Tree/tree2.png","Tree/tree3.png", 10, 3, Vec2(1250, 1700));
+    Tree_information.push_back(temp1.GetTreeCopy());
+    Tree temp2("tree1", "Tree/tree1.png", "Tree/tree2.png", "Tree/tree3.png", 10, 3, Vec2(-400, 850));
+    Tree_information.push_back(temp2.GetTreeCopy());
+    Tree temp3("tree1", "Tree/tree1.png", "Tree/tree2.png", "Tree/tree3.png", 10, 3, Vec2(0, 900));
+    Tree_information.push_back(temp3.GetTreeCopy());
+    Tree temp4("tree1", "Tree/tree1.png", "Tree/tree2.png", "Tree/tree3.png", 10, 3, Vec2(1200, 1200));
+    Tree_information.push_back(temp4.GetTreeCopy());
+    Tree temp5("tree1", "Tree/tree1.png", "Tree/tree2.png", "Tree/tree3.png", 10, 3, Vec2(700, 1750));
+    Tree_information.push_back(temp5.GetTreeCopy());
+    Tree temp6("tree1", "Tree/tree1.png", "Tree/tree2.png", "Tree/tree3.png", 10, 3, Vec2(900, 1350));
+    Tree_information.push_back(temp6.GetTreeCopy());
+    Tree temp7("tree1", "Tree/tree1.png", "Tree/tree2.png", "Tree/tree3.png", 10, 3, Vec2(1600, 1650));
+    Tree_information.push_back(temp7.GetTreeCopy());
+    Tree temp8("tree1", "Tree/tree1.png", "Tree/tree2.png", "Tree/tree3.png", 10, 3, Vec2(200, 1130));
+    Tree_information.push_back(temp8.GetTreeCopy());
+
+    // 初始化存储作物信息的数组
+    cropbasicinformation.insert({ "wheat", wheat });
+    cropbasicinformation.insert({ "corn", corn });
+    cropbasicinformation.insert({ "potato", potato });
+    cropbasicinformation.insert({ "pumpkin", pumpkin });
+    cropbasicinformation.insert({ "blueberry", blueberry });
+
+    // 初始化小镇各地址坐标
+    std::pair<std::string, Vec2> key = { "initiation",Vec2(350,350) };
+    T_lastplace.insert(std::make_pair(key, true));
+    key = { "seedshop",Vec2(230,470) };
+    T_lastplace.insert(std::make_pair(key, false));
+
+    // 初始化农场各地址坐标
+    key = { "initiation",Vec2(800, 1100) };
+    F_lastplace.insert(std::make_pair(key, true));
+    key = { "myhouse", Vec2(70, 920) };
+    F_lastplace.insert(std::make_pair(key, false));
+    key = { "barn",Vec2(20, 170) };
+    F_lastplace.insert(std::make_pair(key, false));
+    key = { "cave",Vec2(645, 1175) };
+    F_lastplace.insert(std::make_pair(key, false));
+
+    // 初始化季节
+    season.insert({ "Spring", 1 });
+    season.insert({ "Summer", 2 });
+    season.insert({ "Autumn", 3 });
+    season.insert({ "Winter", 4 });
+
+}
+
+
