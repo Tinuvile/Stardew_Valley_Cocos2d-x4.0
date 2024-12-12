@@ -6,11 +6,8 @@
 #include "AppDelegate.h"
 #include "physics/CCPhysicsWorld.h"
 #include "ui/CocosGUI.h"
-#include "Inventory.h"
 
 USING_NS_CC;
-
-extern Player* player1;
 
 class Town : public cocos2d::Scene
 {
@@ -37,7 +34,9 @@ private:
 
   
     // 用于显示计时的标签
-    cocos2d::Label* _timerLabel;  
+    cocos2d::Label* _timerLabelD;
+    cocos2d::Label* _timerLabelH;
+    cocos2d::Label* _timerLabelS;
 
     // 用于显示玩家位置的 Label
     cocos2d::Label* _positionLabel;
@@ -56,6 +55,7 @@ private:
     cocos2d::Sprite* In_gettask;
 
     bool isEnterKeyPressed = false;
+
 
 };
 

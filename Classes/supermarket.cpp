@@ -2,17 +2,11 @@
 #include "supermarket.h"
 #include "Town.h"
 #include "Player.h"
-#include "physics/CCPhysicsWorld.h"
+#include "Crop.h"
+#include "cocos2d.h"
 #include "ui/CocosGUI.h"
-#include "StoreUI.h"
 
 USING_NS_CC;
-
-extern int remainingTime;
-extern Player* player1;
-extern Town* town;
-extern supermarket* seedshop;
-extern Inventory* inventory;
 
 supermarket::supermarket() {}
 
@@ -27,270 +21,20 @@ bool supermarket::init()
     button = cocos2d::Sprite::create("CloseNormal.png");
     this->addChild(button, 11);
 
-    StoreItem = new Inventory ();
-
-    // 动物  
-    StoreItem->AddItem ( Golden_Chicken );
-    StoreItem->SetSelectedItem ( 1 );
-
-    StoreItem->AddItem ( Duck );
-    StoreItem->SetSelectedItem ( 2 );
-
-    StoreItem->AddItem ( Goat );
-    StoreItem->SetSelectedItem ( 3 );
-
-    StoreItem->AddItem ( Pig );
-    StoreItem->SetSelectedItem ( 4 );
-
-    StoreItem->AddItem ( Rabbit );
-    StoreItem->SetSelectedItem ( 5 );
-
-    StoreItem->AddItem ( Sheep );
-    StoreItem->SetSelectedItem ( 6 );
-
-    StoreItem->AddItem ( White_Chicken );
-    StoreItem->SetSelectedItem ( 7 );
-
-    // 春季种子物品列表  
-    StoreItem->AddItem ( Bean_Starter );
-    StoreItem->SetSelectedItem ( 8 );
-
-    StoreItem->AddItem ( Carrot_Seeds );
-    StoreItem->SetSelectedItem ( 9 );
-
-    StoreItem->AddItem ( Cauliflower_Seeds );
-    StoreItem->SetSelectedItem ( 10 );
-
-    StoreItem->AddItem ( Coffee_Bean );
-    StoreItem->SetSelectedItem ( 11 );
-
-    StoreItem->AddItem ( Garlic_Seeds );
-    StoreItem->SetSelectedItem ( 12 );
-
-    StoreItem->AddItem ( Jazz_Seeds );
-    StoreItem->SetSelectedItem ( 13 );
-
-    StoreItem->AddItem ( Kale_Seeds );
-    StoreItem->SetSelectedItem ( 14 );
-
-    StoreItem->AddItem ( Parsnip_Seeds );
-    StoreItem->SetSelectedItem ( 15 );
-
-    StoreItem->AddItem ( Potato_Seeds );
-    StoreItem->SetSelectedItem ( 16 );
-
-    StoreItem->AddItem ( Rhubarb_Seeds );
-    StoreItem->SetSelectedItem ( 17 );
-
-    StoreItem->AddItem ( Rice_Shoot );
-    StoreItem->SetSelectedItem ( 18 );
-
-    StoreItem->AddItem ( Strawberry_Seeds );
-    StoreItem->SetSelectedItem ( 19 );
-
-    StoreItem->AddItem ( Tulip_Bulb );
-    StoreItem->SetSelectedItem ( 20 );
-
-    // 夏季种子物品列表  
-    StoreItem->AddItem ( Amaranth_Seeds );
-    StoreItem->SetSelectedItem ( 21 );
-
-    StoreItem->AddItem ( Artichoke_Seeds );
-    StoreItem->SetSelectedItem ( 22 );
-
-    StoreItem->AddItem ( Beet_Seeds );
-    StoreItem->SetSelectedItem ( 23 );
-
-    StoreItem->AddItem ( Blueberry_Seeds );
-    StoreItem->SetSelectedItem ( 24 );
-
-    StoreItem->AddItem ( Bok_Choy_Seeds );
-    StoreItem->SetSelectedItem ( 25 );
-
-    StoreItem->AddItem ( Broccoli_Seeds );
-    StoreItem->SetSelectedItem ( 26 );
-
-    StoreItem->AddItem ( Corn_Seeds );
-    StoreItem->SetSelectedItem ( 27 );
-
-    StoreItem->AddItem ( Cranberry_Seeds );
-    StoreItem->SetSelectedItem ( 28 );
-
-    StoreItem->AddItem ( Eggplant_Seeds );
-    StoreItem->SetSelectedItem ( 29 );
-
-    StoreItem->AddItem ( Fairy_Seeds );
-    StoreItem->SetSelectedItem ( 30 );
-
-    StoreItem->AddItem ( Grape_Starter );
-    StoreItem->SetSelectedItem ( 31 );
-
-    StoreItem->AddItem ( Hops_Starter );
-    StoreItem->SetSelectedItem ( 32 );
-
-    StoreItem->AddItem ( Melon_Seeds );
-    StoreItem->SetSelectedItem ( 33 );
-
-    StoreItem->AddItem ( Pepper_Seeds );
-    StoreItem->SetSelectedItem ( 34 );
-
-    StoreItem->AddItem ( Poppy_Seeds );
-    StoreItem->SetSelectedItem ( 35 );
-
-    StoreItem->AddItem ( Pumpkin_Seeds );
-    StoreItem->SetSelectedItem ( 36 );
-
-    StoreItem->AddItem ( Radish_Seeds );
-    StoreItem->SetSelectedItem ( 37 );
-
-    StoreItem->AddItem ( Red_Cabbage_Seeds );
-    StoreItem->SetSelectedItem ( 38 );
-
-    StoreItem->AddItem ( Spangle_Seeds );
-    StoreItem->SetSelectedItem ( 39 );
-
-    StoreItem->AddItem ( Starfruit_Seeds );
-    StoreItem->SetSelectedItem ( 40 );
-
-    StoreItem->AddItem ( Summer_Squash_Seeds );
-    StoreItem->SetSelectedItem ( 41 );
-
-    StoreItem->AddItem ( Sunflower_Seeds );
-    StoreItem->SetSelectedItem ( 42 );
-
-    StoreItem->AddItem ( Tomato_Seeds );
-    StoreItem->SetSelectedItem ( 43 );
-
-    StoreItem->AddItem ( Wheat_Seeds );
-    StoreItem->SetSelectedItem ( 44 );
-
-    StoreItem->AddItem ( Yam_Seeds );
-    StoreItem->SetSelectedItem ( 45 );
-
-    // 冬季种子物品列表  
-    StoreItem->AddItem ( Powdermelon_Seeds );
-    StoreItem->SetSelectedItem ( 46 );
-
-    // 工具列表  
-    StoreItem->AddItem ( Backpack_36 );
-    StoreItem->SetSelectedItem ( 47 );
-
-    StoreItem->AddItem ( Backpack );
-    StoreItem->SetSelectedItem ( 48 );
-
-    StoreItem->AddItem ( Advanced_Iridium_Rod );
-    StoreItem->SetSelectedItem ( 49 );
-
-    StoreItem->AddItem ( Axe );
-    StoreItem->SetSelectedItem ( 50 );
-
-    StoreItem->AddItem ( Bamboo_Pole );
-    StoreItem->SetSelectedItem ( 51 );
-
-    StoreItem->AddItem ( Copper_Axe );
-    StoreItem->SetSelectedItem ( 52 );
-
-    StoreItem->AddItem ( Copper_Hoe );
-    StoreItem->SetSelectedItem ( 53 );
-
-    StoreItem->AddItem ( Copper_Pan );
-    StoreItem->SetSelectedItem ( 54 );
-
-    StoreItem->AddItem ( Copper_Pickaxe );
-    StoreItem->SetSelectedItem ( 55 );
-
-    StoreItem->AddItem ( Copper_Watering );
-    StoreItem->SetSelectedItem ( 56 );
-
-    StoreItem->AddItem ( Fiberglass_Rod );
-    StoreItem->SetSelectedItem ( 57 );
-
-    StoreItem->AddItem ( Gold_Axe );
-    StoreItem->SetSelectedItem ( 58 );
-
-    StoreItem->AddItem ( Gold_Hoe );
-    StoreItem->SetSelectedItem ( 59 );
-
-    StoreItem->AddItem ( Gold_Pan );
-    StoreItem->SetSelectedItem ( 60 );
-
-    StoreItem->AddItem ( Gold_Pickaxe );
-    StoreItem->SetSelectedItem ( 61 );
-
-    StoreItem->AddItem ( Gold_Watering_Can );
-    StoreItem->SetSelectedItem ( 62 );
-
-    StoreItem->AddItem ( Golden_Scythe );
-    StoreItem->SetSelectedItem ( 63 );
-
-    StoreItem->AddItem ( Hoe );
-    StoreItem->SetSelectedItem ( 64 );
-
-    StoreItem->AddItem ( Pickaxe );
-    StoreItem->SetSelectedItem ( 65 );
-
-    StoreItem->AddItem ( Milk_Pail );
-    StoreItem->SetSelectedItem ( 66 );
-
-    StoreItem->AddItem ( Scythe );
-    StoreItem->SetSelectedItem ( 67 );
-
-    StoreItem->AddItem ( Steel_Axe );
-    StoreItem->SetSelectedItem ( 68 );
-
-    StoreItem->AddItem ( Steel_Hoe );
-    StoreItem->SetSelectedItem ( 69 );
-
-    StoreItem->AddItem ( Steel_Pan );
-    StoreItem->SetSelectedItem ( 70 );
-
-    StoreItem->AddItem ( Steel_Pickaxe );
-    StoreItem->SetSelectedItem ( 71 );
-
-    StoreItem->AddItem ( Steel_Watering );
-    StoreItem->SetSelectedItem ( 72 );
-
-    StoreItem->AddItem ( Trash_Can_Copper );
-    StoreItem->SetSelectedItem ( 73 );
-
-    StoreItem->AddItem ( Watering_Can );
-    StoreItem->SetSelectedItem ( 74 );
-
-    StoreItem->AddItem ( Trash_Can_Steel );
-    StoreItem->SetSelectedItem ( 75 );
-
-    // 树苗列表  
-    StoreItem->AddItem ( Apple_Sapling );
-    StoreItem->SetSelectedItem ( 76 );
-
-    StoreItem->AddItem ( Apricot_Sapling );
-    StoreItem->SetSelectedItem ( 77 );
-
-    StoreItem->AddItem ( Banana_Sapling );
-    StoreItem->SetSelectedItem ( 78 );
-
-    StoreItem->AddItem ( Cherry_Sapling );
-    StoreItem->SetSelectedItem ( 79 );
-
-    StoreItem->AddItem ( Mango_Sapling );
-    StoreItem->SetSelectedItem ( 80 );
-
-    StoreItem->AddItem ( Orange_Sapling );
-    StoreItem->SetSelectedItem ( 81 );
-
-    StoreItem->AddItem ( Peach_Sapling );
-    StoreItem->SetSelectedItem ( 82 );
-
-    StoreItem->AddItem ( Pomegranate_Sapling );
-    StoreItem->SetSelectedItem ( 83 );
-
-
 
     // 设置计时器标签
-    _timerLabel = Label::createWithTTF("Timer: 60", "fonts/Marker Felt.ttf", 24);
-    this->addChild(_timerLabel, 10);
-    _timerLabel->setPosition(Vec2(0, Director::getInstance()->getVisibleSize().height));
-    _timerLabel->setScale(2.3f);
+     // 设置计时器标签
+    _timerLabelD = Label::createWithTTF("Day: 0", "fonts/Marker Felt.ttf", 24);
+    this->addChild(_timerLabelD, 10);
+    _timerLabelD->setScale(2.3f);
+
+    _timerLabelH = Label::createWithTTF("0:00", "fonts/Marker Felt.ttf", 24);
+    this->addChild(_timerLabelH, 10);
+    _timerLabelH->setScale(2.3f);
+
+    _timerLabelS = Label::createWithTTF("Spring", "fonts/Marker Felt.ttf", 24);
+    this->addChild(_timerLabelS, 10);
+    _timerLabelS->setScale(2.3f);
 
     // 创建并初始化 Label 来显示角色的位置
     _positionLabel = Label::createWithTTF("Position: (0, 0)", "fonts/Marker Felt.ttf", 24);
@@ -304,6 +48,7 @@ bool supermarket::init()
     opendoor = Sprite::create("opendoor.png");
     this->addChild(opendoor, 11);
     opendoor->setVisible(false);
+    opendoor->setScale(1.7f);
 
     // 设置背景图片
     auto background_real = Sprite::create("supermarket/supermarket.png");
@@ -423,22 +168,6 @@ bool supermarket::init()
                 isEnterKeyPressed = true;
                 CCLOG("Enter key pressed.");
             }
-            // 处理其他按键  
-            if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
-                static StoreUI* currentStoreUI = nullptr;  // 保存当前显示的 StoreUI  
-                // 如果当前没有打开 StoreUI，则打开它  
-                if (currentStoreUI == nullptr) {
-                    CCLOG ( "Opening inventory." );
-                    currentStoreUI = StoreUI::create ( inventory , StoreItem );
-                    this->addChild ( currentStoreUI , 11 );  // 将 InventoryUI 添加到 Town 的上层  
-                }
-                // 如果已经打开 InventoryUI，则关闭它  
-                else {
-                    CCLOG ( "Closing inventory." );
-                    this->removeChild ( currentStoreUI , true );  // 从当前场景中移除 InventoryUI  
-                    currentStoreUI = nullptr;  // 重置指针  
-                }
-            }
         };
 
     listenerWithPlayer->onKeyReleased = [this](EventKeyboard::KeyCode keyCode, Event* event)
@@ -484,13 +213,71 @@ void supermarket::checkPlayerPosition()
     }
 
 
-    // 减少剩余时间
-    remainingTime--;
-
     // 更新计时器显示
-    remainingTime--;
-    _timerLabel->setString("Timer: " + std::to_string(remainingTime / 600));
+    remainingTime++;
+    _timerLabelD->setString("Day: " + std::to_string(day));
+    _timerLabelH->setString(std::to_string(remainingTime / 1800) + ":00");
+    _timerLabelS->setString(Season);
+    if (remainingTime == 43200) {
 
+        day++;
+
+        IsNextDay = true;
+
+        if (day == 8) {
+            if (Season == "Spring") {
+                Season = "Summer";
+            }
+            else if (Season == "Summer") {
+                Season = "Autumn";
+            }
+            else {
+                Season = "Winter";
+            }
+            day = 1;
+        }
+
+        for (auto it = Crop_information.begin(); it != Crop_information.end();) {
+
+            auto crop = *it;  // 解引用迭代器以访问 Crop 对象
+
+            // 判断前一天是否浇水
+            if ((crop->watered == false) && (crop->GetPhase() != Phase::MATURE)) {
+                // 判断是否已经进入枯萎状态
+                if (crop->GetPhase() != Phase::SAPLESS) {
+                    crop->ChangePhase(Phase::SAPLESS);
+                    crop->ChangMatureNeeded(2); // 延迟两天收获
+                    it++;
+                }
+                else {
+                    // 删除元素并更新迭代器
+                    it = Crop_information.erase(it);
+                }
+
+            }
+            else {
+                // 更新状态
+                crop->UpdateGrowth();
+                it++;
+            }
+
+        }
+
+        for (auto& pair : F_lastplace) {
+            if (pair.first.first == "myhouse") {  // 检查 bool 值是否为 true
+                pair.second = true;
+            }
+        }
+
+
+        remainingTime = 0;
+        player1->removeFromParent();
+        auto nextday = Myhouse::create();
+        Director::getInstance()->replaceScene(nextday);
+
+
+
+    }
 
     // 更新标签位置
     float currentx = 0, currenty = 0;
@@ -511,8 +298,9 @@ void supermarket::checkPlayerPosition()
         currenty = playerPos.y;
     }
 
-
-    _timerLabel->setPosition(currentx - 590, currenty + 570);
+    _timerLabelD->setPosition(currentx - 710, currenty + 570);
+    _timerLabelH->setPosition(currentx - 570, currenty + 570);
+    _timerLabelS->setPosition(currentx - 430, currenty + 570);
     _positionLabel->setPosition(currentx - 530, currenty + 490);
     button->setPosition(currentx + 690, currenty - 590);
    

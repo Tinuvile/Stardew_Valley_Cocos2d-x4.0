@@ -1,44 +1,45 @@
-#ifndef __Myhouse_H__
-#define __Myhouse_H__
+#ifndef __Cave_H__
+#define __Cave_H__
 
 #include "cocos2d.h"
 #include "Player.h"
+#include "Ore.h"
 #include "AppDelegate.h"
-#include "farm.h"
 #include "physics/CCPhysicsWorld.h"
 #include "ui/CocosGUI.h"
 
 USING_NS_CC;
 
-
-class Myhouse : public cocos2d::Scene
+class Cave : public cocos2d::Scene
 {
 public:
 
-    Myhouse();
-    ~Myhouse();
+    Cave();
+    ~Cave();
 
     virtual bool init();
 
-    static Myhouse* create();
+    static Cave* create();
 
     // 判断角色的位置
     void checkPlayerPosition();
 
+    // 返回作物序号
+    int getRegionNumber(Vec2 pos);
+
     // 创建一个列表，用于保存所有非透明像素的坐标
     std::vector<cocos2d::Vec2> nonTransparentPixels;
+  
+    // 恢复种植
+    void AllInitialize_ore(); 
 
-    // 出门区域
-    Rect OutDoor = Rect(510, 210, 150, 70);
-    // 睡觉区域
-    Rect GoBed = Rect(1035, 385, 245, 390);
-
+    // 离开山洞
+    Rect Out_cave = Rect(720, 1100, 150, 150);
 
 private:
-
-
+  
     // 用于显示计时的标签
-    cocos2d::Label* _timerLabelD;
+    cocos2d::Label* _timerLabelD;  
     cocos2d::Label* _timerLabelH;
     cocos2d::Label* _timerLabelS;
 
@@ -54,6 +55,9 @@ private:
     cocos2d::Menu* menu;
 
     bool isEnterKeyPressed = false;
+    // 判断挖矿M键是否按下
+    bool isMKeyPressed = false;
+
 
 };
 
