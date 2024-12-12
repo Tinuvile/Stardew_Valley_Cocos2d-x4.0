@@ -60,6 +60,14 @@ bool Town::init()
 
     inventory->AddItem ( Rhubarb_Seeds );
 
+    inventory->AddItem ( Copper_Axe );
+
+    inventory->AddItem ( Golden_Scythe );
+
+    inventory->AddItem ( Golden_Scythe );
+
+    inventory->AddItem ( Golden_Scythe );
+
 
     // 设置计时器标签
     _timerLabel = Label::createWithTTF("Timer: 60", "fonts/Marker Felt.ttf", 24);
