@@ -9,10 +9,14 @@
 class intimacyUI : public cocos2d::Layer {
 public:
     virtual bool init ();
+
     static intimacyUI* create ();
+
     void backgroundcreate ();
+
     void Buttons_switching ();
 
+    void close ();
 private:  
 
     void onItemSlotClicked ( cocos2d::Ref* sender ); // 物品槽的点击事件处理  

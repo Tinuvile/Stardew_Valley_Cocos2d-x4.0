@@ -12,6 +12,7 @@
 #include "NPCreate.h"
 #include "Generaltem.h"
 #include "NPCData.h"
+#include "NPCtalkUI.h"
 
 USING_NS_CC;
 
@@ -225,7 +226,7 @@ bool Town::init()
     }
 
     // 允许的交互半径  
-    const float interactionRadius = 30.0f;  
+    const float interactionRadius = 300.0f;  
 
     // 鼠标事件监听器
     auto listener = EventListenerMouse::create();
@@ -241,27 +242,21 @@ bool Town::init()
             auto abigailSprite = abigail->GetSprite ();
             if (abigailSprite && abigailSprite->getBoundingBox ().containsPoint ( clickPos )) {
                 // 获取玩家的位置  
+                static NPCtalkUI* currentNPCtalkUI = nullptr;
                 Vec2 playerPos = player1->getPosition ();
-
+                currentNPCtalkUI = NPCtalkUI::create ();
+                this->addChild ( currentNPCtalkUI , 12 ); // 将 currentNPCtalkUI添加到 Town 的上层  
                 // 计算玩家与 Abigail 之间的距离  
                 float distance = playerPos.distance ( abigailSprite->getPosition () );
-
-                // 打开 InventoryUI  
-                static InventoryUI* currentInventoryUI = nullptr; // 保存当前显示的 InventoryUI  
-                if (currentInventoryUI == nullptr) {
-                    currentInventoryUI = InventoryUI::create ( inventory );
-                    this->addChild ( currentInventoryUI , 11 ); // 将 InventoryUI 添加到 Town 的上层  
-                }
 
                 /*
                 // 检查距离是否在允许的范围内  
                 if (distance <= interactionRadius) {
-                    CCLOG ( "Abigail clicked and player is within range! Opening InventoryUI." );
-                    // 打开 InventoryUI  
-                    static InventoryUI* currentInventoryUI = nullptr; // 保存当前显示的 InventoryUI  
-                    if (currentInventoryUI == nullptr) {
-                        currentInventoryUI = InventoryUI::create ( inventory );
-                        this->addChild ( currentInventoryUI , 11 ); // 将 InventoryUI 添加到 Town 的上层  
+                    // 打开对话框
+                    static NPCtalkUI* currentNPCtalkUI = nullptr;
+                    if (currentNPCtalkUI == nullptr) {
+                        currentNPCtalkUI = NPCtalkUI::create ();
+                        this->addChild ( currentNPCtalkUI , 12 ); // 将 currentNPCtalkUI添加到 Town 的上层  
                     }
                 }
                 else {
@@ -284,15 +279,18 @@ bool Town::init()
         }
         // 处理其他按键  
         if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
+            static int isOpen = 0;
             static InventoryUI* currentInventoryUI = nullptr;  // 保存当前显示的 InventoryUI  
             // 如果当前没有打开 InventoryUI，则打开它  
-            if (currentInventoryUI == nullptr) {
+            if (currentInventoryUI == nullptr || isOpen == 0) {
+                isOpen = 1;
                 CCLOG ( "Opening inventory." );
                 currentInventoryUI = InventoryUI::create ( inventory );
                 this->addChild ( currentInventoryUI , 11 );  // 将 InventoryUI 添加到 Town 的上层  
             }
             // 如果已经打开 InventoryUI，则关闭它  
             else {
+                isOpen = 0;
                 CCLOG ( "Closing inventory." );
                 this->removeChild ( currentInventoryUI , true );  // 从当前场景中移除 InventoryUI  
                 currentInventoryUI = nullptr;  // 重置指针  

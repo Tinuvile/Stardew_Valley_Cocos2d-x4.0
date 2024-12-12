@@ -120,12 +120,24 @@ void intimacyUI::Buttons_switching () {
         };
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , this );
 }
+void intimacyUI::close () {
+    // 设置键盘监听器  
+    auto listenerClose = EventListenerKeyboard::create ();
+    listenerClose->onKeyPressed = [this]( EventKeyboard::KeyCode keyCode , Event* event ) {
+        if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
+            this->removeFromParent ();
+        }
+        };
+    // 将监听器添加到事件分发器中  
+    _eventDispatcher->addEventListenerWithSceneGraphPriority ( listenerClose , this );
+}
 bool intimacyUI::init () {
     if (!Layer::init ()) {
         return false;
     }
     backgroundcreate ();
     Buttons_switching ();
+    close ();
     return true;
 }
 
