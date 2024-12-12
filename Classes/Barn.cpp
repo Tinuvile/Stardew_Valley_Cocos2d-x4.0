@@ -15,6 +15,37 @@ Barn::~Barn() {}
 
 bool Barn::init()
 {
+    //获取允许动物活动的矩形块
+    if (barn_space.size () < kMaxLivestock) {
+        auto scene_size= Director::getInstance ()->getVisibleSize ();
+
+        float rectWidth = scene_size.width / 16;
+        float rectHeight = scene_size.height / 12;
+
+        // 遍历每个矩形区域
+        for (int row = 0; row < 12; ++row) {
+            for (int col = 0; col < 16; ++col) {
+                if ( (row ==2 || row == 4 || row ==6) &&
+                    col % 2 == 0 && col >= 6 && col <= 12) {
+                    // 左下角坐标
+                    float x = col * rectWidth;
+                    float y = row * rectHeight;
+
+                    // 创建矩形并存储到 vector 中
+                    cocos2d::Rect rect ( x , y , rectWidth , rectHeight );
+                    barn_space.push_back ( std::make_pair ( rect , false ) );
+                    if (row == 6 && col == 7) {
+                        break;
+                    }
+                }
+                else {
+                    continue;
+                }
+            }
+        }
+    }
+
+
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 

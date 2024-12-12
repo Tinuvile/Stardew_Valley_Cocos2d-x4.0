@@ -40,25 +40,25 @@ bool Town::init()
 
     inventory->AddItem ( Apple_Sapling );
 
-    inventory->AddItem ( Apple_Sapling );
+    //inventory->AddItem ( Apple_Sapling );
 
-    inventory->AddItem ( Potato_Seeds );
+    //inventory->AddItem ( Potato_Seeds );
 
-    inventory->AddItem ( Carrot_Seeds );
+    //inventory->AddItem ( Carrot_Seeds );
 
-    inventory->AddItem ( Cauliflower_Seeds );
+    //inventory->AddItem ( Cauliflower_Seeds );
 
-    inventory->AddItem ( Coffee_Bean );
+    //inventory->AddItem ( Coffee_Bean );
 
-    inventory->AddItem ( Garlic_Seeds );
+    //inventory->AddItem ( Garlic_Seeds );
 
-    inventory->AddItem ( Jazz_Seeds );
+    //inventory->AddItem ( Jazz_Seeds );
 
-    inventory->AddItem ( Kale_Seeds );
+    //inventory->AddItem ( Kale_Seeds );
 
-    inventory->AddItem ( Parsnip_Seeds );
+    //inventory->AddItem ( Parsnip_Seeds );
 
-    inventory->AddItem ( Rhubarb_Seeds );
+    //inventory->AddItem ( Rhubarb_Seeds );
 
     // 创建并初始化 Label 来显示角色的位置
     _positionLabel = Label::createWithTTF("Position: (0, 0)", "fonts/Marker Felt.ttf", 24);
@@ -267,21 +267,21 @@ bool Town::init()
             CCLOG ( "Enter key pressed." );
         }
         // 处理其他按键  
-        if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
-            static InventoryUI* currentInventoryUI = nullptr;  // 保存当前显示的 InventoryUI  
-            // 如果当前没有打开 InventoryUI，则打开它  
-            if (currentInventoryUI == nullptr) {
-                CCLOG ( "Opening inventory." );
-                currentInventoryUI = InventoryUI::create ( inventory );
-                this->addChild ( currentInventoryUI , 11 );  // 将 InventoryUI 添加到 Town 的上层  
-            }
-            // 如果已经打开 InventoryUI，则关闭它  
-            else {
-                CCLOG ( "Closing inventory." );
-                this->removeChild ( currentInventoryUI , true );  // 从当前场景中移除 InventoryUI  
-                currentInventoryUI = nullptr;  // 重置指针  
-            }
-        }
+        //if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
+        //    static InventoryUI* currentInventoryUI = nullptr;  // 保存当前显示的 InventoryUI  
+        //    // 如果当前没有打开 InventoryUI，则打开它  
+        //    if (currentInventoryUI == nullptr) {
+        //        CCLOG ( "Opening inventory." );
+        //        currentInventoryUI = InventoryUI::create ( inventory );
+        //        this->addChild ( currentInventoryUI , 11 );  // 将 InventoryUI 添加到 Town 的上层  
+        //    }
+        //    // 如果已经打开 InventoryUI，则关闭它  
+        //    else {
+        //        CCLOG ( "Closing inventory." );
+        //        this->removeChild ( currentInventoryUI , true );  // 从当前场景中移除 InventoryUI  
+        //        currentInventoryUI = nullptr;  // 重置指针  
+        //    }
+        //}
         };
 
     listenerWithPlayer->onKeyReleased = [this]( EventKeyboard::KeyCode keyCode , Event* event ) {
@@ -434,9 +434,9 @@ void Town::checkPlayerPosition()
             // 打印调试信息，检查 Enter 键的状态
             CCLOG("Player in target area, isEnterKeyPressed: %d", isEnterKeyPressed);
             // 调用场景切换逻辑
-            player1->removeFromParent();
-            seedshop = supermarket::create();
-            Director::getInstance()->replaceScene(seedshop);
+            //player1->removeFromParent();
+            //seedshop = supermarket::create();
+            //Director::getInstance()->replaceScene(seedshop);
         }
 
     }
