@@ -18,14 +18,14 @@ bool Barn::init()
     if (barn_space.size () < kMaxLivestock) {
         auto scene_size= Director::getInstance ()->getVisibleSize ();
 
-        float rectWidth = scene_size.width / 14;
+        float rectWidth = scene_size.width / 16;
         float rectHeight = scene_size.height / 12;
 
         // 遍历每个矩形区域
         for (int row = 0; row < 12; ++row) {
-            for (int col = 0; col < 14; ++col) {
+            for (int col = 0; col < 16; ++col) {
                 if ( (row ==2 || row == 4 || row ==6) &&
-                    col % 2 == 0 && col >= 6) {
+                    col % 2 == 0 && col >= 6 && col <= 12) {
                     // 左下角坐标
                     float x = col * rectWidth;
                     float y = row * rectHeight;
