@@ -11,6 +11,7 @@
 #include "InventoryUI.h"
 #include "NPCreate.h"
 #include "Generaltem.h"
+#include "NPCData.h"
 
 USING_NS_CC;
 
@@ -27,7 +28,6 @@ Town::~Town() {}
 
 bool Town::init()
 {
-
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -181,30 +181,30 @@ bool Town::init()
 
 
 
-
-
-    std::vector<std::vector<std::string>> abigailAnimations = {
-    {"npc/Abigail/Abigail-8.png", "npc/Abigail/Abigail-9.png", "npc/Abigail/Abigail-10.png", "npc/Abigail/Abigail-11.png"},
-    {"npc/Abigail/Abigail-0.png", "npc/Abigail/Abigail-1.png", "npc/Abigail/Abigail-2.png", "npc/Abigail/Abigail-3.png"},
-    {"npc/Abigail/Abigail-14.png", "npc/Abigail/Abigail-13.png", "npc/Abigail/Abigail-14.png", "npc/Abigail/Abigail-15.png"},
-    {"npc/Abigail/Abigail-4.png", "npc/Abigail/Abigail-5.png", "npc/Abigail/Abigail-6.png", "npc/Abigail/Abigail-7.png"}
-    };
-
+    // 使用 getAbigailAnimations() 获取 NPC 动画帧  
+    auto abigailAnimations = getAbigailAnimations ();
     // 创建 NPC 示例  
-    auto abigail = NPCreate::CreateNPC ( "Abigail" , cocos2d::Vec2 ( -100,400 ) , abigailAnimations , nonTransparentPixels );
+    auto abigail = NPCreate::CreateNPC ( "Abigail" , cocos2d::Vec2 ( -100 , 400 ) , abigailAnimations , nonTransparentPixels );
     if (abigail) {
-        CCLOG ( "NPC Abigail created successfully." );
+        // CCLOG ( "NPC Abigail created successfully." );
         auto abigailSprite = abigail->GetSprite ();
         if (abigailSprite) {
-            CCLOG ( "Abigail sprite created successfully at position: (%f, %f)" , abigailSprite->getPositionX () , abigailSprite->getPositionY () );
-            this->addChild ( abigailSprite , 5 ); // 确保添加到场景中 
+            // CCLOG ( "Abigail sprite created successfully at position: (%f, %f)" , abigailSprite->getPositionX () , abigailSprite->getPositionY () );
+            this->addChild ( abigailSprite , 5 ); // 确保添加到场景中  
 
-            
-
-            // 使用调度器每 6.0 秒调用 RandomMove  
+            // 使用调度器每 1.0 秒调用 RandomMove  
             this->schedule ( [abigail]( float dt ) {
                 abigail->RandomMove ();
-            } , 1.0f , "random_move_key" ); // 每 6.0 秒随机移动一次
+
+                // 获取 Abigail 的当前位置  
+                auto abigailSprite = abigail->GetSprite (); // 获取精灵  
+                if (abigailSprite) {
+                    // 获取当前精灵的位置和大小  
+                    Vec2 position = abigailSprite->getPosition ();
+                    Size size = abigailSprite->getContentSize ();
+                    // CCLOG ( "Abigail's current position: (%f, %f)" , position.x , position.y ); // 打印位置  
+                }
+            } , 1.0f , "random_move_key" ); // 每 1.0 秒随机移动一次  
         }
         else {
             CCLOG ( "Abigail sprite is nullptr." );
@@ -214,23 +214,54 @@ bool Town::init()
         CCLOG ( "Failed to create NPC Abigail." );
     }
 
+    // 允许的交互半径  
+    const float interactionRadius = 30.0f;  
 
-
-
-
+    // 鼠标事件监听器
     auto listener = EventListenerMouse::create();
-    listener->onMouseDown = [this](Event* event) {
+    listener->onMouseDown = [this, abigail, interactionRadius](Event* event) {
        
         // 获取鼠标点击的位置
         auto mouseEvent = static_cast<EventMouse*>(event);
         Vec2 clickPos(mouseEvent->getCursorX(), mouseEvent->getCursorY());
         clickPos = this->convertToNodeSpace(clickPos);
 
-        // 判断点击位置是否在精灵范围内
-        if (button != nullptr && button->getBoundingBox().containsPoint(clickPos)) {
-            Director::getInstance()->end();
+        // 检查是否点击了 Abigail   
+        if (abigail) {
+            auto abigailSprite = abigail->GetSprite ();
+            if (abigailSprite && abigailSprite->getBoundingBox ().containsPoint ( clickPos )) {
+                // 获取玩家的位置  
+                Vec2 playerPos = player1->getPosition ();
+
+                // 计算玩家与 Abigail 之间的距离  
+                float distance = playerPos.distance ( abigailSprite->getPosition () );
+
+                // 打开 InventoryUI  
+                static InventoryUI* currentInventoryUI = nullptr; // 保存当前显示的 InventoryUI  
+                if (currentInventoryUI == nullptr) {
+                    currentInventoryUI = InventoryUI::create ( inventory );
+                    this->addChild ( currentInventoryUI , 11 ); // 将 InventoryUI 添加到 Town 的上层  
+                }
+
+                /*
+                // 检查距离是否在允许的范围内  
+                if (distance <= interactionRadius) {
+                    CCLOG ( "Abigail clicked and player is within range! Opening InventoryUI." );
+                    // 打开 InventoryUI  
+                    static InventoryUI* currentInventoryUI = nullptr; // 保存当前显示的 InventoryUI  
+                    if (currentInventoryUI == nullptr) {
+                        currentInventoryUI = InventoryUI::create ( inventory );
+                        this->addChild ( currentInventoryUI , 11 ); // 将 InventoryUI 添加到 Town 的上层  
+                    }
+                }
+                else {
+                    CCLOG ( "Player is too far from Abigail to interact." );
+                }
+                */
+            }
         }
-        };
+    };
+
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, button);
 
     // 设置键盘监听器  

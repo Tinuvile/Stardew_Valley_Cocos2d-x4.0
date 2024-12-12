@@ -7,11 +7,11 @@ NPC::NPC ( const std::string& name , const cocos2d::Vec2& position ,
     : name ( name ) , position ( position ) , animations ( animationFrames ) ,
     nonTransparentPixels ( validPositions ) , currentAnimationName ( "" ) {
 
-    CCLOG ( "Number of valid positions: %zu" , nonTransparentPixels.size () );
+    // CCLOG ( "Number of valid positions: %zu" , nonTransparentPixels.size () );
 
     this->sprite = cocos2d::Sprite::create ( animationFrames[1][0] ); // 使用下方向的第一帧作为初始图像  
     if (!this->sprite) {
-        CCLOG ( "Error: Sprite could not be created from %s" , animationFrames[1][0].c_str () );
+        // CCLOG ( "Error: Sprite could not be created from %s" , animationFrames[1][0].c_str () );
         return; // 处理错误情况，例如返回或抛出异常  
     }
     this->sprite->setPosition ( position );
@@ -27,7 +27,7 @@ NPC::NPC ( const std::string& name , const cocos2d::Vec2& position ,
 }
 
 void NPC::RandomMove () {
-    CCLOG ( "RandomMove method called" );
+    // CCLOG ( "RandomMove method called" );
 
     // 定义可移动的方向，分别为上、下、左、右  
     std::vector<cocos2d::Vec2> directions = {
@@ -44,20 +44,20 @@ void NPC::RandomMove () {
     // 计算目标位置  
     cocos2d::Vec2 targetPosition = position + moveDirection;
 
-    CCLOG ( "Attempting to move to position: (%f, %f)" , targetPosition.x , targetPosition.y );
+    // CCLOG ( "Attempting to move to position: (%f, %f)" , targetPosition.x , targetPosition.y );
 
     // 判断目标位置是否有效，这里传入方向  
     if (IsPositionValid ( targetPosition , moveDirection )) {
         MoveToPosition ( targetPosition );
     }
     else {
-        CCLOG ( "Position (%f, %f) is not valid. Skipping movement." , targetPosition.x , targetPosition.y );
+        // CCLOG ( "Position (%f, %f) is not valid. Skipping movement." , targetPosition.x , targetPosition.y );
     }
 }
 
 // 检查目标位置是否有效  
 bool NPC::IsPositionValid ( const cocos2d::Vec2& targetPosition , const cocos2d::Vec2& direction ) {
-    CCLOG ( "Checking if position is valid: (%f, %f)" , targetPosition.x , targetPosition.y );
+    // CCLOG ( "Checking if position is valid: (%f, %f)" , targetPosition.x , targetPosition.y );
 
     // 检查在给定方向上前四个像素  
     for (int i = 1; i <= 4; ++i) {
@@ -67,20 +67,20 @@ bool NPC::IsPositionValid ( const cocos2d::Vec2& targetPosition , const cocos2d:
         // 检查该位置是否在 nonTransparentPixels 区域内  
         for (const auto& pixel : nonTransparentPixels) {
             if (pixel.distance ( checkPosition ) < 36) { // 如果在距离内，表示该位置不透明  
-                CCLOG ( "Found non-transparent pixel at: (%f, %f)" , checkPosition.x , checkPosition.y );
+                // CCLOG ( "Found non-transparent pixel at: (%f, %f)" , checkPosition.x , checkPosition.y );
                 isTransparent = false; // 发现不透明像素  
                 break;
             }
         }
 
         if (!isTransparent) { // 如果发现不透明像素，返回 false  
-            CCLOG ( "Position (%f, %f) is not valid due to non-transparent pixel." , checkPosition.x , checkPosition.y );
+            // CCLOG ( "Position (%f, %f) is not valid due to non-transparent pixel." , checkPosition.x , checkPosition.y );
             return false;
         }
     }
 
     // 如果所有检查的像素均透明，则返回 true  
-    CCLOG ( "Position (%f, %f) is valid." , targetPosition.x , targetPosition.y );
+    // CCLOG ( "Position (%f, %f) is valid." , targetPosition.x , targetPosition.y );
     return true;
 }
 
@@ -117,7 +117,7 @@ void NPC::PlayAnimation ( const std::string& animationName , bool loop ) {
 
 
 void NPC::MoveToPosition ( const cocos2d::Vec2& targetPosition ) {
-    CCLOG ( "Moving to position: (%f, %f)" , targetPosition.x , targetPosition.y );
+    //CCLOG ( "Moving to position: (%f, %f)" , targetPosition.x , targetPosition.y );
 
     // 判断朝向并播放对应动画  
     std::string animationName;
