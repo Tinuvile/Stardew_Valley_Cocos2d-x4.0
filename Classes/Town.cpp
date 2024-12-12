@@ -62,6 +62,8 @@ bool Town::init()
 
     inventory->AddItem ( Copper_Axe );
 
+    inventory->AddItem ( Copper_Axe );
+
     inventory->AddItem ( Golden_Scythe );
 
     inventory->AddItem ( Golden_Scythe );
