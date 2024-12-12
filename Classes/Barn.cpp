@@ -14,6 +14,55 @@ Barn::~Barn() {}
 
 bool Barn::init()
 {
+    //获取允许动物活动的矩形块
+    if (barn_space.size () < kMaxLivestock) {
+        auto scene_size= Director::getInstance ()->getVisibleSize ();
+
+        float rectWidth = scene_size.width / 14;
+        float rectHeight = scene_size.height / 12;
+
+        // 遍历每个矩形区域
+        for (int row = 0; row < 12; ++row) {
+            for (int col = 0; col < 14; ++col) {
+                if ( (row ==2 || row == 4 || row ==6) &&
+                    col % 2 == 0 && col >= 6) {
+                    // 左下角坐标
+                    float x = col * rectWidth;
+                    float y = row * rectHeight;
+
+                    // 创建矩形并存储到 vector 中
+                    cocos2d::Rect rect ( x , y , rectWidth , rectHeight );
+                    barn_space.push_back ( std::make_pair ( rect , false ) );
+                    if (row == 6 && col == 7) {
+                        break;
+                    }
+                }
+                else {
+                    continue;
+                }
+            }
+        }
+    }
+
+    //创建测试家畜
+    Cow* test_cow = Cow::create ( barn_space[0].first );
+    livestocks.push_back ( test_cow );
+    this->addChild ( livestocks[0] , 10);
+
+    Chicken* test_chicken = Chicken::create ( barn_space[1].first );
+    livestocks.push_back ( test_chicken );
+    this->addChild ( livestocks[1] , 10 );
+
+    Sheep* test_sheep = Sheep::create ( barn_space[2].first );
+    livestocks.push_back ( test_sheep );
+    this->addChild ( livestocks[2] , 10 );
+
+    for (int i = 0; i < 9; i++) {
+        auto test_animal = Chicken::create ( barn_space[3 + i].first );
+        livestocks.push_back ( test_animal );
+        this->addChild ( livestocks[3 + i] , 10 );
+    }
+
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
@@ -109,7 +158,6 @@ bool Barn::init()
 
     }
 
-
     // 启动人物的定时器
     player1->schedule([=](float dt) {
         player1->player1_move();
@@ -173,6 +221,16 @@ bool Barn::init()
     // 将监听器添加到事件分发器中
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listenerWithPlayer, this);
 
+    // 设置鼠标监听器
+    auto mouse_listener = cocos2d::EventListenerMouse::create ();
+
+    // 鼠标点击事件的回调函数
+    mouse_listener->onMouseDown = CC_CALLBACK_1 ( Barn::GetProduction , this );
+
+    // 将监听器添加到事件分发器
+    _eventDispatcher->addEventListenerWithSceneGraphPriority ( mouse_listener , this );
+
+
     return true;
 }
 
@@ -212,7 +270,7 @@ void Barn::checkPlayerPosition()
     if (remainingTime == 432000) {
 
         day++;
-        IsNextDay = true;
+        /*IsNextDay = true;*/
 
         if (day == 8) {
             if (Season == "Spring") {
@@ -333,7 +391,31 @@ void Barn::checkPlayerPosition()
 
 }
 
+void Barn::GetProduction ( cocos2d::EventMouse* event ) {
+    // 判断是否是鼠标右键点击
+    if (event->getMouseButton () == cocos2d::EventMouse::MouseButton::BUTTON_RIGHT)
+    {
+        // 获取鼠标点击位置
+        cocos2d::Vec2 click_pos = this->convertToNodeSpace ( event->getLocationInView () );
 
+        //遍历livestocks
+        for (auto& livestock : livestocks) {
+            if (livestock->IsCanProduce ()) {
+                // 判断点击位置是否在 Sprite 内部
+                if (livestock->getBoundingBox ().containsPoint ( click_pos )) {
+                    CCLOG ( "Right-clicked on the produce_enabled livestock!" );
+                    auto product = livestock->ProduceProduct ();
+                    inventory->AddItem ( *product );
+                    inventory->DisplayPackageInCCLOG ();
+                    //更新对应livestock的can_produce状态为false
+                    livestock->SetCanProduce ( false );
+                }
+
+            }
+
+        }
+    }
+}
 
 
 

@@ -1,6 +1,7 @@
 #pragma once
 #include<iostream>
 #include<unordered_map>
+
 //耕种技能，通过收获农产品（农作物，畜产品）获取经验
 const int farming_skill = 0;
 //采矿技能 通过敲碎岩石获取经验 每次升级增加镐工具的熟练度

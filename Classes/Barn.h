@@ -9,7 +9,11 @@
 #include "physics/CCPhysicsWorld.h"
 #include "ui/CocosGUI.h"
 
+
+
 USING_NS_CC;
+
+const int kMaxLivestock = 12;
 
 class Barn : public cocos2d::Scene
 {
@@ -32,6 +36,7 @@ public:
     // Àë¿ªÐóÅïµÄÇøÓò
     Rect Out_Barn = Rect(915, 70, 150, 90);
 
+    void GetProduction ( cocos2d::EventMouse* event );
 
 private:
 
@@ -54,7 +59,7 @@ private:
 
     bool isEnterKeyPressed = false;
     
-
+    
 
 };
 
