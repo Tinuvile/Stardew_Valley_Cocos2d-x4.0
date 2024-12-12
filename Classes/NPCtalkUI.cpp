@@ -82,7 +82,7 @@ void NPCtalkUI::close () {
     }
 }
 
-bool NPCtalkUI::init () {
+bool NPCtalkUI::init ( NPC* npc_name ) {
     if (!Layer::init ()) {
         return false;
     }
@@ -91,9 +91,9 @@ bool NPCtalkUI::init () {
     return true;
 }
 
-NPCtalkUI* NPCtalkUI::create () {
+NPCtalkUI* NPCtalkUI::create ( NPC* npc_name ) {
     NPCtalkUI* ret = new NPCtalkUI ();
-    if (ret && ret->init ()) {
+    if (ret && ret->init ( npc_name )) {
         ret->autorelease ();
         return ret;
     }

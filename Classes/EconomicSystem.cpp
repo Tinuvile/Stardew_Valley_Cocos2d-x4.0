@@ -2,9 +2,9 @@
 #include "cocos2d.h"  // 确保包含 cocos2d.h 来使用 CCLOG  
 #include <iostream>  
 
-// 构造函数初始化金币数量为0  
+// 构造函数初始化金币数量为500  
 EconomicSystem::EconomicSystem ( Inventory* mybag , Inventory* goods )
-    : goldAmount ( 0 ) , _mybag ( mybag ) , _goods ( goods ) {
+    : goldAmount ( 500 ) , _mybag ( mybag ) , _goods ( goods ) {
     // 初始化代码可以在这里执行  
 }
 

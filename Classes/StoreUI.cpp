@@ -40,7 +40,37 @@ void StoreUI::backgroundcreate () {
         mybag->setScale ( scale / 2 );
         mybag->setPosition ( Vec2 ( position.x + visibleSize.width * 0.2 , position.y - visibleSize.height * 0.25 ) );
         this->addChild ( mybag , 1 );
+
+        auto listener = EventListenerMouse::create ();
+        // 检查鼠标是否点击了背包物品槽  
+           // 添加鼠标按下事件  
+        listener->onMouseDown = [this , mybag]( EventMouse* event ) {
+            Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
+            mousePos = this->convertToNodeSpace ( mousePos );
+
+            // 检查鼠标是否点击了 mybag  
+            if (mybag->getBoundingBox ().containsPoint ( mousePos )) {
+                if (isClick) {
+                    //economicSystem->buyItem ( chosen_Item->GetName () );
+                    int goldAmount = economicSystem->getGoldAmount ();
+                    CCLOG ( "goldAmount: %d , Value: %d" , goldAmount , chosen_Item->GetValue () );
+                    if (goldAmount >= chosen_Item->GetValue ()) {
+                        economicSystem->subtractGold ( chosen_Item->GetValue () );
+                        _mybag->AddItem ( *chosen_Item );
+                        updateDisplay ();
+                        CCLOG ( "Purchased item: %s" , chosen_Item->GetName().c_str ());
+                    }
+                    else {
+                        CCLOG ( "Not enough gold to buy %s." , chosen_Item->GetName ().c_str () );
+                    }
+                    isClick = false;
+                    chosen_Item = nullptr;
+                }
+            }
+            };
+        _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , mybag );
     }
+
     //头像框
     auto Characterframe = Sprite::create ( "UIresource/supermarket/frame.png" );
     if (Characterframe == nullptr)
@@ -117,7 +147,6 @@ void StoreUI::backgroundcreate () {
 }
 
 void StoreUI::ProductDisplay ( Inventory* mybag , Inventory* goods ) {
-    _goods = goods;
     Vec2 position = player1->getPosition ();
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     //商品框
@@ -225,6 +254,7 @@ void StoreUI::ProductDisplay ( Inventory* mybag , Inventory* goods ) {
         else {
             CCLOG ( "Error loading item sprite: %s" , item->initial_pic.c_str () );
         }
+
         auto listener = EventListenerMouse::create ();
             listener->onMouseMove = [this , itemframe , scrollView , position]( EventMouse* event ) {
 
@@ -246,7 +276,28 @@ void StoreUI::ProductDisplay ( Inventory* mybag , Inventory* goods ) {
                         itemframe->setTexture ( "UIresource/supermarket/goodframe.png" );
                 }
             };
+
+            listener->onMouseDown = [this , itemframe , scrollView , position , item] (EventMouse * event) {
+                Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
+                mousePos = this->convertToNodeSpace ( mousePos );
+
+                Vec2 scrollViewPos = scrollView->getPosition ();
+
+                Vec2 innerContainerPos = scrollView->getInnerContainer ()->getPosition ();
+                Rect itemBoundingBox = itemframe->getBoundingBox ();
+
+                float adjustedPosY = itemBoundingBox.getMinY () + innerContainerPos.y;
+                float adjustedPosX = itemBoundingBox.getMinX () + innerContainerPos.x;
+                if (mousePos.x >= adjustedPosX && mousePos.x <= adjustedPosX + itemBoundingBox.size.width &&
+                mousePos.y >= adjustedPosY + position.y && mousePos.y <= position.y + adjustedPosY + itemBoundingBox.size.height) {
+                    isClick = true;
+                    chosen_Item = item;
+                    CCLOG ( "chosen_Item: %s" , item->GetName ().c_str () );
+                }
+                };
+
             _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , itemframe );
+
             // 更新下一个商品的位置偏移量
             offsetY += 105;  // 105 是商品间的间距
     }
@@ -328,6 +379,11 @@ bool StoreUI::init ( Inventory* mybag , Inventory* goods ) {
     if (!Layer::init ()) {
         return false;
     }
+
+    _mybag = mybag;
+    _goods = goods;
+    economicSystem = std::make_shared<EconomicSystem> ( _mybag , _goods ); // 在这里初始化  
+
     backgroundcreate ();
 
     ProductDisplay ( mybag , goods );
@@ -367,7 +423,6 @@ void StoreUI::Itemblock ( Inventory* mybag , Inventory* goods ) {
     Vec2 position = player1->getPosition ();
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     Vec2 origin = Director::getInstance ()->getVisibleOrigin ();
-    _mybag = mybag;
     _selectedSlot = 1; // 默认选中第一个槽位  
 
 
@@ -394,18 +449,6 @@ void StoreUI::Itemblock ( Inventory* mybag , Inventory* goods ) {
             this->addChild ( slot , 2 );
 
             _itemSlots.pushBack ( slot );
-
-            // 添加触摸事件  
-            auto listener = EventListenerTouchOneByOne::create ();
-            listener->onTouchBegan = [this , slot]( Touch* touch , Event* event ) {
-                Vec2 location = touch->getLocation ();
-                if (slot->getBoundingBox ().containsPoint ( location )) {
-                    //onItemSlotClicked ( slot );
-                    return true; // 处理这个事件  
-                }
-                return false; // 不处理这个事件  
-                };
-            _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , slot );
         }
     }
 }
@@ -415,68 +458,70 @@ void StoreUI::updateDisplay () {
         CCLOG ( "Warning: _inventory is nullptr" );
         return; // 退出方法  
     }
+    for (int m = 0; m < 3; m++) {
+        // 获取当前选择的物品的槽位  
+        for (int i = 0; i < kRowSize; ++i) {
+            int serial_number = i + m * 12;
+            auto slot = _itemSlots.at ( serial_number );
+            slot->setVisible ( true ); // 确保显示所有槽位  
 
-    // 获取当前选择的物品的槽位  
-    for (int i = 0; i < kRowSize; ++i) {
-        auto slot = _itemSlots.at ( i );
-        slot->setVisible ( true ); // 确保显示所有槽位  
+            // 获取槽位物品  
+            auto item = _mybag->GetItemAt ( serial_number + 1 ); // 获取特定槽位的物品，注意槽位从1开始 
 
-        // 获取槽位物品  
-        auto item = _mybag->GetItemAt ( i + 1 ); // 获取特定槽位的物品，注意槽位从1开始 
+            // 获取物品数量   
+            int itemCount = _mybag->GetItemCountAt ( serial_number + 1 ); // 获取该槽位的物品数量  
 
-        // 获取物品数量   
-        int itemCount = _mybag->GetItemCountAt ( i + 1 ); // 获取该槽位的物品数量  
-
-        if (item) {
-            CCLOG ( "Item in slot %d: %s" , i + 1 , item->GetName ().c_str () );
-        }
-        else {
-            CCLOG ( "No item in slot %d" , i + 1 );
-        }
-
-        // 如果需要获取特定槽位的物品，使用 GetItemAt(int position) 定义新函数  
-
-        // 更新槽位视觉表现  
-        if (item) {
-            // 清除之前的子节点  
-            slot->removeAllChildren ();
-
-            // 图片路径  
-            auto itemSprite = Sprite::create ( item->initial_pic );
-            if (itemSprite) {
-                itemSprite->setPosition ( slot->getContentSize () / 2 );
-                itemSprite->setScale ( 0.2f );
-                itemSprite->setOpacity ( 128 );
-                slot->addChild ( itemSprite , 3 );
-                CCLOG ( "Loading item sprite: %s" , item->initial_pic.c_str () );
+            if (item) {
+                CCLOG ( "Item in slot %d: %s" , serial_number + 1 , item->GetName ().c_str () );
             }
             else {
-                CCLOG ( "Error loading item sprite: %s" , item->initial_pic.c_str () );
+                CCLOG ( "No item in slot %d" , serial_number + 1 );
             }
 
-            // 根据 item 里的数量来设置数量标签（如果需要）。  
-            // 可以在这里创建一个 Label 显示数量  
-            auto countLabel = static_cast<Label*>(slot->getChildByTag ( 200 + i )); // 使用槽位的标签生成数量标签的唯一ID  
-            if (!countLabel) {
-                // 如果标签不存在，创建新的标签  
-                countLabel = Label::createWithSystemFont ( std::to_string ( itemCount ) , "fonts/Arial Bold.ttf" , 20 );
-                countLabel->setTextColor ( Color4B ( 255 , 153 , 0 , 255 ) );
-                countLabel->setPosition ( slot->getPosition ().x + slot->getContentSize ().width * 1.7 , slot->getPosition ().y - slot->getContentSize ().height * 1.7 ); // 设置位置在槽位下方  
-                countLabel->setTag ( 200 + i ); // 设置标签  
-                slot->addChild ( countLabel , 4 ); // 添加到层级中  
+            // 如果需要获取特定槽位的物品，使用 GetItemAt(int position) 定义新函数  
+
+            // 更新槽位视觉表现  
+            if (item) {
+                // 清除之前的子节点  
+                slot->removeAllChildren ();
+
+                // 图片路径  
+                auto itemSprite = Sprite::create ( item->initial_pic );
+                if (itemSprite) {
+                    itemSprite->setPosition ( slot->getContentSize () / 2 );
+                    itemSprite->setScale ( 0.2f );
+                    itemSprite->setOpacity ( 128 );
+                    slot->addChild ( itemSprite , 3 );
+                    CCLOG ( "Loading item sprite: %s" , item->initial_pic.c_str () );
+                }
+                else {
+                    CCLOG ( "Error loading item sprite: %s" , item->initial_pic.c_str () );
+                }
+
+                // 根据 item 里的数量来设置数量标签（如果需要）。  
+                // 可以在这里创建一个 Label 显示数量  
+                auto countLabel = static_cast<Label*>(slot->getChildByTag ( 200 + i )); // 使用槽位的标签生成数量标签的唯一ID  
+                if (!countLabel) {
+                    // 如果标签不存在，创建新的标签  
+                    countLabel = Label::createWithSystemFont ( std::to_string ( itemCount ) , "fonts/Arial Bold.ttf" , 20 );
+                    countLabel->setTextColor ( Color4B ( 255 , 153 , 0 , 255 ) );
+                    countLabel->setPosition ( slot->getPosition ().x + slot->getContentSize ().width * 1.7 , slot->getPosition ().y - slot->getContentSize ().height * 1.7 ); // 设置位置在槽位下方  
+                    countLabel->setTag ( 200 + serial_number ); // 设置标签  
+                    slot->addChild ( countLabel , 4 ); // 添加到层级中  
+                }
+                else {
+                    // 如果标签存在，更新数量  
+                    countLabel->setString ( std::to_string ( itemCount ) );
+                }
             }
             else {
-                // 如果标签存在，更新数量  
-                countLabel->setString ( std::to_string ( itemCount ) );
-            }
-        }
-        else {
-            slot->removeAllChildren (); // 清空槽位  
+                slot->removeAllChildren (); // 清空槽位  
 
-            // 清除数量标签  
-            auto countLabel = static_cast<Label*>(slot->getChildByTag ( 200 + i ));
-            if (countLabel) {
-                countLabel->removeFromParent (); // 移除数量标签  
+                // 清除数量标签  
+                auto countLabel = static_cast<Label*>(slot->getChildByTag ( 200 + i ));
+                if (countLabel) {
+                    countLabel->removeFromParent (); // 移除数量标签  
+                }
             }
         }
     }

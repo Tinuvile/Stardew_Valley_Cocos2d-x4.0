@@ -30,7 +30,7 @@ public:
 
 private:
     // 保存金币数量  
-    int goldAmount; 
+    int goldAmount;
 
     Inventory* _mybag; // 指向自己背包实例的指针  
 

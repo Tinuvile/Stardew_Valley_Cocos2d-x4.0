@@ -11,7 +11,6 @@
 #include "InventoryUI.h"
 #include "NPCreate.h"
 #include "Generaltem.h"
-#include "NPCData.h"
 #include "NPCtalkUI.h"
 
 USING_NS_CC;
@@ -244,7 +243,7 @@ bool Town::init()
                 // 获取玩家的位置  
                 static NPCtalkUI* currentNPCtalkUI = nullptr;
                 Vec2 playerPos = player1->getPosition ();
-                currentNPCtalkUI = NPCtalkUI::create ();
+                currentNPCtalkUI = NPCtalkUI::create ( abigail );
                 this->addChild ( currentNPCtalkUI , 12 ); // 将 currentNPCtalkUI添加到 Town 的上层  
                 // 计算玩家与 Abigail 之间的距离  
                 float distance = playerPos.distance ( abigailSprite->getPosition () );

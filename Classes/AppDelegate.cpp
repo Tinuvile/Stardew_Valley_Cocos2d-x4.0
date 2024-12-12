@@ -103,8 +103,8 @@ void AppDelegate::runScene(cocos2d::Director* director) {
     T_lastplace.insert(std::make_pair(key, true));
     key = { "seedshop",Vec2(230,470) };
     T_lastplace.insert(std::make_pair(key, false));
-    director->runWithScene ( Town::create () );
-    //director->runWithScene ( supermarket::create () );
+    //director->runWithScene ( Town::create () );
+    director->runWithScene ( supermarket::create () );
 
     //开局UI运行
     //director->runWithScene ( BeginScene::create () );
