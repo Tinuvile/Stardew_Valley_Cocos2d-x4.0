@@ -12,6 +12,7 @@
 #include "NPCreate.h"
 #include "Generaltem.h"
 #include "NPCtalkUI.h"
+#include "mini_bag.h"
 
 USING_NS_CC;
 

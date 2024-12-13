@@ -61,6 +61,42 @@ void NPCtalkUI::backgroundcreate () {
     this->addChild ( NameLabel , 2 );
 }
 
+//对话选中框添加
+void NPCtalkUI::SelectedBox () {
+    Vec2 position = player1->getPosition ();
+    auto visibleSize = Director::getInstance ()->getVisibleSize ();
+    auto Selectedbox1 = Sprite::create ( "npc/xuanzhongkuang.png" );
+    auto Selectedbox2 = Sprite::create ( "npc/xuanzhongkuang.png" );
+    auto Selectedbox3 = Sprite::create ( "npc/xuanzhongkuang.png" );
+    auto Selectedbox4 = Sprite::create ( "npc/xuanzhongkuang.png" );
+    if (Selectedbox1 == nullptr)
+    {
+        problemLoading ( "'npc/xuanzhongkuang.png'" );
+    }
+    else
+    {
+        float originalWidth = Selectedbox1->getContentSize ().width;
+        float originalHeight = Selectedbox1->getContentSize ().height;
+        float scaleX = visibleSize.width / originalWidth;
+        float scaleY = visibleSize.height / originalHeight;
+        float scale = std::min ( scaleX , scaleY );
+        Selectedbox1->setScale ( scale * 0.5 );
+        //差是0.064，第一个位置在Selectedbox1的Y基础上加0.064
+        Selectedbox1->setPosition ( Vec2 ( position.x - visibleSize.width * 0.17 , position.y - visibleSize.height * 0.21 ) );
+        Selectedbox2->setScale ( scale * 0.5 );
+        Selectedbox2->setPosition ( Vec2 ( position.x - visibleSize.width * 0.17 , position.y - visibleSize.height * 0.274 ) );
+        Selectedbox3->setScale ( scale * 0.5 );
+        Selectedbox3->setPosition ( Vec2 ( position.x - visibleSize.width * 0.17 , position.y - visibleSize.height * 0.338 ) );
+        Selectedbox4->setScale ( scale * 0.5 );
+        Selectedbox4->setPosition ( Vec2 ( position.x - visibleSize.width * 0.17 , position.y - visibleSize.height * 0.402 ) );
+
+        this->addChild ( Selectedbox1 , 2 );
+        this->addChild ( Selectedbox2 , 2 );
+        this->addChild ( Selectedbox3 , 2 );
+        this->addChild ( Selectedbox4 , 2 );
+    }
+}
+
 void NPCtalkUI::close () {
     Vec2 position = player1->getPosition ();
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
@@ -109,6 +145,7 @@ bool NPCtalkUI::init ( NPC* npc_name ) {
     }
     npc = npc_name;
     backgroundcreate ();
+    SelectedBox ();
     close ();
     return true;
 }

@@ -71,6 +71,7 @@ void intimacyUI::backgroundcreate () {
     characterInfo ( "Elliott" , "Normal" , Vec2 ( position.x - visibleSize.width * 0.27 , position.y - visibleSize.height * 0.0935 ) );
     characterInfo ( "Emily" , "Normal" , Vec2 ( position.x - visibleSize.width * 0.27 , position.y - visibleSize.height * 0.1985 ) );
 }
+
 void intimacyUI::characterInfo ( const string& name , const string& status , Vec2 Pos_photo) {
     Vec2 position = player1->getPosition ();
     auto visibleSize = Director::getInstance ()->getVisibleSize ();

@@ -13,6 +13,8 @@ public:
     void backgroundcreate ();
 
     void close ();
+
+    void SelectedBox ();
 private:
     NPC* npc;
 };
