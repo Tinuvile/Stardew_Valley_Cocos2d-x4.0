@@ -11,7 +11,7 @@ public:
     // 获取 NPC 的精灵  
     cocos2d::Sprite* GetSprite () const { return sprite; }
 
-    // NPC 的名称  
+    // NPC 的名称
     const std::string& GetName () const { return name; }
 
     // NPC 的位置  

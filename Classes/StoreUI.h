@@ -34,6 +34,7 @@ private:
     void onItemSlotClicked ( cocos2d::Ref* sender ); // 物品槽的点击事件处理 
 
     bool isClick = false;
+
     shared_ptr<Item> chosen_Item = nullptr;
 
     std::shared_ptr<EconomicSystem> economicSystem;

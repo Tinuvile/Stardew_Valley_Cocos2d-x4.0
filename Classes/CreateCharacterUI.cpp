@@ -408,7 +408,7 @@ void CreateCharacter::favoranimal () {
 
     //文字添加
     auto favanimal = cocos2d::Label::createWithSystemFont ( "Favorite animal" , "fonts/Comic Sans MS.ttf" , 25 );
-    favanimal->setTextColor ( cocos2d::Color4B::BLACK);  // 初始颜色是红色
+    favanimal->setTextColor ( cocos2d::Color4B::BLACK);  // 初始颜色是黑色
     Vec2 Pos = Vec2 ( visibleSize.width / 2.0  , visibleSize.height / 2.05 );
     favanimal->setPosition ( Pos );
     this->addChild ( favanimal , 2 );

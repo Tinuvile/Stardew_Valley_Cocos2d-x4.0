@@ -14,6 +14,5 @@ public:
 
     void close ();
 private:
-
-
+    NPC* npc;
 };

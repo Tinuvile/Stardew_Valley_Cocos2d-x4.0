@@ -5,6 +5,7 @@
 #include "NpcRelationship.h"  
 #include "AppDelegate.h"
 #include "InventoryUI.h"
+#include <NPC.h>
 
 class intimacyUI : public cocos2d::Layer {
 public:
@@ -17,8 +18,9 @@ public:
     void Buttons_switching ();
 
     void close ();
+
+    void characterInfo ( const string& name , const string& status , Vec2 Pos_photo);
 private:  
 
-    void onItemSlotClicked ( cocos2d::Ref* sender ); // 物品槽的点击事件处理  
 };
                             

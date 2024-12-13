@@ -430,12 +430,11 @@ bool supermarket::init()
                 if (currentStoreUI == nullptr) {
                     CCLOG ( "Opening inventory." );
                     currentStoreUI = StoreUI::create ( inventory , StoreItem );
-                    this->addChild ( currentStoreUI , 11 );  // 将 InventoryUI 添加到 Town 的上层  
-                }
-                // 如果已经打开 InventoryUI，则关闭它  
+                    this->addChild ( currentStoreUI , 11 );
+                } 
                 else {
                     CCLOG ( "Closing inventory." );
-                    this->removeChild ( currentStoreUI , true );  // 从当前场景中移除 InventoryUI  
+                    this->removeChild ( currentStoreUI , true );
                     currentStoreUI = nullptr;  // 重置指针  
                 }
             }

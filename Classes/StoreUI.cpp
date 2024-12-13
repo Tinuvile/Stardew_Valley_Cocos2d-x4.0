@@ -5,6 +5,7 @@
 #include "AppDelegate.h"
 
 extern Player* player1;
+extern int GoldAmount;
 USING_NS_CC;
 static void problemLoading ( const char* filename )
 {
@@ -375,7 +376,28 @@ void StoreUI::SliderDisplay () {
 }
 
 void StoreUI::moneyDisplay () {
+    Vec2 position = player1->getPosition ();
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
+    //金币更新
+    static Label* GoldAmount = nullptr;
+    int goldAmount = economicSystem->getGoldAmount ();
+    if (GoldAmount == nullptr) {
+        GoldAmount = Label::createWithSystemFont ( std::to_string ( goldAmount ) , "fonts/Comic Sans MS.ttf" , 45 );
+        GoldAmount->setTextColor ( Color4B::BLACK );
+        GoldAmount->setPosition ( Vec2 ( position.x - visibleSize.width * 0.1 , position.y - visibleSize.height * 0.0425 ) );
+        this->addChild ( GoldAmount , 4 );
+    }
+    else {
+        GoldAmount->setString ( std::to_string ( goldAmount ) );
+    }
+    auto listenerWithPlayer = EventListenerKeyboard::create ();
+    listenerWithPlayer->onKeyPressed = [this, goldAmount]( EventKeyboard::KeyCode keyCode , Event* event )
+        {
+            if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
+                GoldAmount = nullptr;
+            }
+        };
+    _eventDispatcher->addEventListenerWithSceneGraphPriority ( listenerWithPlayer , this );
 }
 
 bool StoreUI::init ( Inventory* mybag , Inventory* goods ) {
@@ -385,7 +407,8 @@ bool StoreUI::init ( Inventory* mybag , Inventory* goods ) {
 
     _mybag = mybag;
     _goods = goods;
-    economicSystem = std::make_shared<EconomicSystem> ( _mybag , _goods ); // 在这里初始化  
+    economicSystem = std::make_shared<EconomicSystem> ( _mybag , _goods); // 在这里初始化  
+    CCLOG ( "%d" , economicSystem->getGoldAmount () );
 
     backgroundcreate ();
 
@@ -394,6 +417,7 @@ bool StoreUI::init ( Inventory* mybag , Inventory* goods ) {
     SliderDisplay ();
 
     Itemblock ( mybag , goods );
+
 
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
 
@@ -463,21 +487,9 @@ void StoreUI::updateDisplay () {
         CCLOG ( "Warning: _inventory is nullptr" );
         return; // 退出方法  
     }
-    //金币更新
-    static Label* GoldAmount = nullptr;
-    int goldAmount = economicSystem->getGoldAmount ();
 
-    if (GoldAmount == nullptr) {
-        // 如果标签为空，创建并添加标签
-        GoldAmount = Label::createWithSystemFont ( std::to_string ( goldAmount ) , "fonts/Comic Sans MS.ttf" , 45 );
-        GoldAmount->setTextColor ( Color4B ( 255 , 153 , 0 , 255 ) );
-        GoldAmount->setPosition ( Vec2 ( position.x - visibleSize.width * 0.1 , position.y - visibleSize.height * 0.0425 ) );
-        this->addChild ( GoldAmount , 4 ); // 添加到层级中
-    }
-    else {
-        // 如果标签已存在，直接更新标签的文本
-        GoldAmount->setString ( std::to_string ( goldAmount ) );
-    }
+    //金币更新
+    moneyDisplay ();
 
     for (int m = 0; m < 3; m++) {
         // 获取当前选择的物品的槽位  
@@ -493,10 +505,10 @@ void StoreUI::updateDisplay () {
             int itemCount = _mybag->GetItemCountAt ( serial_number + 1 ); // 获取该槽位的物品数量  
 
             if (item) {
-                CCLOG ( "Item in slot %d: %s" , serial_number + 1 , item->GetName ().c_str () );
+                //CCLOG ( "Item in slot %d: %s" , serial_number + 1 , item->GetName ().c_str () );
             }
             else {
-                CCLOG ( "No item in slot %d" , serial_number + 1 );
+                //CCLOG ( "No item in slot %d" , serial_number + 1 );
             }
 
             // 如果需要获取特定槽位的物品，使用 GetItemAt(int position) 定义新函数  

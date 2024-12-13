@@ -21,6 +21,7 @@ void NPCtalkUI::backgroundcreate () {
     auto darkLayer = cocos2d::LayerColor::create ( cocos2d::Color4B ( 0 , 0 , 0 , 120 ) , 5 * visibleSize.width , 5 * visibleSize.height );  // 黑色，透明度为120
     darkLayer->setPosition ( position - visibleSize / 2 );// 设置遮罩层的位置
     this->addChild ( darkLayer , 0 );
+    //对话框
     auto dialogBox = Sprite::create ( "npc/kuang.png" );
     if (dialogBox == nullptr)
     {
@@ -38,6 +39,26 @@ void NPCtalkUI::backgroundcreate () {
 
         this->addChild ( dialogBox , 1 );
     }
+    //头像
+    std::string photo = getNPCportraits ( npc->GetName () , "Normal" );
+    auto characterPhoto = Sprite::create ( photo );
+
+    float originalWidth = characterPhoto->getContentSize ().width;
+    float originalHeight = characterPhoto->getContentSize ().height;
+    float scaleX = visibleSize.width / originalWidth;
+    float scaleY = visibleSize.height / originalHeight;
+    float scale = std::min ( scaleX , scaleY );
+    characterPhoto->setScale ( scale * 0.25 );
+    characterPhoto->setPosition ( Vec2 ( position.x + visibleSize.width * 0.27 , position.y - visibleSize.height * 0.233 ) );
+
+    this->addChild ( characterPhoto , 2 );
+
+    //姓名
+    std::string name = npc->GetName ();
+    auto NameLabel =Label::createWithSystemFont ( name , "fonts/Comic Sans MS.ttf" , 40 );
+    NameLabel->setTextColor ( cocos2d::Color4B::BLACK );
+    NameLabel->setPosition ( Vec2 ( position.x + visibleSize.width * 0.26 , position.y - visibleSize.height * 0.4 ) );
+    this->addChild ( NameLabel , 2 );
 }
 
 void NPCtalkUI::close () {
@@ -86,6 +107,7 @@ bool NPCtalkUI::init ( NPC* npc_name ) {
     if (!Layer::init ()) {
         return false;
     }
+    npc = npc_name;
     backgroundcreate ();
     close ();
     return true;
