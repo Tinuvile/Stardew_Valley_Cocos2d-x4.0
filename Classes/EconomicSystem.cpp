@@ -4,7 +4,7 @@
 
 // 构造函数初始化金币数量为500  
 EconomicSystem::EconomicSystem ( Inventory* mybag , Inventory* goods )
-    : goldAmount ( 500 ) , _mybag ( mybag ) , _goods ( goods ) {
+    : goldAmount ( 4000 ) , _mybag ( mybag ) , _goods ( goods ) {
     // 初始化代码可以在这里执行  
 }
 

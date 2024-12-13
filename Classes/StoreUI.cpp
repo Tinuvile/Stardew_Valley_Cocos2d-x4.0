@@ -128,10 +128,10 @@ void StoreUI::backgroundcreate () {
     this->addChild ( welcome , 2 );
 
     //拥有金币框
-    auto moneyFrame = Sprite::create ( "UIresource/supermarket/moneyFrame.png" );
+    auto moneyFrame = Sprite::create ( "UIresource/supermarket/moneyFrame_new.png" );
     if (moneyFrame == nullptr)
     {
-        problemLoading ( "'moneyFrame.png'" );
+        problemLoading ( "'moneyFrame_new.png'" );
     }
     else
     {
@@ -198,7 +198,7 @@ void StoreUI::ProductDisplay ( Inventory* mybag , Inventory* goods ) {
         float lowerLimit = scrollView->getContentSize ().height - innerContainer->getContentSize ().height;
         float upperLimit = -20;
 
-        CCLOG ( "currentPosY: %f, newPosY: %f, lowerLimit: %f, upperLimit: %f" , currentPosY , newPosY , lowerLimit , upperLimit );
+        //CCLOG ( "currentPosY: %f, newPosY: %f, lowerLimit: %f, upperLimit: %f" , currentPosY , newPosY , lowerLimit , upperLimit );
 
         // 使用 std::max 和 std::min 确保 newPosY 在边界内  
         newPosY = std::max ( newPosY , lowerLimit );
@@ -249,10 +249,10 @@ void StoreUI::ProductDisplay ( Inventory* mybag , Inventory* goods ) {
             item_value->setTextColor ( cocos2d::Color4B::BLACK );  // 初始颜色
             item_value->setPosition ( Vec2 (visibleSize.width * 0.6750 , 539 + visibleSize.height * 1.51 - offsetY ) );
             scrollView->addChild ( item_value , 2 );
-            CCLOG ( "Loading item sprite: %s" , item->initial_pic.c_str () );
+            //CCLOG ( "Loading item sprite: %s" , item->initial_pic.c_str () );
         }
         else {
-            CCLOG ( "Error loading item sprite: %s" , item->initial_pic.c_str () );
+            //CCLOG ( "Error loading item sprite: %s" , item->initial_pic.c_str () );
         }
 
         auto listener = EventListenerMouse::create ();
@@ -277,7 +277,7 @@ void StoreUI::ProductDisplay ( Inventory* mybag , Inventory* goods ) {
                 }
             };
 
-            listener->onMouseDown = [this , itemframe , scrollView , position , item] (EventMouse * event) {
+            listener->onMouseDown = [this , itemframe , scrollView , position , item , visibleSize , i]( EventMouse* event ) {
                 Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
                 mousePos = this->convertToNodeSpace ( mousePos );
 
@@ -289,7 +289,10 @@ void StoreUI::ProductDisplay ( Inventory* mybag , Inventory* goods ) {
                 float adjustedPosY = itemBoundingBox.getMinY () + innerContainerPos.y;
                 float adjustedPosX = itemBoundingBox.getMinX () + innerContainerPos.x;
                 if (mousePos.x >= adjustedPosX && mousePos.x <= adjustedPosX + itemBoundingBox.size.width &&
-                mousePos.y >= adjustedPosY + position.y && mousePos.y <= position.y + adjustedPosY + itemBoundingBox.size.height) {
+                    mousePos.y >= adjustedPosY + position.y && mousePos.y <= position.y + adjustedPosY + itemBoundingBox.size.height &&
+                    mousePos.x >= position.x - visibleSize.width * 0.25 && mousePos.x < position.x + visibleSize.width * 0.455 &&
+                     mousePos.y >= position.y - visibleSize.height * 0.0772 && mousePos.y < position.y + visibleSize.height * 0.3025
+                    ) {
                     isClick = true;
                     chosen_Item = item;
                     CCLOG ( "chosen_Item: %s" , item->GetName ().c_str () );
@@ -454,10 +457,28 @@ void StoreUI::Itemblock ( Inventory* mybag , Inventory* goods ) {
 }
 
 void StoreUI::updateDisplay () {
+    Vec2 position = player1->getPosition ();
+    auto visibleSize = Director::getInstance ()->getVisibleSize ();
     if (!_mybag) {
         CCLOG ( "Warning: _inventory is nullptr" );
         return; // 退出方法  
     }
+    //金币更新
+    static Label* GoldAmount = nullptr;
+    int goldAmount = economicSystem->getGoldAmount ();
+
+    if (GoldAmount == nullptr) {
+        // 如果标签为空，创建并添加标签
+        GoldAmount = Label::createWithSystemFont ( std::to_string ( goldAmount ) , "fonts/Comic Sans MS.ttf" , 45 );
+        GoldAmount->setTextColor ( Color4B ( 255 , 153 , 0 , 255 ) );
+        GoldAmount->setPosition ( Vec2 ( position.x - visibleSize.width * 0.1 , position.y - visibleSize.height * 0.0425 ) );
+        this->addChild ( GoldAmount , 4 ); // 添加到层级中
+    }
+    else {
+        // 如果标签已存在，直接更新标签的文本
+        GoldAmount->setString ( std::to_string ( goldAmount ) );
+    }
+
     for (int m = 0; m < 3; m++) {
         // 获取当前选择的物品的槽位  
         for (int i = 0; i < kRowSize; ++i) {
@@ -490,7 +511,7 @@ void StoreUI::updateDisplay () {
                 if (itemSprite) {
                     itemSprite->setPosition ( slot->getContentSize () / 2 );
                     itemSprite->setScale ( 0.2f );
-                    itemSprite->setOpacity ( 128 );
+                    //itemSprite->setOpacity ( 128 );
                     slot->addChild ( itemSprite , 3 );
                     CCLOG ( "Loading item sprite: %s" , item->initial_pic.c_str () );
                 }
@@ -500,12 +521,12 @@ void StoreUI::updateDisplay () {
 
                 // 根据 item 里的数量来设置数量标签（如果需要）。  
                 // 可以在这里创建一个 Label 显示数量  
-                auto countLabel = static_cast<Label*>(slot->getChildByTag ( 200 + i )); // 使用槽位的标签生成数量标签的唯一ID  
+                auto countLabel = static_cast<Label*>(slot->getChildByTag ( 200 + serial_number )); // 使用槽位的标签生成数量标签的唯一ID  
                 if (!countLabel) {
                     // 如果标签不存在，创建新的标签  
-                    countLabel = Label::createWithSystemFont ( std::to_string ( itemCount ) , "fonts/Arial Bold.ttf" , 20 );
+                    countLabel = Label::createWithSystemFont ( std::to_string ( itemCount ) , "fonts/Comic Sans MS.ttf" , 8 );
                     countLabel->setTextColor ( Color4B ( 255 , 153 , 0 , 255 ) );
-                    countLabel->setPosition ( slot->getPosition ().x + slot->getContentSize ().width * 1.7 , slot->getPosition ().y - slot->getContentSize ().height * 1.7 ); // 设置位置在槽位下方  
+                    countLabel->setPosition ( slot->getContentSize ().width * 0.8 , slot->getContentSize ().height * 0.2 ); // 设置位置在槽位右下方  
                     countLabel->setTag ( 200 + serial_number ); // 设置标签  
                     slot->addChild ( countLabel , 4 ); // 添加到层级中  
                 }
