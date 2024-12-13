@@ -172,8 +172,15 @@ bool Beach::init ()
 
     listenerWithPlayer->onKeyPressed = [this]( EventKeyboard::KeyCode key_code , Event* event ) {
         if (key_code == EventKeyboard::KeyCode::KEY_H) {
-            //将钓鱼游戏界面加入场景中
-            ;
+
+            if (!this->getChildByName ( "FishingGameLayer" )) {
+                //将钓鱼游戏界面加入场景中
+                auto fishing_game = FishingGame::create ( player1->getPosition () );
+                this->addChild ( fishing_game , 10 , "FishingGameLayer" );
+                ////暂停场景中其他节点的活动
+                //player1->pause ();
+                //this->pause ();
+            }
         }
     };
 

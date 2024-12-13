@@ -3,6 +3,7 @@
 
 #include "cocos2d.h"
 #include "farm.h"
+#include "FishingGame.h"
 #include "Myhouse.h"
 #include "Player.h"
 #include "AppDelegate.h"
