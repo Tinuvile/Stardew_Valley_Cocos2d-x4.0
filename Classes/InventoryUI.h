@@ -1,5 +1,7 @@
-// InventoryUI.h  
-#pragma once  
+#ifndef __InventoryUI_H_
+#define __InventoryUI_H_
+
+// InventoryUI.h    
 #include "cocos2d.h"  
 #include "Inventory.h"  
 #include "AppDelegate.h"
@@ -34,3 +36,5 @@ private:
     Sprite* currentItemSprite = nullptr; // 标识当前选择的物品
 
 };
+
+#endif // __InventoryUI_H_

@@ -1,10 +1,10 @@
-#ifndef __supermarket_H__
-#define __supermarket_H__
+#ifndef __supermarket_H_
+#define __supermarket_H_
 
 #include "cocos2d.h"
-#include "Player.h"
-#include "AppDelegate.h"
 #include "ui/CocosGUI.h"
+#include "Player.h"
+#include "Inventory.h"
 
 class supermarket : public cocos2d::Scene
 {
@@ -26,10 +26,10 @@ public:
     cocos2d::Sprite* button;
 
     /* 开门按钮 */
-    Sprite* opendoor;
+    cocos2d::Sprite* opendoor;
 
     // 创建出口区域
-    cocos2d::Rect Region_Out = Rect(1343, 818, 50, 868);
+    cocos2d::Rect Region_Out = cocos2d::Rect(1343, 818, 50, 868);
 
 private:
 
@@ -52,4 +52,4 @@ private:
 
 };
 
-#endif // __BACKGROUND1_H__
+#endif // __supermarket_H_
