@@ -6,6 +6,7 @@
 #include "AppDelegate.h"
 #include "InventoryUI.h"
 #include <NPC.h>
+#include "NpcRelationship.h"
 
 class intimacyUI : public cocos2d::Layer {
 public:
@@ -17,12 +18,15 @@ public:
 
     void Buttons_switching ();
 
-    void close ();
-
     void updateCoordinate ( float& x , float& y );
 
     void characterInfo ( const string& name , const string& status , Vec2 Pos_photo);
 private:  
 
+    NpcRelationship* NPC_RELATIONSHIP;
+
+    void close ();
+
+    void intimacyDisplay ( const string& name , Vec2 Pos );
 };
                             

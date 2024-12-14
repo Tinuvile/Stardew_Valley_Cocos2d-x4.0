@@ -125,7 +125,8 @@ void NPCtalkUI::SelectedBox () {
         this->addChild ( Selectedbox4 , 0 );
 
         // NPC 对话添加
-        std::vector<std::vector<std::string>> npc_Dialog = getDialog(npc->GetName() , NPC_RELATIONSHIP->getRelationshipLevel ("player" , npc->GetName ()));
+        std::vector<std::vector<std::string>> npc_Dialog = getDialog(npc->GetName() , 
+            NPC_RELATIONSHIP->getRelationshipLevel ("player" , npc->GetName ()));
         
         int choose = rand() % npc_Dialog.size();
         // NPC 对话
