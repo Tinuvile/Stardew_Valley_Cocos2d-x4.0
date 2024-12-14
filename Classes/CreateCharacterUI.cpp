@@ -1,6 +1,9 @@
 #include "CreateCharacterUI.h"
+#include "Town.h"
 
 USING_NS_CC;
+
+extern std::map <std::pair<std::string , Vec2> , bool> T_lastplace;
 
 Scene* CreateCharacter::createScene()
 {
@@ -37,6 +40,7 @@ void CreateCharacter::cloudAni ( float dt )
     auto moveTo_s = cocos2d::MoveTo::create ( 50.0f , cocos2d::Vec2 ( -visibleSize.width * 0.6 , clouds->getPosition ().y ) );
     clouds->runAction ( cocos2d::RepeatForever::create ( moveTo_s ) );
 }
+
 // on "init" you need to initialize your instance
 void CreateCharacter::BackgroundAdd () {
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
@@ -65,6 +69,7 @@ void CreateCharacter::BackgroundAdd () {
         this->addChild ( background , 0 );
     }
 }
+
 void CreateCharacter::optionFace () {
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     Vec2 origin = Director::getInstance ()->getVisibleOrigin ();
@@ -110,7 +115,7 @@ void CreateCharacter::optionFace () {
         // 选择最小的缩放比例，以保证图片完全显示在屏幕上且不变形
         float scale = std::min ( scaleX , scaleY );
         displaycharacter->setScale ( scale / 5 );
-        Vec2 leftTopPos = Vec2 ( visibleSize.width / 2 - optionface->getContentSize ().width * 0.2 , visibleSize.height / 2+ optionface->getContentSize ().height * 0.2 );
+        Vec2 leftTopPos = Vec2 ( visibleSize.width / 2 - optionface->getContentSize ().width * 0.2 , visibleSize.height / 2 + optionface->getContentSize ().height * 0.2 );
 
         // 设置小图位置
         displaycharacter->setPosition ( leftTopPos );
@@ -138,7 +143,7 @@ void CreateCharacter::optionFace () {
         float scale = std::min ( scaleX , scaleY );
         male->setScale ( scale / 16.5 );
         Vec2 displaycharacterPos = displaycharacter->getPosition ();
-        Vec2 Pos = Vec2 ( displaycharacterPos.x - displaycharacter->getContentSize ().width / 2, displaycharacterPos.y - displaycharacter->getContentSize ().height );
+        Vec2 Pos = Vec2 ( displaycharacterPos.x - displaycharacter->getContentSize ().width / 2 , displaycharacterPos.y - displaycharacter->getContentSize ().height );
 
         male->setPosition ( Pos );
 
@@ -197,13 +202,38 @@ void CreateCharacter::optionFace () {
         this->addChild ( xuanzhong , 2 );
     }
 
-    Vec2 leftPos= Vec2  ( displaycharacterPos.x - displaycharacter->getContentSize ().width / 1.5, displaycharacterPos.y - displaycharacter->getContentSize ().height / 1.7);
-    auto leftarrow = directions  ( "UIresource/create/left.png" ,  origin , leftPos  );
+    auto OK = ui::Button::create ( "UIresource/create/OK.png" , "UIresource/create/OK.png" );
+    OK->setTag ( 202 );
+
+    float originalWidth = OK->getContentSize ().width;
+    float originalHeight = OK->getContentSize ().height;
+    float scaleX = visibleSize.width / originalWidth;
+    float scaleY = visibleSize.height / originalHeight;
+    float scale = std::min ( scaleX , scaleY );
+    OK->setScale ( scale / 8 );
+    OK->setOpacity ( 128 );
+    OK->setEnabled ( false );  // 禁用点击事件
+    OK->addClickEventListener ( [this]( Ref* sender ) {
+        // 按钮点击跳转
+        //player1 = Player::create ();
+        //std::pair<std::string , Vec2> key = { "initiation",Vec2 ( 350,350 ) };
+        //T_lastplace.insert ( std::make_pair ( key , false ) );
+        //key = { "seedshop",Vec2 ( 230,470 ) };
+        //T_lastplace.insert ( std::make_pair ( key , false ) );
+        Director::getInstance ()->replaceScene ( TransitionFade::create ( 2.0f , Town::create () ) );
+} );
+    Vec2 Pos = Vec2 ( visibleSize.width * 0.5 , visibleSize.height * 0.2 );
+    OK->setPosition ( Pos );
+    this->addChild ( OK , 2 );
+
+    Vec2 leftPos = Vec2 ( displaycharacterPos.x - displaycharacter->getContentSize ().width / 1.5 , displaycharacterPos.y - displaycharacter->getContentSize ().height / 1.7 );
+    auto leftarrow = directions ( "UIresource/create/left.png" , origin , leftPos );
     Vec2 rightPos = Vec2 ( displaycharacterPos.x + displaycharacter->getContentSize ().width / 1.5 , displaycharacterPos.y - displaycharacter->getContentSize ().height / 1.7 );
     auto rightarrow = directions ( "UIresource/create/right.png" , origin , rightPos );
-    mouseListen ( leftarrow , rightarrow , male , female , xuanzhong, displaycharacter);
+    mouseListen ( leftarrow , rightarrow , male , female , xuanzhong , displaycharacter );
 
 }
+
 cocos2d::Sprite* CreateCharacter::directions (const std::string& normalImage, const Vec2& origin , const Vec2& position)
 {
     auto item = Sprite::create (normalImage);
@@ -283,6 +313,7 @@ void CreateCharacter::mouseListen ( cocos2d::Sprite* leftarrow , cocos2d::Sprite
         };
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , this );
 }
+
 void CreateCharacter::textIn () {
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     Vec2 origin = Director::getInstance ()->getVisibleOrigin ();
@@ -352,6 +383,7 @@ void CreateCharacter::textIn () {
             } );
     }
 }
+
 ui::TextField* CreateCharacter::createTextIn ( float sizex , float sizey, const Vec2& Pos ) {
     // 创建一个 TextField
     auto textField = ui::TextField::create ( "Please enter" , "Arial" , 24 );
@@ -377,7 +409,9 @@ ui::TextField* CreateCharacter::createTextIn ( float sizex , float sizey, const 
     } );
     return textField;
 }
+
 void CreateCharacter::checkTextFields ( ui::TextField* textfield1 , ui::TextField* textfield2, ui::TextField* textfield3 ) {
+    auto OK = dynamic_cast<cocos2d::ui::Button*>(this->getChildByTag ( 202 ));
     std::string text1 = textfield1->getString ();
     std::string text2 = textfield2->getString ();
     std::string text3 = textfield3->getString ();
@@ -396,12 +430,17 @@ void CreateCharacter::checkTextFields ( ui::TextField* textfield1 , ui::TextFiel
     // 检查三个文本框是否都有内容
     if (!text1.empty () && !text2.empty () && !text3.empty ())
     {
+        OK->setOpacity ( 255 );    // 使OK不透明
+        OK->setEnabled ( true );   // 启用OK按钮的点击事件
     }
     else
     {
-        // 如果任一文本框为空，恢复精灵为原始颜色;
+        OK->setOpacity ( 128 );    
+        OK->setEnabled ( false ); 
+        // 如果任一文本框为空，恢复
     }
 }
+
 void CreateCharacter::favoranimal () {
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     Vec2 origin = Director::getInstance ()->getVisibleOrigin ();
@@ -475,6 +514,7 @@ void CreateCharacter::favoranimal () {
         };
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , this );
 }
+
 void CreateCharacter::updateItems( cocos2d::Sprite* item , const std::string& normalImage , cocos2d::Event* event ,const int Magnification )
 {
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
@@ -502,6 +542,7 @@ void CreateCharacter::updateItems( cocos2d::Sprite* item , const std::string& no
         item->setScale ( scale / Magnification );
     }
 }
+
 void CreateCharacter::mousedowncallback ( Ref* pSender , Sprite* item ) {
     // 获取当前精灵的缩放比例
     float currentScale = item->getScale ();
@@ -510,6 +551,7 @@ void CreateCharacter::mousedowncallback ( Ref* pSender , Sprite* item ) {
     // 设置新的缩放比例
     item->setScale ( newScale );
 }
+
 void CreateCharacter::mouseupcallback ( Ref* pSender , Sprite* item ) {
     // 获取当前精灵的缩放比例
     float currentScale = item->getScale ();
@@ -518,6 +560,7 @@ void CreateCharacter::mouseupcallback ( Ref* pSender , Sprite* item ) {
     // 设置新的缩放比例
     item->setScale ( newScale );
 }
+
 bool CreateCharacter::init()
 {
     if (!Scene::init())

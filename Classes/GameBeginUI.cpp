@@ -265,6 +265,7 @@ void NextScene::addLogo_sec ( const Size& visibleSize , const Vec2& origin )
         problemLoading ( "'title.png'" );
     }
 }
+
 void NextScene::cloudsAni ( float dt )
 {
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
@@ -310,6 +311,7 @@ void NextScene::cloudsAni ( float dt )
     cloud0->runAction ( cocos2d::RepeatForever::create ( moveTo_0 ) );
     clouds->runAction ( cocos2d::RepeatForever::create ( moveTo_s ) );
 }
+
 void NextScene::scenechangedown ()
 {
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
@@ -456,7 +458,6 @@ void NextScene::updateMenuItem(MenuItemImage* item, const Vec2& mousePos, const 
 // 跳转到新场景  
 void NextScene::menuNewCallback(Ref* pSender)
 {
-    //Director::getInstance()->replaceScene(Town::create()); // 进入到主地图  
     Director::getInstance ()->replaceScene ( TransitionFade::create ( 3.0f , CreateCharacter::create () ) ); // 进入到人物创建界面 
 }
 
