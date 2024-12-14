@@ -12,13 +12,30 @@ static void problemLoading ( const char* filename )
     printf ( "Error while loading: %s\n" , filename );
     printf ( "Depending on how you compiled you might have to add 'Resources/' in front of filenames in CreateCharacterScene.cpp\n" );
 }
+void StoreUI::updateCoordinate ( float& x , float& y ) {
+    Vec2 position = player1->getPosition ();
+    if (x <= 725) {
+        x = 725;
+    }
+    else {
+        x = position.x;
+    }
+    if (y <= -66) {
+        y = -66;
+    }
+    else {
+        y = position.y;
+    }
+}
 
 void StoreUI::backgroundcreate () {
     Vec2 position = player1->getPosition ();
+    float currentx = position.x , currenty = position.y;
+    updateCoordinate ( currentx , currenty );
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     // 创建一个半透明的黑色遮罩
     auto darkLayer = cocos2d::LayerColor::create ( cocos2d::Color4B ( 0 , 0 , 0 , 120 ) , 5 * visibleSize.width , 5 * visibleSize.height );  // 黑色，透明度为120
-    darkLayer->setPosition ( position - visibleSize / 2 );// 设置遮罩层的位置
+    darkLayer->setPosition ( Vec2 ( currentx , currenty ) - visibleSize / 2 );// 设置遮罩层的位置
     this->addChild ( darkLayer , 0 );
 
     //背包
@@ -39,7 +56,7 @@ void StoreUI::backgroundcreate () {
         // 选择最小的缩放比例，以保证图片完全显示在屏幕上且不变形
         float scale = std::min ( scaleX , scaleY );
         mybag->setScale ( scale / 2 );
-        mybag->setPosition ( Vec2 ( position.x + visibleSize.width * 0.2 , position.y - visibleSize.height * 0.25 ) );
+        mybag->setPosition ( Vec2 ( currentx + visibleSize.width * 0.2 , currenty - visibleSize.height * 0.25 ) );
         this->addChild ( mybag , 1 );
 
         auto listener = EventListenerMouse::create ();
@@ -58,6 +75,7 @@ void StoreUI::backgroundcreate () {
                     if (goldAmount >= chosen_Item->GetValue ()) {
                         economicSystem->subtractGold ( chosen_Item->GetValue () );
                         _mybag->AddItem ( *chosen_Item );
+                        _mybag->isupdated = true;
                         updateDisplay ();
                         CCLOG ( "Purchased item: %s" , chosen_Item->GetName().c_str ());
                     }
@@ -86,7 +104,7 @@ void StoreUI::backgroundcreate () {
         float scaleY = visibleSize.height / originalHeight;
         float scale = std::min ( scaleX , scaleY );
         Characterframe->setScale ( scale / 5 );
-        Characterframe->setPosition ( Vec2 ( position.x - visibleSize.width / 2.7 , position.y + visibleSize.height * 0.24 ) );
+        Characterframe->setPosition ( Vec2 ( currentx - visibleSize.width / 2.7 , currenty + visibleSize.height * 0.24 ) );
         this->addChild ( Characterframe , 1 );
     }
     //人物头像
@@ -103,7 +121,7 @@ void StoreUI::backgroundcreate () {
         float scaleY = visibleSize.height / originalHeight;
         float scale = std::min ( scaleX , scaleY );
         Characterpicture->setScale ( scale / 5.2 );
-        Characterpicture->setPosition ( Vec2 ( position.x - visibleSize.width / 2.7 , position.y + visibleSize.height * 0.24 ) );
+        Characterpicture->setPosition ( Vec2 ( currentx - visibleSize.width / 2.7 , currenty + visibleSize.height * 0.24 ) );
         this->addChild ( Characterpicture , 2 );
     }
     //商店迎接语
@@ -120,12 +138,12 @@ void StoreUI::backgroundcreate () {
         float scaleY = visibleSize.height / originalHeight;
         float scale = std::min ( scaleX , scaleY );
         welcomeframe->setScale ( scale / 5 );
-        welcomeframe->setPosition ( Vec2 ( position.x - visibleSize.width / 2.7 , position.y + visibleSize.height * 0.06316 ) );
+        welcomeframe->setPosition ( Vec2 ( currentx - visibleSize.width / 2.7 , currenty + visibleSize.height * 0.06316 ) );
         this->addChild ( welcomeframe , 1 );
     }
     auto welcome = cocos2d::Label::createWithSystemFont ( "Welcome to the\nPierre store" , "fonts/Arial Bold.ttf" , 25 );
     welcome->setTextColor ( cocos2d::Color4B::BLACK );  // 初始颜色是黑色
-    welcome->setPosition ( Vec2 ( position.x - visibleSize.width / 2.7 , position.y + visibleSize.height * 0.06316 ) );
+    welcome->setPosition ( Vec2 ( currentx - visibleSize.width / 2.7 , currenty + visibleSize.height * 0.06316 ) );
     this->addChild ( welcome , 2 );
 
     //拥有金币框
@@ -142,13 +160,15 @@ void StoreUI::backgroundcreate () {
         float scaleY = visibleSize.height / originalHeight;
         float scale = std::min ( scaleX , scaleY );
         moneyFrame->setScale ( scale / 4 );
-        moneyFrame->setPosition ( Vec2 ( position.x - visibleSize.width * 0.1 , position.y - visibleSize.height * 0.042 ) );
+        moneyFrame->setPosition ( Vec2 ( currentx - visibleSize.width * 0.1 , currenty - visibleSize.height * 0.042 ) );
         this->addChild ( moneyFrame , 1 );
     }
 }
 
 void StoreUI::ProductDisplay ( Inventory* mybag , Inventory* goods ) {
     Vec2 position = player1->getPosition ();
+    float currentx = position.x , currenty = position.y;
+    updateCoordinate ( currentx , currenty );
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     //商品框
     auto Productcolumn = Sprite::create ( "UIresource/supermarket/wupinlan.png" );
@@ -162,14 +182,14 @@ void StoreUI::ProductDisplay ( Inventory* mybag , Inventory* goods ) {
         // 选择最小的缩放比例，以保证图片完全显示在屏幕上且不变形
         float scale = std::min ( scaleX , scaleY );
         Productcolumn->setScale ( scale / 1.4 );
-        Productcolumn->setPosition ( Vec2 ( position.x + visibleSize.width / 9.5 , position.y + visibleSize.height * 0.1684 ) );
+        Productcolumn->setPosition ( Vec2 ( currentx + visibleSize.width / 9.5 , currenty + visibleSize.height * 0.1684 ) );
         this->addChild ( Productcolumn , 0 );
 
     //创建 ScrollView
     auto scrollView = cocos2d::ui::ScrollView::create ();
     scrollView->setDirection ( cocos2d::ui::ScrollView::Direction::VERTICAL ); // 设置为垂直滚动
     scrollView->setContentSize ( Size ( 1630 , 400 ) ); // 设置ScrollView 宽度，高度
-    scrollView->setPosition ( Vec2 ( position.x - visibleSize.width * 0.389 , position.y + visibleSize.height * 0.01368 ) ); // 设置位置
+    scrollView->setPosition ( Vec2 ( currentx - visibleSize.width * 0.389 , currenty + visibleSize.height * 0.01368 ) ); // 设置位置
     scrollView->setBounceEnabled ( true ); // 启用弹性效果
     scrollView->setScrollBarEnabled ( false );    // 禁用垂直和水平滑动条
 
@@ -257,7 +277,7 @@ void StoreUI::ProductDisplay ( Inventory* mybag , Inventory* goods ) {
         }
 
         auto listener = EventListenerMouse::create ();
-            listener->onMouseMove = [this , itemframe , scrollView , position]( EventMouse* event ) {
+            listener->onMouseMove = [this , itemframe , scrollView , currenty]( EventMouse* event ) {
 
                 Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
 
@@ -270,7 +290,7 @@ void StoreUI::ProductDisplay ( Inventory* mybag , Inventory* goods ) {
                 float adjustedPosY = itemBoundingBox.getMinY () + innerContainerPos.y;
                 float adjustedPosX = itemBoundingBox.getMinX () + innerContainerPos.x;
                 if (mousePos.x >= adjustedPosX && mousePos.x <= adjustedPosX + itemBoundingBox.size.width &&
-                mousePos.y >= adjustedPosY + position.y && mousePos.y <= position.y + adjustedPosY + itemBoundingBox.size.height) {
+                mousePos.y >= adjustedPosY + currenty && mousePos.y <= currenty + adjustedPosY + itemBoundingBox.size.height) {
                         itemframe->setTexture ( "UIresource/supermarket/xuanzhong_frame.png" );
                 }
                 else {
@@ -278,7 +298,7 @@ void StoreUI::ProductDisplay ( Inventory* mybag , Inventory* goods ) {
                 }
             };
 
-            listener->onMouseDown = [this , itemframe , scrollView , position , item , visibleSize , i]( EventMouse* event ) {
+            listener->onMouseDown = [this , itemframe , scrollView , currenty , currentx ,item , visibleSize , i]( EventMouse* event ) {
                 Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
                 mousePos = this->convertToNodeSpace ( mousePos );
 
@@ -290,9 +310,9 @@ void StoreUI::ProductDisplay ( Inventory* mybag , Inventory* goods ) {
                 float adjustedPosY = itemBoundingBox.getMinY () + innerContainerPos.y;
                 float adjustedPosX = itemBoundingBox.getMinX () + innerContainerPos.x;
                 if (mousePos.x >= adjustedPosX && mousePos.x <= adjustedPosX + itemBoundingBox.size.width &&
-                    mousePos.y >= adjustedPosY + position.y && mousePos.y <= position.y + adjustedPosY + itemBoundingBox.size.height &&
-                    mousePos.x >= position.x - visibleSize.width * 0.25 && mousePos.x < position.x + visibleSize.width * 0.455 &&
-                     mousePos.y >= position.y - visibleSize.height * 0.0772 && mousePos.y < position.y + visibleSize.height * 0.3025
+                    mousePos.y >= adjustedPosY + currenty && mousePos.y <= currenty + adjustedPosY + itemBoundingBox.size.height &&
+                    mousePos.x >= currentx - visibleSize.width * 0.25 && mousePos.x < currentx + visibleSize.width * 0.455 &&
+                     mousePos.y >= currenty - visibleSize.height * 0.0772 && mousePos.y < currenty + visibleSize.height * 0.3025
                     ) {
                     isClick = true;
                     chosen_Item = item;
@@ -312,6 +332,8 @@ void StoreUI::ProductDisplay ( Inventory* mybag , Inventory* goods ) {
 
 void StoreUI::SliderDisplay () {
     Vec2 position = player1->getPosition ();
+    float currentx = position.x , currenty = position.y;
+    updateCoordinate ( currentx , currenty );
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     //滑动条和滑动块
     auto Sliders = Sprite::create ( "UIresource/supermarket/huadongtiao.png" );
@@ -327,7 +349,7 @@ void StoreUI::SliderDisplay () {
         float scaleY = visibleSize.height / originalHeight;
         float scale = std::min ( scaleX , scaleY );
         Sliders->setScale ( scale / 2.4 );
-        Sliders->setPosition ( Vec2 ( position.x + visibleSize.width * 0.48 , position.y + visibleSize.height * 0.16 ) );
+        Sliders->setPosition ( Vec2 ( currentx + visibleSize.width * 0.48 , currenty + visibleSize.height * 0.16 ) );
         this->addChild ( Sliders , 5 );
     }
     auto Slider = Sprite::create ( "UIresource/supermarket/huadongkuai.png" );
@@ -343,14 +365,14 @@ void StoreUI::SliderDisplay () {
         float scaleY = visibleSize.height / originalHeight;
         float scale = std::min ( scaleX , scaleY );
         Slider->setScale ( scale / 29 );
-        Slider->setPosition ( Vec2 ( position.x + visibleSize.width * 0.478 , position.y + visibleSize.height * 0.34375 ) );
+        Slider->setPosition ( Vec2 ( currentx + visibleSize.width * 0.478 , currenty + visibleSize.height * 0.34375 ) );
         this->addChild ( Slider , 6 );
     }
     // 监听滚轮事件
     auto listener = cocos2d::EventListenerMouse::create ();
-    listener->onMouseScroll = [Slider,position,visibleSize]( cocos2d::EventMouse* event ) {
-        float _minY = position.y + visibleSize.height * 0.34375 - 20 * 23.8;
-        float _maxY = position.y + visibleSize.height * 0.34375;
+    listener->onMouseScroll = [Slider,currenty,visibleSize]( cocos2d::EventMouse* event ) {
+        float _minY = currenty + visibleSize.height * 0.34375 - 20 * 23.8;
+        float _maxY = currenty + visibleSize.height * 0.34375;
 
         // 获取滚轮滚动的增量（单位：像素）
         float scrollDelta = event->getScrollY ();
@@ -377,6 +399,8 @@ void StoreUI::SliderDisplay () {
 
 void StoreUI::moneyDisplay () {
     Vec2 position = player1->getPosition ();
+    float currentx = position.x , currenty = position.y;
+    updateCoordinate ( currentx , currenty );
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     //金币更新
     static Label* GoldAmount = nullptr;
@@ -384,7 +408,7 @@ void StoreUI::moneyDisplay () {
     if (GoldAmount == nullptr) {
         GoldAmount = Label::createWithSystemFont ( std::to_string ( goldAmount ) , "fonts/Comic Sans MS.ttf" , 45 );
         GoldAmount->setTextColor ( Color4B::BLACK );
-        GoldAmount->setPosition ( Vec2 ( position.x - visibleSize.width * 0.1 , position.y - visibleSize.height * 0.0425 ) );
+        GoldAmount->setPosition ( Vec2 ( currentx - visibleSize.width * 0.1 , currenty - visibleSize.height * 0.0425 ) );
         this->addChild ( GoldAmount , 4 );
     }
     else {
@@ -448,6 +472,8 @@ StoreUI* StoreUI::create ( Inventory* mybag , Inventory* goods ) {
 
 void StoreUI::Itemblock ( Inventory* mybag , Inventory* goods ) {
     Vec2 position = player1->getPosition ();
+    float currentx = position.x , currenty = position.y;
+    updateCoordinate ( currentx , currenty );
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     Vec2 origin = Director::getInstance ()->getVisibleOrigin ();
     _selectedSlot = 1; // 默认选中第一个槽位  
@@ -470,7 +496,7 @@ void StoreUI::Itemblock ( Inventory* mybag , Inventory* goods ) {
             slot->setScale ( scale / 22 );
             float bagWidth = bag->getContentSize ().width;
             float bagHeight = bag->getContentSize ().height;
-            slot->setPosition ( position.x - bagWidth * 0.12 + (originalWidth * scale / 22 + 5) * i , position.y - bagHeight * 2.7 - m * (originalHeight * scale / 22 + 23) ); // 计算槽位位置  
+            slot->setPosition ( currentx - bagWidth * 0.12 + (originalWidth * scale / 22 + 5) * i , currenty - bagHeight * 2.7 - m * (originalHeight * scale / 22 + 23) ); // 计算槽位位置  
             slot->setTag ( i + 1 ); // 设置槽位的标签  
             slot->setOpacity ( 128 );
             this->addChild ( slot , 2 );

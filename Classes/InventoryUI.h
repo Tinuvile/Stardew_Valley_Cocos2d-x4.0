@@ -19,6 +19,7 @@ public:
 
     void Buttons_switching ();
 
+    void updateCoordinate ( float &x , float &y );
 private:
     Inventory* _inventory; // 指向 Inventory 实例的指针  
 

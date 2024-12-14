@@ -14,8 +14,35 @@ static void problemLoading ( const char* filename )
     printf ( "Depending on how you compiled you might have to add 'Resources/' in front of filenames in CreateCharacterScene.cpp\n" );
 }
 
+void mini_bag::updateCoordinate ( float& x , float& y) {
+    Vec2 position = player1->getPosition ();
+    if (whichScene == "Town") {
+        if (x <= -117) {
+            x = -117;
+        }
+        else if (x >= 1773) {
+            x = 1773;
+        }
+        else {
+            x = position.x;
+        }
+
+        if (y >= 1498) {
+            y = 1498;
+        }
+        else if (y <= -222) {
+            y = -222;
+        }
+        else {
+            y = position.y;
+        }
+    }
+}
+
 void mini_bag::backgroundcreate () {
     Vec2 position = player1->getPosition ();
+    float currentx = position.x , currenty = position.y;
+    updateCoordinate ( currentx , currenty );
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     auto bag = Sprite::create ( "UIresource/beibao/minibag.png" );
     bag->setTag ( 101 );
@@ -34,13 +61,15 @@ void mini_bag::backgroundcreate () {
         // 选择最小的缩放比例，以保证图片完全显示在屏幕上且不变形
         float scale = std::min ( scaleX , scaleY );
         bag->setScale ( scale / 1.5 );
-        bag->setPosition ( position );
+        bag->setPosition ( Vec2 ( currentx , currenty - visibleSize.height * 0.8 ) );
         this->addChild ( bag , 0 );
     }
 }
 
 void mini_bag::Itemblock ( Inventory* inventory ) {
     Vec2 position = player1->getPosition ();
+    float currentx = position.x , currenty = position.y;
+    updateCoordinate ( currentx , currenty );
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     Vec2 origin = Director::getInstance ()->getVisibleOrigin ();
     _inventory = inventory;
@@ -62,7 +91,7 @@ void mini_bag::Itemblock ( Inventory* inventory ) {
         slot->setScale ( scale / 16.5 );
         float bagWidth = bag->getContentSize ().width;
         float bagHeight = bag->getContentSize ().height;
-        slot->setPosition ( position.x - bagWidth * 0.545 + (originalWidth * scale / 16.5 + 5) * i , position.y + bagHeight * 1.73 / 3.643); // 计算槽位位置  
+        slot->setPosition ( currentx - bagWidth * 0.57 + (originalWidth * scale / 16.5 + 5) * i , currenty - visibleSize.height * 0.835 + bagHeight * 1.73 / 3.643); // 计算槽位位置  
         slot->setTag ( i + 1 ); // 设置槽位的标签  
         this->addChild ( slot , 2 );
 
@@ -71,10 +100,11 @@ void mini_bag::Itemblock ( Inventory* inventory ) {
     }
 }
 
-bool mini_bag::init ( Inventory* inventory ) {
+bool mini_bag::init ( Inventory* inventory , std::string& WhichScene ) {
     if (!Layer::init ()) {
         return false;
     }
+    whichScene = WhichScene;
     backgroundcreate ();
 
     Itemblock ( inventory );
@@ -86,9 +116,9 @@ bool mini_bag::init ( Inventory* inventory ) {
     return true;
 }
 
-mini_bag* mini_bag::create ( Inventory* inventory ) {
+mini_bag* mini_bag::create ( Inventory* inventory , std::string& WhichScene ) {
     mini_bag* ret = new mini_bag ();
-    if (ret && ret->init ( inventory )) {
+    if (ret && ret->init ( inventory, WhichScene )) {
         ret->autorelease ();
         return ret;
     }
@@ -97,9 +127,7 @@ mini_bag* mini_bag::create ( Inventory* inventory ) {
 }
 
 void mini_bag::updateDisplay () {
-    Vec2 position = player1->getPosition ();
     if (!_inventory) {
-        CCLOG ( "Warning: _inventory is nullptr" );
         return; // 退出方法  
     }
 
@@ -115,13 +143,6 @@ void mini_bag::updateDisplay () {
         // 获取物品数量   
         int itemCount = _inventory->GetItemCountAt ( serial_number + 1 ); // 获取该槽位的物品数量  
 
-        if (item) {
-            CCLOG ( "Item in slot %d: %s" , serial_number + 1 , item->GetName ().c_str () );
-        }
-        else {
-            CCLOG ( "No item in slot %d" , serial_number + 1 );
-        }
-
         // 如果需要获取特定槽位的物品，使用 GetItemAt(int position) 定义新函数  
 
         // 更新槽位视觉表现  
@@ -129,18 +150,13 @@ void mini_bag::updateDisplay () {
             // 清除之前的子节点  
             slot->removeAllChildren ();
 
-            // 图片路径  
+            // 图片路径
             auto itemSprite = Sprite::create ( item->initial_pic );
             if (itemSprite) {
                 itemSprite->setPosition ( slot->getContentSize () / 2 );
                 itemSprite->setScale ( 0.7f );
                 slot->addChild ( itemSprite , 3 );
-                CCLOG ( "Loading item sprite: %s" , item->initial_pic.c_str () );
             }
-            else {
-                CCLOG ( "Error loading item sprite: %s" , item->initial_pic.c_str () );
-            }
-
             // 根据 item 里的数量来设置数量标签（如果需要）。  
             // 可以在这里创建一个 Label 显示数量  
             auto countLabel = static_cast<Label*>(slot->getChildByTag ( 200 + serial_number )); // 使用槽位的标签生成数量标签的唯一ID  
@@ -214,9 +230,6 @@ void mini_bag::updateDisplay () {
         else {
             _itemLabel->setString ( "No item selected." );
         }
-    }
-    else {
-        CCLOG ( "Warning: _itemLabel is nullptr" );
     }
 }
 
