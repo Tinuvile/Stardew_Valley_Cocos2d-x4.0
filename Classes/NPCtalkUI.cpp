@@ -160,21 +160,26 @@ void NPCtalkUI::SelectedBox () {
             }
             };
 
-        listener->onMouseDown = [=]( EventMouse* event ) {
+        listener->onMouseDown = [this, Selectedbox1 , Selectedbox2 , Selectedbox3 , Selectedbox4]( EventMouse* event ) {
             Vec2 mousePosition = Vec2 ( event->getCursorX () , event->getCursorY () );
             mousePosition = this->convertToNodeSpace ( mousePosition );
+
             // 检查每个 Selectedbox  
-            if (Selectedbox1->getBoundingBox ().containsPoint ( mousePosition )) {
-                Selectedbox1->setLocalZOrder ( 2 ); // 显示在上层  
+            if (Selectedbox1 && Selectedbox1->getBoundingBox ().containsPoint ( mousePosition )) {
+                this->removeFromParent ();
+                return; // 提前返回，避免执行后续选择框检查  
             }
-            if (Selectedbox2->getBoundingBox ().containsPoint ( mousePosition )) {
-                Selectedbox2->setLocalZOrder ( 2 );
+            if (Selectedbox2 && Selectedbox2->getBoundingBox ().containsPoint ( mousePosition )) {
+                this->removeFromParent ();
+                return; // 提前返回  
             }
-            if (Selectedbox3->getBoundingBox ().containsPoint ( mousePosition )) {
-                Selectedbox3->setLocalZOrder ( 2 );
+            if (Selectedbox3 && Selectedbox3->getBoundingBox ().containsPoint ( mousePosition )) {
+                this->removeFromParent ();
+                return; // 提前返回  
             }
-            if (Selectedbox4->getBoundingBox ().containsPoint ( mousePosition )) {
-                Selectedbox4->setLocalZOrder ( 2 );
+            if (Selectedbox4 && Selectedbox4->getBoundingBox ().containsPoint ( mousePosition )) {
+                this->removeFromParent ();
+                return; // 提前返回  
             }
             };
 
