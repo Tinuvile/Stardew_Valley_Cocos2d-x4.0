@@ -7,7 +7,6 @@
 #include "physics/CCPhysicsWorld.h"
 #include "ui/CocosGUI.h"
 #include "Inventory.h"
-#include "mini_bag.h"
 
 USING_NS_CC;
 
@@ -58,7 +57,6 @@ private:
 
     bool isEnterKeyPressed = false;
 
-    mini_bag* miniBag;
 };
 
 #endif // __BACKGROUND1_H__

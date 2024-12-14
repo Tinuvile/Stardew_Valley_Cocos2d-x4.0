@@ -12,6 +12,7 @@
 #include "NPCreate.h"
 #include "Generaltem.h"
 #include "NPCtalkUI.h"
+#include "mini_bag.h"
 
 USING_NS_CC;
 
@@ -84,19 +85,6 @@ bool Town::init()
         this->addChild(_positionLabel, 10);
         _positionLabel->setScale(2.3f);
     }
-
-    //界面下的背包显示
-    string SceneName = "Town";
-    miniBag = mini_bag::create ( inventory , SceneName );
-    this->addChild ( miniBag , 10 );
-
-    // 更新物品栏
-    schedule ( [this]( float deltaTime ) {
-        if (inventory->isupdated == true){
-            miniBag->updateDisplay ();
-            inventory->isupdated = false;
-        }
-    } , 0.1f , "item_update_key" );
 
     // 设置背景图片
     auto background_real = Sprite::create("Town/Town.png");
@@ -321,7 +309,6 @@ bool Town::init()
     // 将监听器添加到事件分发器中  
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listenerWithPlayer , this );
 
-
     return true;
 }
 
@@ -384,7 +371,6 @@ void Town::checkPlayerPosition()
     _timerLabel->setPosition(currentx - 630, currenty + 570);
     _positionLabel->setPosition(currentx - 570, currenty + 490);
     button->setPosition(currentx + 730, currenty - 590);
-    miniBag->setPosition ( currentx , currenty + 490 );
    
     // 检查玩家是否进入目标区域，并且按下 Enter 键
     if (Region_supermarket.containsPoint(playerPos)) {
