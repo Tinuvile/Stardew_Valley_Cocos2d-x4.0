@@ -16,7 +16,6 @@ public:
     void close ();
 
     void SelectedBox ();
-
 private:
 
     NPC* npc;
