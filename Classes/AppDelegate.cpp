@@ -86,6 +86,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
     glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::NO_BORDER);
     director->setContentScaleFactor(1.0f);
 
+    std::srand ( static_cast<unsigned int>(std::time ( 0 )) );
+
     register_all_packages();  // 注册所有的包
 
     runScene(director);

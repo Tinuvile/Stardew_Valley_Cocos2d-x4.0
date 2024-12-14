@@ -170,39 +170,40 @@ std::vector<std::vector<std::string>> getAbigailAnimations () {
 }
 
 // 获取 Abigail 对话信息的函数
-std::vector<std::vector<std::string>> getDialog ( std::string npc, std::string relation_ship ) {
+std::vector<std::vector<std::string>> getDialog ( std::string npc , std::string relation_ship ) {
     if (relation_ship == "非常差") {
         return {
-        {"I'm busy, I don't have time for you.", "Okay", "How have you been?", "Can we talk?","Okay"},
-        {"You are a baby dragon, you are a baby dragon.", "I am not.", "Okay", "Okay","Okay"},
-        {"You are a baby dragon, you are a baby dragon.", "I am not.", "Okay", "Okay","Okay"},
-        {"You are a baby dragon, you are a baby dragon.", "I am not.", "Okay", "Okay","Okay"}
+            {"I'm busy, I don't have time for you.", "Okay", "How have you been?", "Can we talk?", "Sure"},
+            {"Why are you bothering me?", "Just wanted to check in.", "I don't care.", "Leave me alone!", "Okay"},
+            {"You are a baby dragon, you are a baby dragon.", "I am not.", "Okay", "Alright", "Whatever"},
+            {"I don't want to talk to you.", "Why not?", "I just don't.", "That's rude!", "Okay"}
         };
     }
     else if (relation_ship == "一般") {
         return {
-        {"I'm busy, I don't have time for you.", "Okay", "How have you been?", "Can we talk?","Okay"},
-        {"You are a baby dragon, you are a baby dragon.", "I am not.", "Okay", "Okay","Okay"},
-        {"You are a baby dragon, you are a baby dragon.", "I am not.", "Okay", "Okay","Okay"},
-        {"You are a baby dragon, you are a baby dragon.", "I am not.", "Okay", "Okay","Okay"}
+            {"Hello, is there something you need?", "Nothing, just wanted to ask you.", "How have you been?", "Can we talk?", "Sure"},
+            {"How have you been?", "Pretty good, just busy with work.", "What about you?", "Let's catch up!", "Okay"},
+            {"Can we talk?", "Sure, but I have limited time.", "What do you want to discuss?", "I'm all ears.", "Okay"},
+            {"What do you think about our relationship?", "It's average, nothing special.", "I hope it improves.", "Let's work on it.", "Okay"}
         };
     }
     else if (relation_ship == "友好") {
         return {
-        {"I'm busy, I don't have time for you.", "Okay", "How have you been?", "Can we talk?","Okay"},
-        {"You are a baby dragon, you are a baby dragon.", "I am not.", "Okay", "Okay","Okay"},
-        {"You are a baby dragon, you are a baby dragon.", "I am not.", "Okay", "Okay","Okay"},
-        {"You are a baby dragon, you are a baby dragon.", "I am not.", "Okay", "Okay","Okay"}
+            {"Hey, how's it going?", "I'm good, thanks!", "What about you?", "Let's hang out!", "Sure"},
+            {"What are you up to?", "Just relaxing, you?", "Same here, want to chat?", "Sure, let's talk.", "Okay"},
+            {"Can we chat for a bit?", "Absolutely, what's on your mind?", "I have some ideas.", "I'd love to hear them.", "Okay"},
+            {"How do you feel about us?", "I think we're getting along well.", "I agree, it's nice.", "Let's keep it that way.", "Okay"}
         };
     }
     else if (relation_ship == "亲密") {
         return {
-        {"I'm busy, I don't have time for you.", "Okay", "How have you been?", "Can we talk?","Okay"},
-        {"You are a baby dragon, you are a baby dragon.", "I am not.", "Okay", "Okay","Okay"},
-        {"You are a baby dragon, you are a baby dragon.", "I am not.", "Okay", "Okay","Okay"},
-        {"You are a baby dragon, you are a baby dragon.", "I am not.", "Okay", "Okay","Okay"}
+            {"I really enjoy spending time with you.", "Me too, you're great company.", "Let's do this more often.", "Absolutely!", "Sure"},
+            {"We should go on a trip together!", "That sounds amazing, where to?", "I can't wait!", "Count me in!", "Okay"},
+            {"You know how much I care about you, right?", "Of course, I feel the same way.", "You're very important to me.", "Thank you, that means a lot.", "Okay"},
+            {"You're my best friend.", "And you're mine, always here for you.", "Let's stick together.", "Forever!", "Okay"}
         };
     }
+    return {};
 }
 
 // 获取 NPC 大头照路径

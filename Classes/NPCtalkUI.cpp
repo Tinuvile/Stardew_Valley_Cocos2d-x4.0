@@ -99,6 +99,7 @@ void NPCtalkUI::SelectedBox () {
 
         // NPC 对话添加
         std::vector<std::vector<std::string>> npc_Dialog = getDialog(npc->GetName() , NPC_RELATIONSHIP->getRelationshipLevel ("player" , npc->GetName ()));
+        
         int choose = rand() % npc_Dialog.size();
         // NPC 对话
         auto NPC_talk_Label = Label::createWithSystemFont ( npc_Dialog[choose][0] , "fonts/Comic Sans MS.ttf" , 40);
@@ -106,22 +107,22 @@ void NPCtalkUI::SelectedBox () {
         NPC_talk_Label->setPosition ( Vec2 ( position.x - visibleSize.width * 0.17 , position.y - visibleSize.height * 0.14 ) );
         this->addChild ( NPC_talk_Label , 2 );
         // 四个回答
-        auto Player_talk_Label1 = Label::createWithSystemFont ( npc_Dialog[choose][1] , "fonts/Comic Sans MS.ttf" , 40 );
+        auto Player_talk_Label1 = Label::createWithSystemFont ( npc_Dialog[choose][1] , "fonts/Comic Sans MS.ttf" , 30 );
         Player_talk_Label1->setTextColor ( cocos2d::Color4B::BLACK );
         Player_talk_Label1->setPosition ( Vec2 ( position.x - visibleSize.width * 0.17 , position.y - visibleSize.height * 0.21 ) );
         this->addChild ( Player_talk_Label1 , 2 );
 
-        auto Player_talk_Label2 = Label::createWithSystemFont ( npc_Dialog[choose][2] , "fonts/Comic Sans MS.ttf" , 40 );
+        auto Player_talk_Label2 = Label::createWithSystemFont ( npc_Dialog[choose][2] , "fonts/Comic Sans MS.ttf" , 30 );
         Player_talk_Label2->setTextColor ( cocos2d::Color4B::BLACK );
         Player_talk_Label2->setPosition ( Vec2 ( position.x - visibleSize.width * 0.17 , position.y - visibleSize.height * 0.274 ) );
         this->addChild ( Player_talk_Label2 , 2 );
 
-        auto Player_talk_Label3 = Label::createWithSystemFont ( npc_Dialog[choose][3] , "fonts/Comic Sans MS.ttf" , 40 );
+        auto Player_talk_Label3 = Label::createWithSystemFont ( npc_Dialog[choose][3] , "fonts/Comic Sans MS.ttf" , 30 );
         Player_talk_Label3->setTextColor ( cocos2d::Color4B::BLACK );
         Player_talk_Label3->setPosition ( Vec2 ( position.x - visibleSize.width * 0.17 , position.y - visibleSize.height * 0.338 ) );
         this->addChild ( Player_talk_Label3 , 2 );
 
-        auto Player_talk_Label4 = Label::createWithSystemFont ( npc_Dialog[choose][4] , "fonts/Comic Sans MS.ttf" , 40 );
+        auto Player_talk_Label4 = Label::createWithSystemFont ( npc_Dialog[choose][4] , "fonts/Comic Sans MS.ttf" , 30 );
         Player_talk_Label4->setTextColor ( cocos2d::Color4B::BLACK );
         Player_talk_Label4->setPosition ( Vec2 ( position.x - visibleSize.width * 0.17 , position.y - visibleSize.height * 0.402 ) );
         this->addChild ( Player_talk_Label4 , 2 );
@@ -159,6 +160,24 @@ void NPCtalkUI::SelectedBox () {
             }
             };
 
+        listener->onMouseDown = [=]( EventMouse* event ) {
+            Vec2 mousePosition = Vec2 ( event->getCursorX () , event->getCursorY () );
+            mousePosition = this->convertToNodeSpace ( mousePosition );
+            // 检查每个 Selectedbox  
+            if (Selectedbox1->getBoundingBox ().containsPoint ( mousePosition )) {
+                Selectedbox1->setLocalZOrder ( 2 ); // 显示在上层  
+            }
+            if (Selectedbox2->getBoundingBox ().containsPoint ( mousePosition )) {
+                Selectedbox2->setLocalZOrder ( 2 );
+            }
+            if (Selectedbox3->getBoundingBox ().containsPoint ( mousePosition )) {
+                Selectedbox3->setLocalZOrder ( 2 );
+            }
+            if (Selectedbox4->getBoundingBox ().containsPoint ( mousePosition )) {
+                Selectedbox4->setLocalZOrder ( 2 );
+            }
+            };
+
         _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , this );
     }
 }
@@ -178,8 +197,8 @@ void NPCtalkUI::close () {
         float scaleX = visibleSize.width / originalWidth;
         float scaleY = visibleSize.height / originalHeight;
         float scale = std::min ( scaleX , scaleY );
-        closeIcon->setScale ( scale / 20.5 );
-        closeIcon->setPosition ( Vec2 ( position.x + visibleSize.width * 0.0644 , position.y - visibleSize.height * 0.409 ) );
+        closeIcon->setScale ( scale / 40 );
+        closeIcon->setPosition ( Vec2 ( position.x + visibleSize.width * 0.40 , position.y - visibleSize.height * 0.13 ) );
 
         this->addChild ( closeIcon , 1 );
         auto listener = EventListenerMouse::create ();
