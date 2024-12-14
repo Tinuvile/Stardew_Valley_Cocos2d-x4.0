@@ -16,6 +16,8 @@ public:
     void close ();
 
     void SelectedBox ();
+
+    void updateCoordinate ( float& x , float& y );
 private:
 
     NPC* npc;
