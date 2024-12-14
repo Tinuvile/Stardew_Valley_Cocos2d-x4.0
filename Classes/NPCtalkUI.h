@@ -3,6 +3,7 @@
 #include "cocos2d.h"  
 #include "AppDelegate.h"
 #include "NPC.h"
+#include "NpcRelationship.h"
 
 class NPCtalkUI : public cocos2d::Layer {
 public:
@@ -16,5 +17,8 @@ public:
 
     void SelectedBox ();
 private:
+
     NPC* npc;
+
+    NpcRelationship* NPC_RELATIONSHIP;
 };

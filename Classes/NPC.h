@@ -56,4 +56,6 @@ protected:
 
 std::vector<std::vector<std::string>> getAbigailAnimations ();
 
+std::vector<std::vector<std::string>> getDialog ( std::string npc , std::string relation_ship );
+
 std::string getNPCportraits ( std::string name , std::string status );

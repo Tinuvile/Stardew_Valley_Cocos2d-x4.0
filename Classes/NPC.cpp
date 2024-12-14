@@ -159,7 +159,7 @@ void NPC::MoveToPosition ( const cocos2d::Vec2& targetPosition ) {
 }
 
 
-// 获取 NPC 动画帧信息的函数  
+// 获取 Abigail 动画帧信息的函数  
 std::vector<std::vector<std::string>> getAbigailAnimations () {
     return {
         {"npc/Abigail/Abigail-8.png", "npc/Abigail/Abigail-9.png", "npc/Abigail/Abigail-10.png", "npc/Abigail/Abigail-11.png"},
@@ -167,6 +167,42 @@ std::vector<std::vector<std::string>> getAbigailAnimations () {
         {"npc/Abigail/Abigail-14.png", "npc/Abigail/Abigail-13.png", "npc/Abigail/Abigail-14.png", "npc/Abigail/Abigail-15.png"},
         {"npc/Abigail/Abigail-4.png", "npc/Abigail/Abigail-5.png", "npc/Abigail/Abigail-6.png", "npc/Abigail/Abigail-7.png"}
     };
+}
+
+// 获取 Abigail 对话信息的函数
+std::vector<std::vector<std::string>> getDialog ( std::string npc, std::string relation_ship ) {
+    if (relation_ship == "非常差") {
+        return {
+        {"I'm busy, I don't have time for you.", "Okay", "How have you been?", "Can we talk?","Okay"},
+        {"You are a baby dragon, you are a baby dragon.", "I am not.", "Okay", "Okay","Okay"},
+        {"You are a baby dragon, you are a baby dragon.", "I am not.", "Okay", "Okay","Okay"},
+        {"You are a baby dragon, you are a baby dragon.", "I am not.", "Okay", "Okay","Okay"}
+        };
+    }
+    else if (relation_ship == "一般") {
+        return {
+        {"I'm busy, I don't have time for you.", "Okay", "How have you been?", "Can we talk?","Okay"},
+        {"You are a baby dragon, you are a baby dragon.", "I am not.", "Okay", "Okay","Okay"},
+        {"You are a baby dragon, you are a baby dragon.", "I am not.", "Okay", "Okay","Okay"},
+        {"You are a baby dragon, you are a baby dragon.", "I am not.", "Okay", "Okay","Okay"}
+        };
+    }
+    else if (relation_ship == "友好") {
+        return {
+        {"I'm busy, I don't have time for you.", "Okay", "How have you been?", "Can we talk?","Okay"},
+        {"You are a baby dragon, you are a baby dragon.", "I am not.", "Okay", "Okay","Okay"},
+        {"You are a baby dragon, you are a baby dragon.", "I am not.", "Okay", "Okay","Okay"},
+        {"You are a baby dragon, you are a baby dragon.", "I am not.", "Okay", "Okay","Okay"}
+        };
+    }
+    else if (relation_ship == "亲密") {
+        return {
+        {"I'm busy, I don't have time for you.", "Okay", "How have you been?", "Can we talk?","Okay"},
+        {"You are a baby dragon, you are a baby dragon.", "I am not.", "Okay", "Okay","Okay"},
+        {"You are a baby dragon, you are a baby dragon.", "I am not.", "Okay", "Okay","Okay"},
+        {"You are a baby dragon, you are a baby dragon.", "I am not.", "Okay", "Okay","Okay"}
+        };
+    }
 }
 
 // 获取 NPC 大头照路径

@@ -3,8 +3,10 @@
 #include "ui/CocosGUI.h"  
 #include "Item.h"  
 #include "AppDelegate.h"
+#include "NPC.h"
 
 extern Player* player1;
+extern NpcRelationship* npc_relationship;
 
 USING_NS_CC;
 
@@ -90,10 +92,74 @@ void NPCtalkUI::SelectedBox () {
         Selectedbox4->setScale ( scale * 0.5 );
         Selectedbox4->setPosition ( Vec2 ( position.x - visibleSize.width * 0.17 , position.y - visibleSize.height * 0.402 ) );
 
-        this->addChild ( Selectedbox1 , 2 );
-        this->addChild ( Selectedbox2 , 2 );
-        this->addChild ( Selectedbox3 , 2 );
-        this->addChild ( Selectedbox4 , 2 );
+        this->addChild ( Selectedbox1 , 0 );
+        this->addChild ( Selectedbox2 , 0 );
+        this->addChild ( Selectedbox3 , 0 );
+        this->addChild ( Selectedbox4 , 0 );
+
+        // NPC 对话添加
+        std::vector<std::vector<std::string>> npc_Dialog = getDialog(npc->GetName() , NPC_RELATIONSHIP->getRelationshipLevel ("player" , npc->GetName ()));
+        int choose = rand() % npc_Dialog.size();
+        // NPC 对话
+        auto NPC_talk_Label = Label::createWithSystemFont ( npc_Dialog[choose][0] , "fonts/Comic Sans MS.ttf" , 40);
+        NPC_talk_Label->setTextColor ( cocos2d::Color4B::BLACK );
+        NPC_talk_Label->setPosition ( Vec2 ( position.x - visibleSize.width * 0.17 , position.y - visibleSize.height * 0.14 ) );
+        this->addChild ( NPC_talk_Label , 2 );
+        // 四个回答
+        auto Player_talk_Label1 = Label::createWithSystemFont ( npc_Dialog[choose][1] , "fonts/Comic Sans MS.ttf" , 40 );
+        Player_talk_Label1->setTextColor ( cocos2d::Color4B::BLACK );
+        Player_talk_Label1->setPosition ( Vec2 ( position.x - visibleSize.width * 0.17 , position.y - visibleSize.height * 0.21 ) );
+        this->addChild ( Player_talk_Label1 , 2 );
+
+        auto Player_talk_Label2 = Label::createWithSystemFont ( npc_Dialog[choose][2] , "fonts/Comic Sans MS.ttf" , 40 );
+        Player_talk_Label2->setTextColor ( cocos2d::Color4B::BLACK );
+        Player_talk_Label2->setPosition ( Vec2 ( position.x - visibleSize.width * 0.17 , position.y - visibleSize.height * 0.274 ) );
+        this->addChild ( Player_talk_Label2 , 2 );
+
+        auto Player_talk_Label3 = Label::createWithSystemFont ( npc_Dialog[choose][3] , "fonts/Comic Sans MS.ttf" , 40 );
+        Player_talk_Label3->setTextColor ( cocos2d::Color4B::BLACK );
+        Player_talk_Label3->setPosition ( Vec2 ( position.x - visibleSize.width * 0.17 , position.y - visibleSize.height * 0.338 ) );
+        this->addChild ( Player_talk_Label3 , 2 );
+
+        auto Player_talk_Label4 = Label::createWithSystemFont ( npc_Dialog[choose][4] , "fonts/Comic Sans MS.ttf" , 40 );
+        Player_talk_Label4->setTextColor ( cocos2d::Color4B::BLACK );
+        Player_talk_Label4->setPosition ( Vec2 ( position.x - visibleSize.width * 0.17 , position.y - visibleSize.height * 0.402 ) );
+        this->addChild ( Player_talk_Label4 , 2 );
+
+
+        // 鼠标移动事件  
+        auto listener = EventListenerMouse::create ();
+        listener->onMouseMove = [=]( EventMouse* event ) {
+            Vec2 mousePosition = Vec2 ( event->getCursorX () , event->getCursorY () );
+            mousePosition = this->convertToNodeSpace ( mousePosition );
+            // 检查每个 Selectedbox  
+            if (Selectedbox1->getBoundingBox ().containsPoint ( mousePosition )) {
+                Selectedbox1->setLocalZOrder ( 2 ); // 显示在上层  
+            }
+            else {
+                Selectedbox1->setLocalZOrder ( 0 ); // 隐藏在下层  
+            }
+            if (Selectedbox2->getBoundingBox ().containsPoint ( mousePosition )) {
+                Selectedbox2->setLocalZOrder ( 2 );
+            }
+            else {
+                Selectedbox2->setLocalZOrder ( 0 );
+            }
+            if (Selectedbox3->getBoundingBox ().containsPoint ( mousePosition )) {
+                Selectedbox3->setLocalZOrder ( 2 );
+            }
+            else {
+                Selectedbox3->setLocalZOrder ( 0 );
+            }
+            if (Selectedbox4->getBoundingBox ().containsPoint ( mousePosition )) {
+                Selectedbox4->setLocalZOrder ( 2 );
+            }
+            else {
+                Selectedbox4->setLocalZOrder ( 0 );
+            }
+            };
+
+        _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , this );
     }
 }
 
@@ -144,6 +210,7 @@ bool NPCtalkUI::init ( NPC* npc_name ) {
         return false;
     }
     npc = npc_name;
+    NPC_RELATIONSHIP = npc_relationship;
     backgroundcreate ();
     SelectedBox ();
     close ();
