@@ -28,6 +28,8 @@ public:
 
 	~Inventory ();
 
+	bool isupdated = false;//检测背包是否更新过
+
 	//成功添加时返回true,添加失败时返回false
 	bool AddItem ( const Item& item );
 

@@ -19,6 +19,8 @@ public:
 
     void close ();
 
+    void updateCoordinate ( float& x , float& y );
+
     void characterInfo ( const string& name , const string& status , Vec2 Pos_photo);
 private:  
 
