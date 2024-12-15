@@ -37,7 +37,7 @@ public:
     Rect farm_area = Rect(1100, 2500, 150, 300);
 
     // «∞Õ˘–°’Ú
-    Rect town_area = Rect(2700, 1850, 250, 150);
+    Rect town_area = Rect(2500, 1850, 400, 150);
 
    
 private:

@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 #include "Player.h"
 #include "AppDelegate.h"
+#include "mini_bag.h"
 #include "physics/CCPhysicsWorld.h"
 #include "ui/CocosGUI.h"
 
@@ -28,7 +29,9 @@ public:
 
     // 创建房子的区域
     cocos2d::Rect Region_supermarket = Rect(163, 518, 130, 60);
-  
+    cocos2d::Rect Region_forest = Rect(-940, -400, 200, 110);
+    cocos2d::Rect Region_beach = Rect(490, -750, 50, 100);
+
 
 private:
 
@@ -56,6 +59,9 @@ private:
 
     bool isEnterKeyPressed = false;
 
+    bool isEscKeyPressed = false;
+
+   
 
 };
 

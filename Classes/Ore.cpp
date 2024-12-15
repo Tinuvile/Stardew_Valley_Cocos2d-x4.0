@@ -8,7 +8,7 @@ Ore::Ore(const std::string& ore_name, const std::string& initial_pic,
 
 Ore::Ore(const Ore& other)
 	:Item(other), mining_pic(other.mining_pic),
-	mining_day(0), available(true), position(100,100),recover_time(other.recover_time) {
+	mining_day(0), available(true), position(other.position),recover_time(other.recover_time) {
 }
 
 

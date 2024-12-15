@@ -228,7 +228,7 @@ void farm::AllInitialize_crop() {
         if (crop->GetPhase() == Phase::MATURE) {
             auto test = Sprite::create(crop->mature_pic);
             this->addChild(test, 15 - nums / 19);
-            test->setPosition(545 + ((nums % 19) - 2) * 48, 910 - ((nums / 19) - 1) * 48);
+            test->setPosition(545 + ((nums % 19) - 2) * 48, 910 - ((nums / 19) - 1) * 48); 
             test->setScale(1.9f);
         }
         else if (crop->GetPhase() == Phase::GROWING) {
@@ -398,25 +398,49 @@ void farm::checkPlayerPosition()
                     Crop_information.push_back(cropbasicinformation[TypeName].GetCropCopy());
                     Crop_information.back()->plant_day = season[Season] * 7 + day;
                     Crop_information.back()->nums = nums;
-                    // 初始设置：设置第一个图片并放大
-                    player1->setTexture("character1/player_plant1.png");
-                    player1->setScale(2.5f);
 
-                    // 延迟0.3秒后切换到第二个图片
-                    player1->scheduleOnce([=](float dt) {
-                        player1->setTexture("character1/player_plant2.png");  // 更换为player_plant2
-                        player1->setScale(2.7f);
-                        }, 0.15f, "change_image1_key");
+                    if (player1->pic_path == "character1/player_right3.png") {
+                        // 初始设置：设置第一个图片并放大
+                        player1->setTexture("character1/player_plant3.png");
+                        player1->setScale(2.5f);
 
-                    // 延迟0.6秒后切换到第三个图片
-                    player1->scheduleOnce([=](float dt) {
-                        player1->setTexture("character1/player_left3.png"); // 更换为player_left3
-                        player1->setScale(1.5f);
-                        auto temp = Sprite::create(Crop_information.back()->initial_pic);
-                        this->addChild(temp, 15 - nums / 19);
-                        temp->setPosition(500 + ((nums % 19) - 1) * 48, 910 - ((nums / 19) - 1) * 48);
-                        temp->setScale(2.1f);
-                        }, 0.35f, "change_image2_key");
+                        // 延迟0.3秒后切换到第二个图片
+                        player1->scheduleOnce([=](float dt) {
+                            player1->setTexture("character1/player_plant4.png");  // 更换为player_plant2
+                            player1->setScale(2.7f);
+                            }, 0.15f, "change_image1_key");
+
+                        // 延迟0.6秒后切换到第三个图片
+                        player1->scheduleOnce([=](float dt) {
+                            player1->setTexture("character1/player_right3.png"); // 更换为player_left3
+                            player1->setScale(1.5f);
+                            auto temp = Sprite::create(Crop_information.back()->initial_pic);
+                            this->addChild(temp, 15 - nums / 19);
+                            temp->setPosition(500 + ((nums % 19) - 1) * 48, 910 - ((nums / 19) - 1) * 48);
+                            temp->setScale(2.1f);
+                            }, 0.35f, "change_image2_key");
+                    }
+                    else {
+                        // 初始设置：设置第一个图片并放大
+                        player1->setTexture("character1/player_plant1.png");
+                        player1->setScale(2.5f);
+
+                        // 延迟0.3秒后切换到第二个图片
+                        player1->scheduleOnce([=](float dt) {
+                            player1->setTexture("character1/player_plant2.png");  // 更换为player_plant2
+                            player1->setScale(2.7f);
+                            }, 0.15f, "change_image1_key");
+
+                        // 延迟0.6秒后切换到第三个图片
+                        player1->scheduleOnce([=](float dt) {
+                            player1->setTexture("character1/player_left3.png"); // 更换为player_left3
+                            player1->setScale(1.5f);
+                            auto temp = Sprite::create(Crop_information.back()->initial_pic);
+                            this->addChild(temp, 15 - nums / 19);
+                            temp->setPosition(500 + ((nums % 19) - 1) * 48, 910 - ((nums / 19) - 1) * 48);
+                            temp->setScale(2.1f);
+                            }, 0.35f, "change_image2_key");
+                    }
 
                 }
 
@@ -432,26 +456,51 @@ void farm::checkPlayerPosition()
                     // 改为已浇水
                     it->watered = true;
 
-                    // 初始设置：设置第一个图片并放大
-                    player1->setTexture("character1/player_water2.png");
-                    player1->setScale(1.7f);
-
-                    // 延迟0.3秒后切换到第二个图片
-                    player1->scheduleOnce([=](float dt) {
-                        player1->setTexture("character1/player_water1.png");  // 更换为player_water1
+                    if (player1->pic_path == "character1/player_left3.png") {
+                        // 初始设置：设置第一个图片并放大
+                        player1->setTexture("character1/player_water4.png");
                         player1->setScale(1.7f);
-                        }, 0.15f, "change_image1_key");
 
-                    // 延迟0.6秒后切换到第三个图片
-                    player1->scheduleOnce([=](float dt) {
-                        player1->setTexture("character1/player_right3.png"); // 更换为player_right3
-                        player1->setScale(1.5f);
-                        // 恢复角色其他的动作权限
-                        player1->moveDown = true;
-                        player1->moveLeft = true;
-                        player1->moveUp = true;
-                        player1->moveRight = true;
-                        }, 0.35f, "change_image2_key");
+                        // 延迟0.3秒后切换到第二个图片
+                        player1->scheduleOnce([=](float dt) {
+                            player1->setTexture("character1/player_water3.png");  // 更换为player_water1
+                            player1->setScale(1.7f);
+                            }, 0.15f, "change_image1_key");
+
+                        // 延迟0.6秒后切换到第三个图片
+                        player1->scheduleOnce([=](float dt) {
+                            player1->setTexture("character1/player_left3.png"); // 更换为player_right3
+                            player1->setScale(1.5f);
+                            // 恢复角色其他的动作权限
+                            player1->moveDown = true;
+                            player1->moveLeft = true;
+                            player1->moveUp = true;
+                            player1->moveRight = true;
+                            }, 0.35f, "change_image2_key");
+
+                    }
+                    else {
+                        // 初始设置：设置第一个图片并放大
+                        player1->setTexture("character1/player_water2.png");
+                        player1->setScale(1.7f);
+
+                        // 延迟0.3秒后切换到第二个图片
+                        player1->scheduleOnce([=](float dt) {
+                            player1->setTexture("character1/player_water1.png");  // 更换为player_water1
+                            player1->setScale(1.7f);
+                            }, 0.15f, "change_image1_key");
+
+                        // 延迟0.6秒后切换到第三个图片
+                        player1->scheduleOnce([=](float dt) {
+                            player1->setTexture("character1/player_right3.png"); // 更换为player_right3
+                            player1->setScale(1.5f);
+                            // 恢复角色其他的动作权限
+                            player1->moveDown = true;
+                            player1->moveLeft = true;
+                            player1->moveUp = true;
+                            player1->moveRight = true;
+                            }, 0.35f, "change_image2_key");
+                    }
 
                 }
             }
@@ -551,6 +600,20 @@ void farm::checkPlayerPosition()
             }
             player1->removeFromParent();
             auto NextSence = Cave::create();
+            Director::getInstance()->replaceScene(NextSence);
+        }
+    }
+
+    // 是否进入森林
+    if (forest_area.containsPoint(playerPos)) {
+        if (isEnterKeyPressed) {
+            for (auto& pair : F_lastplace) {
+                if (pair.first.first == "forest") {  // 检查 bool 值是否为 true
+                    pair.second = true;
+                }
+            }
+            player1->removeFromParent();
+            auto NextSence = Forest::create();
             Director::getInstance()->replaceScene(NextSence);
         }
     }

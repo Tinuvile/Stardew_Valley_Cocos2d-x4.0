@@ -21,8 +21,9 @@ USING_NS_CC;  // 使用cocos2d的命名空间
 
 /******************************** 全局变量声明区 ****************************************/
 // 在此文件中定义并初始化全局变量
-int remainingTime = 60000;
+int remainingTime = 0;
 int day = 1;
+int GoldAmount = 4000;
 bool frombed = false;
 bool IsNextDay = false;
 
@@ -40,14 +41,17 @@ std::vector<std::shared_ptr<Tree>> Tree_information;
 std::map<std::string , Crop> cropbasicinformation;
 std::map<std::pair<std::string , Vec2> , bool> T_lastplace;
 std::map<std::pair<std::string , Vec2> , bool> F_lastplace;
+std::map<std::pair<std::string , Vec2>, bool> W_lastplace;
 
 // 全局指针变量定义
 Player* player1 = nullptr;
+mini_bag* miniBag = nullptr;
 Town* town = nullptr;
 supermarket* seedshop = nullptr;
 farm* Farm = nullptr;
 Myhouse* myhouse = nullptr;
 Inventory* inventory = new Inventory ();
+NpcRelationship* npc_relationship = new NpcRelationship();
 std::vector<std::pair<Rect , bool>> barn_space;
 std::vector<Livestock*> livestocks;
 /****************************************************************************************/
@@ -124,13 +128,23 @@ void AppDelegate::runScene ( cocos2d::Director* director ) {
    /* auto barn = Barn::create ();
     director->runWithScene ( barn );*/
 
-    // 运行农场场景
-    /*auto test = Cave::create();
+    // 运行家的场景
+    /*auto test = Myhouse::create();
     director->runWithScene(test); */
 
-    // 运行森林
-    auto test = Forest::create();
+    // 运行小镇的场景
+    auto test = Town::create();
     director->runWithScene(test);
+
+    // 运行商店的场景
+    /*auto test = supermarket::create();
+    director->runWithScene(test);*/
+
+
+
+    // 运行森林
+    /*auto test = Forest::create();
+    director->runWithScene(test);*/
 
     //开局UI运行
     //director->runWithScene ( BeginScene::create () );
@@ -180,11 +194,34 @@ void AppDelegate::Initialize () {
     Tree_information.push_back(tree.GetTreeCopy());
 
     // 初始化小镇各地址坐标
-    std::pair<std::string , Vec2> key = { "initiation",Vec2 ( 350,350 ) };
+    std::pair<std::string , Vec2> key = { "initiation",Vec2 (-925,650) };
     T_lastplace.insert ( std::make_pair ( key , true ) );
     key = { "seedshop",Vec2 ( 230,470 ) };
     T_lastplace.insert ( std::make_pair ( key , false ) );
+    key = { "forest",Vec2(-925,650) };
+    T_lastplace.insert(std::make_pair(key, false));
 
+    // 初始化农场各地址坐标
+    key = { "initiation",Vec2(70, 920) };
+    F_lastplace.insert(std::make_pair(key, true));
+    key = { "myhouse",Vec2(70, 920) };
+    F_lastplace.insert(std::make_pair(key, false));
+    key = { "barn",Vec2(20, 170) };
+    F_lastplace.insert(std::make_pair(key, false));
+    key = { "forest",Vec2(-740,-330) };
+    F_lastplace.insert(std::make_pair(key, false));
+    key = { "cave",Vec2(635, 1185) };
+    F_lastplace.insert(std::make_pair(key, false));
+    key = { "beach",Vec2(500, -750) };
+    F_lastplace.insert(std::make_pair(key, false));
+
+    // 初始化森林各地址坐标
+    key = { "initiation",Vec2(1150,2650) };
+    W_lastplace.insert(std::make_pair(key, true));
+    key = { "town",Vec2(2600, 1900) };
+    W_lastplace.insert(std::make_pair(key, false));
+    key = { "farm",Vec2(1150, 2650) };
+    W_lastplace.insert(std::make_pair(key, false));
 
     // 初始化季节
     season.insert ( { "Spring", 1 } );
