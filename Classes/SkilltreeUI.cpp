@@ -20,21 +20,46 @@ static void problemLoading ( const char* filename )
 
 void SkillTreeUI::updateCoordinate ( float& x , float& y ) {
     Vec2 position = player1->getPosition ();
-    if (x <= -170) {
-        x = -170;
+    float  Leftboundary = -10000.0f , rightboundary = 10000.0f , upperboundary = 10000.0f , lowerboundary = 10000.0f;
+    if (SceneName == "Town") {
+        Leftboundary = -170.0f;
+        rightboundary = 1773.0f;
+        upperboundary = 1498.0f;
+        lowerboundary = -222.0f;
     }
-    else if (x >= 1773) {
-        x = 1773;
+    else if (SceneName == "Cave") {
+        Leftboundary = 786.0f;
+        rightboundary = 817.0f;
+        upperboundary = 808.0f;
+        lowerboundary = 460.0f;
+    }
+    else if (SceneName == "Beach") {
+        Leftboundary = -315.0f;
+        rightboundary = 20000.0f;
+        upperboundary = 920.0f;
+        lowerboundary = -850.0f;
+    }
+    else if (SceneName == "Forest") {
+        Leftboundary = -600.0f;
+        rightboundary = 2197.0f;
+        upperboundary = 2200.0f;
+        lowerboundary = -850.0f;
+    }
+    if (x <= Leftboundary) {
+        x = Leftboundary;
+    }
+    else if (x >= rightboundary) {
+        x = rightboundary;
     }
     else {
         x = position.x;
     }
 
-    if (y >= 1498) {
-        y = 1498;
+    if (y >= upperboundary) {
+        y = upperboundary;
     }
-    else if (y <= -222) {
-        y = -222;
+    else if (y <= lowerboundary) {
+        y = lowerboundary;
     }
     else {
         y = position.y;
@@ -170,15 +195,17 @@ void SkillTreeUI::Buttons_switching () {
         //CCLOG ( "X:%f,Y:%f" , event->getCursorX () , event->getCursorY () );
         if (bagkey->getBoundingBox ().containsPoint ( mousePos )) {
             // ÒÆ³ýµ±Ç°µÄLayer
+            std::string nowScene = SceneName;
             this->removeFromParent ();
-            Director::getInstance ()->getRunningScene ()->addChild ( InventoryUI::create ( inventory ) , 10 );
+            Director::getInstance ()->getRunningScene ()->addChild ( InventoryUI::create ( inventory , nowScene ) , 20 );
         }
         else if (Skillkey->getBoundingBox ().containsPoint ( mousePos )) {
 
         }
         else if (intimacykey->getBoundingBox ().containsPoint ( mousePos )) {
+            std::string nowScene = SceneName;
             this->removeFromParent ();
-            Director::getInstance ()->getRunningScene ()->addChild ( intimacyUI::create () , 10 );
+            Director::getInstance ()->getRunningScene ()->addChild ( intimacyUI::create ( nowScene ) , 20 );
         }
         };
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , this );
@@ -196,10 +223,11 @@ void SkillTreeUI::close () {
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listenerClose , this );
 }
 
-bool SkillTreeUI::init () {
+bool SkillTreeUI::init ( std::string sceneName ) {
     if (!Layer::init ()) {
         return false;
     }
+    SceneName = sceneName;
     backgroundcreate ();
 
     Buttons_switching ();
@@ -207,9 +235,9 @@ bool SkillTreeUI::init () {
     return true;
 }
 
-SkillTreeUI* SkillTreeUI::create () {
+SkillTreeUI* SkillTreeUI::create ( std::string sceneName ) {
     SkillTreeUI* ret = new SkillTreeUI ();
-    if (ret && ret->init ()) {
+    if (ret && ret->init ( sceneName )) {
         ret->autorelease ();
         return ret;
     }

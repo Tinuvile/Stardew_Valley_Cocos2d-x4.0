@@ -18,21 +18,52 @@ static void problemLoading ( const char* filename )
 
 void intimacyUI::updateCoordinate ( float& x , float& y ) {
     Vec2 position = player1->getPosition ();
-    if (x <= -170) {
-        x = -170;
+    float  Leftboundary = -10000.0f , rightboundary = 10000.0f , upperboundary = 10000.0f , lowerboundary = 10000.0f;
+    if (SceneName == "Town") {
+        Leftboundary = -170.0f;
+        rightboundary = 1773.0f;
+        upperboundary = 1498.0f;
+        lowerboundary = -222.0f;
     }
-    else if (x >= 1773) {
-        x = 1773;
+    else if (SceneName == "Cave") {
+        Leftboundary =  786.0f;
+        rightboundary = 817.0f;
+        upperboundary = 808.0f;
+        lowerboundary = 460.0f;
+    }
+    else if (SceneName == "Beach") {
+        Leftboundary = -315.0f;
+        rightboundary = 20000.0f;
+        upperboundary = 920.0f;
+        lowerboundary = -850.0f;
+    }
+    else if (SceneName == "Forest") {
+        Leftboundary = -600.0f;
+        rightboundary = 2197.0f;
+        upperboundary = 2200.0f;
+        lowerboundary = -850.0f;
+    }
+    else if (SceneName == "fram") {
+        Leftboundary = 637.0f;
+        rightboundary = 960.0f;
+        upperboundary = 777.0f;
+        lowerboundary = 500.0f;
+    }
+    if (x <= Leftboundary) {
+        x = Leftboundary;
+    }
+    else if (x >= rightboundary){
+        x = rightboundary;
     }
     else {
         x = position.x;
     }
 
-    if (y >= 1498) {
-        y = 1498;
+    if (y >= upperboundary) {
+        y = upperboundary;
     }
-    else if (y <= -222) {
-        y = -222;
+    else if (y <= lowerboundary) {
+        y = lowerboundary;
     }
     else {
         y = position.y;
@@ -125,6 +156,7 @@ void intimacyUI::characterInfo ( const string& name , const string& status , Vec
     NameLabel->setPosition ( Vec2 ( Pos_photo.x + visibleSize.width * 0.1 , Pos_photo.y ) );
     this->addChild ( NameLabel , 2 );
 }
+
 void intimacyUI::Buttons_switching () {
     Vec2 position = player1->getPosition ();
     float currentx = position.x , currenty = position.y;
@@ -167,12 +199,14 @@ void intimacyUI::Buttons_switching () {
         //CCLOG ( "X:%f,Y:%f" , event->getCursorX () , event->getCursorY () );
         if (bagkey->getBoundingBox ().containsPoint ( mousePos )) {
             // ÒÆ³ýµ±Ç°µÄLayer
+            std::string nowScene = SceneName;
             this->removeFromParent ();
-            Director::getInstance ()->getRunningScene ()->addChild ( InventoryUI::create ( inventory ) , 10 );
+            Director::getInstance ()->getRunningScene ()->addChild ( InventoryUI::create ( inventory , nowScene ) , 20 );
         }
         else if (Skillkey->getBoundingBox ().containsPoint ( mousePos )) {
+            std::string nowScene = SceneName;
             this->removeFromParent ();
-            Director::getInstance ()->getRunningScene ()->addChild ( SkillTreeUI::create () , 10 );
+            Director::getInstance ()->getRunningScene ()->addChild ( SkillTreeUI::create ( nowScene ) , 20 );
         }
         else if (intimacykey->getBoundingBox ().containsPoint ( mousePos )) {
         }
@@ -192,19 +226,20 @@ void intimacyUI::close () {
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listenerClose , this );
 }
 
-bool intimacyUI::init () {
+bool intimacyUI::init ( std::string sceneName ) {
     if (!Layer::init ()) {
         return false;
     }
+    SceneName = sceneName;
     backgroundcreate ();
     Buttons_switching ();
     close ();
     return true;
 }
 
-intimacyUI* intimacyUI::create () {
+intimacyUI* intimacyUI::create ( std::string sceneName ) {
     intimacyUI* ret = new intimacyUI ();
-    if (ret && ret->init ()) {
+    if (ret && ret->init ( sceneName )) {
         ret->autorelease ();
         return ret;
     }

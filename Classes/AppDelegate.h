@@ -32,6 +32,7 @@
 #include "Chicken.h"
 #include "Sheep.h"
 #include <memory>
+#include "Beach.h"
 #define Daytime 43200
 
 USING_NS_CC;

@@ -59,9 +59,6 @@ private:
 
     bool isEnterKeyPressed = false;
 
-    bool isEscKeyPressed = false;
-
-   
 
 };
 

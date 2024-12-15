@@ -159,6 +159,24 @@ bool Cave::init()
             else if (keyCode == EventKeyboard::KeyCode::KEY_M) {
                 isMKeyPressed = true;
             }
+            else if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
+                static int isOpen = 0;
+                static InventoryUI* currentInventoryUI = nullptr;  // 保存当前显示的 InventoryUI  
+                // 如果当前没有打开 InventoryUI，则打开它  
+                if (currentInventoryUI == nullptr || isOpen == 0) {
+                    isOpen = 1;
+                    CCLOG ( "Opening inventory." );
+                    currentInventoryUI = InventoryUI::create ( inventory , "Cave" );
+                    this->addChild ( currentInventoryUI , 20 );  // 将 InventoryUI 添加到 Cave 的上层  
+                }
+                // 如果已经打开 InventoryUI，则关闭它  
+                else {
+                    isOpen = 0;
+                    CCLOG ( "Closing inventory." );
+                    this->removeChild ( currentInventoryUI , true );  // 从当前场景中移除 InventoryUI  
+                    currentInventoryUI = nullptr;  // 重置指针  
+                }
+            }
         };
 
     listenerWithPlayer->onKeyReleased = [this](EventKeyboard::KeyCode keyCode, Event* event)
