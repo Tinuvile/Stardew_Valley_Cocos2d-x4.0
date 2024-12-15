@@ -1,10 +1,5 @@
-#ifndef __NPC_H_  
-#define __NPC_H_  
- 
-#include <string>  
-#include <vector>
+#pragma once
 #include "cocos2d.h" 
-#include "Town.h"
 
 // NPC 角色类  
 class NPC : public cocos2d::Node {
@@ -16,7 +11,7 @@ public:
     // 获取 NPC 的精灵  
     cocos2d::Sprite* GetSprite () const { return sprite; }
 
-    // NPC 的名称  
+    // NPC 的名称
     const std::string& GetName () const { return name; }
 
     // NPC 的位置  
@@ -56,7 +51,11 @@ protected:
 
     std::string currentAnimationName; // 跟踪当前动画名称
 
-    cocos2d::Vec2 currentDirection; // 当前移动方向  
+    cocos2d::Vec2 currentDirection; // 当前移动方向
 };
 
-#endif // __NPC_H_
+std::vector<std::vector<std::string>> getAbigailAnimations ();
+
+std::vector<std::vector<std::string>> getDialog ( std::string npc , std::string relation_ship );
+
+std::string getNPCportraits ( std::string name , std::string status );

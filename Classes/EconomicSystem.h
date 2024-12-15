@@ -10,7 +10,7 @@ using namespace std;
 class EconomicSystem {
 public:
     // 构造函数和析构函数  
-    EconomicSystem ( Inventory* mybag , Inventory* goods );
+    EconomicSystem ( Inventory* mybag , Inventory* goods);
     ~EconomicSystem ();
 
     // 增加金币的函数  
@@ -29,8 +29,8 @@ public:
     void sellItem ( const string& itemName , int count = 1 );
 
 private:
-    // 保存金币数量  
-    int goldAmount; 
+    // 保存金币数量
+    int goldAmount;
 
     Inventory* _mybag; // 指向自己背包实例的指针  
 

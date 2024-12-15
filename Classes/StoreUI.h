@@ -1,10 +1,11 @@
-#ifndef __StoreUI_H_  
-#define __StoreUI_H_ 
-
+#pragma once
 // StoreUI.h    
 #include "cocos2d.h"  
 #include "Inventory.h"  
 #include "AppDelegate.h"
+#include "EconomicSystem.h"
+
+USING_NS_CC;
 
 class StoreUI : public cocos2d::Layer {
 public:
@@ -22,6 +23,8 @@ public:
     void moneyDisplay ();
 
     void SliderDisplay ();
+
+    void updateCoordinate ( float& x , float& y );
 private:
     Inventory* _mybag; // 指向自己背包实例的指针  
 
@@ -33,7 +36,11 @@ private:
 
     int _selectedSlot; // 当前选中的槽位  
 
-    void onItemSlotClicked ( cocos2d::Ref* sender ); // 物品槽的点击事件处理  
-};
+    void onItemSlotClicked ( cocos2d::Ref* sender ); // 物品槽的点击事件处理 
 
-#endif // __StoreUI_H_
+    bool isClick = false;
+
+    shared_ptr<Item> chosen_Item = nullptr;
+
+    std::shared_ptr<EconomicSystem> economicSystem;
+};

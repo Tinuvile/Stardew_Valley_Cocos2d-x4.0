@@ -47,6 +47,9 @@ public:
   
     // 可以进入山洞的区域
     Rect cave_area = Rect(635, 1185, 90, 40);
+
+    // 可以进入森林的区域
+    Rect forest_area = Rect(750, -70, 100, 50);
   
     // 恢复种植
     void AllInitialize_crop(); 

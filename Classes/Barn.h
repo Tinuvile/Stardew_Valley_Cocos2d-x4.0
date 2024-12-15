@@ -6,7 +6,13 @@
 //#include "Myhouse.h"
 #include "Player.h"
 #include "AppDelegate.h"
+#include "Sheep.h"
+#include "physics/CCPhysicsWorld.h"
+#include "ui/CocosGUI.h"
 
+
+
+USING_NS_CC;
 
 const int kMaxLivestock = 12;
 
@@ -31,6 +37,7 @@ public:
     //// Àë¿ªÐóÅïµÄÇøÓò
     //Rect Out_Barn = Rect(915, 70, 150, 90);
 
+    void GetProduction ( cocos2d::EventMouse* event );
 
 private:
 
@@ -53,7 +60,7 @@ private:
 
     bool isEnterKeyPressed = false;
     
-
+    
 
 };
 

@@ -1,15 +1,16 @@
-// InventoryUI.h  
+// mini_bag.h
 #pragma once  
 #include "cocos2d.h"  
 #include "Inventory.h"  
 #include "AppDelegate.h"
-#include "intimacyUI.h"
-
-class InventoryUI : public cocos2d::Layer {
+class mini_bag : public cocos2d::Layer {
 public:
-    virtual bool init ( Inventory* inventory );
 
-    static InventoryUI* create ( Inventory* inventory );
+ 
+
+    virtual bool init ( Inventory* inventory,std::string& WhichScene );
+
+    static mini_bag* create ( Inventory* inventory,std::string& WhichScene );
 
     void backgroundcreate ();
 
@@ -17,9 +18,8 @@ public:
 
     void updateDisplay (); // 更新显示内容  
 
-    void Buttons_switching ();
+    void updateCoordinate ( float& x , float& y);
 
-    void updateCoordinate ( float &x , float &y );
 private:
     Inventory* _inventory; // 指向 Inventory 实例的指针  
 
@@ -33,6 +33,7 @@ private:
 
     bool isClick = false;  // 标志，表示是否被点击
 
-    Sprite* currentItemSprite = nullptr; // 标识当前选择的物品
+    cocos2d::Sprite* currentItemSprite = nullptr; // 标识当前选择的物品
 
+    std::string whichScene;
 };

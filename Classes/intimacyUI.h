@@ -1,17 +1,13 @@
 //intimacyUI.h
 //人物亲密度界面
-#ifndef __INTIMACYUI_H_  
-#define __INTIMACYUI_H_  
-
+#pragma once
 #include "cocos2d.h"  
 #include "NpcRelationship.h"  
 #include "AppDelegate.h"
 #include "InventoryUI.h"
+#include <NPC.h>
 
-extern Inventory* inventory;
-
-class intimacyUI : public cocos2d::Layer
-{
+class intimacyUI : public cocos2d::Layer {
 public:
     virtual bool init ();
 
@@ -21,12 +17,12 @@ public:
 
     void Buttons_switching ();
 
+    void close ();
 
-    //滚动人物框
-    void charactersSlider ();
+    void updateCoordinate ( float& x , float& y );
 
+    void characterInfo ( const string& name , const string& status , Vec2 Pos_photo);
 private:  
-    void onItemSlotClicked ( cocos2d::Ref* sender ); // 物品槽的点击事件处理  
+
 };
-    
-#endif // __INTIMACYUI_H_ 
+                            

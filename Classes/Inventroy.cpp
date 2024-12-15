@@ -119,6 +119,6 @@ void Inventory::DisplayPackageInCCLOG () {
 		std::string name = it.second.first->GetName ();
 		int num = it.second.second;
 		int value = it.second.first->GetValue ();
-		CCLOG ( "pos: %d  name: %s num: %d value: %d\n" , position , name.c_str() , num , value);
+		CCLOG ( "pos: %d  name: %s num: %d value: %d\n" , position , name , num ,value);
 	}
 }

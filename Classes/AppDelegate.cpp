@@ -27,31 +27,39 @@ USING_NS_CC;  // 使用cocos2d的命名空间
 
 /******************************** 全局变量声明区 ****************************************/
 // 在此文件中定义并初始化全局变量
-int remainingTime = 60000;
+int remainingTime = 0;
 int day = 1;
-//CropBasicInformation WHEAT ( "crop/wheat1.png" , "crop/wheat2.png" , "crop/wheat3.png" , "All" );
-//CropBasicInformation CORN ( "crop/corn1.png" , "crop/corn2.png" , "crop/corn3.png" , "Spring" );
-//CropBasicInformation POTATO ( "crop/potato1.png" , "crop/potato2.png" , "crop/potato3.png" , "All" );
-//CropBasicInformation PUMPKIN ( "crop/pumpkin1.png" , "crop/pumpkin2.png" , "crop/pumpkin3.png" , "Summer" );
-//CropBasicInformation BLUEBERRY ( "crop/blueberry1.png" , "crop/blueberry2.png" , "crop/blueberry3.png" , "Autumn" );
-//Crop wheat("wheat", "Unkown", "All");   
-//Crop corn("corn", "Unkown", "Spring", Phase::SEED, 50, 0, false, 6);
-//Crop potato("potato", "Unkown", "All", Phase::SEED, 30, 0, false, 4);
-//Crop pumpkin("pumpkin", "Unkown", "Autumn", Phase::SEED, 70, 0, false, 6);
-//Crop blueberry("blueberry", "Unkown", "Summer", Phase::SEED, 100, 0, false, 7);
+int GoldAmount = 4000;
+bool frombed = false;
+bool IsNextDay = false;
+
+Crop wheat ( "wheat" , "crop/wheat1.png" , "crop/wheat2.png" , "crop/wheat3.png" , "All" , Phase::SEED , 50 , 0 , false , 4 );
+Crop corn ( "corn" , "crop/corn1.png" , "crop/corn2.png" , "crop/corn3.png" , "Spring" , Phase::SEED , 50 , 0 , false , 6 );
+Crop potato ( "potato" , "crop/potato1.png" , "crop/potato2.png" , "crop/potato3.png" , "All" , Phase::SEED , 30 , 0 , false , 4 );
+Crop pumpkin ( "pumpkin" , "crop/pumpkin1.png" , "crop/pumpkin2.png" , "crop/pumpkin3.png" , "Autumn" , Phase::SEED , 70 , 0 , false , 6 );
+Crop blueberry ( "blueberry" , "crop/blueberry1.png" , "crop/blueberry2.png" , "crop/blueberry3.png" , "Summer" , Phase::SEED , 100 , 0 , false , 7 );
+
 std::string Season = "Spring";
 std::map<std::string , int> season;
-// std::vector<std::shared_ptr<Crop>> Crop_information;
-//std::map<std::string , CropBasicInformation> cropbasicinformation;
+std::vector<std::shared_ptr<Crop>> Crop_information;
+std::vector<std::shared_ptr<Ore>> Ore_information;
+std::vector<std::shared_ptr<Tree>> Tree_information;
+std::map<std::string , Crop> cropbasicinformation;
+std::map<std::pair<std::string , Vec2> , bool> T_lastplace;
+std::map<std::pair<std::string , Vec2> , bool> F_lastplace;
+std::map<std::pair<std::string , Vec2>, bool> W_lastplace;
+
 // 全局指针变量定义
 Player* player1 = nullptr;
-//Town* town = nullptr;
-//supermarket* seedshop = nullptr;
+mini_bag* miniBag = nullptr;
+Town* town = nullptr;
+supermarket* seedshop = nullptr;
 farm* Farm = nullptr;
 std::map<std::pair<std::string , Vec2> , bool> T_lastplace;
 
 Inventory* inventory = new Inventory ();
-std::vector<std::pair<Rect,bool>> barn_space;
+NpcRelationship* npc_relationship = new NpcRelationship();
+std::vector<std::pair<Rect , bool>> barn_space;
 std::vector<Livestock*> livestocks;
 /****************************************************************************************/
 
@@ -131,14 +139,23 @@ void AppDelegate::runScene(cocos2d::Director* director) {
     auto beach = Beach::create ();
     director->runWithScene ( beach );
 
-    /*town = Town::create();*/
+    // 运行家的场景
+    /*auto test = Myhouse::create();
+    director->runWithScene(test); */
 
-    ////运行畜棚场景
-    //auto barn = Barn::create ();
-    //director->runWithScene ( barn );
+    // 运行小镇的场景
+    auto test = Town::create();
+    director->runWithScene(test);
 
-    // 运行小镇场景
-    //director->runWithScene ( town );
+    // 运行商店的场景
+    /*auto test = supermarket::create();
+    director->runWithScene(test);*/
+
+
+
+    // 运行森林
+    /*auto test = Forest::create();
+    director->runWithScene(test);*/
 
     //开局UI运行
     //director->runWithScene ( BeginScene::create () );
@@ -156,10 +173,35 @@ void AppDelegate::Initialize () {
     //cropbasicinformation.insert ( { "pumpkin", PUMPKIN } );
     //cropbasicinformation.insert ( { "blueberry", BLUEBERRY } );
     // 初始化小镇各地址坐标
-    std::pair<std::string , Vec2> key = { "initiation",Vec2 ( 350,350 ) };
+    std::pair<std::string , Vec2> key = { "initiation",Vec2 (-925,650) };
     T_lastplace.insert ( std::make_pair ( key , true ) );
     key = { "seedshop",Vec2 ( 230,470 ) };
     T_lastplace.insert ( std::make_pair ( key , false ) );
+    key = { "forest",Vec2(-925,650) };
+    T_lastplace.insert(std::make_pair(key, false));
+
+    // 初始化农场各地址坐标
+    key = { "initiation",Vec2(70, 920) };
+    F_lastplace.insert(std::make_pair(key, true));
+    key = { "myhouse",Vec2(70, 920) };
+    F_lastplace.insert(std::make_pair(key, false));
+    key = { "barn",Vec2(20, 170) };
+    F_lastplace.insert(std::make_pair(key, false));
+    key = { "forest",Vec2(-740,-330) };
+    F_lastplace.insert(std::make_pair(key, false));
+    key = { "cave",Vec2(635, 1185) };
+    F_lastplace.insert(std::make_pair(key, false));
+    key = { "beach",Vec2(500, -750) };
+    F_lastplace.insert(std::make_pair(key, false));
+
+    // 初始化森林各地址坐标
+    key = { "initiation",Vec2(1150,2650) };
+    W_lastplace.insert(std::make_pair(key, true));
+    key = { "town",Vec2(2600, 1900) };
+    W_lastplace.insert(std::make_pair(key, false));
+    key = { "farm",Vec2(1150, 2650) };
+    W_lastplace.insert(std::make_pair(key, false));
+
     // 初始化季节
     season.insert ( { "Spring", 1 } );
     season.insert ( { "Summer", 2 } );

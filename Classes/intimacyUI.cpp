@@ -2,28 +2,53 @@
 #include "intimacyUI.h"  
 #include "ui/CocosGUI.h"  
 #include "Item.h"  
-#include "AppDelegate.h"
 
 extern Player* player1;
 extern Inventory* inventory;
 
-USING_NS_CC;
 const int characternum = 5;
+
+USING_NS_CC;
+
 static void problemLoading ( const char* filename )
 {
     printf ( "Error while loading: %s\n" , filename );
     printf ( "Depending on how you compiled you might have to add 'Resources/' in front of filenames in CreateCharacterScene.cpp\n" );
 }
 
-void intimacyUI::backgroundcreate () {
-    CCLOG ( "yes" );
+void intimacyUI::updateCoordinate ( float& x , float& y ) {
     Vec2 position = player1->getPosition ();
-    CCLOG ( "X%f Y%f" , position.x , position.y );
+    if (x <= -117) {
+        x = -117;
+    }
+    else if (x >= 1773) {
+        x = 1773;
+    }
+    else {
+        x = position.x;
+    }
+
+    if (y >= 1498) {
+        y = 1498;
+    }
+    else if (y <= -222) {
+        y = -222;
+    }
+    else {
+        y = position.y;
+    }
+}
+
+void intimacyUI::backgroundcreate () {
+    Vec2 position = player1->getPosition ();
+    float currentx = position.x , currenty = position.y;
+    updateCoordinate ( currentx , currenty );
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     // 创建一个半透明的黑色遮罩
     auto darkLayer = cocos2d::LayerColor::create ( cocos2d::Color4B ( 0 , 0 , 0 , 120 ) , 5 * visibleSize.width , 5 * visibleSize.height );  // 黑色，透明度为120
-    darkLayer->setPosition ( position - visibleSize / 2 );// 设置遮罩层的位置
+    darkLayer->setPosition ( Vec2 ( currentx , currenty ) - visibleSize / 2 );// 设置遮罩层的位置
     this->addChild ( darkLayer , 0 );
+    //大框架
     auto IntimacyFace = Sprite::create ( "UIresource/qinmidu/intimacyDisplay.png" );
     IntimacyFace->setTag ( 101 );
     if (IntimacyFace == nullptr)
@@ -41,19 +66,17 @@ void intimacyUI::backgroundcreate () {
         // 选择最小的缩放比例，以保证图片完全显示在屏幕上且不变形
         float scale = std::min ( scaleX , scaleY );
         IntimacyFace->setScale ( scale / 1.5 );
-        IntimacyFace->setPosition ( Vec2 ( position.x , position.y + 13 ) );
+        IntimacyFace->setPosition ( Vec2 ( currentx , currenty + 13 ) );
+       
         this->addChild ( IntimacyFace , 1 );
-
         for (int i = 0; i < characternum; i++) {
             auto oneframe = Sprite::create ( "UIresource/qinmidu/weixuanzhong.png" );
             oneframe->setTag ( i + 1 );
             float originalframeHeight = oneframe->getContentSize ().height;
             oneframe->setScale ( scale / 1.5 );
-            oneframe->setPosition ( position.x - 2 , position.y + 280 - i * (originalframeHeight * scale / 1.5 + 12) ); // 计算槽位位置  
-            oneframe->setTag ( i + 1 ); // 设置槽位的标签  
+            oneframe->setPosition ( currentx - 2 , currenty + 280 - i * (originalframeHeight * scale / 1.5 + 12) );
+            oneframe->setTag ( i + 1 );
             this->addChild ( oneframe , 2 );
-
-            // 添加鼠标事件  
             auto listener = EventListenerMouse::create ();
             listener->onMouseMove = [this , oneframe]( EventMouse* event ) {
                 Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
@@ -64,13 +87,48 @@ void intimacyUI::backgroundcreate () {
                     oneframe->setTexture ( "UIresource/qinmidu/weixuanzhong.png" );
                 };
             _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , oneframe );
-        }
 
+        }
     }
+    characterInfo ( "Abigail" , "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty + visibleSize.height * 0.2215 ) );
+    characterInfo ( "Alex" , "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty + visibleSize.height * 0.1165 ) );
+    characterInfo ( "Caroline" , "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty + visibleSize.height * 0.0115 ) );
+    characterInfo ( "Elliott" , "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty - visibleSize.height * 0.0935 ) );
+    characterInfo ( "Emily" , "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty - visibleSize.height * 0.1985 ) );
 }
 
+void intimacyUI::characterInfo ( const string& name , const string& status , Vec2 Pos_photo) {
+    Vec2 position = player1->getPosition ();
+    float currentx = position.x , currenty = position.y;
+    updateCoordinate ( currentx , currenty );
+    auto visibleSize = Director::getInstance ()->getVisibleSize ();
+    //人物头像
+    std::string photo = getNPCportraits ( name , status );
+    auto characterPhoto = Sprite::create ( photo );
+    cocos2d::log("%s", photo.c_str());
+    if (characterPhoto == NULL) {
+        cocos2d::log("failed");
+    }
+    else {
+        float originalWidth = characterPhoto->getContentSize().width;
+        float originalHeight = characterPhoto->getContentSize().height;
+        float scaleX = visibleSize.width / originalWidth;
+        float scaleY = visibleSize.height / originalHeight;
+        float scale = std::min(scaleX, scaleY);
+        characterPhoto->setScale(scale * 0.1);
+        characterPhoto->setPosition(Pos_photo);
+        this->addChild(characterPhoto, 2);
+    }
+    //姓名
+    auto NameLabel = Label::createWithSystemFont ( name , "fonts/Comic Sans MS.ttf" , 35 );
+    NameLabel->setTextColor ( cocos2d::Color4B::BLACK );
+    NameLabel->setPosition ( Vec2 ( Pos_photo.x + visibleSize.width * 0.1 , Pos_photo.y ) );
+    this->addChild ( NameLabel , 2 );
+}
 void intimacyUI::Buttons_switching () {
     Vec2 position = player1->getPosition ();
+    float currentx = position.x , currenty = position.y;
+    updateCoordinate ( currentx , currenty );
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     //图标显示
     auto bagkey = Sprite::create ( "UIresource/beibao/bagkey.png" );
@@ -91,11 +149,11 @@ void intimacyUI::Buttons_switching () {
         // 选择最小的缩放比例，以保证图片完全显示在屏幕上且不变形
         float scale = std::min ( scaleX , scaleY );
         bagkey->setScale ( scale / 16.5 );
-        bagkey->setPosition ( Vec2 ( position.x - visibleSize.width * 0.25 , position.y + visibleSize.height * 0.315 ) );//0.305是选中时位置
+        bagkey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.25 , currenty + visibleSize.height * 0.315 ) );//0.305是选中时位置
         Skillkey->setScale ( scale / 16.5 );
-        Skillkey->setPosition ( Vec2 ( position.x - visibleSize.width * 0.19 , position.y + visibleSize.height * 0.315 ) );//0.315是未选中时位置
+        Skillkey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.19 , currenty + visibleSize.height * 0.315 ) );//0.315是未选中时位置
         intimacykey->setScale ( scale / 16.5 );
-        intimacykey->setPosition ( Vec2 ( position.x - visibleSize.width * 0.13 , position.y + visibleSize.height * 0.305 ) );//0.315是未选中时位置
+        intimacykey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.13 , currenty + visibleSize.height * 0.305 ) );//0.315是未选中时位置
         this->addChild ( bagkey , 2 );
         this->addChild ( Skillkey , 2 );
         this->addChild ( intimacykey , 2 );
@@ -121,9 +179,16 @@ void intimacyUI::Buttons_switching () {
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , this );
 }
 
-void intimacyUI::charactersSlider () {
-    Vec2 position = player1->getPosition ();
-    auto visibleSize = Director::getInstance ()->getVisibleSize ();
+void intimacyUI::close () {
+    // 设置键盘监听器  
+    auto listenerClose = EventListenerKeyboard::create ();
+    listenerClose->onKeyPressed = [this]( EventKeyboard::KeyCode keyCode , Event* event ) {
+        if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
+            this->removeFromParent ();
+        }
+        };
+    // 将监听器添加到事件分发器中  
+    _eventDispatcher->addEventListenerWithSceneGraphPriority ( listenerClose , this );
 }
 
 bool intimacyUI::init () {
@@ -132,7 +197,7 @@ bool intimacyUI::init () {
     }
     backgroundcreate ();
     Buttons_switching ();
-    charactersSlider ();
+    close ();
     return true;
 }
 
@@ -146,6 +211,3 @@ intimacyUI* intimacyUI::create () {
     return nullptr;
 }
 
-void intimacyUI::onItemSlotClicked ( cocos2d::Ref* sender ) {
-
-}

@@ -205,6 +205,8 @@ void Cave::AllInitialize_ore() {
             }
         }
 
+        cocos2d::log("Create Ore");
+
         if (ore->available) {
             auto temp = Sprite::create(ore->initial_pic);
             this->addChild(temp, 5);
@@ -337,28 +339,56 @@ void Cave::checkPlayerPosition()
 
                 ore->mining_day = season[Season] * 7 + day;
 
-                player1->setTexture("character1/player_plant1.png");
-                player1->setScale(3.9f);
+                if (player1->pic_path == "character1/player_right3.png") {
+                   
+                    player1->setTexture("character1/player_plant3.png");
+                    player1->setScale(3.9f);
 
-                // 延迟0.3秒后切换到第二个图片
-                player1->scheduleOnce([=](float dt) {
-                    player1->setTexture("character1/player_plant2.png");  // 更换为player_plant2
-                    player1->setScale(4.1f);
-                    }, 0.15f, "change_image1_key");
+                    // 延迟0.3秒后切换到第二个图片
+                    player1->scheduleOnce([=](float dt) {
+                        player1->setTexture("character1/player_plant4.png");  // 更换为player_plant2
+                        player1->setScale(4.1f);
+                        }, 0.15f, "change_image1_key");
 
-                // 延迟0.6秒后切换到第三个图片
-                player1->scheduleOnce([=](float dt) {
-                    player1->setTexture("character1/player_left3.png"); // 更换为player_left3
-                    player1->setScale(2.3f);
-                    auto earth = Sprite::create("Ore/earth.png");
-                    this->addChild(earth, 5);
-                    earth->setPosition(ore->position);
-                    earth->setScale(2.9f);
-                    auto temp = Sprite::create(ore->mining_pic);
-                    this->addChild(temp, 6);
-                    temp->setPosition(ore->position);
-                    temp->setScale(2.7f);
-                    }, 0.35f, "change_image2_key");
+                    // 延迟0.6秒后切换到第三个图片
+                    player1->scheduleOnce([=](float dt) {
+                        player1->setTexture("character1/player_right3.png"); // 更换为player_left3
+                        player1->setScale(2.3f);
+                        auto earth = Sprite::create("Ore/earth.png");
+                        this->addChild(earth, 5);
+                        earth->setPosition(ore->position);
+                        earth->setScale(2.9f);
+                        auto temp = Sprite::create(ore->mining_pic);
+                        this->addChild(temp, 6);
+                        temp->setPosition(ore->position);
+                        temp->setScale(2.7f);
+                        }, 0.35f, "change_image2_key");
+
+                }
+                else {
+                    player1->setTexture("character1/player_plant1.png");
+                    player1->setScale(3.9f);
+
+                    // 延迟0.3秒后切换到第二个图片
+                    player1->scheduleOnce([=](float dt) {
+                        player1->setTexture("character1/player_plant2.png");  // 更换为player_plant2
+                        player1->setScale(4.1f);
+                        }, 0.15f, "change_image1_key");
+
+                    // 延迟0.6秒后切换到第三个图片
+                    player1->scheduleOnce([=](float dt) {
+                        player1->setTexture("character1/player_left3.png"); // 更换为player_left3
+                        player1->setScale(2.3f);
+                        auto earth = Sprite::create("Ore/earth.png");
+                        this->addChild(earth, 5);
+                        earth->setPosition(ore->position);
+                        earth->setScale(2.9f);
+                        auto temp = Sprite::create(ore->mining_pic);
+                        this->addChild(temp, 6);
+                        temp->setPosition(ore->position);
+                        temp->setScale(2.7f);
+                        }, 0.35f, "change_image2_key");
+                }
             }
 
 

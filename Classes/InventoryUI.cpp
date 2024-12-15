@@ -8,18 +8,44 @@ extern Player* player1;
 
 USING_NS_CC;
 
+
 static void problemLoading ( const char* filename )
 {
     printf ( "Error while loading: %s\n" , filename );
     printf ( "Depending on how you compiled you might have to add 'Resources/' in front of filenames in CreateCharacterScene.cpp\n" );
 }
 
+void InventoryUI::updateCoordinate ( float &x , float &y ) {
+    Vec2 position = player1->getPosition ();
+    if (x <= -117) {
+        x = -117;
+    }
+    else if (x >= 1773) {
+        x = 1773;
+    }
+    else {
+        x = position.x;
+    }
+
+    if (y >= 1498) {
+        y = 1498;
+    }
+    else if (y <= -222) {
+        y = -222;
+    }
+    else {
+        y = position.y;
+    }
+}
+
 void InventoryUI::backgroundcreate(){
     Vec2 position = player1->getPosition ();
+    float currentx = position.x , currenty = position.y;
+    updateCoordinate ( currentx , currenty );   
     // 创建一个半透明的黑色遮罩
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     auto darkLayer = cocos2d::LayerColor::create ( cocos2d::Color4B ( 0 , 0 , 0 , 120 ) , 5 * visibleSize.width , 5 * visibleSize.height );  // 黑色，透明度为120
-    darkLayer->setPosition ( position - visibleSize / 2 );// 设置遮罩层的位置
+    darkLayer->setPosition ( Vec2 ( currentx , currenty ) - visibleSize / 2 );// 设置遮罩层的位置
     this->addChild ( darkLayer , 0 );
     auto bag = Sprite::create ( "UIresource/beibao/newbag2.png" );
     bag->setTag ( 101 );
@@ -38,13 +64,15 @@ void InventoryUI::backgroundcreate(){
         // 选择最小的缩放比例，以保证图片完全显示在屏幕上且不变形
         float scale = std::min ( scaleX , scaleY );
         bag->setScale ( scale / 1.5 );
-        bag->setPosition ( position );
+        bag->setPosition ( Vec2 ( currentx , currenty ) );
         this->addChild ( bag , 0 );
     }
 }
 
 void InventoryUI::Itemblock ( Inventory* inventory ) {
     Vec2 position = player1->getPosition ();
+    float currentx = position.x , currenty = position.y;
+    updateCoordinate ( currentx , currenty );
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     Vec2 origin = Director::getInstance ()->getVisibleOrigin ();
     _inventory = inventory;
@@ -68,7 +96,7 @@ void InventoryUI::Itemblock ( Inventory* inventory ) {
             slot->setScale ( scale / 16.5 );
             float bagWidth = bag->getContentSize ().width;
             float bagHeight = bag->getContentSize ().height;
-            slot->setPosition ( position.x - bagWidth * 0.545 + (originalWidth * scale / 16.5 + 5) * i , position.y + bagHeight * 1.73 / 3.643 - m * (originalHeight * scale / 16.5 + 10) ); // 计算槽位位置  
+            slot->setPosition ( currentx - bagWidth * 0.545 + (originalWidth * scale / 16.5 + 5) * i , currenty + bagHeight * 1.73 / 3.643 - m * (originalHeight * scale / 16.5 + 10) ); // 计算槽位位置  
             slot->setTag ( i + 1 ); // 设置槽位的标签  
             this->addChild ( slot , 2 );
 
@@ -107,6 +135,8 @@ bool InventoryUI::init ( Inventory* inventory ) {
 
 void InventoryUI::Buttons_switching () {
     Vec2 position = player1->getPosition ();
+    float currentx = position.x , currenty = position.y;
+    updateCoordinate ( currentx , currenty );
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     //图标显示
     auto bagkey = Sprite::create ( "UIresource/beibao/bagkey.png" );
@@ -127,11 +157,11 @@ void InventoryUI::Buttons_switching () {
         // 选择最小的缩放比例，以保证图片完全显示在屏幕上且不变形
         float scale = std::min ( scaleX , scaleY );
         bagkey->setScale ( scale / 16.5 );
-        bagkey->setPosition ( Vec2 ( position.x - visibleSize.width * 0.25 , position.y + visibleSize.height * 0.305 ) );//0.305是选中时位置
+        bagkey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.25 , currenty + visibleSize.height * 0.305 ) );//0.305是选中时位置
         Skillkey->setScale ( scale / 16.5 );
-        Skillkey->setPosition ( Vec2 ( position.x - visibleSize.width * 0.19 , position.y + visibleSize.height * 0.315 ) );//0.315是未选中时位置
+        Skillkey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.19 , currenty + visibleSize.height * 0.315 ) );//0.315是未选中时位置
         intimacykey->setScale ( scale / 16.5 );
-        intimacykey->setPosition ( Vec2 ( position.x - visibleSize.width * 0.13 , position.y + visibleSize.height * 0.315 ) );//0.315是未选中时位置
+        intimacykey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.13 , currenty + visibleSize.height * 0.315 ) );//0.315是未选中时位置
         this->addChild ( bagkey , 1 );
         this->addChild ( Skillkey , 1 );
         this->addChild ( intimacykey , 1 );
@@ -169,7 +199,6 @@ InventoryUI* InventoryUI::create ( Inventory* inventory ) {
 }
 
 void InventoryUI::updateDisplay () {
-    Vec2 position = player1->getPosition ();
     if (!_inventory) {
         CCLOG ( "Warning: _inventory is nullptr" );
         return; // 退出方法  
@@ -249,7 +278,7 @@ void InventoryUI::updateDisplay () {
                     };
 
                 // 添加鼠标按下事件  
-                listener->onMouseDown = [this , slot , itemSprite]( EventMouse* event ) {
+                listener->onMouseDown = [this , slot , itemSprite, serial_number]( EventMouse* event ) {
                     Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
                     mousePos = this->convertToNodeSpace ( mousePos );
 
@@ -257,6 +286,8 @@ void InventoryUI::updateDisplay () {
                     if (slot->getBoundingBox ().containsPoint ( mousePos )) {
                         if (!isClick) {
                             currentItemSprite = itemSprite; // 记录当前选择的物品
+                            _selectedSlot = serial_number + 1;
+                            CCLOG ( "_selectedSlot:%d" , _selectedSlot );
                         }
                         else {
                             currentItemSprite = nullptr;

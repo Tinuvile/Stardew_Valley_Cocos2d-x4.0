@@ -104,8 +104,12 @@ bool Forest::init()
     // 初始化角色并将其添加到场景
     if (player1->getParent() == NULL) {
         this->addChild(player1, 6);
-        
-        player1->setPosition(300,950);      
+        for (auto& pair : W_lastplace) {
+            if (pair.second == true) { 
+                player1->setPosition(pair.first.second);
+                pair.second = false;
+            }
+        }
         player1->speed = 6.1f;
         player1->setScale(2.3f);
         player1->setAnchorPoint(Vec2(0.5f, 0.2f));
@@ -357,29 +361,80 @@ void  Forest::checkPlayerPosition()
 
                 tree->mining_day = season[Season] * 7 + day;
 
-                player1->setTexture("character1/player_plant1.png");
-                player1->setScale(3.5f);
 
-                // 延迟0.3秒后切换到第二个图片
-                player1->scheduleOnce([=](float dt) {
-                    player1->setTexture("character1/player_plant2.png");  // 更换为player_plant2
-                    player1->setScale(3.7f);
-                    }, 0.15f, "change_image1_key");
+                if (player1->pic_path == "character1/player_right3.png") {
+                    player1->setTexture("character1/player_plant3.png");
+                    player1->setScale(3.5f);
 
-                // 延迟0.6秒后切换到第三个图片
-                player1->scheduleOnce([=](float dt) {
-                    player1->setTexture("character1/player_left3.png"); // 更换为player_left3
-                    player1->setScale(2.3f);
-                    auto temp = Sprite::create(tree->G_Cut_pic);
-                    this->addChild(temp, 5);
-                    temp->setPosition(tree->position);
-                    temp->setScale(3.1f);
-                    }, 0.35f, "change_image2_key");
+                    // 延迟0.3秒后切换到第二个图片
+                    player1->scheduleOnce([=](float dt) {
+                        player1->setTexture("character1/player_plant4.png");  // 更换为player_plant2
+                        player1->setScale(3.7f);
+                        }, 0.15f, "change_image1_key");
+
+                    // 延迟0.6秒后切换到第三个图片
+                    player1->scheduleOnce([=](float dt) {
+                        player1->setTexture("character1/player_right3.png"); // 更换为player_left3
+                        player1->setScale(2.3f);
+                        auto temp = Sprite::create(tree->G_Cut_pic);
+                        this->addChild(temp, 5);
+                        temp->setPosition(tree->position);
+                        temp->setScale(3.1f);
+                        }, 0.35f, "change_image2_key");
+                }
+                else {
+                    player1->setTexture("character1/player_plant1.png");
+                    player1->setScale(3.5f);
+
+                    // 延迟0.3秒后切换到第二个图片
+                    player1->scheduleOnce([=](float dt) {
+                        player1->setTexture("character1/player_plant2.png");  // 更换为player_plant2
+                        player1->setScale(3.7f);
+                        }, 0.15f, "change_image1_key");
+
+                    // 延迟0.6秒后切换到第三个图片
+                    player1->scheduleOnce([=](float dt) {
+                        player1->setTexture("character1/player_left3.png"); // 更换为player_left3
+                        player1->setScale(2.3f);
+                        auto temp = Sprite::create(tree->G_Cut_pic);
+                        this->addChild(temp, 5);
+                        temp->setPosition(tree->position);
+                        temp->setScale(3.1f);
+                        }, 0.35f, "change_image2_key");
+                }
             }
 
 
             it++;
 
+        }
+    }
+
+    // 是否前往农场
+    if (farm_area.containsPoint(playerPos)) {
+        if (isEnterKeyPressed) {
+            for (auto& pair : W_lastplace) {
+                if (pair.first.first == "farm") {  // 检查 bool 值是否为 true
+                    pair.second = true;
+                }
+            }
+            player1->removeFromParent();
+            auto NextSence = farm::create();
+            Director::getInstance()->replaceScene(NextSence);
+        }
+    }
+
+    // 是否前往小镇
+    if (town_area.containsPoint(playerPos)) {
+        if (isEnterKeyPressed) {
+            for (auto& pair : W_lastplace) {
+                if (pair.first.first == "town") {  // 检查 bool 值是否为 true
+                    pair.second = true;
+                }
+            }
+            player1->removeFromParent();
+            auto NextSence = Town::create();
+            Director::getInstance()->replaceScene(NextSence);
         }
     }
 
