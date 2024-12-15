@@ -35,7 +35,7 @@ void mini_bag::backgroundcreate () {
         // 选择最小的缩放比例，以保证图片完全显示在屏幕上且不变形
         float scale = std::min ( scaleX , scaleY );
         bag->setScale ( scale / 1.5 );
-        bag->setPosition ( Vec2 ( 0 , 0 - visibleSize.height * 0.4 ) );
+        bag->setPosition ( Vec2 ( 0 , 0 - visibleSize.height * 0.45 ) );
         this->addChild ( bag , 0 );
     }
 }
@@ -63,7 +63,7 @@ void mini_bag::Itemblock ( Inventory* inventory ) {
         slot->setScale ( scale / 16.5 );
         float bagWidth = bag->getContentSize ().width;
         float bagHeight = bag->getContentSize ().height;
-        slot->setPosition ( 0 - bagWidth * 0.57 + (originalWidth * scale / 16.5 + 5) * i , 0 - visibleSize.height * 0.435 + bagHeight * 1.73 / 3.643); // 计算槽位位置  
+        slot->setPosition ( 0 - bagWidth * 0.57 + (originalWidth * scale / 16.5 + 5) * i , 0 - visibleSize.height * 0.485 + bagHeight * 1.73 / 3.643); // 计算槽位位置  
         slot->setTag ( i + 1 ); // 设置槽位的标签  
         this->addChild ( slot , 2 );
 

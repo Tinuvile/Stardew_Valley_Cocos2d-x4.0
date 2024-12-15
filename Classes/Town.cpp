@@ -288,7 +288,7 @@ bool Town::init()
                 // 获取玩家的位置  
                 static NPCtalkUI* currentNPCtalkUI = nullptr;
                 Vec2 playerPos = player1->getPosition ();
-                currentNPCtalkUI = NPCtalkUI::create ( alex );
+                currentNPCtalkUI = NPCtalkUI::create ( alex , "Town" );
                 this->addChild ( currentNPCtalkUI , 12 ); // 将 currentNPCtalkUI添加到 Town 的上层  
                 // 计算玩家与 Alex 之间的距离  
                 float distance = playerPos.distance ( alexSprite->getPosition () );

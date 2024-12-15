@@ -19,7 +19,7 @@ static void problemLoading ( const char* filename )
 void NPCtalkUI::updateCoordinate ( float& x , float& y ) {
     Vec2 position = player1->getPosition ();
     float  Leftboundary = -10000.0f , rightboundary = 10000.0f , upperboundary = 10000.0f , lowerboundary = 10000.0f;
-    if (SceneName == "Town") {
+    if (SceneName  == "Town") {
         Leftboundary = -170.0f;
         rightboundary = 1773.0f;
         upperboundary = 1498.0f;
