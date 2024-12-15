@@ -595,9 +595,6 @@ void supermarket::checkPlayerPosition()
         }
 
     }
-
-
-
 }
 
 
