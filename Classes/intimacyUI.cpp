@@ -3,9 +3,6 @@
 #include "ui/CocosGUI.h"  
 #include "Item.h"  
 
-extern Player* player1;
-extern Inventory* inventory;
-
 const int characternum = 5;
 
 USING_NS_CC;
@@ -18,21 +15,52 @@ static void problemLoading ( const char* filename )
 
 void intimacyUI::updateCoordinate ( float& x , float& y ) {
     Vec2 position = player1->getPosition ();
-    if (x <= -117) {
-        x = -117;
+    float  Leftboundary = -10000.0f , rightboundary = 10000.0f , upperboundary = 10000.0f , lowerboundary = 10000.0f;
+    if (SceneName == "Town") {
+        Leftboundary = -170.0f;
+        rightboundary = 1773.0f;
+        upperboundary = 1498.0f;
+        lowerboundary = -222.0f;
     }
-    else if (x >= 1773) {
-        x = 1773;
+    else if (SceneName == "Cave") {
+        Leftboundary =  786.0f;
+        rightboundary = 817.0f;
+        upperboundary = 808.0f;
+        lowerboundary = 460.0f;
+    }
+    else if (SceneName == "Beach") {
+        Leftboundary = -315.0f;
+        rightboundary = 20000.0f;
+        upperboundary = 920.0f;
+        lowerboundary = 360.0f;
+    }
+    else if (SceneName == "Forest") {
+        Leftboundary = -600.0f;
+        rightboundary = 2197.0f;
+        upperboundary = 2200.0f;
+        lowerboundary = -850.0f;
+    }
+    else if (SceneName == "farm") {
+        Leftboundary = 637.0f;
+        rightboundary = 960.0f;
+        upperboundary = 777.0f;
+        lowerboundary = 500.0f;
+    }
+    if (x <= Leftboundary) {
+        x = Leftboundary;
+    }
+    else if (x >= rightboundary){
+        x = rightboundary;
     }
     else {
         x = position.x;
     }
 
-    if (y >= 1498) {
-        y = 1498;
+    if (y >= upperboundary) {
+        y = upperboundary;
     }
-    else if (y <= -222) {
-        y = -222;
+    else if (y <= lowerboundary) {
+        y = lowerboundary;
     }
     else {
         y = position.y;
@@ -95,6 +123,12 @@ void intimacyUI::backgroundcreate () {
     characterInfo ( "Caroline" , "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty + visibleSize.height * 0.0115 ) );
     characterInfo ( "Elliott" , "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty - visibleSize.height * 0.0935 ) );
     characterInfo ( "Emily" , "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty - visibleSize.height * 0.1985 ) );
+
+    intimacyDisplay ( "Abigail" , Vec2 ( currentx - visibleSize.width * 0.09 , currenty + visibleSize.height * 0.217 ) );
+    intimacyDisplay ( "Alex" , Vec2 ( currentx - visibleSize.width * 0.09 , currenty + visibleSize.height * 0.112 ) );
+    intimacyDisplay ( "Caroline" , Vec2 ( currentx - visibleSize.width * 0.09 , currenty + visibleSize.height * 0.007 ) );
+    intimacyDisplay ( "Elliott" , Vec2 ( currentx - visibleSize.width * 0.09 , currenty - visibleSize.height * 0.098 ) );
+    intimacyDisplay ( "Emily" , Vec2 ( currentx - visibleSize.width * 0.09 , currenty - visibleSize.height * 0.203 ) );
 }
 
 void intimacyUI::characterInfo ( const string& name , const string& status , Vec2 Pos_photo) {
@@ -125,6 +159,47 @@ void intimacyUI::characterInfo ( const string& name , const string& status , Vec
     NameLabel->setPosition ( Vec2 ( Pos_photo.x + visibleSize.width * 0.1 , Pos_photo.y ) );
     this->addChild ( NameLabel , 2 );
 }
+
+void intimacyUI::intimacyDisplay ( const string& name , Vec2 Pos ) {
+    int fullheart_num = NPC_RELATIONSHIP->getRelationship ( "player" , name ) / 10;
+    int emptyheart_num = 10 - fullheart_num;
+    auto visibleSize = Director::getInstance ()->getVisibleSize ();
+    for (int i = 0; i < 10; i++) {
+        if (fullheart_num > 0)
+        {
+            auto fullHeart = Sprite::create ( "UIresource/qinmidu/fullheart.png" );
+            if (fullHeart == nullptr)
+            {
+                problemLoading ( "'fullheart.png'" );
+            }
+            else
+            {
+                fullHeart->setScale ( 1.2f );
+                fullHeart->setPosition ( Vec2 ( Pos.x + 32 * 1600 / 884 / 1.5 * i , Pos.y ) );
+                this->addChild ( fullHeart , 3 );
+            }
+            fullheart_num--;
+            continue;
+        }
+        if (emptyheart_num > 0)
+        {
+            auto emptyheart = Sprite::create ( "UIresource/qinmidu/emptyheart.png" );
+            if (emptyheart == nullptr)
+            {
+                problemLoading ( "'emptyheart.png'" );
+            }
+            else
+            {
+                emptyheart->setScale ( 1.2f );
+                emptyheart->setPosition ( Vec2 ( Pos.x + 32 * 1600 / 884 / 1.5 * i , Pos.y ) );
+                this->addChild ( emptyheart , 3 );
+            }
+            emptyheart_num--;
+            continue;
+        }
+    }
+}
+
 void intimacyUI::Buttons_switching () {
     Vec2 position = player1->getPosition ();
     float currentx = position.x , currenty = position.y;
@@ -167,11 +242,14 @@ void intimacyUI::Buttons_switching () {
         //CCLOG ( "X:%f,Y:%f" , event->getCursorX () , event->getCursorY () );
         if (bagkey->getBoundingBox ().containsPoint ( mousePos )) {
             // ÒÆ³ýµ±Ç°µÄLayer
+            std::string nowScene = SceneName;
             this->removeFromParent ();
-            Director::getInstance ()->getRunningScene ()->addChild ( InventoryUI::create ( inventory ) , 10 );
+            Director::getInstance ()->getRunningScene ()->addChild ( InventoryUI::create ( inventory , nowScene ) , 20 );
         }
         else if (Skillkey->getBoundingBox ().containsPoint ( mousePos )) {
-
+            std::string nowScene = SceneName;
+            this->removeFromParent ();
+            Director::getInstance ()->getRunningScene ()->addChild ( SkillTreeUI::create ( nowScene ) , 20 );
         }
         else if (intimacykey->getBoundingBox ().containsPoint ( mousePos )) {
         }
@@ -191,19 +269,21 @@ void intimacyUI::close () {
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listenerClose , this );
 }
 
-bool intimacyUI::init () {
+bool intimacyUI::init ( std::string sceneName ) {
     if (!Layer::init ()) {
         return false;
     }
+    SceneName = sceneName;
+    NPC_RELATIONSHIP = npc_relationship;
     backgroundcreate ();
     Buttons_switching ();
     close ();
     return true;
 }
 
-intimacyUI* intimacyUI::create () {
+intimacyUI* intimacyUI::create ( std::string sceneName ) {
     intimacyUI* ret = new intimacyUI ();
-    if (ret && ret->init ()) {
+    if (ret && ret->init ( sceneName )) {
         ret->autorelease ();
         return ret;
     }

@@ -173,6 +173,24 @@ bool farm::init()
             else if (keyCode == EventKeyboard::KeyCode::KEY_G) {
                 isGKeyPressed = true;
             }
+            else if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
+                static int isOpen = 0;
+                static InventoryUI* currentInventoryUI = nullptr;  // 保存当前显示的 InventoryUI  
+                // 如果当前没有打开 InventoryUI，则打开它  
+                if (currentInventoryUI == nullptr || isOpen == 0) {
+                    isOpen = 1;
+                    CCLOG ( "Opening inventory." );
+                    currentInventoryUI = InventoryUI::create ( inventory , "farm" );
+                    this->addChild ( currentInventoryUI , 20 );  // 将 InventoryUI 添加到上层  
+                }
+                // 如果已经打开 InventoryUI，则关闭它  
+                else {
+                    isOpen = 0;
+                    CCLOG ( "Closing inventory." );
+                    this->removeChild ( currentInventoryUI , true );  // 从当前场景中移除 InventoryUI  
+                    currentInventoryUI = nullptr;  // 重置指针  
+                }
+            }
         };
 
     listenerWithPlayer->onKeyReleased = [this](EventKeyboard::KeyCode keyCode, Event* event)
@@ -194,6 +212,26 @@ bool farm::init()
 
     // 将监听器添加到事件分发器中
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listenerWithPlayer, this);
+
+    //界面下的背包显示
+    miniBag = mini_bag::create ( inventory );
+    miniBag->setScale ( 1.0f );
+    Vec2 pos = miniBag->getPosition ();
+    if (miniBag != NULL) {
+        cocos2d::log ( "miniBagtest %f" , pos.x );
+    }
+    if (!this->getChildByName ( "mini_bag" )) {
+        this->addChild ( miniBag , 10 , "mini_bag" );
+    }
+
+
+    // 更新物品栏
+    schedule ( [=]( float deltaTime ) {
+        if (inventory->isupdated == true) {
+            miniBag->updateDisplay ();
+            inventory->isupdated = false;
+        }
+        } , 0.1f , "item_update_key" );
 
     return true;
 }
@@ -364,7 +402,7 @@ void farm::checkPlayerPosition()
     _timerLabelS->setPosition(currentx - 430, currenty + 570);
     _positionLabel->setPosition(currentx - 570, currenty + 490);
     button->setPosition(currentx + 730, currenty - 590);
-
+    miniBag->setPosition ( currentx , currenty );
     
     // 与种植有关的操作
     if (plant_area.containsPoint(playerPos)) {

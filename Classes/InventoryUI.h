@@ -4,12 +4,13 @@
 #include "Inventory.h"  
 #include "AppDelegate.h"
 #include "intimacyUI.h"
+#include "SkillTreeUI.h"
 
 class InventoryUI : public cocos2d::Layer {
 public:
-    virtual bool init ( Inventory* inventory );
+    virtual bool init ( Inventory* inventory , std::string sceneName );
 
-    static InventoryUI* create ( Inventory* inventory );
+    static InventoryUI* create ( Inventory* inventory , std::string sceneName );
 
     void backgroundcreate ();
 
@@ -35,4 +36,5 @@ private:
 
     Sprite* currentItemSprite = nullptr; // 标识当前选择的物品
 
+    std::string SceneName;
 };

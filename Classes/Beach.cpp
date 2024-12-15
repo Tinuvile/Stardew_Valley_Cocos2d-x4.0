@@ -182,11 +182,49 @@ bool Beach::init ()
                 //this->pause ();
             }
         }
+        else if (key_code == EventKeyboard::KeyCode::KEY_ESCAPE) {
+            static int isOpen = 0;
+            static InventoryUI* currentInventoryUI = nullptr;  // 保存当前显示的 InventoryUI  
+            // 如果当前没有打开 InventoryUI，则打开它  
+            if (currentInventoryUI == nullptr || isOpen == 0) {
+                isOpen = 1;
+                CCLOG ( "Opening inventory." );
+                currentInventoryUI = InventoryUI::create ( inventory , "Beach" );
+                this->addChild ( currentInventoryUI , 30 );  // 将 InventoryUI 添加到上层  
+            }
+            // 如果已经打开 InventoryUI，则关闭它  
+            else {
+                isOpen = 0;
+                CCLOG ( "Closing inventory." );
+                this->removeChild ( currentInventoryUI , true );  // 从当前场景中移除 InventoryUI  
+                currentInventoryUI = nullptr;  // 重置指针  
+            }
+        }
     };
 
     // 将监听器添加到事件分发器中
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listenerWithPlayer , this );
 
+
+    //界面下的背包显示
+    miniBag = mini_bag::create ( inventory );
+    miniBag->setScale ( 1.0f );
+    Vec2 pos = miniBag->getPosition ();
+    if (miniBag != NULL) {
+        cocos2d::log ( "miniBagtest %f" , pos.x );
+    }
+    if (!this->getChildByName ( "mini_bag" )) {
+        this->addChild ( miniBag , 10 , "mini_bag" );
+    }
+
+
+    // 更新物品栏
+    schedule ( [=]( float deltaTime ) {
+        if (inventory->isupdated == true) {
+            miniBag->updateDisplay ();
+            inventory->isupdated = false;
+        }
+        } , 0.1f , "item_update_key" );
 
     return true;
 }
@@ -277,6 +315,34 @@ void Beach::CheckPlayerPosition ()
 
     }
 
+    // 更新标签位置
+    float currentx = 0 , currenty = 0;
+    if (playerPos.x <= -315) {
+        currentx = -315;
+    }
+    else if (playerPos.x >= 20000) {
+        currentx = 20000;
+    }
+    else {
+        currentx = playerPos.x;
+    }
+
+    if (playerPos.y >= 920) {
+        currenty = 920;
+    }
+    else if (playerPos.y <= 360) {
+        currenty = 360;
+    }
+    else {
+        currenty = playerPos.y;
+    }
+
+    _timerLabelD->setPosition ( currentx - 710 , currenty + 570 );
+    _timerLabelH->setPosition ( currentx - 570 , currenty + 570 );
+    _timerLabelS->setPosition ( currentx - 410 , currenty + 570 );
+    _positionLabel->setPosition ( currentx - 570 , currenty + 490 );
+    button->setPosition ( currentx + 730 , currenty - 590 );
+    miniBag->setPosition ( currentx , currenty );
 
 
     // 是否进入农场

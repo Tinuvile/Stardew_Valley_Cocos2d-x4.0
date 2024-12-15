@@ -4,8 +4,6 @@
 #include "Item.h"  
 #include "AppDelegate.h"
 
-extern Player* player1;
-
 USING_NS_CC;
 
 
@@ -17,25 +15,57 @@ static void problemLoading ( const char* filename )
 
 void InventoryUI::updateCoordinate ( float &x , float &y ) {
     Vec2 position = player1->getPosition ();
-    if (x <= -117) {
-        x = -117;
+    float  Leftboundary = -10000.0f , rightboundary = 10000.0f , upperboundary = 10000.0f , lowerboundary = 10000.0f;
+    if (SceneName == "Town") {
+        Leftboundary = -170.0f;
+        rightboundary = 1773.0f;
+        upperboundary = 1498.0f;
+        lowerboundary = -222.0f;
     }
-    else if (x >= 1773) {
-        x = 1773;
+    else if (SceneName == "Cave") {
+        Leftboundary = 786.0f;
+        rightboundary = 817.0f;
+        upperboundary = 808.0f;
+        lowerboundary = 460.0f;
+    }
+    else if (SceneName == "Beach") {
+        Leftboundary = -315.0f;
+        rightboundary = 20000.0f;
+        upperboundary = 920.0f;
+        lowerboundary = 360.0f;
+    }
+    else if (SceneName == "Forest") {
+        Leftboundary = -600.0f;
+        rightboundary = 2197.0f;
+        upperboundary = 2200.0f;
+        lowerboundary = -850.0f;
+    }
+    else if (SceneName == "farm") {
+        Leftboundary = 637.0f;
+        rightboundary = 960.0f;
+        upperboundary = 777.0f;
+        lowerboundary = 500.0f;
+    }
+    if (x <= Leftboundary) {
+        x = Leftboundary;
+    }
+    else if (x >= rightboundary) {
+        x = rightboundary;
     }
     else {
         x = position.x;
     }
 
-    if (y >= 1498) {
-        y = 1498;
+    if (y >= upperboundary) {
+        y = upperboundary;
     }
-    else if (y <= -222) {
-        y = -222;
+    else if (y <= lowerboundary) {
+        y = lowerboundary;
     }
     else {
         y = position.y;
     }
+    CCLOG ( "%f  %f" , x , y );
 }
 
 void InventoryUI::backgroundcreate(){
@@ -106,10 +136,13 @@ void InventoryUI::Itemblock ( Inventory* inventory ) {
     }
 }
 
-bool InventoryUI::init ( Inventory* inventory ) {
+bool InventoryUI::init ( Inventory* inventory , std::string sceneName ) {
     if (!Layer::init ()) {
         return false;
     }
+
+    SceneName = sceneName;
+
     backgroundcreate ();
 
     Buttons_switching ();
@@ -176,21 +209,24 @@ void InventoryUI::Buttons_switching () {
         if (bagkey->getBoundingBox ().containsPoint ( mousePos )) {
         }
         else if (Skillkey->getBoundingBox ().containsPoint ( mousePos )) {
-
+            std::string nowScene = SceneName;
+            this->removeFromParent ();
+            Director::getInstance ()->getRunningScene ()->addChild ( SkillTreeUI::create ( nowScene ) , 20 );
         }
         else if (intimacykey->getBoundingBox ().containsPoint ( mousePos )) {
             CCLOG ( "Clicked on intimacykey" );
             // ÒÆ³ýµ±Ç°µÄLayer
+            std::string nowScene = SceneName;
             this->removeFromParent ();
-            Director::getInstance ()->getRunningScene ()->addChild ( intimacyUI::create () , 10 );
+            Director::getInstance ()->getRunningScene ()->addChild ( intimacyUI::create ( nowScene ) , 20 );
         }
         };
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , this );
 }
 
-InventoryUI* InventoryUI::create ( Inventory* inventory ) {
+InventoryUI* InventoryUI::create ( Inventory* inventory , std::string sceneName ) {
     InventoryUI* ret = new InventoryUI ();
-    if (ret && ret->init ( inventory )) {
+    if (ret && ret->init ( inventory , sceneName )) {
         ret->autorelease ();
         return ret;
     }

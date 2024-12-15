@@ -5,20 +5,15 @@
 #include "AppDelegate.h"
 class mini_bag : public cocos2d::Layer {
 public:
+    virtual bool init ( Inventory* inventory);
 
- 
-
-    virtual bool init ( Inventory* inventory,std::string& WhichScene );
-
-    static mini_bag* create ( Inventory* inventory,std::string& WhichScene );
+    static mini_bag* create ( Inventory* inventory);
 
     void backgroundcreate ();
 
     void Itemblock ( Inventory* inventory );
 
     void updateDisplay (); // 更新显示内容  
-
-    void updateCoordinate ( float& x , float& y);
 
 private:
     Inventory* _inventory; // 指向 Inventory 实例的指针  
@@ -35,5 +30,4 @@ private:
 
     cocos2d::Sprite* currentItemSprite = nullptr; // 标识当前选择的物品
 
-    std::string whichScene;
 };

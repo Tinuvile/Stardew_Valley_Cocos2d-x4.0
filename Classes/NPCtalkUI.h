@@ -7,9 +7,9 @@
 
 class NPCtalkUI : public cocos2d::Layer {
 public:
-    virtual bool init ( NPC* npc_name );
+    virtual bool init ( NPC* npc_name ,std::string sceneName);
 
-    static NPCtalkUI* create ( NPC* npc_name );
+    static NPCtalkUI* create ( NPC* npc_name , std::string sceneName );
 
     void backgroundcreate ();
 
@@ -21,6 +21,6 @@ public:
 private:
 
     NPC* npc;
-
+    std::string SceneName;
     NpcRelationship* NPC_RELATIONSHIP;
 };

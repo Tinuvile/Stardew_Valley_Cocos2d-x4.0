@@ -19,10 +19,10 @@ NPC::NPC ( const std::string& name , const cocos2d::Vec2& position ,
     this->sprite->setScale ( 3.0f );
 
     // 创建四个方向的动画  
-    CreateAnimation ( "upAnimation" , animations[0] , 0.3f );
-    CreateAnimation ( "downAnimation" , animations[1] , 0.3f );
-    CreateAnimation ( "leftAnimation" , animations[2] , 0.3f );
-    CreateAnimation ( "rightAnimation" , animations[3] , 0.3f );
+    CreateAnimation ( name + "_upAnimation" , animations[0] , 0.3f );
+    CreateAnimation ( name + "_downAnimation" , animations[1] , 0.3f );
+    CreateAnimation ( name + "_leftAnimation" , animations[2] , 0.3f );
+    CreateAnimation ( name + "_rightAnimation" , animations[3] , 0.3f );
 
 }
 
@@ -88,6 +88,7 @@ bool NPC::IsPositionValid ( const cocos2d::Vec2& targetPosition , const cocos2d:
 void NPC::CreateAnimation ( const std::string& animationName , const std::vector<std::string>& framePaths , float delay ) {
     cocos2d::Vector<cocos2d::SpriteFrame*> frames;
     for (const auto& framePath : framePaths) {
+        cocos2d::log ( "%s" , framePath.c_str() );
         cocos2d::SpriteFrame* frame = cocos2d::SpriteFrame::create ( framePath , cocos2d::Rect ( 0 , 0 , sprite->getContentSize ().width , sprite->getContentSize ().height ) );
         frames.pushBack ( frame );
     }
@@ -122,16 +123,16 @@ void NPC::MoveToPosition ( const cocos2d::Vec2& targetPosition ) {
     // 判断朝向并播放对应动画  
     std::string animationName;
     if (targetPosition.x < position.x) {
-        animationName = "leftAnimation";
+        animationName = name + "_leftAnimation";
     }
     else if (targetPosition.x > position.x) {
-        animationName = "rightAnimation";
+        animationName = name + "_rightAnimation";
     }
     else if (targetPosition.y < position.y) {
-        animationName = "downAnimation";
+        animationName = name + "_downAnimation";
     }
     else if (targetPosition.y > position.y) {
-        animationName = "upAnimation";
+        animationName = name + "_upAnimation";
     }
 
 
@@ -306,4 +307,14 @@ std::string getNPCportraits ( std::string name , std::string status ) {
 
     // 如果 NPC 名称不存在，则返回空字符串或错误信息  
     return "ERROR"; // 或者可以返回默认头像路径  
+}
+
+// 获取 Alex 动画信息的函数
+std::vector<std::vector<std::string>> getAlexAnimations () {
+    return {
+        {"npc/Alex/Alex-8.png", "npc/Alex/Alex-9.png", "npc/Alex/Alex-10.png", "npc/Alex/Alex-11.png"},
+        {"npc/Alex/Alex-0.png", "npc/Alex/Alex-1.png", "npc/Alex/Alex-2.png", "npc/Alex/Alex-3.png"},
+        {"npc/Alex/Alex-14.png", "npc/Alex/Alex-13.png", "npc/Alex/Alex-14.png", "npc/Alex/Alex-15.png"},
+        {"npc/Alex/Alex-4.png", "npc/Alex/Alex-5.png", "npc/Alex/Alex-6.png", "npc/Alex/Alex-7.png"}
+    };
 }
