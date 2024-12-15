@@ -1,4 +1,5 @@
 #include "NPC.h"
+#include "AppDelegate.h"
 
 // NPC 类构造函数  
 NPC::NPC ( const std::string& name , const cocos2d::Vec2& position ,

@@ -1,6 +1,5 @@
 #pragma once
 #include "cocos2d.h" 
-#include "AppDelegate.h"
 
 // NPC ½ÇÉ«Àà  
 class NPC : public cocos2d::Node {
@@ -25,8 +24,6 @@ public:
     void MoveToPosition ( const cocos2d::Vec2& targetPosition );
 
     void RandomMove ();
-
-    bool isTalked = false;
 
     bool IsPositionValid ( const cocos2d::Vec2& targetPosition , const cocos2d::Vec2& direction );
 
