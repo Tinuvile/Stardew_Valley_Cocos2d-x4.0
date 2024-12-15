@@ -202,6 +202,26 @@ bool Forest::init()
     // 将监听器添加到事件分发器中
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listenerWithPlayer, this);
 
+    //界面下的背包显示
+    miniBag = mini_bag::create ( inventory );
+    miniBag->setScale ( 1.0f );
+    Vec2 pos = miniBag->getPosition ();
+    if (miniBag != NULL) {
+        cocos2d::log ( "miniBagtest %f" , pos.x );
+    }
+    if (!this->getChildByName ( "mini_bag" )) {
+        this->addChild ( miniBag , 10 , "mini_bag" );
+    }
+
+
+    // 更新物品栏
+    schedule ( [=]( float deltaTime ) {
+        if (inventory->isupdated == true) {
+            miniBag->updateDisplay ();
+            inventory->isupdated = false;
+        }
+        } , 0.1f , "item_update_key" );
+
     return true;
 }
 
@@ -362,6 +382,7 @@ void  Forest::checkPlayerPosition()
     _timerLabelS->setPosition(currentx - 410, currenty + 570);
     _positionLabel->setPosition(currentx - 570, currenty + 490);
     button->setPosition(currentx + 730, currenty - 590);
+    miniBag->setPosition ( currentx , currenty );
 
     if (isLKeyPressed) {
         for (auto it = Tree_information.begin(); it != Tree_information.end(); ) {

@@ -72,11 +72,10 @@ void mini_bag::Itemblock ( Inventory* inventory ) {
     }
 }
 
-bool mini_bag::init ( Inventory* inventory , std::string& WhichScene ) {
+bool mini_bag::init ( Inventory* inventory) {
     if (!Layer::init ()) {
         return false;
     }
-    whichScene = WhichScene;
     backgroundcreate ();
 
     Itemblock ( inventory );
@@ -88,9 +87,9 @@ bool mini_bag::init ( Inventory* inventory , std::string& WhichScene ) {
     return true;
 }
 
-mini_bag* mini_bag::create ( Inventory* inventory , std::string& WhichScene ) {
+mini_bag* mini_bag::create ( Inventory* inventory ) {
     mini_bag* ret = new mini_bag ();
-    if (ret && ret->init ( inventory, WhichScene )) {
+    if (ret && ret->init ( inventory)) {
         ret->autorelease ();
         return ret;
     }

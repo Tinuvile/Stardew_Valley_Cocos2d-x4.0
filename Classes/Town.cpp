@@ -118,8 +118,7 @@ bool Town::init()
     }
 
     //界面下的背包显示
-    std::string scenename = "town";
-    miniBag = mini_bag::create(inventory, scenename);
+    miniBag = mini_bag::create(inventory);
     miniBag->setScale(1.0f);
     Vec2 pos = miniBag->getPosition();
     if (miniBag != NULL) {

@@ -206,6 +206,26 @@ bool Beach::init ()
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listenerWithPlayer , this );
 
 
+    //界面下的背包显示
+    miniBag = mini_bag::create ( inventory );
+    miniBag->setScale ( 1.0f );
+    Vec2 pos = miniBag->getPosition ();
+    if (miniBag != NULL) {
+        cocos2d::log ( "miniBagtest %f" , pos.x );
+    }
+    if (!this->getChildByName ( "mini_bag" )) {
+        this->addChild ( miniBag , 10 , "mini_bag" );
+    }
+
+
+    // 更新物品栏
+    schedule ( [=]( float deltaTime ) {
+        if (inventory->isupdated == true) {
+            miniBag->updateDisplay ();
+            inventory->isupdated = false;
+        }
+        } , 0.1f , "item_update_key" );
+
     return true;
 }
 
@@ -295,6 +315,34 @@ void Beach::CheckPlayerPosition ()
 
     }
 
+    // 更新标签位置
+    float currentx = 0 , currenty = 0;
+    if (playerPos.x <= -315) {
+        currentx = -315;
+    }
+    else if (playerPos.x >= 20000) {
+        currentx = 20000;
+    }
+    else {
+        currentx = playerPos.x;
+    }
+
+    if (playerPos.y >= 920) {
+        currenty = 920;
+    }
+    else if (playerPos.y <= 360) {
+        currenty = 360;
+    }
+    else {
+        currenty = playerPos.y;
+    }
+
+    _timerLabelD->setPosition ( currentx - 710 , currenty + 570 );
+    _timerLabelH->setPosition ( currentx - 570 , currenty + 570 );
+    _timerLabelS->setPosition ( currentx - 410 , currenty + 570 );
+    _positionLabel->setPosition ( currentx - 570 , currenty + 490 );
+    button->setPosition ( currentx + 730 , currenty - 590 );
+    miniBag->setPosition ( currentx , currenty );
 
 
     // 是否进入农场

@@ -5,9 +5,9 @@
 #include "AppDelegate.h"
 class mini_bag : public cocos2d::Layer {
 public:
-    virtual bool init ( Inventory* inventory,std::string& WhichScene );
+    virtual bool init ( Inventory* inventory);
 
-    static mini_bag* create ( Inventory* inventory,std::string& WhichScene );
+    static mini_bag* create ( Inventory* inventory);
 
     void backgroundcreate ();
 
@@ -30,5 +30,4 @@ private:
 
     cocos2d::Sprite* currentItemSprite = nullptr; // 标识当前选择的物品
 
-    std::string whichScene;
 };

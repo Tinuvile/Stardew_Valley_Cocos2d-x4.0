@@ -248,6 +248,26 @@ bool Barn::init()
     // 将监听器添加到事件分发器
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( mouse_listener , this );
 
+    //界面下的背包显示
+    std::string scenename = "town";
+    miniBag = mini_bag::create ( inventory);
+    miniBag->setScale ( 1.0f );
+    Vec2 pos = miniBag->getPosition ();
+    if (miniBag != NULL) {
+        cocos2d::log ( "miniBagtest %f" , pos.x );
+    }
+    if (!this->getChildByName ( "mini_bag" )) {
+        this->addChild ( miniBag , 10 , "mini_bag" );
+    }
+
+
+    // 更新物品栏
+    schedule ( [=]( float deltaTime ) {
+        if (inventory->isupdated == true) {
+            miniBag->updateDisplay ();
+            inventory->isupdated = false;
+        }
+        } , 0.1f , "item_update_key" );
 
     return true;
 }

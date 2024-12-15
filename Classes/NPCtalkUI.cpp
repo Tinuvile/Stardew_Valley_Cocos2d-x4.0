@@ -35,7 +35,7 @@ void NPCtalkUI::updateCoordinate ( float& x , float& y ) {
         Leftboundary = -315.0f;
         rightboundary = 20000.0f;
         upperboundary = 920.0f;
-        lowerboundary = -850.0f;
+        lowerboundary = 360.0f;
     }
     else if (SceneName == "Forest") {
         Leftboundary = -600.0f;
@@ -43,7 +43,7 @@ void NPCtalkUI::updateCoordinate ( float& x , float& y ) {
         upperboundary = 2200.0f;
         lowerboundary = -850.0f;
     }
-    else if (SceneName == "fram") {
+    else if (SceneName == "farm") {
         Leftboundary = 637.0f;
         rightboundary = 960.0f;
         upperboundary = 777.0f;
