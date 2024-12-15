@@ -30,7 +30,7 @@ private:
 
     bool isClick = false;  // 标志，表示是否被点击
 
-    Sprite* currentItemSprite = nullptr; // 标识当前选择的物品
+    cocos2d::Sprite* currentItemSprite = nullptr; // 标识当前选择的物品
 
     std::string whichScene;
 };

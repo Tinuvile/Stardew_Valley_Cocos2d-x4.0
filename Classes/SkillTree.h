@@ -9,6 +9,7 @@
 class SkillTree {
 private:
 	std::unordered_map<int,Skill> skills;
+
 public:
 	SkillTree ();
 
@@ -29,9 +30,5 @@ public:
 			return skills[skill_type].GetLevel ();
 		}
 		return -1;
-	}
-
-
-
-	
+	}	
 };

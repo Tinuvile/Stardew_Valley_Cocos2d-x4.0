@@ -192,7 +192,7 @@ void mini_bag::updateDisplay () {
                 };
 
             // 添加鼠标按下事件  
-            listener->onMouseDown = [this , slot , itemSprite]( EventMouse* event ) {
+            listener->onMouseDown = [this , slot , itemSprite, serial_number]( EventMouse* event ) {
                 Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
                 mousePos = this->convertToNodeSpace ( mousePos );
 
@@ -200,6 +200,7 @@ void mini_bag::updateDisplay () {
                 if (slot->getBoundingBox ().containsPoint ( mousePos )) {
                     if (!isClick) {
                         currentItemSprite = itemSprite; // 记录当前选择的物品
+                        _selectedSlot = serial_number + 1;
                     }
                     else {
                         currentItemSprite = nullptr;
