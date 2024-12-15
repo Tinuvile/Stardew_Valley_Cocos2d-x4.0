@@ -160,15 +160,6 @@ void NPC::MoveToPosition ( const cocos2d::Vec2& targetPosition ) {
 }
 
 
-// 获取 Abigail 动画帧信息的函数  
-std::vector<std::vector<std::string>> getAbigailAnimations () {
-    return {
-        {"npc/Abigail/Abigail-8.png", "npc/Abigail/Abigail-9.png", "npc/Abigail/Abigail-10.png", "npc/Abigail/Abigail-11.png"},
-        {"npc/Abigail/Abigail-0.png", "npc/Abigail/Abigail-1.png", "npc/Abigail/Abigail-2.png", "npc/Abigail/Abigail-3.png"},
-        {"npc/Abigail/Abigail-14.png", "npc/Abigail/Abigail-13.png", "npc/Abigail/Abigail-14.png", "npc/Abigail/Abigail-15.png"},
-        {"npc/Abigail/Abigail-4.png", "npc/Abigail/Abigail-5.png", "npc/Abigail/Abigail-6.png", "npc/Abigail/Abigail-7.png"}
-    };
-}
 
 // 获取 Abigail 对话信息的函数
 std::vector<std::vector<std::string>> getDialog ( std::string npc , std::string relation_ship ) {
@@ -309,6 +300,16 @@ std::string getNPCportraits ( std::string name , std::string status ) {
     return "ERROR"; // 或者可以返回默认头像路径  
 }
 
+// 获取 Abigail 动画帧信息的函数  
+std::vector<std::vector<std::string>> getAbigailAnimations () {
+    return {
+        {"npc/Abigail/Abigail-8.png", "npc/Abigail/Abigail-9.png", "npc/Abigail/Abigail-10.png", "npc/Abigail/Abigail-11.png"},
+        {"npc/Abigail/Abigail-0.png", "npc/Abigail/Abigail-1.png", "npc/Abigail/Abigail-2.png", "npc/Abigail/Abigail-3.png"},
+        {"npc/Abigail/Abigail-14.png", "npc/Abigail/Abigail-13.png", "npc/Abigail/Abigail-14.png", "npc/Abigail/Abigail-15.png"},
+        {"npc/Abigail/Abigail-4.png", "npc/Abigail/Abigail-5.png", "npc/Abigail/Abigail-6.png", "npc/Abigail/Abigail-7.png"}
+    };
+}
+
 // 获取 Alex 动画信息的函数
 std::vector<std::vector<std::string>> getAlexAnimations () {
     return {
@@ -316,5 +317,35 @@ std::vector<std::vector<std::string>> getAlexAnimations () {
         {"npc/Alex/Alex-0.png", "npc/Alex/Alex-1.png", "npc/Alex/Alex-2.png", "npc/Alex/Alex-3.png"},
         {"npc/Alex/Alex-14.png", "npc/Alex/Alex-13.png", "npc/Alex/Alex-14.png", "npc/Alex/Alex-15.png"},
         {"npc/Alex/Alex-4.png", "npc/Alex/Alex-5.png", "npc/Alex/Alex-6.png", "npc/Alex/Alex-7.png"}
+    };
+}
+
+// 获取 Caroline 动画信息的函数
+std::vector<std::vector<std::string>> getCarolineAnimations () {
+    return {
+        {"npc/Caroline/Caroline-8.png", "npc/Caroline/Caroline-9.png", "npc/Caroline/Caroline-10.png", "npc/Caroline/Caroline-11.png"},
+        {"npc/Caroline/Caroline-0.png", "npc/Caroline/Caroline-1.png", "npc/Caroline/Caroline-2.png", "npc/Caroline/Caroline-3.png"},
+        {"npc/Caroline/Caroline-14.png", "npc/Caroline/Caroline-13.png", "npc/Caroline/Caroline-14.png", "npc/Caroline/Caroline-15.png"},
+        {"npc/Caroline/Caroline-4.png", "npc/Caroline/Caroline-5.png", "npc/Caroline/Caroline-6.png", "npc/Caroline/Caroline-7.png"}
+    };
+}
+
+// 获取 Elliott 动画信息的函数
+std::vector<std::vector<std::string>> getElliottAnimations () {
+    return {
+        {"npc/Elliott/Elliott-8.png", "npc/Elliott/Elliott-9.png", "npc/Elliott/Elliott-10.png", "npc/Elliott/Elliott-11.png"},
+        {"npc/Elliott/Elliott-0.png", "npc/Elliott/Elliott-1.png", "npc/Elliott/Elliott-2.png", "npc/Elliott/Elliott-3.png"},
+        {"npc/Elliott/Elliott-14.png", "npc/Elliott/Elliott-13.png", "npc/Elliott/Elliott-14.png", "npc/Elliott/Elliott-15.png"},
+        {"npc/Elliott/Elliott-4.png", "npc/Elliott/Elliott-5.png", "npc/Elliott/Elliott-6.png", "npc/Elliott/Elliott-7.png"}
+    };
+}
+
+// 获取 Emily 动画信息的函数
+std::vector<std::vector<std::string>> getEmilyAnimations () {
+    return {
+        {"npc/Emily/Emily-8.png", "npc/Emily/Emily-9.png", "npc/Emily/Emily-10.png", "npc/Emily/Emily-11.png"},
+        {"npc/Emily/Emily-0.png", "npc/Emily/Emily-1.png", "npc/Emily/Emily-2.png", "npc/Emily/Emily-3.png"},
+        {"npc/Emily/Emily-14.png", "npc/Emily/Emily-13.png", "npc/Emily/Emily-14.png", "npc/Emily/Emily-15.png"},
+        {"npc/Emily/Emily-4.png", "npc/Emily/Emily-5.png", "npc/Emily/Emily-6.png", "npc/Emily/Emily-7.png"}
     };
 }

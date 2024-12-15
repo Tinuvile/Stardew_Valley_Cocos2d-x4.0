@@ -34,7 +34,6 @@ public:
 
 
 private:
-
   
     // 用于显示计时的标签
     cocos2d::Label* _timerLabelD;
@@ -58,7 +57,6 @@ private:
     cocos2d::Sprite* In_gettask;
 
     bool isEnterKeyPressed = false;
-
 
 };
 

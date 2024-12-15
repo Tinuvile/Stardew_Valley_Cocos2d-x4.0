@@ -224,12 +224,16 @@ void NPCtalkUI::SelectedBox () {
 
             // 检查每个 Selectedbox  
             if (Selectedbox1 && Selectedbox1->getBoundingBox ().containsPoint ( mousePosition )) {
-                npc_relationship->increaseRelationship ( "player" , npc->GetName () , 20 );
+                if (npc_relationship->getRelationship ( "player" , npc->GetName () ) < 60) {
+                    npc_relationship->increaseRelationship ( "player" , npc->GetName () , 10 );
+                }
                 this->removeFromParent ();
                 return; // 提前返回，避免执行后续选择框检查  
             }
             if (Selectedbox2 && Selectedbox2->getBoundingBox ().containsPoint ( mousePosition )) {
-                npc_relationship->increaseRelationship ( "player" , npc->GetName () , 10 );
+                if (npc_relationship->getRelationship ( "player" , npc->GetName () ) < 60) {
+                    npc_relationship->increaseRelationship ( "player" , npc->GetName () , 5 );
+                }
                 this->removeFromParent ();
                 return; // 提前返回  
             }
