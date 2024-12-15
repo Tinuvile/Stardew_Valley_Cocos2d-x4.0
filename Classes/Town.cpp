@@ -170,6 +170,45 @@ bool Town::init()
         this->checkPlayerPosition();  // 检查玩家是否接近轮廓点
         }, 0.01f, "check_position_key");
 
+
+    // 允许的交互半径  
+    const float interactionRadius = 300.0f;
+
+
+    // 使用 getAlexAnimations() 获取 NPC 动画帧  
+    auto alexAnimations = getAlexAnimations ();
+    // 创建 NPC 示例  
+    auto alex = NPCreate::CreateNPC ( "Alex" , cocos2d::Vec2 ( -550 , 1450 ) , alexAnimations , nonTransparentPixels );
+    if (alex) {
+        // CCLOG ( "NPC Alex created successfully." );  
+        auto alexSprite = alex->GetSprite ();
+        if (alexSprite) {
+            // CCLOG ( "Alex sprite created successfully at position: (%f, %f)" , alexSprite->getPositionX () , alexSprite->getPositionY () );  
+            this->addChild ( alexSprite , 5 ); // 确保添加到场景中  
+
+            // 使用调度器每 1.0 秒调用 RandomMove  
+            this->schedule ( [alex]( float dt ) {
+                alex->RandomMove ();
+
+                // 获取 Alex 的当前位置  
+                auto alexSprite = alex->GetSprite (); // 获取精灵  
+                if (alexSprite) {
+                    // 获取当前精灵的位置和大小  
+                    Vec2 position = alexSprite->getPosition ();
+                    Size size = alexSprite->getContentSize ();
+                    // CCLOG ( "Alex's current position: (%f, %f)" , position.x , position.y ); // 打印位置  
+                }
+                } , 1.0f , "random_move_key_alex" ); // 每 1.0 秒随机移动一次  
+        }
+        else {
+            CCLOG ( "Alex sprite is nullptr." );
+        }
+    }
+    else {
+        CCLOG ( "Failed to create NPC Alex." );
+    }
+
+
     // 使用 getAbigailAnimations() 获取 NPC 动画帧  
     auto abigailAnimations = getAbigailAnimations();
     // 创建 NPC 示例  
@@ -203,12 +242,10 @@ bool Town::init()
         CCLOG("Failed to create NPC Abigail.");
     }
 
-    // 允许的交互半径  
-    const float interactionRadius = 300.0f;
 
     // 鼠标事件监听器
     auto listener = EventListenerMouse::create();
-    listener->onMouseDown = [this, abigail, interactionRadius](Event* event) {
+    listener->onMouseDown = [this , abigail , alex , interactionRadius] ( Event* event ) {
 
         // 获取鼠标点击的位置
         auto mouseEvent = static_cast<EventMouse*>(event);
@@ -243,9 +280,39 @@ bool Town::init()
                 */
             }
         }
+
+        // 检查是否点击了 Alex   
+        if (alex) {
+            auto alexSprite = alex->GetSprite ();
+            if (alexSprite && alexSprite->getBoundingBox ().containsPoint ( clickPos )) {
+                // 获取玩家的位置  
+                static NPCtalkUI* currentNPCtalkUI = nullptr;
+                Vec2 playerPos = player1->getPosition ();
+                currentNPCtalkUI = NPCtalkUI::create ( alex );
+                this->addChild ( currentNPCtalkUI , 12 ); // 将 currentNPCtalkUI添加到 Town 的上层  
+                // 计算玩家与 Alex 之间的距离  
+                float distance = playerPos.distance ( alexSprite->getPosition () );
+
+                /*
+                // 检查距离是否在允许的范围内
+                if (distance <= interactionRadius) {
+                    // 打开对话框
+                    static NPCtalkUI* currentNPCtalkUI = nullptr;
+                    if (currentNPCtalkUI == nullptr) {
+                        currentNPCtalkUI = NPCtalkUI::create ();
+                        this->addChild ( currentNPCtalkUI , 12 ); // 将 currentNPCtalkUI添加到 Town 的上层
+                    }
+                }
+                else {
+                    CCLOG ( "Player is too far from Alex to interact." );
+                }
+                */
+            }
+        }
         };
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, button);
+
 
 
     // 设置键盘监听器
