@@ -1,5 +1,6 @@
 #pragma once
 #include "cocos2d.h" 
+#include "AppDelegate.h"
 
 // NPC 角色类  
 class NPC : public cocos2d::Node {
@@ -25,12 +26,14 @@ public:
 
     void RandomMove ();
 
+    bool isTalked = false;
+
     bool IsPositionValid ( const cocos2d::Vec2& targetPosition , const cocos2d::Vec2& direction );
 
 protected:
     std::string name;            // NPC 的名字  
     cocos2d::Vec2 position;      // NPC 的坐标位置  
-    cocos2d::Sprite* sprite;     // NPC 的精灵  
+    cocos2d::Sprite* sprite;     // NPC 的精灵
 
     std::vector<cocos2d::Vec2> nonTransparentPixels;
 

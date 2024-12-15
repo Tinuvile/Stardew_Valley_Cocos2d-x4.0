@@ -161,9 +161,17 @@ void NPC::MoveToPosition ( const cocos2d::Vec2& targetPosition ) {
 
 
 
-// 获取 Abigail 对话信息的函数
+// 获取对话信息的函数
 std::vector<std::vector<std::string>> getDialog ( std::string npc , std::string relation_ship ) {
-    if (relation_ship == "非常差") {
+    if (npc_relationship->getRelationship ( "player" , npc ) >= 80) {
+        return {
+            {"Here, I brought you a gift!", "I really appreciate it!", "How have you been?", "Can we talk?", "Sure"},
+            {"I have something special for you.", "Thank you! That means a lot.", "I just wanted to check in.", "I don't care.", "Leave me alone!"},
+            {"Look what I got for you, a little present!", "Wow, this is amazing!", "I am not.", "Okay", "Alright"},
+            {"I thought you might like this.", "This is so thoughtful of you!", "Why not?", "I just don't.", "That's rude!"}
+        };
+    }
+    else if (relation_ship == "非常差") {
         return {
             {"I'm busy, I don't have time for you.", "Okay", "How have you been?", "Can we talk?", "Sure"},
             {"Why are you bothering me?", "Just wanted to check in.", "I don't care.", "Leave me alone!", "Okay"},
@@ -189,8 +197,8 @@ std::vector<std::vector<std::string>> getDialog ( std::string npc , std::string 
     }
     else if (relation_ship == "亲密") {
         return {
-            {"I really enjoy spending time with you.", "Me too, you're great company.", "Let's do this more often.", "Absolutely!", "Sure"},
-            {"We should go on a trip together!", "That sounds amazing, where to?", "I can't wait!", "Count me in!", "Okay"},
+            {"Let's go on a date.", "Oh, I have a gift for you.", "Let's do this more often.", "Absolutely!", "Sure"},
+            {"We should go on a trip together!", "That sounds amazing!", "I can't wait!", "Yeah!", "Okay"},
             {"You know how much I care about you, right?", "Of course, I feel the same way.", "You're very important to me.", "Thank you, that means a lot.", "Okay"},
             {"You're my best friend.", "And you're mine, always here for you.", "Let's stick together.", "Forever!", "Okay"}
         };
