@@ -18,8 +18,8 @@ static void problemLoading ( const char* filename )
 
 void intimacyUI::updateCoordinate ( float& x , float& y ) {
     Vec2 position = player1->getPosition ();
-    if (x <= -117) {
-        x = -117;
+    if (x <= -170) {
+        x = -170;
     }
     else if (x >= 1773) {
         x = 1773;
@@ -171,7 +171,8 @@ void intimacyUI::Buttons_switching () {
             Director::getInstance ()->getRunningScene ()->addChild ( InventoryUI::create ( inventory ) , 10 );
         }
         else if (Skillkey->getBoundingBox ().containsPoint ( mousePos )) {
-
+            this->removeFromParent ();
+            Director::getInstance ()->getRunningScene ()->addChild ( SkillTreeUI::create () , 10 );
         }
         else if (intimacykey->getBoundingBox ().containsPoint ( mousePos )) {
         }

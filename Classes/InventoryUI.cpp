@@ -17,8 +17,8 @@ static void problemLoading ( const char* filename )
 
 void InventoryUI::updateCoordinate ( float &x , float &y ) {
     Vec2 position = player1->getPosition ();
-    if (x <= -117) {
-        x = -117;
+    if (x <= -170) {
+        x = -170;
     }
     else if (x >= 1773) {
         x = 1773;
@@ -176,7 +176,8 @@ void InventoryUI::Buttons_switching () {
         if (bagkey->getBoundingBox ().containsPoint ( mousePos )) {
         }
         else if (Skillkey->getBoundingBox ().containsPoint ( mousePos )) {
-
+            this->removeFromParent ();
+            Director::getInstance ()->getRunningScene ()->addChild ( SkillTreeUI::create () , 10 );
         }
         else if (intimacykey->getBoundingBox ().containsPoint ( mousePos )) {
             CCLOG ( "Clicked on intimacykey" );

@@ -14,31 +14,6 @@ static void problemLoading ( const char* filename )
     printf ( "Depending on how you compiled you might have to add 'Resources/' in front of filenames in CreateCharacterScene.cpp\n" );
 }
 
-void mini_bag::updateCoordinate ( float& x , float& y) {
-    Vec2 position = player1->getPosition ();
-    if (whichScene == "Town") {
-        if (x <= -170) {
-            x = -170;
-        }
-        else if (x >= 1773) {
-            x = 1773;
-        }
-        else {
-            x = position.x;
-        }
-
-        if (y >= 1498) {
-            y = 1498;
-        }
-        else if (y <= -222) {
-            y = -222;
-        }
-        else {
-            y = position.y;
-        }
-    }
-}
-
 void mini_bag::backgroundcreate () {
     Vec2 position = player1->getPosition ();
     //updateCoordinate ( 0 , 0 );

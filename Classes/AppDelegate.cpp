@@ -54,6 +54,7 @@ Inventory* inventory = new Inventory ();
 NpcRelationship* npc_relationship = new NpcRelationship();
 std::vector<std::pair<Rect , bool>> barn_space;
 std::vector<Livestock*> livestocks;
+SkillTree* skillTree = new SkillTree ();
 /****************************************************************************************/
 
 

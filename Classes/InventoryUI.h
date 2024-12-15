@@ -4,6 +4,7 @@
 #include "Inventory.h"  
 #include "AppDelegate.h"
 #include "intimacyUI.h"
+#include "SkillTreeUI.h"
 
 class InventoryUI : public cocos2d::Layer {
 public:

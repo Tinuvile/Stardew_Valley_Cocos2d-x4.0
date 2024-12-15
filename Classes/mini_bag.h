@@ -18,8 +18,6 @@ public:
 
     void updateDisplay (); // 更新显示内容  
 
-    void updateCoordinate ( float& x , float& y);
-
 private:
     Inventory* _inventory; // 指向 Inventory 实例的指针  
 
