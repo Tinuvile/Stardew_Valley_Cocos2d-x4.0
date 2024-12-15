@@ -10,9 +10,9 @@
 
 class intimacyUI : public cocos2d::Layer {
 public:
-    virtual bool init ();
+    virtual bool init ( std::string sceneName );
 
-    static intimacyUI* create ();
+    static intimacyUI* create ( std::string sceneName );
 
     void backgroundcreate ();
 
@@ -24,6 +24,6 @@ public:
 
     void characterInfo ( const string& name , const string& status , Vec2 Pos_photo);
 private:  
-
+    std::string SceneName;
 };
                             

@@ -8,9 +8,9 @@
 
 class SkillTreeUI : public cocos2d::Layer {
 public:
-    virtual bool init ();
+    virtual bool init ( std::string sceneName );
 
-    static SkillTreeUI* create ();
+    static SkillTreeUI* create ( std::string sceneName );
 
     void backgroundcreate ();
 
@@ -25,4 +25,6 @@ private:
     void close ();
 
     void SkillDisplay ( int whichSkill , Vec2 Pos , float gap );
+
+    std::string SceneName;
 };

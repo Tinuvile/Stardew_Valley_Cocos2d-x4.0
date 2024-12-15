@@ -182,6 +182,24 @@ bool Beach::init ()
                 //this->pause ();
             }
         }
+        else if (key_code == EventKeyboard::KeyCode::KEY_ESCAPE) {
+            static int isOpen = 0;
+            static InventoryUI* currentInventoryUI = nullptr;  // 保存当前显示的 InventoryUI  
+            // 如果当前没有打开 InventoryUI，则打开它  
+            if (currentInventoryUI == nullptr || isOpen == 0) {
+                isOpen = 1;
+                CCLOG ( "Opening inventory." );
+                currentInventoryUI = InventoryUI::create ( inventory , "Beach" );
+                this->addChild ( currentInventoryUI , 30 );  // 将 InventoryUI 添加到上层  
+            }
+            // 如果已经打开 InventoryUI，则关闭它  
+            else {
+                isOpen = 0;
+                CCLOG ( "Closing inventory." );
+                this->removeChild ( currentInventoryUI , true );  // 从当前场景中移除 InventoryUI  
+                currentInventoryUI = nullptr;  // 重置指针  
+            }
+        }
     };
 
     // 将监听器添加到事件分发器中

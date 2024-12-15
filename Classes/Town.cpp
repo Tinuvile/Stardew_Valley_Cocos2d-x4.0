@@ -222,7 +222,7 @@ bool Town::init()
                 // 获取玩家的位置  
                 static NPCtalkUI* currentNPCtalkUI = nullptr;
                 Vec2 playerPos = player1->getPosition();
-                currentNPCtalkUI = NPCtalkUI::create(abigail);
+                currentNPCtalkUI = NPCtalkUI::create ( abigail , "Town" );
                 this->addChild(currentNPCtalkUI, 12); // 将 currentNPCtalkUI添加到 Town 的上层  
                 // 计算玩家与 Abigail 之间的距离  
                 float distance = playerPos.distance(abigailSprite->getPosition());
@@ -259,15 +259,14 @@ bool Town::init()
                 CCLOG("Enter key pressed. ");
             }
             else if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
-                isEscKeyPressed = true;
                 static int isOpen = 0;
                 static InventoryUI* currentInventoryUI = nullptr;  // 保存当前显示的 InventoryUI  
                 // 如果当前没有打开 InventoryUI，则打开它  
                 if (currentInventoryUI == nullptr || isOpen == 0) {
                     isOpen = 1;
                     CCLOG("Opening inventory.");
-                    currentInventoryUI = InventoryUI::create(inventory);
-                    this->addChild(currentInventoryUI, 11);  // 将 InventoryUI 添加到 Town 的上层  
+                    currentInventoryUI = InventoryUI::create ( inventory , "Town" );
+                    this->addChild ( currentInventoryUI , 20 );  // 将 InventoryUI 添加到 Town 的上层  
                 }
                 // 如果已经打开 InventoryUI，则关闭它  
                 else {
@@ -285,9 +284,6 @@ bool Town::init()
             if (keyCode == EventKeyboard::KeyCode::KEY_ENTER) {
                 isEnterKeyPressed = false;
                 CCLOG("Enter key released. ");
-            }
-            else if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
-                isEscKeyPressed = false;
             }
         };
 
@@ -417,11 +413,6 @@ void Town::checkPlayerPosition()
     _positionLabel->setPosition(currentx - 570, currenty + 490);
     button->setPosition(currentx + 730, currenty - 590);
     miniBag->setPosition (currentx, currenty);
-
-    // 是否打开物品栏
-    if (isEscKeyPressed) {
-       
-    }
    
     // 检查玩家是否进入目标区域，并且按下 Enter 键
     if (Region_supermarket.containsPoint(playerPos)) {

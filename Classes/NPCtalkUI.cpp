@@ -18,21 +18,52 @@ static void problemLoading ( const char* filename )
 
 void NPCtalkUI::updateCoordinate ( float& x , float& y ) {
     Vec2 position = player1->getPosition ();
-    if (x <= -117) {
-        x = -117;
+    float  Leftboundary = -10000.0f , rightboundary = 10000.0f , upperboundary = 10000.0f , lowerboundary = 10000.0f;
+    if (SceneName == "Town") {
+        Leftboundary = -170.0f;
+        rightboundary = 1773.0f;
+        upperboundary = 1498.0f;
+        lowerboundary = -222.0f;
     }
-    else if (x >= 1773) {
-        x = 1773;
+    else if (SceneName == "Cave") {
+        Leftboundary = 786.0f;
+        rightboundary = 817.0f;
+        upperboundary = 808.0f;
+        lowerboundary = 460.0f;
+    }
+    else if (SceneName == "Beach") {
+        Leftboundary = -315.0f;
+        rightboundary = 20000.0f;
+        upperboundary = 920.0f;
+        lowerboundary = -850.0f;
+    }
+    else if (SceneName == "Forest") {
+        Leftboundary = -600.0f;
+        rightboundary = 2197.0f;
+        upperboundary = 2200.0f;
+        lowerboundary = -850.0f;
+    }
+    else if (SceneName == "fram") {
+        Leftboundary = 637.0f;
+        rightboundary = 960.0f;
+        upperboundary = 777.0f;
+        lowerboundary = 500.0f;
+    }
+    if (x <= Leftboundary) {
+        x = Leftboundary;
+    }
+    else if (x >= rightboundary) {
+        x = rightboundary;
     }
     else {
         x = position.x;
     }
 
-    if (y >= 1498) {
-        y = 1498;
+    if (y >= upperboundary) {
+        y = upperboundary;
     }
-    else if (y <= -222) {
-        y = -222;
+    else if (y <= lowerboundary) {
+        y = lowerboundary;
     }
     else {
         y = position.y;
@@ -258,10 +289,11 @@ void NPCtalkUI::close () {
     }
 }
 
-bool NPCtalkUI::init ( NPC* npc_name ) {
+bool NPCtalkUI::init ( NPC* npc_name , std::string sceneName ) {
     if (!Layer::init ()) {
         return false;
     }
+    SceneName = sceneName;
     npc = npc_name;
     NPC_RELATIONSHIP = npc_relationship;
     backgroundcreate ();
@@ -270,9 +302,9 @@ bool NPCtalkUI::init ( NPC* npc_name ) {
     return true;
 }
 
-NPCtalkUI* NPCtalkUI::create ( NPC* npc_name ) {
+NPCtalkUI* NPCtalkUI::create ( NPC* npc_name , std::string sceneName ) {
     NPCtalkUI* ret = new NPCtalkUI ();
-    if (ret && ret->init ( npc_name )) {
+    if (ret && ret->init ( npc_name , sceneName )) {
         ret->autorelease ();
         return ret;
     }
