@@ -4,7 +4,7 @@ USING_NS_CC;
 
 extern int remainingTime;
 
-Player::Player() : speed(10.0f) {}
+Player::Player() : speed(20.0f) {}
 
 Player::~Player() {}
 

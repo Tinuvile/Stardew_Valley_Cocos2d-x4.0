@@ -6,6 +6,8 @@
 
 
 
+const int kMaxLivestock = 12;
+
 Barn::Barn() {}
 
 Barn::~Barn() {}
@@ -235,78 +237,78 @@ void Barn::checkPlayerPosition()
 
     // 更新计时器显示
     remainingTime++;
-    //_timerLabelD->setString("Day: " + std::to_string(day));
-    //_timerLabelH->setString(std::to_string(remainingTime / 1800) + ":00");
-    //_timerLabelS->setString(Season);
-    if (remainingTime == 432000) {
+    _timerLabelD->setString("Day: " + std::to_string(day));
+    _timerLabelH->setString(std::to_string(remainingTime / 1800) + ":00");
+    _timerLabelS->setString(Season);
+    //if (remainingTime == 432000) {
 
-        /*day++;
-        IsNextDay = true;
+    //    day++;
+    //    IsNextDay = true;
 
-        if (day == 8) {
-            if (Season == "Spring") {
-                Season = "Summer";
-            }
-            else if (Season == "Summer") {
-                Season = "Autumn";
-            }
-            else {
-                Season = "Winter";
-            }
-            day = 1;
-        }*/
+    //    if (day == 8) {
+    //        if (Season == "Spring") {
+    //            Season = "Summer";
+    //        }
+    //        else if (Season == "Summer") {
+    //            Season = "Autumn";
+    //        }
+    //        else {
+    //            Season = "Winter";
+    //        }
+    //        day = 1;
+    //    }
 
-        remainingTime = 0;
+    //    remainingTime = 0;
 
-        //for (auto it = Crop_information.begin(); it != Crop_information.end();) {
+    //    for (auto it = Crop_information.begin(); it != Crop_information.end();) {
 
-        //    auto crop = *it;  // 解引用迭代器以访问 Crop 对象
+    //        auto crop = *it;  // 解引用迭代器以访问 Crop 对象
 
-        //    // 判断前一天是否浇水
-        //    if ((crop->watered == false) && (crop->GetPhase() != Phase::MATURE)) {
-        //        // 判断是否已经进入枯萎状态
-        //        if (crop->GetPhase() != Phase::SAPLESS) {
-        //            crop->ChangePhase(Phase::SAPLESS);
-        //            crop->ChangMatureNeeded(2); // 延迟两天收获
-        //            it++;
-        //        }
-        //        else {
-        //            // 删除元素并更新迭代器
-        //            it = Crop_information.erase(it);
-        //        }
+    //        // 判断前一天是否浇水
+    //        if ((crop->watered == false) && (crop->GetPhase() != Phase::MATURE)) {
+    //            // 判断是否已经进入枯萎状态
+    //            if (crop->GetPhase() != Phase::SAPLESS) {
+    //                crop->ChangePhase(Phase::SAPLESS);
+    //                crop->ChangMatureNeeded(2); // 延迟两天收获
+    //                it++;
+    //            }
+    //            else {
+    //                // 删除元素并更新迭代器
+    //                it = Crop_information.erase(it);
+    //            }
 
-        //    }
-        //    else {
-        //        // 更新状态
-        //        crop->UpdateGrowth();
-        //        it++;
-        //    }
+    //        }
+    //        else {
+    //            // 更新状态
+    //            crop->UpdateGrowth();
+    //            it++;
+    //        }
 
-        //}
+    //    }
 
-        //for (auto& pair : F_lastplace) {
-        //    if (pair.first.first == "myhouse") {  // 检查 bool 值是否为 true
-        //        pair.second = true;
-        //    }
-        //}
+    //    for (auto& pair : F_lastplace) {
+    //        if (pair.first.first == "myhouse") {  // 检查 bool 值是否为 true
+    //            pair.second = true;
+    //        }
+    //    }
 
-        //player1->removeFromParent();
-        //auto nextday = farm::create();
-        //Director::getInstance()->replaceScene(nextday);
-
-
-    }
+    //    player1->removeFromParent();
+    //    auto nextday = farm::create();
+    //    Director::getInstance()->replaceScene(nextday);
 
 
+    //}
 
-    // 是否进入农场
-  /*  if (Out_Barn.containsPoint(playerPos)) {
-        if (isEnterKeyPressed) {
-            player1->removeFromParent();
-            auto NextSence = farm::create();
-            Director::getInstance()->replaceScene(NextSence);
-        }
-    }*/
+
+
+    //// 是否进入农场
+    //if (Out_Barn.containsPoint(playerPos)) {
+    //    if (isEnterKeyPressed) {
+    //        player1->removeFromParent();
+    //        auto NextSence = farm::create();
+    //        Director::getInstance()->replaceScene(NextSence);
+    //    }
+    //}
 
 
     for (const auto& point : nonTransparentPixels)

@@ -29,7 +29,6 @@ public:
     // 创建房子的区域
     cocos2d::Rect Region_supermarket = Rect(163, 518, 130, 60);
   
-
 private:
 
   
