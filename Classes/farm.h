@@ -28,7 +28,7 @@ public:
    
 
     // 返回作物序号
-    int getRegionNumber(Vec2 pos);
+    //int getRegionNumber(Vec2 pos);
 
     // 创建一个列表，用于保存所有非透明像素的坐标
     std::vector<cocos2d::Vec2> nonTransparentPixels;

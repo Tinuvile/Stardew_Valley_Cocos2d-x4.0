@@ -32,21 +32,21 @@ Crop potato ( "potato" , "crop/potato1.png" , "crop/potato2.png" , "crop/potato3
 Crop pumpkin ( "pumpkin" , "crop/pumpkin1.png" , "crop/pumpkin2.png" , "crop/pumpkin3.png" , "Autumn" , Phase::SEED , 70 , 0 , false , 6 );
 Crop blueberry ( "blueberry" , "crop/blueberry1.png" , "crop/blueberry2.png" , "crop/blueberry3.png" , "Summer" , Phase::SEED , 100 , 0 , false , 7 );
 
-std::string Season = "Spring";
-std::map<std::string , int> season;
-std::vector<std::shared_ptr<Crop>> Crop_information;
-std::vector<std::shared_ptr<Ore>> Ore_information;
-std::vector<std::shared_ptr<Tree>> Tree_information;
-std::map<std::string , Crop> cropbasicinformation;
-std::map<std::pair<std::string , Vec2> , bool> T_lastplace;
-std::map<std::pair<std::string , Vec2> , bool> F_lastplace;
+//std::string Season = "Spring";
+//std::map<std::string , int> season;
+//std::vector<std::shared_ptr<Crop>> Crop_information;
+//std::vector<std::shared_ptr<Ore>> Ore_information;
+//std::vector<std::shared_ptr<Tree>> Tree_information;
+//std::map<std::string , Crop> cropbasicinformation;
+//std::map<std::pair<std::string , Vec2> , bool> T_lastplace;
+//std::map<std::pair<std::string , Vec2> , bool> F_lastplace;
 
 // 全局指针变量定义
 Player* player1 = nullptr;
-Town* town = nullptr;
-supermarket* seedshop = nullptr;
-farm* Farm = nullptr;
-Myhouse* myhouse = nullptr;
+//Town* town = nullptr;
+//supermarket* seedshop = nullptr;
+//farm* Farm = nullptr;
+//Myhouse* myhouse = nullptr;
 Inventory* inventory = new Inventory ();
 std::vector<std::pair<Rect , bool>> barn_space;
 std::vector<Livestock*> livestocks;
@@ -120,6 +120,9 @@ void AppDelegate::runScene ( cocos2d::Director* director ) {
     auto visibleSize = Director::getInstance ()->getVisibleSize ();  // 获取屏幕可视区域的大小
     Vec2 origin = Director::getInstance ()->getVisibleOrigin ();  // 获取屏幕原点的位置（左下角）
 
+    auto beach = Beach::create ();
+    director->runWithScene ( beach );
+
     //运行畜棚场景
    /* auto barn = Barn::create ();
     director->runWithScene ( barn );*/
@@ -129,8 +132,8 @@ void AppDelegate::runScene ( cocos2d::Director* director ) {
     director->runWithScene(test); */
 
     // 运行森林
-    auto test = Forest::create();
-    director->runWithScene(test);
+   /* auto test = Forest::create();
+    director->runWithScene(test);*/
 
     //开局UI运行
     //director->runWithScene ( BeginScene::create () );
@@ -145,52 +148,52 @@ void AppDelegate::Initialize () {
     player1 = Player::create ();
 
     // 初始化存储作物信息的数组
-    cropbasicinformation.insert ( { "wheat", wheat } ); 
-    cropbasicinformation.insert ( { "corn", corn } );
-    cropbasicinformation.insert ( { "potato", potato } );
-    cropbasicinformation.insert ( { "pumpkin", pumpkin } );
-    cropbasicinformation.insert ( { "blueberry", blueberry } );
+    //cropbasicinformation.insert ( { "wheat", wheat } ); 
+    //cropbasicinformation.insert ( { "corn", corn } );
+    //cropbasicinformation.insert ( { "potato", potato } );
+    //cropbasicinformation.insert ( { "pumpkin", pumpkin } );
+    //cropbasicinformation.insert ( { "blueberry", blueberry } );
 
-    // 初始化宝石信息
-    Ore Ruby("Ruby", "Ore/Ruby1.png", "Ore/Ruby2.png", 5, 5, Vec2(350, 500));                   // 红宝石
-    Ore_information.push_back(Ruby.GetOreCopy());
-    Ruby.position = Vec2(950, 750);
-    Ore_information.push_back(Ruby.GetOreCopy()); 
+    //// 初始化宝石信息
+    //Ore Ruby("Ruby", "Ore/Ruby1.png", "Ore/Ruby2.png", 5, 5, Vec2(350, 500));                   // 红宝石
+    //Ore_information.push_back(Ruby.GetOreCopy());
+    //Ruby.position = Vec2(950, 750);
+    //Ore_information.push_back(Ruby.GetOreCopy()); 
 
-    Ore Amethyst("Amethyst", "Ore/Amethyst1.png", "Ore/Amethyst2.png", 5, 5, Vec2(800, 250));   // 紫宝石
-    Ore_information.push_back(Amethyst.GetOreCopy());
-    Amethyst.position = Vec2(750, 850);
-    Ore_information.push_back(Amethyst.GetOreCopy());
+    //Ore Amethyst("Amethyst", "Ore/Amethyst1.png", "Ore/Amethyst2.png", 5, 5, Vec2(800, 250));   // 紫宝石
+    //Ore_information.push_back(Amethyst.GetOreCopy());
+    //Amethyst.position = Vec2(750, 850);
+    //Ore_information.push_back(Amethyst.GetOreCopy());
 
-    Ore Emerald("Emerald", "Ore/Emerald1.png", "Ore/Emerald2.png", 5, 5, Vec2(900, 150));       // 绿宝石
-    Ore_information.push_back(Emerald.GetOreCopy());
-    Emerald.position = Vec2(1250, 350);
-    Ore_information.push_back(Emerald.GetOreCopy());
+    //Ore Emerald("Emerald", "Ore/Emerald1.png", "Ore/Emerald2.png", 5, 5, Vec2(900, 150));       // 绿宝石
+    //Ore_information.push_back(Emerald.GetOreCopy());
+    //Emerald.position = Vec2(1250, 350);
+    //Ore_information.push_back(Emerald.GetOreCopy());
 
-    // 初始化树木信息
-    Tree tree("tree", "Tree/tree1.png", "Tree/tree2.png", "Tree/tree3.png", 15, 5, Vec2(50, 950));
-    Tree_information.push_back(tree.GetTreeCopy());
-    tree.position = Vec2(-400, 700);
-    Tree_information.push_back(tree.GetTreeCopy());
-    tree.position = Vec2(800, 1250);
-    Tree_information.push_back(tree.GetTreeCopy());
-    tree.position = Vec2(900, 1650);
-    Tree_information.push_back(tree.GetTreeCopy());
-    tree.position = Vec2(1300, 1550);
-    Tree_information.push_back(tree.GetTreeCopy());
+    //// 初始化树木信息
+    //Tree tree("tree", "Tree/tree1.png", "Tree/tree2.png", "Tree/tree3.png", 15, 5, Vec2(50, 950));
+    //Tree_information.push_back(tree.GetTreeCopy());
+    //tree.position = Vec2(-400, 700);
+    //Tree_information.push_back(tree.GetTreeCopy());
+    //tree.position = Vec2(800, 1250);
+    //Tree_information.push_back(tree.GetTreeCopy());
+    //tree.position = Vec2(900, 1650);
+    //Tree_information.push_back(tree.GetTreeCopy());
+    //tree.position = Vec2(1300, 1550);
+    //Tree_information.push_back(tree.GetTreeCopy());
 
-    // 初始化小镇各地址坐标
-    std::pair<std::string , Vec2> key = { "initiation",Vec2 ( 350,350 ) };
-    T_lastplace.insert ( std::make_pair ( key , true ) );
-    key = { "seedshop",Vec2 ( 230,470 ) };
-    T_lastplace.insert ( std::make_pair ( key , false ) );
+    //// 初始化小镇各地址坐标
+    //std::pair<std::string , Vec2> key = { "initiation",Vec2 ( 350,350 ) };
+    //T_lastplace.insert ( std::make_pair ( key , true ) );
+    //key = { "seedshop",Vec2 ( 230,470 ) };
+    //T_lastplace.insert ( std::make_pair ( key , false ) );
 
 
-    // 初始化季节
-    season.insert ( { "Spring", 1 } );
-    season.insert ( { "Summer", 2 } );
-    season.insert ( { "Autumn", 3 } );
-    season.insert ( { "Winter", 4 } );
+    //// 初始化季节
+    //season.insert ( { "Spring", 1 } );
+    //season.insert ( { "Summer", 2 } );
+    //season.insert ( { "Autumn", 3 } );
+    //season.insert ( { "Winter", 4 } );
 
 }
 

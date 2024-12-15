@@ -4,23 +4,24 @@
 #include "cocos2d.h"  // 引入 Cocos2d-x 引擎的主头文件
 //#include "GameBeginUI.h"
 #include "Inventory.h"
-#include "Town.h"
-#include "supermarket.h"
-#include "farm.h"
+//#include "Town.h"
+//#include "supermarket.h"
+//#include "farm.h"
 #include "Barn.h"
-#include "Forest.h"
-#include "Cave.h"
-#include "Myhouse.h"
+#include "Beach.h"
+//#include "Forest.h"
+//#include "Cave.h"
+//#include "Myhouse.h"
 #include "Player.h"
-#include "tree.h"
+//#include "tree.h"
 #include "Crop.h"
-#include "Ore.h"
+//#include "Ore.h"
 #include "Item.h"
-#include "BasicInformation.h"
-#include "Generaltem.h"
-#include "NPCdata.h"
-#include "NPCreate.h"
-#include "NpcRelationship.h"
+//#include "BasicInformation.h"
+//#include "Generaltem.h"
+//#include "NPCdata.h"
+//#include "NPCreate.h"
+//#include "NpcRelationship.h"
 #include"Livestock.h"
 #include"Cow.h"
 #include"Chicken.h"
@@ -31,46 +32,44 @@
 USING_NS_CC;
 
 class Player;
-class Town;
-class farm;
-class supermarket;
-class Myhouse;
+//class Town;
+//class farm;
+//class supermarket;
+//class Myhouse;
 class Crop;
 class Item;
-class CropBasicInformation;
+//class CropBasicInformation;
 class Barn;
 /******************************** 全局变量声明区 ***************************************/
 extern int remainingTime;  // 声明，不初始化
-extern int day;
-extern bool IsNextDay;
-extern bool frombed;
-extern std::string Season;
-extern std::map<std::string , int> season;
-extern supermarket* seedshop;
-extern Town* town;
-extern Player* player1;
-extern farm* Farm;
-extern Myhouse* myhouse;
-extern Inventory* inventory;
-// 每种作物的基本信息
-extern std::map<std::string , Crop> cropbasicinformation;
-extern std::map<std::pair<std::string , Vec2> , bool> T_lastplace;
-extern std::map<std::pair<std::string, Vec2>, bool> F_lastplace;
-// 已经种植的作物的状态信息
-extern std::vector<std::shared_ptr<Crop>> Crop_information;
-extern std::vector<std::shared_ptr<Ore>> Ore_information; 
-extern std::vector<std::shared_ptr<Tree>> Tree_information; 
-// 初始化各作物的基本信息
-extern CropBasicInformation WHEAT;
-extern CropBasicInformation CORN;
-extern CropBasicInformation POTATO;
-extern CropBasicInformation PUMPKIN;
-extern CropBasicInformation BLUEBERRY;
-extern Crop wheat; 
-extern Crop corn;
-extern Crop potato;
-extern Crop pumpkin;
-extern Crop blueberry;
+//extern int day;
+//extern bool IsNextDay;
+//extern bool frombed;
+//extern std::string Season;
+//extern std::map<std::string , int> season;
+//extern supermarket* seedshop;
+//extern Town* town;
+//extern farm* Farm;
+//extern Myhouse* myhouse;
+//// 每种作物的基本信息
+//extern std::map<std::string , Crop> cropbasicinformation;
+//extern std::map<std::pair<std::string , Vec2> , bool> T_lastplace;
+//extern std::map<std::pair<std::string, Vec2>, bool> F_lastplace;
+//// 已经种植的作物的状态信息
+//extern std::vector<std::shared_ptr<Crop>> Crop_information;
+//extern std::vector<std::shared_ptr<Ore>> Ore_information; 
+//extern std::vector<std::shared_ptr<Tree>> Tree_information; 
+//// 初始化各作物的基本信息
+//extern CropBasicInformation WHEAT;
+//extern CropBasicInformation CORN;
+//extern CropBasicInformation POTATO;
+//extern CropBasicInformation PUMPKIN;
+//extern CropBasicInformation BLUEBERRY;
+//extern Crop wheat; 
+//extern Crop corn;
+//extern Crop potato;
+//extern Crop pumpkin;
+//extern Crop blueberry;
 extern Player* player1;  // 声明指针变量，不初始化
 extern Inventory* inventory;
 //存储畜棚中可有家畜活动的矩形区域，并记录该区域是否已存在家畜

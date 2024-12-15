@@ -1,12 +1,7 @@
 #include "AppDelegate.h"
 #include "Beach.h"
-#include "farm.h"
 #include "Player.h"
-#include "physics/CCPhysicsWorld.h"
-#include "ui/CocosGUI.h"
 
-
-USING_NS_CC;
 
 Beach::Beach () {}
 
@@ -18,9 +13,9 @@ bool Beach::init ()
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     Vec2 origin = Director::getInstance ()->getVisibleOrigin ();
 
-    //创建退出按钮
-    button = cocos2d::Sprite::create ( "CloseNormal.png" );
-    this->addChild ( button , 11 );
+    ////创建退出按钮
+    //button = cocos2d::Sprite::create ( "CloseNormal.png" );
+    //this->addChild ( button , 11 );
 
     // 设置计时器标签
     _timerLabelD = Label::createWithTTF ( "Day: 0" , "fonts/Marker Felt.ttf" , 24 );
@@ -145,12 +140,12 @@ bool Beach::init ()
         clickPos = this->convertToNodeSpace ( clickPos );
 
         // 判断点击位置是否在精灵范围内
-        if (button != nullptr && button->getBoundingBox ().containsPoint ( clickPos )) {
-            Director::getInstance ()->end ();
-        }
+        //if (button != nullptr && button->getBoundingBox ().containsPoint ( clickPos )) {
+        //    Director::getInstance ()->end ();
+        //}
         };
 
-    _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , button );
+    //_eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , button );
 
     // 设置键盘监听器
     auto listenerWithPlayer = EventListenerKeyboard::create ();
@@ -221,15 +216,15 @@ void Beach::CheckPlayerPosition ()
 
     // 更新计时器显示
     remainingTime++;
-    _timerLabelD->setString ( "Day: " + std::to_string ( day ) );
-    _timerLabelH->setString ( std::to_string ( remainingTime / 1800 ) + ":00" );
-    _timerLabelS->setString ( Season );
+    //_timerLabelD->setString ( "Day: " + std::to_string ( day ) );
+    //_timerLabelH->setString ( std::to_string ( remainingTime / 1800 ) + ":00" );
+    //_timerLabelS->setString ( Season );
     if (remainingTime == 432000) {
 
-        day++;
+        //day++;
         /*IsNextDay = true;*/
 
-        if (day == 8) {
+     /*   if (day == 8) {
             if (Season == "Spring") {
                 Season = "Summer";
             }
@@ -240,7 +235,7 @@ void Beach::CheckPlayerPosition ()
                 Season = "Winter";
             }
             day = 1;
-        }
+        }*/
 
         remainingTime = 0;
 
@@ -270,9 +265,9 @@ void Beach::CheckPlayerPosition ()
         //    it++;
         //}
 
-        player1->removeFromParent ();
+       /* player1->removeFromParent ();
         auto nextday = farm::create ();
-        Director::getInstance ()->replaceScene ( nextday );
+        Director::getInstance ()->replaceScene ( nextday );*/
 
 
     }
@@ -280,13 +275,13 @@ void Beach::CheckPlayerPosition ()
 
 
     // 是否进入农场
-    if (Out_Beach.containsPoint ( playerPos )) {
+  /*  if (Out_Beach.containsPoint ( playerPos )) {
         if (isEnterKeyPressed) {
             player1->removeFromParent ();
             auto NextSence = farm::create ();
             Director::getInstance ()->replaceScene ( NextSence );
         }
-    }
+    }*/
 
 
     for (const auto& point : non_transparent_pixels)

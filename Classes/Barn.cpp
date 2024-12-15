@@ -1,13 +1,10 @@
 #include "AppDelegate.h"
 #include "Barn.h"
-#include "farm.h"
-#include "Crop.h"
+//#include "farm.h"
+//#include "Crop.h"
 #include "Player.h"
-#include "physics/CCPhysicsWorld.h"
-#include "ui/CocosGUI.h"
 
 
-USING_NS_CC;
 
 Barn::Barn() {}
 
@@ -49,8 +46,8 @@ bool Barn::init()
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    button = cocos2d::Sprite::create("CloseNormal.png");
-    this->addChild(button, 11);
+    //button = cocos2d::Sprite::create("CloseNormal.png");
+    //this->addChild(button, 11);
 
     // 设置计时器标签
     _timerLabelD = Label::createWithTTF("Day: 0", "fonts/Marker Felt.ttf", 24);
@@ -176,13 +173,13 @@ bool Barn::init()
         Vec2 clickPos(mouseEvent->getCursorX(), mouseEvent->getCursorY());
         clickPos = this->convertToNodeSpace(clickPos);
 
-        // 判断点击位置是否在精灵范围内
-        if (button != nullptr && button->getBoundingBox().containsPoint(clickPos)) {
-            Director::getInstance()->end();
-        }
+        //// 判断点击位置是否在精灵范围内
+        //if (button != nullptr && button->getBoundingBox().containsPoint(clickPos)) {
+        //    Director::getInstance()->end();
+        //}
         };
 
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, button);
+    //_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, button);
 
     // 设置键盘监听器
     auto listenerWithPlayer = EventListenerKeyboard::create();
@@ -238,12 +235,12 @@ void Barn::checkPlayerPosition()
 
     // 更新计时器显示
     remainingTime++;
-    _timerLabelD->setString("Day: " + std::to_string(day));
-    _timerLabelH->setString(std::to_string(remainingTime / 1800) + ":00");
-    _timerLabelS->setString(Season);
+    //_timerLabelD->setString("Day: " + std::to_string(day));
+    //_timerLabelH->setString(std::to_string(remainingTime / 1800) + ":00");
+    //_timerLabelS->setString(Season);
     if (remainingTime == 432000) {
 
-        day++;
+        /*day++;
         IsNextDay = true;
 
         if (day == 8) {
@@ -257,45 +254,45 @@ void Barn::checkPlayerPosition()
                 Season = "Winter";
             }
             day = 1;
-        }
+        }*/
 
         remainingTime = 0;
 
-        for (auto it = Crop_information.begin(); it != Crop_information.end();) {
+        //for (auto it = Crop_information.begin(); it != Crop_information.end();) {
 
-            auto crop = *it;  // 解引用迭代器以访问 Crop 对象
+        //    auto crop = *it;  // 解引用迭代器以访问 Crop 对象
 
-            // 判断前一天是否浇水
-            if ((crop->watered == false) && (crop->GetPhase() != Phase::MATURE)) {
-                // 判断是否已经进入枯萎状态
-                if (crop->GetPhase() != Phase::SAPLESS) {
-                    crop->ChangePhase(Phase::SAPLESS);
-                    crop->ChangMatureNeeded(2); // 延迟两天收获
-                    it++;
-                }
-                else {
-                    // 删除元素并更新迭代器
-                    it = Crop_information.erase(it);
-                }
+        //    // 判断前一天是否浇水
+        //    if ((crop->watered == false) && (crop->GetPhase() != Phase::MATURE)) {
+        //        // 判断是否已经进入枯萎状态
+        //        if (crop->GetPhase() != Phase::SAPLESS) {
+        //            crop->ChangePhase(Phase::SAPLESS);
+        //            crop->ChangMatureNeeded(2); // 延迟两天收获
+        //            it++;
+        //        }
+        //        else {
+        //            // 删除元素并更新迭代器
+        //            it = Crop_information.erase(it);
+        //        }
 
-            }
-            else {
-                // 更新状态
-                crop->UpdateGrowth();
-                it++;
-            }
+        //    }
+        //    else {
+        //        // 更新状态
+        //        crop->UpdateGrowth();
+        //        it++;
+        //    }
 
-        }
+        //}
 
-        for (auto& pair : F_lastplace) {
-            if (pair.first.first == "myhouse") {  // 检查 bool 值是否为 true
-                pair.second = true;
-            }
-        }
+        //for (auto& pair : F_lastplace) {
+        //    if (pair.first.first == "myhouse") {  // 检查 bool 值是否为 true
+        //        pair.second = true;
+        //    }
+        //}
 
-        player1->removeFromParent();
-        auto nextday = farm::create();
-        Director::getInstance()->replaceScene(nextday);
+        //player1->removeFromParent();
+        //auto nextday = farm::create();
+        //Director::getInstance()->replaceScene(nextday);
 
 
     }
@@ -303,13 +300,13 @@ void Barn::checkPlayerPosition()
 
 
     // 是否进入农场
-    if (Out_Barn.containsPoint(playerPos)) {
+  /*  if (Out_Barn.containsPoint(playerPos)) {
         if (isEnterKeyPressed) {
             player1->removeFromParent();
             auto NextSence = farm::create();
             Director::getInstance()->replaceScene(NextSence);
         }
-    }
+    }*/
 
 
     for (const auto& point : nonTransparentPixels)
