@@ -21,6 +21,7 @@ extern Town* town;
 extern supermarket* seedshop;
 extern std::map <std::pair<std::string, Vec2>, bool> T_lastplace;
 extern Inventory* inventory;
+extern SkillTree* skillTree;
 
 Town::Town() {}
 
@@ -295,6 +296,7 @@ bool Town::init()
             static InventoryUI* currentInventoryUI = nullptr;  // 保存当前显示的 InventoryUI  
             // 如果当前没有打开 InventoryUI，则打开它  
             if (currentInventoryUI == nullptr || isOpen == 0) {
+                skillTree->AddExperience ( 1 , 500 );
                 isOpen = 1;
                 CCLOG ( "Opening inventory." );
                 currentInventoryUI = InventoryUI::create ( inventory );

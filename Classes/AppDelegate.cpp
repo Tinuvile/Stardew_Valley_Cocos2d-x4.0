@@ -15,6 +15,7 @@
 #include "supermarket.h"
 #include "CreateCharacterUI.h"
 #include "NpcRelationship.h"
+#include "SkillTree.h"
 
  // #define USE_AUDIO_ENGINE 1   // 如果需要使用音频引擎，可以取消注释这一行
 
@@ -34,6 +35,8 @@ std::map<std::pair<std::string, Vec2>, bool> T_lastplace;
 Inventory* inventory = new Inventory ();//人物背包
 int GoldAmount = 4000;
 NpcRelationship* npc_relationship = new NpcRelationship ();
+SkillTree* skillTree = new SkillTree ();
+
 /****************************************************************************************/
 
 

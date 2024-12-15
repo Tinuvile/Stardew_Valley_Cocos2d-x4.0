@@ -7,6 +7,7 @@
 #include "InventoryUI.h"
 #include <NPC.h>
 #include "NpcRelationship.h"
+#include "SkillTreeUI.h"
 
 class intimacyUI : public cocos2d::Layer {
 public:
