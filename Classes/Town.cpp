@@ -380,24 +380,25 @@ bool Town::init()
                             this->addChild ( currentNPCtalkUI , 12 ); // 将当前NPC对话框添加到场景中  
                             return; // 处理完一个NPC后直接返回  
                         }
-                        else {
+                        else if (miniBag->getSelectedSlot ()) {
                             Vec2 playerPos = player1->getPosition ();
                             npc_relationship->increaseRelationship ( "player" , npc->GetName () , 15.2 );
                             inventory->RemoveItem ( miniBag->getSelectedSlot () );
-                            miniBag->getSelectBack ();
+
                             npc->AddGiftTime ();
                             // 这里改成礼物的图
                             auto ItemClickByminiBag = Sprite::create ( inventory->GetItemAt ( miniBag->getSelectedSlot () )->initial_pic );
                             ItemClickByminiBag->setPosition ( playerPos );
                             this->addChild ( ItemClickByminiBag , 6 );
                             // 一个延迟，2秒后移除 ItemClickByminiBag  
-                            this->runAction ( Sequence::create (
+                            this->runAction (Sequence::create (
                                 DelayTime::create ( 1.5f ) , // 等待2秒  
                                 CallFunc::create ( [=]() {
                                     this->removeChild ( ItemClickByminiBag ); // 移除 ItemClickByminiBag  
                                     } ) ,
                                 nullptr
                             ) );
+                            miniBag->getSelectBack ();
                         }
                     }
                     else {

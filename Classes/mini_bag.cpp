@@ -45,7 +45,6 @@ void mini_bag::Itemblock ( Inventory* inventory ) {
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     Vec2 origin = Director::getInstance ()->getVisibleOrigin ();
     _inventory = inventory;
-    _selectedSlot = 1; // 默认选中第一个槽位  
 
 
     // 初始化物品槽 Sprite 
@@ -206,17 +205,6 @@ void mini_bag::updateDisplay () {
     //}
 }
 
-void mini_bag::onItemSlotClicked ( cocos2d::Ref* sender ) {
-    auto slot = static_cast<Sprite*>(sender);
-    int position = slot->getTag (); // 获取槽位位置  
-
-    // 设置为选中状态并更新 Inventory 数据  
-    _inventory->SetSelectedItem ( position );
-    _selectedSlot = position;
-
-    // 更新显示  
-    updateDisplay ();
-}
 
 void mini_bag::getSelectBack () {
     _selectedSlot = 0;

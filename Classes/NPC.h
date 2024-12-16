@@ -29,7 +29,7 @@ public:
 
     int GetGiftTime () { return GiftTime; }
 
-    int AddGiftTime () { GiftTime++; }
+    void AddGiftTime () { GiftTime++; }
 
 protected:
     std::string name;            // NPC µÄÃû×Ö  
