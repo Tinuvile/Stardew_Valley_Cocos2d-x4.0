@@ -305,6 +305,7 @@ bool NPCtalkUI::init ( NPC* npc_name , std::string sceneName ) {
     SceneName = sceneName;
     npc = npc_name;
     NPC_RELATIONSHIP = npc_relationship;
+
     backgroundcreate ();
     SelectedBox ();
     close ();
