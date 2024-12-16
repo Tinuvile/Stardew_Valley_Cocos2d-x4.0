@@ -30,7 +30,7 @@ public:
 protected:
     std::string name;            // NPC 的名字  
     cocos2d::Vec2 position;      // NPC 的坐标位置  
-    cocos2d::Sprite* sprite;     // NPC 的精灵  
+    cocos2d::Sprite* sprite;     // NPC 的精灵
 
     std::vector<cocos2d::Vec2> nonTransparentPixels;
 
@@ -54,6 +54,7 @@ protected:
     cocos2d::Vec2 currentDirection; // 当前移动方向
 };
 
+
 std::vector<std::vector<std::string>> getAbigailAnimations ();
 
 std::vector<std::vector<std::string>> getDialog ( std::string npc , std::string relation_ship );
@@ -61,3 +62,9 @@ std::vector<std::vector<std::string>> getDialog ( std::string npc , std::string 
 std::string getNPCportraits ( std::string name , std::string status );
 
 std::vector<std::vector<std::string>> getAlexAnimations ();
+
+std::vector<std::vector<std::string>> getCarolineAnimations ();
+
+std::vector<std::vector<std::string>> getElliottAnimations ();
+
+std::vector<std::vector<std::string>> getEmilyAnimations ();

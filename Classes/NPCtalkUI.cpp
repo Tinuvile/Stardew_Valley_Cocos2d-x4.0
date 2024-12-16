@@ -156,7 +156,8 @@ void NPCtalkUI::SelectedBox () {
         this->addChild ( Selectedbox4 , 0 );
 
         // NPC 对话添加
-        std::vector<std::vector<std::string>> npc_Dialog = getDialog(npc->GetName() , NPC_RELATIONSHIP->getRelationshipLevel ("player" , npc->GetName ()));
+        std::vector<std::vector<std::string>> npc_Dialog = getDialog(npc->GetName() , 
+            NPC_RELATIONSHIP->getRelationshipLevel ("player" , npc->GetName ()));
         
         int choose = rand() % npc_Dialog.size();
         // NPC 对话
@@ -224,21 +225,26 @@ void NPCtalkUI::SelectedBox () {
 
             // 检查每个 Selectedbox  
             if (Selectedbox1 && Selectedbox1->getBoundingBox ().containsPoint ( mousePosition )) {
-                npc_relationship->increaseRelationship ( "player" , npc->GetName () , 20 );
+                if (npc_relationship->getRelationship ( "player" , npc->GetName () ) < 60) {
+                    npc_relationship->increaseRelationship ( "player" , npc->GetName () , 10.2 );
+                }
                 this->removeFromParent ();
                 return; // 提前返回，避免执行后续选择框检查  
             }
             if (Selectedbox2 && Selectedbox2->getBoundingBox ().containsPoint ( mousePosition )) {
-                npc_relationship->increaseRelationship ( "player" , npc->GetName () , 10 );
+                if (npc_relationship->getRelationship ( "player" , npc->GetName () ) < 60) {
+                    npc_relationship->increaseRelationship ( "player" , npc->GetName () , 5.0001 );
+                }
                 this->removeFromParent ();
                 return; // 提前返回  
             }
             if (Selectedbox3 && Selectedbox3->getBoundingBox ().containsPoint ( mousePosition )) {
+                npc_relationship->decreaseRelationship ( "player" , npc->GetName () , 0.001 );
                 this->removeFromParent ();
                 return; // 提前返回  
             }
             if (Selectedbox4 && Selectedbox4->getBoundingBox ().containsPoint ( mousePosition )) {
-                npc_relationship->decreaseRelationship ( "player" , npc->GetName () , 5 );
+                npc_relationship->decreaseRelationship ( "player" , npc->GetName () , 5.01 );
                 this->removeFromParent ();
                 return; // 提前返回  
             }

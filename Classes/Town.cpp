@@ -207,110 +207,186 @@ bool Town::init()
         CCLOG ( "Failed to create NPC Alex." );
     }
 
-
-    // 使用 getAbigailAnimations() 获取 NPC 动画帧  
-    auto abigailAnimations = getAbigailAnimations();
+    // 使用 getElliottAnimations() 获取 NPC 动画帧  
+    auto elliottAnimations = getElliottAnimations ();
     // 创建 NPC 示例  
-    auto abigail = NPCreate::CreateNPC("Abigail", cocos2d::Vec2(-100, 400), abigailAnimations, nonTransparentPixels);
-    if (abigail) {
-        // CCLOG ( "NPC Abigail created successfully." );
-        auto abigailSprite = abigail->GetSprite();
-        if (abigailSprite) {
-            // CCLOG ( "Abigail sprite created successfully at position: (%f, %f)" , abigailSprite->getPositionX () , abigailSprite->getPositionY () );
-            this->addChild(abigailSprite, 5); // 确保添加到场景中  
+    auto elliott = NPCreate::CreateNPC ( "Elliott" , cocos2d::Vec2 ( 1550 ,600 ) , elliottAnimations , nonTransparentPixels );
+    if (elliott) {
+        // CCLOG ( "NPC Elliott created successfully." );
+        auto elliottSprite = elliott->GetSprite ();
+        if (elliottSprite) {
+            // CCLOG ( "Elliott sprite created successfully at position: (%f, %f)" , elliottSprite->getPositionX () , elliottSprite->getPositionY () );
+            this->addChild ( elliottSprite , 5 ); // 确保添加到场景中  
 
             // 使用调度器每 1.0 秒调用 RandomMove  
-            this->schedule([abigail](float dt) {
-                abigail->RandomMove();
+            this->schedule ( [elliott]( float dt ) {
+                elliott->RandomMove ();
 
-                // 获取 Abigail 的当前位置  
-                auto abigailSprite = abigail->GetSprite(); // 获取精灵  
-                if (abigailSprite) {
+                // 获取 Elliott 的当前位置  
+                auto elliottSprite = elliott->GetSprite (); // 获取精灵  
+                if (elliottSprite) {
                     // 获取当前精灵的位置和大小  
-                    Vec2 position = abigailSprite->getPosition();
-                    Size size = abigailSprite->getContentSize();
-                    // CCLOG ( "Abigail's current position: (%f, %f)" , position.x , position.y ); // 打印位置  
+                    Vec2 position = elliottSprite->getPosition ();
+                    Size size = elliottSprite->getContentSize ();
+                    // CCLOG ( "Elliott's current position: (%f, %f)" , position.x , position.y ); // 打印位置  
                 }
-                }, 1.0f, "random_move_key"); // 每 1.0 秒随机移动一次  
+                } , 1.0f , "random_move_key_elliott" ); // 每 1.0 秒随机移动一次  
         }
         else {
-            CCLOG("Abigail sprite is nullptr.");
+            CCLOG ( "Elliott sprite is nullptr." );
         }
     }
     else {
-        CCLOG("Failed to create NPC Abigail.");
+        CCLOG ( "Failed to create NPC Elliott." );
+    }
+
+    // 使用 getCarolineAnimations() 获取 NPC 动画帧  
+    auto carolineAnimations = getCarolineAnimations ();
+    // 创建 NPC 示例  
+    auto caroline = NPCreate::CreateNPC ( "Caroline" , cocos2d::Vec2 ( 700 , 1400 ) , carolineAnimations , nonTransparentPixels );
+    if (caroline) {
+        // CCLOG ( "NPC Caroline created successfully." );  
+        auto carolineSprite = caroline->GetSprite ();
+        if (carolineSprite) {
+            // CCLOG ( "Caroline sprite created successfully at position: (%f, %f)" , carolineSprite->getPositionX () , carolineSprite->getPositionY () );  
+            this->addChild ( carolineSprite , 5 ); // 确保添加到场景中  
+
+            // 使用调度器每 1.0 秒调用 RandomMove  
+            this->schedule ( [caroline]( float dt ) {
+                caroline->RandomMove ();
+
+                // 获取 Caroline 的当前位置  
+                auto carolineSprite = caroline->GetSprite (); // 获取精灵  
+                if (carolineSprite) {
+                    // 获取当前精灵的位置和大小  
+                    Vec2 position = carolineSprite->getPosition ();
+                    Size size = carolineSprite->getContentSize ();
+                    // CCLOG ( "Caroline's current position: (%f, %f)" , position.x , position.y ); // 打印位置  
+                }
+                } , 1.0f , "random_move_key_caroline" ); // 每 1.0 秒随机移动一次  
+        }
+        else {
+            CCLOG ( "Caroline sprite is nullptr." );
+        }
+    }
+    else {
+        CCLOG ( "Failed to create NPC Caroline." );
+    }
+
+    // 使用 getAbigailAnimations() 获取 NPC 动画帧  
+    auto abigailAnimations = getAbigailAnimations ();
+    // 创建 NPC 示例  
+    auto abigail = NPCreate::CreateNPC ( "Abigail" , cocos2d::Vec2 ( 60 , 100 ) , abigailAnimations , nonTransparentPixels );
+    if (abigail) {
+        // CCLOG ( "NPC Abigail created successfully." );  
+        auto abigailSprite = abigail->GetSprite ();
+        if (abigailSprite) {
+            // CCLOG ( "Abigail sprite created successfully at position: (%f, %f)" , abigailSprite->getPositionX () , abigailSprite->getPositionY () );  
+            this->addChild ( abigailSprite , 5 ); // 确保添加到场景中  
+
+            // 使用调度器每 1.0 秒调用 RandomMove  
+            this->schedule ( [abigail]( float dt ) {
+                abigail->RandomMove ();
+
+                // 获取 Abigail 的当前位置  
+                auto abigailSprite = abigail->GetSprite (); // 获取精灵  
+                if (abigailSprite) {
+                    // 获取当前精灵的位置和大小  
+                    Vec2 position = abigailSprite->getPosition ();
+                    Size size = abigailSprite->getContentSize ();
+                    // CCLOG ( "Abigail's current position: (%f, %f)" , position.x , position.y ); // 打印位置  
+                }
+                } , 1.0f , "random_move_key_abigail" ); // 每 1.0 秒随机移动一次  
+        }
+        else {
+            CCLOG ( "Abigail sprite is nullptr." );
+        }
+    }
+    else {
+        CCLOG ( "Failed to create NPC Abigail." );
+    }
+
+    // 使用 getEmilyAnimations() 获取 NPC 动画帧  
+    auto emilyAnimations = getEmilyAnimations ();
+    // 创建 NPC 示例  
+    auto emily = NPCreate::CreateNPC ( "Emily" , cocos2d::Vec2 ( 180 , 1550 ) , emilyAnimations , nonTransparentPixels );
+    if (emily) {
+        // CCLOG ( "NPC Emily created successfully." );  
+        auto emilySprite = emily->GetSprite ();
+        if (emilySprite) {
+            // CCLOG ( "Emily sprite created successfully at position: (%f, %f)" , emilySprite->getPositionX () , emilySprite->getPositionY () );  
+            this->addChild ( emilySprite , 5 ); // 确保添加到场景中  
+
+            // 使用调度器每 1.0 秒调用 RandomMove  
+            this->schedule ( [emily]( float dt ) {
+                emily->RandomMove ();
+
+                // 获取 Emily 的当前位置  
+                auto emilySprite = emily->GetSprite (); // 获取精灵  
+                if (emilySprite) {
+                    // 获取当前精灵的位置和大小  
+                    Vec2 position = emilySprite->getPosition ();
+                    Size size = emilySprite->getContentSize ();
+                    // CCLOG ( "Emily's current position: (%f, %f)" , position.x , position.y ); // 打印位置  
+                }
+                } , 1.0f , "random_move_key_emily" ); // 每 1.0 秒随机移动一次  
+        }
+        else {
+            CCLOG ( "Emily sprite is nullptr." );
+        }
+    }
+    else {
+        CCLOG ( "Failed to create NPC Abigail." );
     }
 
 
     // 鼠标事件监听器
-    auto listener = EventListenerMouse::create();
-    listener->onMouseDown = [this , abigail , alex , interactionRadius] ( Event* event ) {
+    auto listener = EventListenerMouse::create ();
+    listener->onMouseDown = [this , abigail , alex , caroline , elliott , emily , interactionRadius]( Event* event ) {
 
-        // 获取鼠标点击的位置
+        // 获取鼠标点击的位置  
         auto mouseEvent = static_cast<EventMouse*>(event);
-        Vec2 clickPos(mouseEvent->getCursorX(), mouseEvent->getCursorY());
-        clickPos = this->convertToNodeSpace(clickPos);
+        Vec2 clickPos ( mouseEvent->getCursorX () , mouseEvent->getCursorY () );
+        clickPos = this->convertToNodeSpace ( clickPos );
 
-        // 检查是否点击了 Abigail   
-        if (abigail) {
-            auto abigailSprite = abigail->GetSprite();
-            if (abigailSprite && abigailSprite->getBoundingBox().containsPoint(clickPos)) {
-                // 获取玩家的位置  
-                static NPCtalkUI* currentNPCtalkUI = nullptr;
-                Vec2 playerPos = player1->getPosition();
-                currentNPCtalkUI = NPCtalkUI::create ( abigail , "Town" );
-                this->addChild(currentNPCtalkUI, 12); // 将 currentNPCtalkUI添加到 Town 的上层  
-                // 计算玩家与 Abigail 之间的距离  
-                float distance = playerPos.distance(abigailSprite->getPosition());
+        // 检查是否点击了NPC并打开对话框  
+        std::vector<std::pair<NPC* , std::string>> npcs = {
+            {abigail, "Abigail"},
+            {alex, "Alex"},
+            {caroline, "Caroline"},
+            {elliott, "Elliott"},
+            {emily, "Emily"}
+        };
 
-                /*
-                // 检查距离是否在允许的范围内
-                if (distance <= interactionRadius) {
-                    // 打开对话框
-                    static NPCtalkUI* currentNPCtalkUI = nullptr;
-                    if (currentNPCtalkUI == nullptr) {
-                        currentNPCtalkUI = NPCtalkUI::create ();
-                        this->addChild ( currentNPCtalkUI , 12 ); // 将 currentNPCtalkUI添加到 Town 的上层
+        for (auto& npcPair : npcs) {
+            NPC* npc = npcPair.first;
+            const std::string& npcName = npcPair.second;
+
+            if (npc) {
+                auto npcSprite = npc->GetSprite ();
+                if (npcSprite && npcSprite->getBoundingBox ().containsPoint ( clickPos )) {
+                    // 获取玩家的位置  
+                    Vec2 playerPos = player1->getPosition ();
+
+                    // 计算玩家与NPC之间的距离  
+                    float distance = playerPos.distance ( npcSprite->getPosition () );
+
+                    // 检查距离是否在允许的范围内  
+                    if (distance <= interactionRadius) {
+                        // 打开对话框，确保对话框每次都是新的实例  
+                        NPCtalkUI* currentNPCtalkUI = NPCtalkUI::create ( npc , "Town");
+                        this->addChild ( currentNPCtalkUI , 12 ); // 将当前NPC对话框添加到场景中  
+                        return; // 处理完一个NPC后直接返回  
+                    }
+                    else {
+                        CCLOG ( "Player is too far from %s to interact." , npcName.c_str () );
                     }
                 }
-                else {
-                    CCLOG ( "Player is too far from Abigail to interact." );
-                }
-                */
-            }
-        }
-
-        // 检查是否点击了 Alex   
-        if (alex) {
-            auto alexSprite = alex->GetSprite ();
-            if (alexSprite && alexSprite->getBoundingBox ().containsPoint ( clickPos )) {
-                // 获取玩家的位置  
-                static NPCtalkUI* currentNPCtalkUI = nullptr;
-                Vec2 playerPos = player1->getPosition ();
-                currentNPCtalkUI = NPCtalkUI::create ( alex , "Town" );
-                this->addChild ( currentNPCtalkUI , 12 ); // 将 currentNPCtalkUI添加到 Town 的上层  
-                // 计算玩家与 Alex 之间的距离  
-                float distance = playerPos.distance ( alexSprite->getPosition () );
-
-                /*
-                // 检查距离是否在允许的范围内
-                if (distance <= interactionRadius) {
-                    // 打开对话框
-                    static NPCtalkUI* currentNPCtalkUI = nullptr;
-                    if (currentNPCtalkUI == nullptr) {
-                        currentNPCtalkUI = NPCtalkUI::create ();
-                        this->addChild ( currentNPCtalkUI , 12 ); // 将 currentNPCtalkUI添加到 Town 的上层
-                    }
-                }
-                else {
-                    CCLOG ( "Player is too far from Alex to interact." );
-                }
-                */
             }
         }
         };
 
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, button);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , button );
 
 
 

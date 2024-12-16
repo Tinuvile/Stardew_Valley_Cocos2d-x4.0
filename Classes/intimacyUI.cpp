@@ -164,6 +164,8 @@ void intimacyUI::intimacyDisplay ( const string& name , Vec2 Pos ) {
     int fullheart_num = NPC_RELATIONSHIP->getRelationship ( "player" , name ) / 10;
     int emptyheart_num = 10 - fullheart_num;
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
+
+    //爱心显示
     for (int i = 0; i < 10; i++) {
         if (fullheart_num > 0)
         {
@@ -196,6 +198,29 @@ void intimacyUI::intimacyDisplay ( const string& name , Vec2 Pos ) {
             }
             emptyheart_num--;
             continue;
+        }
+    }
+
+    //是否说过话显示
+    if (NPC_RELATIONSHIP->getRelationship ( "player" , name ) != 0)
+    {
+        auto IsTalked = Sprite::create ( "UIresource/qinmidu/is.png" );
+        if (IsTalked == nullptr)
+        {
+            problemLoading ( "'intimacyDisplay.png'" );
+        }
+        else
+        {
+            float originalWidth = IsTalked->getContentSize ().width;
+            float originalHeight = IsTalked->getContentSize ().height;
+            float scaleX = visibleSize.width / originalWidth;
+            float scaleY = visibleSize.height / originalHeight;
+            // 选择最小的缩放比例，以保证图片完全显示在屏幕上且不变形
+            float scale = std::min ( scaleX , scaleY );
+            IsTalked->setScale ( scale * 0.026 );
+            IsTalked->setPosition ( Vec2 ( Pos.x + visibleSize.width * 0.374 , Pos.y - 27 ) );
+
+            this->addChild ( IsTalked , 3 );
         }
     }
 }
