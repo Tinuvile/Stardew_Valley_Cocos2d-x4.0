@@ -5,8 +5,6 @@
 
 
 
-const int kMaxLivestock = 12;
-
 Barn::Barn() {}
 
 Barn::~Barn() {}
@@ -203,7 +201,7 @@ bool Barn::init()
     auto listenerWithPlayer = EventListenerKeyboard::create();
     listenerWithPlayer->onKeyPressed = [this](EventKeyboard::KeyCode keyCode, Event* event)
         {
-            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER) {
+            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER || keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER) {
                 isEnterKeyPressed = true;
                 CCLOG("Enter key pressed. ");
             }
@@ -230,7 +228,7 @@ bool Barn::init()
     listenerWithPlayer->onKeyReleased = [this](EventKeyboard::KeyCode keyCode, Event* event)
         {
             // 释放 Enter 键时，设置为 false
-            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER) {
+            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER || keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER) {
                 isEnterKeyPressed = false;
             }
         };

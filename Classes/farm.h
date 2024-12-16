@@ -15,50 +15,50 @@ class farm : public cocos2d::Scene
 {
 public:
 
-    farm();
-    ~farm();
+    farm ();
+    ~farm ();
 
-    virtual bool init();
+    virtual bool init ();
 
-    static farm* create();
+    static farm* create ();
 
     // 判断角色的位置
-    void checkPlayerPosition();
+    void checkPlayerPosition ();
 
-   
+
 
     // 返回作物序号
-    //int getRegionNumber(Vec2 pos);
+    int getRegionNumber ( Vec2 pos );
 
     // 创建一个列表，用于保存所有非透明像素的坐标
     std::vector<cocos2d::Vec2> nonTransparentPixels;
 
     // 离开农场的区域
-    Rect Out_Farm = Rect(792, 1187, 36, 153);
+    Rect Out_Farm = Rect ( 792 , 1187 , 36 , 153 );
 
     // 可种植区域(单块面积为 48 * 48 )
-    Rect plant_area = Rect(474, 467, 864, 510); 
+    Rect plant_area = Rect ( 474 , 467 , 864 , 510 );
 
     // 可以进入家的区域
-    Rect myhouse_area = Rect(70, 920, 75, 30);       
+    Rect myhouse_area = Rect ( 70 , 920 , 75 , 30 );
 
     // 可以进入畜棚的区域
-    Rect barn_area = Rect(20, 170, 70, 70);
-  
+    Rect barn_area = Rect ( 20 , 170 , 70 , 70 );
+
     // 可以进入山洞的区域
-    Rect cave_area = Rect(635, 1185, 90, 40);
+    Rect cave_area = Rect ( 635 , 1185 , 90 , 40 );
 
     // 可以进入森林的区域
-    Rect forest_area = Rect(750, -70, 100, 50);
-  
+    Rect forest_area = Rect ( 750 , -70 , 100 , 50 );
+
     // 恢复种植
-    void AllInitialize_crop(); 
+    void AllInitialize_crop ();
 
 private:
 
-  
+
     // 用于显示计时的标签
-    cocos2d::Label* _timerLabelD;  
+    cocos2d::Label* _timerLabelD;
     cocos2d::Label* _timerLabelH;
     cocos2d::Label* _timerLabelS;
 
@@ -81,7 +81,7 @@ private:
     bool isWKeyPressed = false;
     // 判断收割G键是否按下
     bool isGKeyPressed = false;
-  
+
 
 
 };
