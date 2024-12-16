@@ -15,6 +15,10 @@ public:
 
     void updateDisplay (); // 更新显示内容  
 
+    int getSelectedSlot () { return _selectedSlot; }
+
+    void getSelectBack ();
+
 private:
     Inventory* _inventory; // 指向 Inventory 实例的指针  
 

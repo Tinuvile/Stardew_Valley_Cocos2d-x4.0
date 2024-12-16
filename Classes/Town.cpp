@@ -14,6 +14,7 @@ Town::~Town() {}
 
 bool Town::init()
 {
+    inventory->AddItem ( Duck , 12 );
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -373,10 +374,31 @@ bool Town::init()
 
                     // 检查距离是否在允许的范围内  
                     if (distance <= interactionRadius) {
-                        // 打开对话框，确保对话框每次都是新的实例  
-                        NPCtalkUI* currentNPCtalkUI = NPCtalkUI::create ( npc , "Town");
-                        this->addChild ( currentNPCtalkUI , 12 ); // 将当前NPC对话框添加到场景中  
-                        return; // 处理完一个NPC后直接返回  
+                        if (!miniBag->getSelectedSlot ()) {
+                            // 打开对话框，确保对话框每次都是新的实例  
+                            NPCtalkUI* currentNPCtalkUI = NPCtalkUI::create ( npc , "Town" );
+                            this->addChild ( currentNPCtalkUI , 12 ); // 将当前NPC对话框添加到场景中  
+                            return; // 处理完一个NPC后直接返回  
+                        }
+                        else {
+                            Vec2 playerPos = player1->getPosition ();
+                            npc_relationship->increaseRelationship ( "player" , npc->GetName () , 15.2 );
+                            inventory->RemoveItem ( miniBag->getSelectedSlot () );
+                            miniBag->getSelectBack ();
+                            npc->AddGiftTime ();
+                            // 这里改成礼物的图
+                            auto ItemClickByminiBag = Sprite::create ( inventory->GetItemAt ( miniBag->getSelectedSlot () )->initial_pic );
+                            ItemClickByminiBag->setPosition ( playerPos );
+                            this->addChild ( ItemClickByminiBag , 6 );
+                            // 一个延迟，2秒后移除 ItemClickByminiBag  
+                            this->runAction ( Sequence::create (
+                                DelayTime::create ( 1.5f ) , // 等待2秒  
+                                CallFunc::create ( [=]() {
+                                    this->removeChild ( ItemClickByminiBag ); // 移除 ItemClickByminiBag  
+                                    } ) ,
+                                nullptr
+                            ) );
+                        }
                     }
                     else {
                         CCLOG ( "Player is too far from %s to interact." , npcName.c_str () );

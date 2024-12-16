@@ -175,6 +175,7 @@ void mini_bag::updateDisplay () {
                     }
                     else {
                         currentItemSprite = nullptr;
+                        _selectedSlot = 0;
                     }
                     isClick = !isClick;
                 }
@@ -215,4 +216,9 @@ void mini_bag::onItemSlotClicked ( cocos2d::Ref* sender ) {
 
     // ¸üÐÂÏÔÊ¾  
     updateDisplay ();
+}
+
+void mini_bag::getSelectBack () {
+    _selectedSlot = 0;
+    currentItemSprite = nullptr;
 }
