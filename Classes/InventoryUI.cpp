@@ -359,15 +359,3 @@ void InventoryUI::updateDisplay () {
         CCLOG ( "Warning: _itemLabel is nullptr" );
     }
 }
-
-void InventoryUI::onItemSlotClicked ( cocos2d::Ref* sender ) {
-    auto slot = static_cast<Sprite*>(sender);
-    int position = slot->getTag (); // 获取槽位位置  
-
-    // 设置为选中状态并更新 Inventory 数据  
-    _inventory->SetSelectedItem ( position );
-    _selectedSlot = position;
-
-    // 更新显示  
-    updateDisplay ();
-}
