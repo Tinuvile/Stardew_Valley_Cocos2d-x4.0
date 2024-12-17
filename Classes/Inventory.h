@@ -86,15 +86,17 @@ public:
 	int Inventory::RemoveItem ( const Item& item , const int& remove_num ) {
 		for (auto it = package.begin (); it != package.end (); ++it) {
 			if (it->second.first->GetName () == item.GetName ()) {
-				is_updated = true;
 				// 如果移除数量超过现有数量  
+				is_updated = true;
 				if (remove_num >= it->second.second) {
+					
 					package.erase ( it ); // 清空该格子  
 					return 1; // 清空格子  
 				}
 				else {
 					it->second.second -= remove_num; // 减少数量  
 					return 0; // 正常移除  
+
 				}
 			}
 		}

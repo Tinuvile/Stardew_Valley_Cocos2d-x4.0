@@ -135,8 +135,9 @@ void AppDelegate::runScene(cocos2d::Director* director) {
     key = { "seedshop",Vec2(230,470) };
     T_lastplace.insert(std::make_pair(key, false));
 
-    /*auto farm = farm::create ();
-    director->runWithScene ( farm );*/
+    // 运行农场
+    auto farm = farm::create ();
+    director->runWithScene ( farm );
 
     //运行海滩场景
    /* auto beach = Beach::create ();
@@ -163,8 +164,8 @@ void AppDelegate::runScene(cocos2d::Director* director) {
     // director->runWithScene(test);
     
     // 运行森林
-     auto test = Forest::create();
-     director->runWithScene(test);
+    /* auto test = Forest::create();
+     director->runWithScene(test);*/
 
     //开局UI运行
     //director->runWithScene ( BeginScene::create () );

@@ -40,6 +40,9 @@ bool farm::init()
     // 恢复种植
     AllInitialize_crop();
 
+    // 下雨
+    createRainEffect();
+
     // 创建并初始化 Label 来显示角色的位置
     _positionLabel = Label::createWithTTF("Position: (0, 0)", "fonts/Marker Felt.ttf", 24);
     if (_positionLabel)
@@ -755,6 +758,20 @@ int farm::getRegionNumber(Vec2 pos) {
 
     return region_number;
 }
+
+void farm::createRainEffect() {
+    
+    auto emitter = ParticleRain::create();
+    emitter->setDuration(ParticleSystem::DURATION_INFINITY);
+    emitter->setScale(5.0f);
+    emitter->setLife(0.3f);
+    emitter->setTotalParticles(150);
+    emitter->setSpeed(300);
+
+    addChild(emitter, 10);
+
+}
+
 
 
 
