@@ -19,6 +19,8 @@ public:
 
     void getSelectBack ();
 
+    std::shared_ptr<Item> getSelectedItem();
+
 private:
     Inventory* _inventory; // 指向 Inventory 实例的指针  
 
