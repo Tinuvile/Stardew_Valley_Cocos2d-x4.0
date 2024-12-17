@@ -384,10 +384,10 @@ bool Town::init()
                             Vec2 playerPos = player1->getPosition ();
                             npc_relationship->increaseRelationship ( "player" , npc->GetName () , 15.2 );
                             inventory->RemoveItem ( miniBag->getSelectedSlot () );
-
+                            inventory->isupdated = true;
                             npc->AddGiftTime ();
                             // 这里改成礼物的图
-                            auto ItemClickByminiBag = Sprite::create ( inventory->GetItemAt ( miniBag->getSelectedSlot () )->initial_pic );
+                            auto ItemClickByminiBag = Sprite::create ( "npc/gift.png" );
                             ItemClickByminiBag->setPosition ( playerPos );
                             this->addChild ( ItemClickByminiBag , 6 );
                             // 一个延迟，2秒后移除 ItemClickByminiBag  
