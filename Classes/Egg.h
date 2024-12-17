@@ -1,21 +1,15 @@
 #pragma once
-#include"Item.h"
+#include"Food.h"
 
 const int kEggValue = 40;
+const int kEggEnergy = 15;
 
-class Egg :public Item {
+class Egg :public Food {
 private:
-	//作为食物可提供的能量
-	const int energy_provided = 15;
 public:
 	//构造函数
 	Egg ();
 
 	//虚析构函数
 	virtual ~Egg ();
-
-	//获取`energy_provided`
-	int GetEnergyProvided ()const {
-		return energy_provided;
-	}
 };

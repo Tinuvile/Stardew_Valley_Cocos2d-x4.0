@@ -104,7 +104,7 @@ bool Beach::init ()
     if (player1->getParent () == NULL) {
         this->addChild ( player1 , 11 );
         player1->setScale ( 1.6f );
-        player1->setPosition ( 320 ,1400 );
+        player1->setPosition ( 320 , 1400 );
         player1->setAnchorPoint ( Vec2 ( 0.5f , 0.2f ) );
 
 
@@ -160,35 +160,6 @@ bool Beach::init ()
                 isEnterKeyPressed = true;
                 CCLOG ( "Enter key pressed. " );
             }
-            else if (keyCode == EventKeyboard::KeyCode::KEY_H) {
-
-                if (!this->getChildByName("FishingGameLayer")) {
-                    //将钓鱼游戏界面加入场景中
-                    auto fishing_game = FishingGame::create(player1->getPosition());
-                    this->addChild(fishing_game, 10, "FishingGameLayer");
-                    ////暂停场景中其他节点的活动
-                    //player1->pause ();
-                    //this->pause ();
-                }
-            }
-            else if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
-                static int isOpen = 0;
-                static InventoryUI* currentInventoryUI = nullptr;  // 保存当前显示的 InventoryUI  
-                // 如果当前没有打开 InventoryUI，则打开它  
-                if (currentInventoryUI == nullptr || isOpen == 0) {
-                    isOpen = 1;
-                    CCLOG("Opening inventory.");
-                    currentInventoryUI = InventoryUI::create(inventory, "Beach");
-                    this->addChild(currentInventoryUI, 30);  // 将 InventoryUI 添加到上层  
-                }
-                // 如果已经打开 InventoryUI，则关闭它  
-                else {
-                    isOpen = 0;
-                    CCLOG("Closing inventory.");
-                    this->removeChild(currentInventoryUI, true);  // 从当前场景中移除 InventoryUI  
-                    currentInventoryUI = nullptr;  // 重置指针  
-                }
-            }
         };
 
     listenerWithPlayer->onKeyReleased = [this]( EventKeyboard::KeyCode keyCode , Event* event )
@@ -199,7 +170,38 @@ bool Beach::init ()
             }
         };
 
-  
+    listenerWithPlayer->onKeyPressed = [this]( EventKeyboard::KeyCode key_code , Event* event ) {
+        if (key_code == EventKeyboard::KeyCode::KEY_H) {
+
+            if (!this->getChildByName ( "FishingGameLayer" )) {
+                //将钓鱼游戏界面加入场景中
+                auto fishing_game = FishingGame::create ( player1->getPosition () );
+                this->addChild ( fishing_game , 10 , "FishingGameLayer" );
+                ////暂停场景中其他节点的活动
+                //player1->pause ();
+                //this->pause ();
+            }
+        }
+        else if (key_code == EventKeyboard::KeyCode::KEY_ESCAPE) {
+            static int isOpen = 0;
+            static InventoryUI* currentInventoryUI = nullptr;  // 保存当前显示的 InventoryUI  
+            // 如果当前没有打开 InventoryUI，则打开它  
+            if (currentInventoryUI == nullptr || isOpen == 0) {
+                isOpen = 1;
+                CCLOG ( "Opening inventory." );
+                currentInventoryUI = InventoryUI::create ( inventory , "Beach" );
+                this->addChild ( currentInventoryUI , 30 );  // 将 InventoryUI 添加到上层  
+            }
+            // 如果已经打开 InventoryUI，则关闭它  
+            else {
+                isOpen = 0;
+                CCLOG ( "Closing inventory." );
+                this->removeChild ( currentInventoryUI , true );  // 从当前场景中移除 InventoryUI  
+                currentInventoryUI = nullptr;  // 重置指针  
+            }
+        }
+        };
+
     // 将监听器添加到事件分发器中
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listenerWithPlayer , this );
 
@@ -224,192 +226,190 @@ bool Beach::init ()
         }
         } , 0.1f , "item_update_key" );
 
-    return true;
-}
+        return true;
+        }
 
 
-Beach* Beach::create ()
-{
-    Beach* scene = new Beach ();
-    if (scene && scene->init ())
+        Beach * Beach::create ()
     {
-        scene->autorelease ();
-        return scene;
-    }
-    CC_SAFE_DELETE ( scene );
-    return nullptr;
-}
-
-
-// 检查玩家是否接近背景的轮廓点
-void Beach::CheckPlayerPosition ()
-{
-
-    // 获取玩家的位置
-    Vec2 playerPos = player1->getPosition ();
-
-    // 更新位置标签的内容
-    if (_positionLabel)
-    {
-        _positionLabel->setString ( "Position: (" + std::to_string ( static_cast<int>(playerPos.x) ) + ", " + std::to_string ( static_cast<int>(playerPos.y) ) + ")" );
-
+        Beach* scene = new Beach ();
+        if (scene && scene->init ())
+        {
+            scene->autorelease ();
+            return scene;
+        }
+        CC_SAFE_DELETE ( scene );
+        return nullptr;
     }
 
-    // 更新计时器显示
-    remainingTime++;
-    _timerLabelD->setString ( "Day: " + std::to_string ( day ) );
-    _timerLabelH->setString ( std::to_string ( remainingTime / 1800 ) + ":00" );
-    _timerLabelS->setString ( Season );
-    if (remainingTime == 432000) {
 
-        day++;
-        /*IsNextDay = true;*/
+    // 检查玩家是否接近背景的轮廓点
+    void Beach::CheckPlayerPosition ()
+    {
 
-        if (day == 8) {
-            if (Season == "Spring") {
-                Season = "Summer";
+        // 获取玩家的位置
+        Vec2 playerPos = player1->getPosition ();
+
+        // 更新位置标签的内容
+        if (_positionLabel)
+        {
+            _positionLabel->setString ( "Position: (" + std::to_string ( static_cast<int>(playerPos.x) ) + ", " + std::to_string ( static_cast<int>(playerPos.y) ) + ")" );
+
+        }
+
+        // 更新计时器显示
+        remainingTime++;
+        _timerLabelD->setString ( "Day: " + std::to_string ( day ) );
+        _timerLabelH->setString ( std::to_string ( remainingTime / 1800 ) + ":00" );
+        _timerLabelS->setString ( Season );
+        if (remainingTime == 432000) {
+
+            day++;
+            /*IsNextDay = true;*/
+
+            if (day == 8) {
+                if (Season == "Spring") {
+                    Season = "Summer";
+                }
+                else if (Season == "Summer") {
+                    Season = "Autumn";
+                }
+                else {
+                    Season = "Winter";
+                }
+                day = 1;
             }
-            else if (Season == "Summer") {
-                Season = "Autumn";
+
+            remainingTime = 0;
+
+            //for (auto it = Crop_information.begin(); it != Crop_information.end(); /* no increment here */) {
+
+            //    auto crop = *it;  // 解引用迭代器以访问 Crop 对象
+
+            //     判断前一天是否浇水
+            //    if ((crop->watered == false) && (crop->GetPhase() != Phase::MATURE)) {
+            //         判断是否已经进入枯萎状态
+            //        if (crop->GetPhase() != Phase::SAPLESS) {
+            //            crop->ChangePhase(Phase::SAPLESS);
+            //            crop->ChangMatureNeeded(2); // 延迟两天收获
+            //        }
+            //        else {
+            //             删除元素并更新迭代器
+            //            it = Crop_information.erase(it);
+            //        }
+            //        ++it;
+            //        continue;  // 跳过后续代码，直接继续循环
+            //    }
+            //    else {
+            //         更新状态
+            //        crop->UpdateGrowth();
+            //    }
+
+            //    it++;
+            //}
+
+            player1->removeFromParent ();
+            auto nextday = farm::create ();
+            Director::getInstance ()->replaceScene ( nextday );
+
+
+        }
+
+        // 更新标签位置
+        float currentx = 0 , currenty = 0;
+        if (playerPos.x <= -315) {
+            currentx = -315;
+        }
+        else if (playerPos.x >= 20000) {
+            currentx = 20000;
+        }
+        else {
+            currentx = playerPos.x;
+        }
+
+        if (playerPos.y >= 920) {
+            currenty = 920;
+        }
+        else if (playerPos.y <= 360) {
+            currenty = 360;
+        }
+        else {
+            currenty = playerPos.y;
+        }
+
+        _timerLabelD->setPosition ( currentx - 710 , currenty + 570 );
+        _timerLabelH->setPosition ( currentx - 570 , currenty + 570 );
+        _timerLabelS->setPosition ( currentx - 410 , currenty + 570 );
+        _positionLabel->setPosition ( currentx - 570 , currenty + 490 );
+        button->setPosition ( currentx + 730 , currenty - 590 );
+        miniBag->setPosition ( currentx , currenty );
+
+
+        // 是否进入农场
+        if (Out_Beach.containsPoint ( playerPos )) {
+            if (isEnterKeyPressed) {
+                player1->removeFromParent ();
+                auto NextSence = farm::create ();
+                Director::getInstance ()->replaceScene ( NextSence );
+            }
+        }
+
+
+        for (const auto& point : non_transparent_pixels)
+        {
+            // 计算玩家与轮廓点之间的距离
+            float distance = 0;
+
+            Vec2 temp;
+            temp = playerPos;
+            temp.x -= player1->speed;
+            distance = temp.distance ( point );
+            if (distance <= 17) {
+                player1->moveLeft = false;
             }
             else {
-                Season = "Winter";
+                if (player1->leftpressed == false) {
+                    player1->moveLeft = true;
+                }
             }
-            day = 1;
-        }
 
-        remainingTime = 0;
-
-        //for (auto it = Crop_information.begin(); it != Crop_information.end(); /* no increment here */) {
-
-        //    auto crop = *it;  // 解引用迭代器以访问 Crop 对象
-
-        //     判断前一天是否浇水
-        //    if ((crop->watered == false) && (crop->GetPhase() != Phase::MATURE)) {
-        //         判断是否已经进入枯萎状态
-        //        if (crop->GetPhase() != Phase::SAPLESS) {
-        //            crop->ChangePhase(Phase::SAPLESS);
-        //            crop->ChangMatureNeeded(2); // 延迟两天收获
-        //        }
-        //        else {
-        //             删除元素并更新迭代器
-        //            it = Crop_information.erase(it);
-        //        }
-        //        ++it;
-        //        continue;  // 跳过后续代码，直接继续循环
-        //    }
-        //    else {
-        //         更新状态
-        //        crop->UpdateGrowth();
-        //    }
-
-        //    it++;
-        //}
-
-        player1->removeFromParent ();
-        auto nextday = farm::create ();
-        Director::getInstance ()->replaceScene ( nextday );
-
-
-    }
-
-    // 更新标签位置
-    float currentx = 0 , currenty = 0;
-    if (playerPos.x <= -315) {
-        currentx = -315;
-    }
-    else if (playerPos.x >= 20000) {
-        currentx = 20000;
-    }
-    else {
-        currentx = playerPos.x;
-    }
-
-    if (playerPos.y >= 920) {
-        currenty = 920;
-    }
-    else if (playerPos.y <= 360) {
-        currenty = 360;
-    }
-    else {
-        currenty = playerPos.y;
-    }
-
-    _timerLabelD->setPosition ( currentx - 710 , currenty + 570 );
-    _timerLabelH->setPosition ( currentx - 570 , currenty + 570 );
-    _timerLabelS->setPosition ( currentx - 410 , currenty + 570 );
-    _positionLabel->setPosition ( currentx - 570 , currenty + 490 );
-    button->setPosition ( currentx + 730 , currenty - 590 );
-    miniBag->setPosition ( currentx , currenty );
-
-
-    // 是否进入农场
-    if (Out_Beach.containsPoint ( playerPos )) {
-        if (isEnterKeyPressed) {
-            player1->removeFromParent ();
-            auto NextSence = Town::create ();
-            Director::getInstance ()->replaceScene ( NextSence );
-        }
-    }
-
-
-    for (const auto& point : non_transparent_pixels)
-    {
-        // 计算玩家与轮廓点之间的距离
-        float distance = 0;
-
-        Vec2 temp;
-        temp = playerPos;
-        temp.x -= player1->speed;
-        distance = temp.distance ( point );
-        if (distance <= 17) {
-            player1->moveLeft = false;
-        }
-        else {
-            if (player1->leftpressed == false) {
-                player1->moveLeft = true;
+            temp = playerPos;
+            temp.y -= 10;
+            distance = temp.distance ( point );
+            if (distance <= 15) {
+                player1->moveDown = false;
             }
+            else {
+                if (player1->downpressed == false) {
+                    player1->moveDown = true;
+                }
+            }
+
+            temp = playerPos;
+            temp.y += 10;
+            distance = temp.distance ( point );
+            if (distance <= 15) {
+                player1->moveUp = false;
+            }
+            else {
+                if (player1->uppressed == false) {
+                    player1->moveUp = true;
+                }
+            }
+
+            temp = playerPos;
+            temp.x += 10;
+            distance = temp.distance ( point );
+            if (distance <= 15) {
+                player1->moveRight = false;
+            }
+            else {
+                if (player1->rightpressed == false) {
+                    player1->moveRight = true;
+                }
+            }
+
         }
 
-        temp = playerPos;
-        temp.y -= 10;
-        distance = temp.distance ( point );
-        if (distance <= 15) {
-            player1->moveDown = false;
-        }
-        else {
-            if (player1->downpressed == false) {
-                player1->moveDown = true;
-            }
-        }
-
-        temp = playerPos;
-        temp.y += 10;
-        distance = temp.distance ( point );
-        if (distance <= 15) {
-            player1->moveUp = false;
-        }
-        else {
-            if (player1->uppressed == false) {
-                player1->moveUp = true;
-            }
-        }
-
-        temp = playerPos;
-        temp.x += 10;
-        distance = temp.distance ( point );
-        if (distance <= 15) {
-            player1->moveRight = false;
-        }
-        else {
-            if (player1->rightpressed == false) {
-                player1->moveRight = true;
-            }
-        }
 
     }
-
-
-}
-
-

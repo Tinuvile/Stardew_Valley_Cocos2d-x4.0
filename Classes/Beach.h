@@ -11,7 +11,6 @@
 #include "ui/CocosGUI.h"
 
 
-
 USING_NS_CC;
 
 
@@ -26,32 +25,32 @@ public:
 
     static  Beach* create ();
 
-    // ÅĞ¶Ï½ÇÉ«µÄÎ»ÖÃ
+    // åˆ¤æ–­è§’è‰²çš„ä½ç½®
     void CheckPlayerPosition ();
 
 
-    // ´´½¨Ò»¸öÁĞ±í£¬ÓÃÓÚ±£´æËùÓĞ·ÇÍ¸Ã÷ÏñËØµÄ×ø±ê
+    // åˆ›å»ºä¸€ä¸ªåˆ—è¡¨ï¼Œç”¨äºä¿å­˜æ‰€æœ‰éé€æ˜åƒç´ çš„åæ ‡
     std::vector<cocos2d::Vec2> non_transparent_pixels;
 
-    // Àë¿ªº£Ì²µÄÇøÓò
+    // ç¦»å¼€æµ·æ»©çš„åŒºåŸŸ
     Rect Out_Beach = Rect ( 240 , 1300 , 150 , 200 );
 
 
 private:
 
 
-    // ÓÃÓÚÏÔÊ¾¼ÆÊ±µÄ±êÇ©
+    // ç”¨äºæ˜¾ç¤ºè®¡æ—¶çš„æ ‡ç­¾
     cocos2d::Label* _timerLabelD;
     cocos2d::Label* _timerLabelH;
     cocos2d::Label* _timerLabelS;
 
-    // ÓÃÓÚÏÔÊ¾Íæ¼ÒÎ»ÖÃµÄ Label
+    // ç”¨äºæ˜¾ç¤ºç©å®¶ä½ç½®çš„ Label
     cocos2d::Label* _positionLabel;
 
-    /* ÍË³ö°´Å¥ */
+    /* é€€å‡ºæŒ‰é’® */
     Sprite* button;
 
-    // ÍË³ö°´Å¥
+    // é€€å‡ºæŒ‰é’®
     cocos2d::MenuItemImage* closeItem;
 
     cocos2d::Menu* menu;

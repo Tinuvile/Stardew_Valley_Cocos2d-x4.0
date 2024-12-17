@@ -1,6 +1,6 @@
 #include"Egg.h"
 
 Egg::Egg ()
-	:Item ( "Egg" , "Livestock/egg.png" , kEggValue ) {};
+	:Food ( "Egg" , "Livestock/egg.png" , kEggValue , 15 ) {};
 
 Egg::~Egg () {};
