@@ -57,14 +57,10 @@ supermarket* seedshop = nullptr;
 farm* Farm = nullptr;
 
 Inventory* inventory = new Inventory ();
-Inventory* StoreItem = new Inventory ();
 NpcRelationship* npc_relationship = new NpcRelationship();
 std::vector<std::pair<Rect , bool>> barn_space;
 std::vector<Livestock*> livestocks;
 SkillTree* skill_tree = new SkillTree ();
-
-// 创建任务管理器
-TaskManagement* taskManager;
 /****************************************************************************************/
 
 
@@ -248,26 +244,6 @@ void AppDelegate::Initialize () {
     season.insert ( { "Summer", 2 } );
     season.insert ( { "Autumn", 3 } );
     season.insert ( { "Winter", 4 } );
-
-    // 创建任务  
-    TaskManagement::Task task1 ( "Fetch the Amethyst" , TaskManagement::NPC_TASK );
-    task1.npcName = "Abigail"; // 发布任务的 NPC 名字  
-    task1.requiredItems.push_back ( amethyst ); // 需要的物品  
-    task1.rewardCoins = 500; // 奖励金币  
-    task1.relationshipPoints = 10; // NPC 好感度  
-
-    TaskManagement::Task task2 ( "Collect Emerald" , TaskManagement::SYSTEM_TASK );
-    task2.requiredItems.push_back ( emerald ); // 需要的物品  
-    task2.rewardCoins = 30; // 奖励金币  
-
-    TaskManagement::Task task3 ( "Festival Gathering" , TaskManagement::FESTIVAL_TASK );
-    task3.specialRewards.push_back ( Gold_Hoe );   // 特殊奖励  
-    task3.relationshipPoints = 5; // 与所有人的好感度  
-
-    // 将任务添加到任务管理器  
-    taskManager->createTask ( task1 );
-    taskManager->createTask ( task2 );
-    taskManager->createTask ( task3 );
 }
 
 
