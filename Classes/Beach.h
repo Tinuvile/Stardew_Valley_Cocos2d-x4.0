@@ -34,7 +34,7 @@ public:
     std::vector<cocos2d::Vec2> non_transparent_pixels;
 
     // 离开海滩的区域
-    Rect Out_Beach = Rect ( 915 , 70 , 150 , 90 );
+    Rect Out_Beach = Rect ( 240 , 1300 , 150 , 200 );
 
 
 private:

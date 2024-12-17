@@ -35,7 +35,7 @@ bool IsNextDay = false;
 
 Crop wheat ( "wheat" , "crop/wheat1.png" , "crop/wheat2.png" , "crop/wheat3.png" , "All" , Phase::SEED , 50 , 0 , false , 4 );
 Crop corn ( "corn" , "crop/corn1.png" , "crop/corn2.png" , "crop/corn3.png" , "Spring" , Phase::SEED , 50 , 0 , false , 6 );
-Crop potato ( "potato" , "crop/potato1.png" , "crop/potato2.png" , "crop/potato3.png" , "All" , Phase::SEED , 30 , 0 , false , 4 );
+Crop potato ( "potato" , "crop/potato1.png" , "crop/potato2.png" , "crop/potato3.png" , "All" , Phase::SEED , 30 , 0 , false , 2 );
 Crop pumpkin ( "pumpkin" , "crop/pumpkin1.png" , "crop/pumpkin2.png" , "crop/pumpkin3.png" , "Autumn" , Phase::SEED , 70 , 0 , false , 6 );
 Crop blueberry ( "blueberry" , "crop/blueberry1.png" , "crop/blueberry2.png" , "crop/blueberry3.png" , "Summer" , Phase::SEED , 100 , 0 , false , 7 );
 
@@ -135,20 +135,20 @@ void AppDelegate::runScene(cocos2d::Director* director) {
     key = { "seedshop",Vec2(230,470) };
     T_lastplace.insert(std::make_pair(key, false));
 
-    auto farm = farm::create ();
-    director->runWithScene ( farm );
+    /*auto farm = farm::create ();
+    director->runWithScene ( farm );*/
 
     //运行海滩场景
-    //auto beach = Beach::create ();
-    //director->runWithScene ( beach );
+   /* auto beach = Beach::create ();
+    director->runWithScene ( beach );*/
 
     // 运行家的场景
     /*auto test = Myhouse::create();
     director->runWithScene(test); */
 
     // 运行小镇的场景
-    //auto test = Town::create();
-    //director->runWithScene(test);
+    /*auto test = Town::create();
+    director->runWithScene(test);*/
 
     // 运行商店的场景
     /*auto test = supermarket::create();
@@ -163,8 +163,8 @@ void AppDelegate::runScene(cocos2d::Director* director) {
     // director->runWithScene(test);
     
     // 运行森林
-    // auto test = Forest::create();
-    // director->runWithScene(test);
+     auto test = Forest::create();
+     director->runWithScene(test);
 
     //开局UI运行
     //director->runWithScene ( BeginScene::create () );
@@ -173,14 +173,44 @@ void AppDelegate::runScene(cocos2d::Director* director) {
 }
 
 void AppDelegate::Initialize () {
+   
     // 创建人物
     player1 = Player::create ();
     // 初始化存储作物信息的数组
-    //cropbasicinformation.insert ( { "wheat", WHEAT } );
-    //cropbasicinformation.insert ( { "corn", CORN } );
-    //cropbasicinformation.insert ( { "potato", POTATO } );
-    //cropbasicinformation.insert ( { "pumpkin", PUMPKIN } );
-    //cropbasicinformation.insert ( { "blueberry", BLUEBERRY } );
+    cropbasicinformation.insert({ "Wheat_Seeds", wheat });
+    cropbasicinformation.insert({ "Corn_Seeds", corn });
+    cropbasicinformation.insert({ "Potato_Seeds", potato });
+    cropbasicinformation.insert({ "Pumpkin_Seeds", pumpkin });
+    cropbasicinformation.insert({ "Blueberry_Seeds", blueberry });
+
+    // 初始化宝石信息
+    Ore Ruby("Ruby", "Ore/Ruby1.png", "Ore/Ruby2.png", 5, 5, Vec2(350, 500));                   // 红宝石
+    Ore_information.push_back(Ruby.GetOreCopy());
+    Ruby.position = Vec2(950, 750);
+    Ore_information.push_back(Ruby.GetOreCopy());
+
+    Ore Amethyst("Amethyst", "Ore/Amethyst1.png", "Ore/Amethyst2.png", 5, 5, Vec2(800, 250));   // 紫宝石
+    Ore_information.push_back(Amethyst.GetOreCopy());
+    Amethyst.position = Vec2(750, 850);
+    Ore_information.push_back(Amethyst.GetOreCopy());
+
+    Ore Emerald("Emerald", "Ore/Emerald1.png", "Ore/Emerald2.png", 5, 5, Vec2(900, 150));       // 绿宝石
+    Ore_information.push_back(Emerald.GetOreCopy());
+    Emerald.position = Vec2(1250, 350);
+    Ore_information.push_back(Emerald.GetOreCopy());
+
+    // 初始化树木信息
+    Tree tree("tree", "Tree/tree1.png", "Tree/tree2.png", "Tree/tree3.png", 15, 5, Vec2(50, 950));
+    Tree_information.push_back(tree.GetTreeCopy());
+    tree.position = Vec2(-400, 700);
+    Tree_information.push_back(tree.GetTreeCopy());
+    tree.position = Vec2(800, 1250);
+    Tree_information.push_back(tree.GetTreeCopy());
+    tree.position = Vec2(900, 1650);
+    Tree_information.push_back(tree.GetTreeCopy());
+    tree.position = Vec2(1300, 1550);
+    Tree_information.push_back(tree.GetTreeCopy());
+
     // 初始化小镇各地址坐标
     std::pair<std::string , Vec2> key = { "initiation",Vec2 (-925,650) };
     T_lastplace.insert ( std::make_pair ( key , true ) );

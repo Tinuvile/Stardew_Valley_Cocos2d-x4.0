@@ -378,6 +378,16 @@ void Cave::checkPlayerPosition()
 
                 ore->mining_day = season[Season] * 7 + day;
 
+                if (ore->GetName() == "Emerald") {
+                    inventory->AddItem(emerald);
+                }
+                else if (ore->GetName() == "Ruby") {
+                    inventory->AddItem(ruby);
+                }
+                else {
+                    inventory->AddItem(amethyst);
+                }
+
                 if (player1->pic_path == "character1/player_right3.png") {
                    
                     player1->setTexture("character1/player_plant3.png");

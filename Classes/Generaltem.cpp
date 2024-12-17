@@ -97,3 +97,17 @@ Item Orange_Sapling ( "Orange_Sapling" , "Item/Surpermarket/Tree/Orange_Sapling.
 Item Peach_Sapling ( "Peach_Sapling" , "Item/Surpermarket/Tree/Peach_Sapling.png" , 3000 , 99 );
 Item Pomegranate_Sapling ( "Pomegranate_Sapling" , "Item/Surpermarket/Tree/Pomegranate_Sapling.png" , 3000 , 99 );
 
+// 宝石
+Item amethyst("Amethyst", "Ore/Amethyst3.png", 1000, 99);
+Item emerald("Emerald", "Ore/Emerald3.png", 1000, 99);
+Item ruby("Ruby", "Ore/Ruby3.png", 1000, 99);
+
+// 成熟作物
+Item Wheat("wheat", "crop/wheat4.png", 1000, 99);
+Item Corn("corn", "crop/corn4.png", 1000, 99);
+Item Potato("potato", "crop/Potato4.png", 1000, 99);
+Item Pumpkin("pumpkin", "crop/Pumpkin4.png", 1000, 99);
+Item Blueberry("blueberry", "crop/blueberry4.png", 1000, 99);
+Item Wood("wood", "tree/wood.png", 1000, 99);
+
+

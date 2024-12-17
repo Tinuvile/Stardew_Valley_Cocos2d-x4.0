@@ -100,4 +100,17 @@ extern Item Orange_Sapling;
 extern Item Peach_Sapling;
 extern Item Pomegranate_Sapling;
 
+// 宝石类
+extern Item amethyst;
+extern Item emerald;
+extern Item ruby;
+
+// 成熟作物
+extern Item Wheat;
+extern Item Corn;
+extern Item Potato;
+extern Item Pumpkin;
+extern Item Blueberry;
+extern Item Wood;
+
 #endif // GENERALITEM_H

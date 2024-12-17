@@ -160,7 +160,7 @@ bool farm::init()
     auto listenerWithPlayer = EventListenerKeyboard::create();
     listenerWithPlayer->onKeyPressed = [this](EventKeyboard::KeyCode keyCode, Event* event)
         {
-            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER || keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER) {
+            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER) {
                 isEnterKeyPressed = true;
                 CCLOG("Enter key pressed. ");
             }
@@ -191,12 +191,13 @@ bool farm::init()
                     currentInventoryUI = nullptr;  // 重置指针  
                 }
             }
+            
         };
 
     listenerWithPlayer->onKeyReleased = [this](EventKeyboard::KeyCode keyCode, Event* event)
         {
             // 释放 Enter 键时，设置为 false
-            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER || keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER) {
+            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER) {
                 isEnterKeyPressed = false;
             }
             else if (keyCode == EventKeyboard::KeyCode::KEY_P) {
@@ -370,8 +371,6 @@ void farm::checkPlayerPosition()
          player1->removeFromParent();
          auto nextday = Myhouse::create();
          Director::getInstance()->replaceScene(nextday);
-           
-        
 
     }
 
@@ -428,60 +427,66 @@ void farm::checkPlayerPosition()
 
             if (Isplant == false) {
 
-                std::string TypeName = "wheat";
+                auto temp = miniBag->getSelectedItem();
+                if (temp != nullptr) {
+                    cocos2d::log("copy item");
+                    std::string TypeName = temp->GetName();
+                    auto point = cropbasicinformation.find(TypeName);
+                    if (point != cropbasicinformation.end()) {
+                        cocos2d::log("find crop");
+                        // 判断是否符合种植的季节
+                        if ((cropbasicinformation[TypeName].GetSeason() == Season) || (cropbasicinformation[TypeName].GetSeason() == "All")) {
 
-                // 判断是否符合种植的季节
-                if ((cropbasicinformation[TypeName].GetSeason() == Season) || (cropbasicinformation[TypeName].GetSeason() == "All")) {
+                            Crop_information.push_back(cropbasicinformation[TypeName].GetCropCopy());
+                            Crop_information.back()->plant_day = season[Season] * 7 + day;
+                            Crop_information.back()->nums = nums;
 
-                    Crop_information.push_back(cropbasicinformation[TypeName].GetCropCopy());
-                    Crop_information.back()->plant_day = season[Season] * 7 + day;
-                    Crop_information.back()->nums = nums;
+                            if (player1->pic_path == "character1/player_right3.png") {
+                                // 初始设置：设置第一个图片并放大
+                                player1->setTexture("character1/player_plant3.png");
+                                player1->setScale(2.5f);
 
-                    if (player1->pic_path == "character1/player_right3.png") {
-                        // 初始设置：设置第一个图片并放大
-                        player1->setTexture("character1/player_plant3.png");
-                        player1->setScale(2.5f);
+                                // 延迟0.3秒后切换到第二个图片
+                                player1->scheduleOnce([=](float dt) {
+                                    player1->setTexture("character1/player_plant4.png");  // 更换为player_plant2
+                                    player1->setScale(2.7f);
+                                    }, 0.15f, "change_image1_key");
 
-                        // 延迟0.3秒后切换到第二个图片
-                        player1->scheduleOnce([=](float dt) {
-                            player1->setTexture("character1/player_plant4.png");  // 更换为player_plant2
-                            player1->setScale(2.7f);
-                            }, 0.15f, "change_image1_key");
+                                // 延迟0.6秒后切换到第三个图片
+                                player1->scheduleOnce([=](float dt) {
+                                    player1->setTexture("character1/player_right3.png"); // 更换为player_left3
+                                    player1->setScale(1.5f);
+                                    auto temp = Sprite::create(Crop_information.back()->initial_pic);
+                                    this->addChild(temp, 15 - nums / 19);
+                                    temp->setPosition(500 + ((nums % 19) - 1) * 48, 910 - ((nums / 19) - 1) * 48);
+                                    temp->setScale(2.1f);
+                                    }, 0.35f, "change_image2_key");
+                            }
+                            else {
+                                // 初始设置：设置第一个图片并放大
+                                player1->setTexture("character1/player_plant1.png");
+                                player1->setScale(2.5f);
 
-                        // 延迟0.6秒后切换到第三个图片
-                        player1->scheduleOnce([=](float dt) {
-                            player1->setTexture("character1/player_right3.png"); // 更换为player_left3
-                            player1->setScale(1.5f);
-                            auto temp = Sprite::create(Crop_information.back()->initial_pic);
-                            this->addChild(temp, 15 - nums / 19);
-                            temp->setPosition(500 + ((nums % 19) - 1) * 48, 910 - ((nums / 19) - 1) * 48);
-                            temp->setScale(2.1f);
-                            }, 0.35f, "change_image2_key");
+                                // 延迟0.3秒后切换到第二个图片
+                                player1->scheduleOnce([=](float dt) {
+                                    player1->setTexture("character1/player_plant2.png");  // 更换为player_plant2
+                                    player1->setScale(2.7f);
+                                    }, 0.15f, "change_image1_key");
+
+                                // 延迟0.6秒后切换到第三个图片
+                                player1->scheduleOnce([=](float dt) {
+                                    player1->setTexture("character1/player_left3.png"); // 更换为player_left3
+                                    player1->setScale(1.5f);
+                                    auto temp = Sprite::create(Crop_information.back()->initial_pic);
+                                    this->addChild(temp, 15 - nums / 19);
+                                    temp->setPosition(500 + ((nums % 19) - 1) * 48, 910 - ((nums / 19) - 1) * 48);
+                                    temp->setScale(2.1f);
+                                    }, 0.35f, "change_image2_key");
+                            }
+
+                        }
                     }
-                    else {
-                        // 初始设置：设置第一个图片并放大
-                        player1->setTexture("character1/player_plant1.png");
-                        player1->setScale(2.5f);
-
-                        // 延迟0.3秒后切换到第二个图片
-                        player1->scheduleOnce([=](float dt) {
-                            player1->setTexture("character1/player_plant2.png");  // 更换为player_plant2
-                            player1->setScale(2.7f);
-                            }, 0.15f, "change_image1_key");
-
-                        // 延迟0.6秒后切换到第三个图片
-                        player1->scheduleOnce([=](float dt) {
-                            player1->setTexture("character1/player_left3.png"); // 更换为player_left3
-                            player1->setScale(1.5f);
-                            auto temp = Sprite::create(Crop_information.back()->initial_pic);
-                            this->addChild(temp, 15 - nums / 19);
-                            temp->setPosition(500 + ((nums % 19) - 1) * 48, 910 - ((nums / 19) - 1) * 48);
-                            temp->setScale(2.1f);
-                            }, 0.35f, "change_image2_key");
-                    }
-
                 }
-
             }
         }
         // 是否执行浇水
@@ -549,9 +554,16 @@ void farm::checkPlayerPosition()
 
             int nums = getRegionNumber(Vec2(playerPos.x + 10, playerPos.y - 10));
             
+
             for (auto it = Crop_information.begin(); it != Crop_information.end(); /* no increment here */) {
                 if ((*it)->nums == nums) {  // 使用 *it 解引用迭代器
                     if ((*it)->GetPhase() == Phase::MATURE) {
+
+                        auto find_temp = (*it);
+                        
+                        if (find_temp->GetName() == "potato") {
+                            inventory->AddItem(potato);
+                        }
 
                         // 覆盖精灵
                         auto test = Sprite::create("farm/tile.png");

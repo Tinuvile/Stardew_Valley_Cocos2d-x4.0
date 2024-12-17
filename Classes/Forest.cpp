@@ -389,10 +389,16 @@ void  Forest::checkPlayerPosition()
 
             auto tree = *it;  
 
-         
-
             float distance = tree->position.distance(playerPos);
             if (distance <= 250 && tree->available) {
+
+                inventory->AddItem(Wood);
+
+                // Éý¼¶
+                skill_tree->AddExperience(foraging_skill, 10);
+
+
+
 
                 cocos2d::log("Cut Down");
 

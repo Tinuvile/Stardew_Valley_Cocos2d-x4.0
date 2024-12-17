@@ -384,7 +384,7 @@ bool Town::init()
                             Vec2 playerPos = player1->getPosition ();
                             npc_relationship->increaseRelationship ( "player" , npc->GetName () , 15.2 );
                             inventory->RemoveItem ( miniBag->getSelectedSlot () );
-                            inventory->isupdated = true;
+                            inventory->is_updated = true;
                             npc->AddGiftTime ();
                             // 这里改成礼物的图
                             auto ItemClickByminiBag = Sprite::create ( "npc/gift.png" );
@@ -441,6 +441,7 @@ bool Town::init()
                     currentInventoryUI = nullptr;  // 重置指针  
                 }
             }
+           
         };
 
     listenerWithPlayer->onKeyReleased = [this](EventKeyboard::KeyCode keyCode, Event* event)
