@@ -25,6 +25,9 @@ public:
     // 判断角色的位置
     void checkPlayerPosition ();
 
+    // 下雨效果
+    void createRainEffect();
+
 
 
     // 返回作物序号
@@ -50,6 +53,9 @@ public:
 
     // 可以进入森林的区域
     Rect forest_area = Rect ( 750 , -70 , 100 , 50 );
+
+
+
 
     // 恢复种植
     void AllInitialize_crop ();

@@ -37,20 +37,20 @@ void Crop::UpdateGrowth() {
 	this->watered = false;
 
 	int times = 0;
-	//if (Season == "Spring") {
-	//	times = 1;
-	//}
-	//else if (Season == "Summmer") {
-	//	times = 2;
-	//}
-	//else if (Season == "Autumn") {
-	//	times = 3;
-	//}
-	//else {
-	//	times = 4;
-	//}
-	//int growth_progress = times * 7 + day - this->plant_day;
-	/*if (growth_progress >= mature_needed) {
+	if (Season == "Spring") {
+		times = 1;
+	}
+	else if (Season == "Summmer") {
+		times = 2;
+	}
+	else if (Season == "Autumn") {
+		times = 3;
+	}
+	else {
+		times = 4;
+	}
+	int growth_progress = times * 7 + day - this->plant_day;
+	if (growth_progress >= mature_needed) {
 		this->phase = Phase::MATURE;
 	}
 	else if (growth_progress >= mature_needed / 2) {
@@ -58,7 +58,7 @@ void Crop::UpdateGrowth() {
 	}
 	else {
 		this->phase = Phase::SEED;
-	}*/
+	}
 }
 
 void Crop::SetDead() {
