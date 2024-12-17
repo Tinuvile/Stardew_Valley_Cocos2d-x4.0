@@ -1,6 +1,6 @@
 #include "TaskManagement.h"
 
-
+TaskManagement::TaskManagement () {}
 
 // 创建任务
 void TaskManagement::createTask ( const Task& task ) {
@@ -20,9 +20,7 @@ void TaskManagement::completeTask ( const Task& task ) {
 		}
 	}
     if (it->type == NPC_TASK) {
-        if (npc != nullptr) {
-            npc_relationship->increaseRelationship ("player", it->npcName , it->relationshipPoints);
-        }
+        npc_relationship->increaseRelationship ( "player" , it->npcName , it->relationshipPoints );
     }
     else if (it->type == FESTIVAL_TASK) {
         // 处理节日任务特殊奖励  

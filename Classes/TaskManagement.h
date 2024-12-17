@@ -1,7 +1,6 @@
 #pragma once
 #include "cocos2d.h" 
-#include "Item.h"
-#include "AppDelegate.h"
+ #include "AppDelegate.h"
 
 class TaskManagement {
 public:
@@ -31,7 +30,7 @@ public:
 		}
 	};
 
-	TaskManagement() {}
+	TaskManagement ();
 
 	// 创建任务  
 	void createTask ( const Task& task );
@@ -42,6 +41,5 @@ public:
 protected:
 
 	std::vector<Task> tasks;              // 存储任务的容器  
-	NPC* npc;
 
 };
