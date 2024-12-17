@@ -1,7 +1,7 @@
 #include"Fish.h"
 
 Fish::Fish(int fish_index)
-	:Item(fish_name[fish_index],fish_path[fish_index]){
+	:Food(fish_name[fish_index],fish_path[fish_index],kFishBasicValue,kFishBasicEnergy){
 	switch (fish_index) {
 		case 0:
 			catching_difficulty = 1;
@@ -16,13 +16,10 @@ Fish::Fish(int fish_index)
 			catching_difficulty = 1;
 			break;
 	}
-	value = kFishBasicValue * catching_difficulty;
-	energy_provided = kFishBasicEnergy * catching_difficulty;
+	value *= catching_difficulty;
+	energy_provided *= catching_difficulty;
 }
 
-int Fish::GetEnergyProvided () const {
-	return energy_provided;
-}
 
 int Fish::GetCatchingDiffuculty () const {
 	return catching_difficulty;

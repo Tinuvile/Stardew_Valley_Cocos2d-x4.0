@@ -41,6 +41,30 @@ bool Barn::init ()
         }
     }
 
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 4; j++) {
+            Livestock* livestock = nullptr;
+            Rect area = barn_space[4 * i + j].first;
+            switch (i) {
+                case 0: {
+                    livestock = Chicken::create (area);
+                    break;
+                }
+                case 1: {
+                    livestock = Cow::create ( area );
+                    break;
+                }
+                case 2: {
+                    livestock = Sheep::create ( area );
+                    break;
+                }
+            }
+            if (livestock != nullptr) {
+                this->addChild ( livestock , 10 );
+            }
+        }
+    }
+
     //º”»Îº“–Û
     if (!livestocks.empty ()) {
         for (auto livestock : livestocks) {

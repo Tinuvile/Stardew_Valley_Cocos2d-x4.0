@@ -44,7 +44,7 @@ bool Chicken::init () {
 std::shared_ptr<Item> Chicken::ProduceProduct () {
 	if (can_produce) {
 		CCLOG ( "Chicken produced egg!" );
-		std::shared_ptr<Egg> production = std::make_shared<Egg> ( Egg () );
+		std::shared_ptr<Food> production = Food::create ( FoodType::Egg );
 		can_produce = false;
 		return production;
 	}

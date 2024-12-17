@@ -1,7 +1,7 @@
 #include"Milk.h"
 
-Milk::Milk()
-	:Item ("Milk" , "Livestock/milk.png" , kMilkValue) {};
+Milk::Milk ()
+	:Food ( "Milk" , "Livestock/milk.png" , kMilkValue , 30 ) {};
 
 Milk::~Milk () {
 

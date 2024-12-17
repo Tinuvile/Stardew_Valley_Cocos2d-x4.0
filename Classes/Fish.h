@@ -1,5 +1,5 @@
 #pragma once
-#include"Item.h"
+#include"Food.h"
 
 const int kFishTypes = 3;
 const int kFishBasicValue = 100;
@@ -15,7 +15,7 @@ const std::string fish_path[] = {
 	"Fish/AquariumFish-22.png","Fish/AquariumFish-21.png","Fish/AquariumFish-97.png"
 };
 
-class Fish :public Item {
+class Fish :public Food {
 private:
 	//捕获难度
 	int catching_difficulty;
@@ -27,8 +27,6 @@ public:
 
 	//析构函数
 	virtual ~Fish () {};
-
-	int GetEnergyProvided () const;
 
 	int GetCatchingDiffuculty () const;
 

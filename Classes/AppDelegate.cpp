@@ -161,9 +161,9 @@ void AppDelegate::runScene(cocos2d::Director* director) {
 
     
     // 运行森林
-    /* auto test = Forest::create();
-     director->runWithScene(test);*/
-
+     //auto test = Forest::create();
+     //director->runWithScene(test);
+    
     //开局UI运行
     //director->runWithScene ( BeginScene::create () );
     //创建人物界面运行

@@ -1,6 +1,6 @@
 #pragma once
 #include"Livestock.h"
-#include "Milk.h"
+#include "Food.h"
 
 const std::string cow_icon[] = {
 	"Livestock/white_cow_front1.png","Livestock/white_cow_front2.png","Livestock/white_cow_front3.png","Livestock/white_cow_front4.png",
@@ -26,8 +26,8 @@ public:
 	virtual bool init ();
 
 	// 产出牛奶
-	// 要获取Milk在基类Item以外的独有成员（如energy_provided)
-	// 需要使用std::xxx_pointer_cast(如std::dynamic_pointer_cast<Milk>()将指针基类型转换为Milk
+	// 要获取Milk在基类Item以外的独有成员（如energy)
+	// 需要使用std::xxx_pointer_cast(如std::dynamic_pointer_cast<Food>()将指针基类型转换为Food
 	virtual std::shared_ptr<Item> ProduceProduct ();
 
 	//移动时更新图像

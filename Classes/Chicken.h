@@ -1,6 +1,6 @@
 #pragma once
 #include"Livestock.h"
-#include"Egg.h"
+#include"Food.h"
 #include<string>
 
 const std::string chicken_icon[] = {
@@ -25,8 +25,8 @@ public:
 	virtual bool init ();
 
 	// 产出鸡蛋
-	// 要获取Egg在基类Item以外的独有成员（如energy_provided)
-	// 需要使用std::xxx_pointer_cast(如std::dynamic_pointer_cast< >( )将指针基类型转换为派生类
+	// 要获取Egg在基类Item以外的独有成员（如energy)
+	// 需要使用std::xxx_pointer_cast(如std::dynamic_pointer_cast< >( )将指针基类型转换为派生类Food
 	virtual std::shared_ptr<Item> ProduceProduct ();
 
 
