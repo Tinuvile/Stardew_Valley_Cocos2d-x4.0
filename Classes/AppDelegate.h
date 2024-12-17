@@ -31,6 +31,7 @@
 #include "Cow.h"
 #include "Sheep.h"
 
+#include "TaskManagement.h"
 #include "NPC.h"
 #include "NPCreate.h"
 #include "NPCtalkUI.h"
@@ -60,6 +61,7 @@ class Barn;
 class Inventory;
 class NpcRelationship;
 class mini_bag;
+class TaskManagment;
 /******************************** 全局变量声明区 ***************************************/
 extern int remainingTime;  // 声明，不初始化
 extern int day;
@@ -93,6 +95,8 @@ extern SkillTree* skill_tree;
 extern mini_bag* miniBag;
 extern Inventory* inventory;
 extern NpcRelationship* npc_relationship;
+extern Inventory* StoreItem;
+extern TaskManagement* taskManager;
 //存储畜棚中可有家畜活动的矩形区域，并记录该区域是否已存在家畜
 extern std::vector<std::pair<Rect , bool>> barn_space;
 //存储畜棚中的家畜
