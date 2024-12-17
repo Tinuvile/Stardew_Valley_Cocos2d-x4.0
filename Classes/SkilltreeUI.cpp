@@ -3,7 +3,6 @@
 #include "Item.h" 
 #include "SkillTreeUI.h"
 
-extern SkillTree* skillTree;
 
 
 const int characternum = 5;
@@ -109,7 +108,7 @@ void SkillTreeUI::backgroundcreate () {
 }
 
 void SkillTreeUI::SkillDisplay ( int whichSkill , Vec2 Pos , float gap ) {
-    int fullSkill_num = (*skillTree)(whichSkill);
+    int fullSkill_num = (*skill_tree)(whichSkill);
     int emptyheart_num = 10 - fullSkill_num;
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     for (int i = 0; i < 10; i++) {

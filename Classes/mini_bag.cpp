@@ -1,5 +1,3 @@
-
-// mini_bag.cpp  
 #include "mini_bag.h"  
 #include "ui/CocosGUI.h"  
 #include "Item.h"  
@@ -12,31 +10,6 @@ static void problemLoading ( const char* filename )
 {
     printf ( "Error while loading: %s\n" , filename );
     printf ( "Depending on how you compiled you might have to add 'Resources/' in front of filenames in CreateCharacterScene.cpp\n" );
-}
-
-void mini_bag::updateCoordinate ( float& x , float& y ) {
-    Vec2 position = player1->getPosition ();
-    if (whichScene == "Town") {
-        if (x <= -170) {
-            x = -170;
-        }
-        else if (x >= 1773) {
-            x = 1773;
-        }
-        else {
-            x = position.x;
-        }
-
-        if (y >= 1498) {
-            y = 1498;
-        }
-        else if (y <= -222) {
-            y = -222;
-        }
-        else {
-            y = position.y;
-        }
-    }
 }
 
 void mini_bag::backgroundcreate () {
@@ -70,7 +43,6 @@ void mini_bag::Itemblock ( Inventory* inventory ) {
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     Vec2 origin = Director::getInstance ()->getVisibleOrigin ();
     _inventory = inventory;
-    _selectedSlot = 1; // 默认选中第一个槽位  
 
 
     // 初始化物品槽 Sprite 
@@ -88,7 +60,7 @@ void mini_bag::Itemblock ( Inventory* inventory ) {
         slot->setScale ( scale / 16.5 );
         float bagWidth = bag->getContentSize ().width;
         float bagHeight = bag->getContentSize ().height;
-        slot->setPosition ( 0 - bagWidth * 0.57 + (originalWidth * scale / 16.5 + 5) * i , 0 - visibleSize.height * 0.435 + bagHeight * 1.73 / 3.643 ); // 计算槽位位置  
+        slot->setPosition ( 0 - bagWidth * 0.57 + (originalWidth * scale / 16.5 + 5) * i , 0 - visibleSize.height * 0.485 + bagHeight * 1.73 / 3.643 ); // 计算槽位位置  
         slot->setTag ( i + 1 ); // 设置槽位的标签  
         this->addChild ( slot , 2 );
 
@@ -97,7 +69,7 @@ void mini_bag::Itemblock ( Inventory* inventory ) {
     }
 }
 
-bool mini_bag::init ( Inventory* inventory) {
+bool mini_bag::init ( Inventory* inventory ) {
     if (!Layer::init ()) {
         return false;
     }
@@ -114,7 +86,7 @@ bool mini_bag::init ( Inventory* inventory) {
 
 mini_bag* mini_bag::create ( Inventory* inventory ) {
     mini_bag* ret = new mini_bag ();
-    if (ret && ret->init ( inventory , WhichScene )) {
+    if (ret && ret->init ( inventory )) {
         ret->autorelease ();
         return ret;
     }
@@ -231,17 +203,6 @@ void mini_bag::updateDisplay () {
     //}
 }
 
-void mini_bag::onItemSlotClicked ( cocos2d::Ref* sender ) {
-    auto slot = static_cast<Sprite*>(sender);
-    int position = slot->getTag (); // 获取槽位位置  
-
-    // 设置为选中状态并更新 Inventory 数据  
-    _inventory->SetSelectedItem ( position );
-    _selectedSlot = position;
-
-    // 更新显示  
-    updateDisplay ();
-}
 
 void mini_bag::getSelectBack () {
     _selectedSlot = 0;

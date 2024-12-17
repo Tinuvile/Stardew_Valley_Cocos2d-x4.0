@@ -11,12 +11,14 @@ bool Inventory::AddItem ( const Item& item ) {
 		if (pair.second.first->CanBeDepositTogether(item)
 			&& pair.second.second < item.max_count_in_one_grid) {
 			++pair.second.second;
+			is_updated = true;
 			return true;
 		}
 	}
 	int size = package.size ();
 	if (size < capacity) {
 		package[++size] = std::make_pair ( item.GetCopy() , 1);
+		is_updated = true;
 		return true;
 	}
 	return false;
@@ -32,6 +34,7 @@ bool Inventory::AddItem ( const Item& item , const int& add_num ) {
 			pair.second.second += to_add;
 			remaining -= to_add;
 			if (remaining <= 0) {
+				is_updated = true;
 				return true;
 			}
 		}
@@ -42,6 +45,7 @@ bool Inventory::AddItem ( const Item& item , const int& add_num ) {
 		remaining -= to_add;
 		package[++size] = std::make_pair ( item.GetCopy() , (to_add));
 	}
+	is_updated = remaining < add_num ? true : false;
 	return remaining <= 0;
 }
 

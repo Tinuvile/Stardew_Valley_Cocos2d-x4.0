@@ -74,7 +74,7 @@ void StoreUI::backgroundcreate () {
                     if (goldAmount >= chosen_Item->GetValue ()) {
                         economicSystem->subtractGold ( chosen_Item->GetValue () );
                         _mybag->AddItem ( *chosen_Item );
-                        _mybag->isupdated = true;
+                        _mybag->is_updated = true;
                         updateDisplay ();
                         CCLOG ( "Purchased item: %s" , chosen_Item->GetName().c_str ());
                     }

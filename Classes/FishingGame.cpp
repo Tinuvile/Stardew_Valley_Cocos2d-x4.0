@@ -180,6 +180,11 @@ void FishingGame::EndGame ( bool success ) {
         // 向背包中加入对应鱼
         std::shared_ptr<Fish> fish_caught = std::make_shared<Fish> ( fish_type );
         inventory->AddItem ( *fish_caught );
+        //根据所钓鱼的难度增加经验
+        int experience_to_add = 0;
+        int difficulty = fish_caught->GetCatchingDiffuculty ();
+        experience_to_add = 10 * difficulty;
+        skill_tree->AddExperience ( fishing_skill , experience_to_add );
         inventory->DisplayPackageInCCLOG ();
         CCLOG ( "Player wins!" );
     }

@@ -132,9 +132,9 @@ bool Town::init()
 
     // 更新物品栏
     schedule([=](float deltaTime) {
-        if (inventory->isupdated == true) {
+        if (inventory->is_updated == true) {
             miniBag->updateDisplay();
-            inventory->isupdated = false;
+            inventory->is_updated = false;
         }
         }, 0.1f, "item_update_key");
 
@@ -142,7 +142,7 @@ bool Town::init()
     // 初始化角色并将其添加到场景
     if (player1->getParent() == NULL) {
         cocos2d::log("player1->get");
-        this->addChild(player1, 5);
+        this->addChild(player1, 6);
     }
     player1->setScale(1.5f);
     player1->setAnchorPoint(Vec2(0.5f, 0.2f));

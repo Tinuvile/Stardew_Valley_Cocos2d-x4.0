@@ -3,15 +3,15 @@
 #include<unordered_map>
 
 //耕种技能，通过收获农产品（农作物，畜产品）获取经验
-const int farming_skill = 0;
+const int farming_skill = 1;
 //采矿技能 通过敲碎岩石获取经验 每次升级增加镐工具的熟练度
-const int mining_skill = 1;
+const int mining_skill = 2;
 //采集技能 通过采集物品和砍伐树木获取经验 每次升级增加斧工具的熟练度
-const int foraging_skill = 2;
+const int foraging_skill = 3;
 //钓鱼技能 通过成功完成钓鱼小游戏获取经验
-const int fishing_skill = 3;
+const int fishing_skill = 4;
 //战斗技能 是否实现待定
-const int combat_skill = 4;
+const int combat_skill = 5;
 
 class Skill {
 private:

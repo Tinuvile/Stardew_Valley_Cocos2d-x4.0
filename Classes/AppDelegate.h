@@ -3,36 +3,47 @@
 
 #include "cocos2d.h"  
 //#include "GameBeginUI.h"
-#include "Inventory.h"
-#include "Town.h"
-#include "supermarket.h"
-#include "farm.h"
 #include "Barn.h"
-#include "Forest.h"
+#include "Beach.h"
 #include "Cave.h"
+#include "farm.h"
+#include "Forest.h"
 #include "Myhouse.h"
+#include "supermarket.h"
+#include "Town.h"
+
 #include "Player.h"
-#include "tree.h"
+
+#include "mini_bag.h"
+#include "Inventory.h"
+#include "InventoryUI.h"
+
+#include "Item.h"
+#include "Generaltem.h"
+
+#include "BasicInformation.h"
 #include "Crop.h"
 #include "Ore.h"
-#include "Item.h"
-#include "BasicInformation.h"
-#include "Generaltem.h"
-#include "InventoryUI.h"
-#include "StoreUI.h"
-#include "EconomicSystem.h"
-#include "mini_bag.h"
-#include "NPCtalkUI.h"
-#include "NPCreate.h"
+#include "tree.h"
+
+#include "Livestock.h"
+#include "Chicken.h"
+#include "Cow.h"
+#include "Sheep.h"
+
 #include "NPC.h"
+#include "NPCreate.h"
+#include "NPCtalkUI.h"
 #include "NpcRelationship.h"
 #include "intimacyUI.h"
-#include "Livestock.h"
-#include "Cow.h"
-#include "Chicken.h"
-#include "Sheep.h"
+
+#include "StoreUI.h"
+#include "EconomicSystem.h"
+
+#include "SkillTree.h"
+
 #include <memory>
-#include "Beach.h"
+
 #define Daytime 43200
 
 USING_NS_CC;
@@ -78,6 +89,7 @@ extern Crop potato;
 extern Crop pumpkin;
 extern Crop blueberry;
 extern Player* player1;  // 声明指针变量，不初始化
+extern SkillTree* skill_tree;
 extern mini_bag* miniBag;
 extern Inventory* inventory;
 extern NpcRelationship* npc_relationship;

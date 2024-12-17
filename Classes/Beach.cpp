@@ -220,9 +220,9 @@ bool Beach::init ()
 
     // 更新物品栏
     schedule ( [=]( float deltaTime ) {
-        if (inventory->isupdated == true) {
+        if (inventory->is_updated == true) {
             miniBag->updateDisplay ();
-            inventory->isupdated = false;
+            inventory->is_updated = false;
         }
         } , 0.1f , "item_update_key" );
 

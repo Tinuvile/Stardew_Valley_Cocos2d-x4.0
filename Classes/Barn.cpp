@@ -9,11 +9,11 @@ Barn::Barn() {}
 
 Barn::~Barn() {}
 
-bool Barn::init()
+bool Barn::init ()
 {
     //获取允许动物活动的矩形块
     if (barn_space.size () < kMaxLivestock) {
-        auto scene_size= Director::getInstance ()->getVisibleSize ();
+        auto scene_size = Director::getInstance ()->getVisibleSize ();
 
         float rectWidth = scene_size.width / 14;
         float rectHeight = scene_size.height / 12;
@@ -21,7 +21,7 @@ bool Barn::init()
         // 遍历每个矩形区域
         for (int row = 0; row < 12; ++row) {
             for (int col = 0; col < 14; ++col) {
-                if ( (row ==2 || row == 4 || row ==6) &&
+                if ((row == 2 || row == 4 || row == 6) &&
                     col % 2 == 0 && col >= 6) {
                     // 左下角坐标
                     float x = col * rectWidth;
@@ -41,23 +41,13 @@ bool Barn::init()
         }
     }
 
-    //创建测试家畜
-    Cow* test_cow = Cow::create ( barn_space[0].first );
-    livestocks.push_back ( test_cow );
-    this->addChild ( livestocks[0] , 10);
-
-    Chicken* test_chicken = Chicken::create ( barn_space[1].first );
-    livestocks.push_back ( test_chicken );
-    this->addChild ( livestocks[1] , 10 );
-    
-   /* Sheep* test_sheep = Sheep::create(barn_space[2].first);
-    livestocks.push_back(test_sheep);
-    this->addChild ( livestocks[2] , 10 );*/
-
-    for (int i = 0; i < 9; i++) {
-        auto test_animal = Chicken::create ( barn_space[3 + i].first );
-        livestocks.push_back ( test_animal );
-        this->addChild ( livestocks[3 + i] , 10 );
+    //加入家畜
+    if (!livestocks.empty ()) {
+        for (auto livestock : livestocks) {
+            if (livestock != nullptr) {
+                this->addChild ( livestock , 10 );
+            }
+        }
     }
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
@@ -260,9 +250,9 @@ bool Barn::init()
 
     // 更新物品栏
     schedule ( [=]( float deltaTime ) {
-        if (inventory->isupdated == true) {
+        if (inventory->is_updated == true) {
             miniBag->updateDisplay ();
-            inventory->isupdated = false;
+            inventory->is_updated = false;
         }
         } , 0.1f , "item_update_key" );
 
@@ -357,14 +347,14 @@ void Barn::checkPlayerPosition()
 
 
 
-    //// 是否进入农场
-    //if (Out_Barn.containsPoint(playerPos)) {
-    //    if (isEnterKeyPressed) {
-    //        player1->removeFromParent();
-    //        auto NextSence = farm::create();
-    //        Director::getInstance()->replaceScene(NextSence);
-    //    }
-    //}
+    // 是否进入农场
+    if (Out_Barn.containsPoint(playerPos)) {
+        if (isEnterKeyPressed) {
+            player1->removeFromParent();
+            auto NextSence = farm::create();
+            Director::getInstance()->replaceScene(NextSence);
+        }
+    }
 
 
     for (const auto& point : nonTransparentPixels)
@@ -441,11 +431,12 @@ void Barn::GetProduction ( cocos2d::EventMouse* event ) {
                     CCLOG ( "Right-clicked on the produce_enabled livestock!" );
                     auto product = livestock->ProduceProduct ();
                     inventory->AddItem ( *product );
+                    int experience_to_add = 10;
+                    skill_tree->AddExperience ( farming_skill , experience_to_add );
                     inventory->DisplayPackageInCCLOG ();
                     //更新对应livestock的can_produce状态为false
                     livestock->SetCanProduce ( false );
                 }
-
             }
 
         }

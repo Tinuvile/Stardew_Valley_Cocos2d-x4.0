@@ -55,13 +55,12 @@ mini_bag* miniBag = nullptr;
 Town* town = nullptr;
 supermarket* seedshop = nullptr;
 farm* Farm = nullptr;
-std::map<std::pair<std::string , Vec2> , bool> T_lastplace;
 
 Inventory* inventory = new Inventory ();
 NpcRelationship* npc_relationship = new NpcRelationship();
 std::vector<std::pair<Rect , bool>> barn_space;
 std::vector<Livestock*> livestocks;
-SkillTree* skillTree = new SkillTree ();
+SkillTree* skill_tree = new SkillTree ();
 /****************************************************************************************/
 
 
@@ -136,17 +135,20 @@ void AppDelegate::runScene(cocos2d::Director* director) {
     key = { "seedshop",Vec2(230,470) };
     T_lastplace.insert(std::make_pair(key, false));
 
+    auto farm = farm::create ();
+    director->runWithScene ( farm );
+
     //运行海滩场景
-    auto beach = Beach::create ();
-    director->runWithScene ( beach );
+    //auto beach = Beach::create ();
+    //director->runWithScene ( beach );
 
     // 运行家的场景
     /*auto test = Myhouse::create();
     director->runWithScene(test); */
 
     // 运行小镇的场景
-    auto test = Town::create();
-    director->runWithScene(test);
+    //auto test = Town::create();
+    //director->runWithScene(test);
 
     // 运行商店的场景
     /*auto test = supermarket::create();

@@ -35,7 +35,7 @@ public:
     std::vector<cocos2d::Vec2> nonTransparentPixels;
 
     //// Àë¿ªĞóÅïµÄÇøÓò
-    //Rect Out_Barn = Rect(915, 70, 150, 90);
+    Rect Out_Barn = Rect(915, 70, 150, 90);
 
     void GetProduction ( cocos2d::EventMouse* event );
 
