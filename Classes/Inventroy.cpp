@@ -52,6 +52,7 @@ bool Inventory::AddItem ( const Item& item , const int& add_num ) {
 int Inventory::RemoveItem ( const int& position , const int& remove_num ) {
 	auto it = package.find ( position );
 	if (it != package.end ()) {
+		is_updated = true;
 		if (it->second.second > remove_num) {
 			it->second.second -= remove_num;
 			return 0;
@@ -66,6 +67,7 @@ bool Inventory::ClearGrid ( const int& position ) {
 	auto it = package.find ( position );
 	if (it != package.end ()) {
 		package.erase ( it );
+		is_updated = true;
 		return true;
 	}
 	return false;
