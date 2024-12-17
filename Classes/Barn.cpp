@@ -43,7 +43,7 @@ bool Barn::init ()
 
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 4; j++) {
-            Livestock* livestock = nullptr;
+            Livestock* livestock;
             Rect area = barn_space[4 * i + j].first;
             switch (i) {
                 case 0: {
@@ -59,9 +59,7 @@ bool Barn::init ()
                     break;
                 }
             }
-            if (livestock != nullptr) {
-                this->addChild ( livestock , 10 );
-            }
+            livestocks.push_back ( livestock );
         }
     }
 
@@ -371,6 +369,14 @@ void Barn::checkPlayerPosition()
 
 
 
+    //// 是否进入农场
+    //if (Out_Barn.containsPoint(playerPos)) {
+    //    if (isEnterKeyPressed) {
+    //        player1->removeFromParent();
+    //        auto NextSence = farm::create();
+    //        Director::getInstance()->replaceScene(NextSence);
+    //    }
+    //}
     // 是否进入农场
     if (Out_Barn.containsPoint(playerPos)) {
         if (isEnterKeyPressed) {
@@ -466,9 +472,3 @@ void Barn::GetProduction ( cocos2d::EventMouse* event ) {
         }
     }
 }
-
-
-
-
-
-

@@ -11,7 +11,7 @@ std::shared_ptr<Food> Food::create (FoodType type) {
 			return milk;
 		}
 		case FoodType::Egg: {
-			auto egg = std::make_shared<Food> ( "Egg" , "Livestock / egg.png" , kEggValue , kEggEnergy );
+			auto egg = std::make_shared<Food> ( "Egg" , "Livestock/egg.png" , kEggValue , kEggEnergy );
 			return egg;
 		}
 		default:
