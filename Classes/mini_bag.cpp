@@ -191,7 +191,6 @@ void mini_bag::updateDisplay () {
         }
     }
 
-
     // 更新物品信息标签（用于调试）  
     //if (_itemLabel) { // 检查 _itemLabel 是否为 nullptr  
     //    if (auto selectedItem = _inventory->GetSelectedItem ()) {
@@ -207,4 +206,30 @@ void mini_bag::updateDisplay () {
 void mini_bag::getSelectBack () {
     _selectedSlot = 0;
     currentItemSprite = nullptr;
+}
+
+
+// 复制并返回当前选中的物品（Item）
+std::shared_ptr<Item> mini_bag::getSelectedItem() {
+    // 确保选中了槽位
+    if (_selectedSlot == 0) {
+        return nullptr;  // 如果没有选中任何槽位，返回空
+    }
+
+    // 获取当前选中的槽位索引
+    int serial_number = _selectedSlot - 1;  // 假设槽位从1开始，索引从0开始
+
+    // 从库存中获取物品实例
+    std::shared_ptr<Item> itemPtr = _inventory->GetItemAt(serial_number + 1);  // 获取 shared_ptr
+
+    if (itemPtr != nullptr) {
+
+        auto temp = itemPtr->GetCopy();
+        _inventory->RemoveItem(*(itemPtr.get()), 1);
+        return temp;
+    }
+    else {
+        return nullptr;
+    }
+ 
 }
