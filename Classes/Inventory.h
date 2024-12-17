@@ -2,7 +2,6 @@
 #include<algorithm>
 #include<memory>
 #include<map>
-
 #include"Item.h"
 
 const int kRowSize = 12;

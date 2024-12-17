@@ -11,6 +11,7 @@ static void problemLoading ( const char* filename )
     printf ( "Error while loading: %s\n" , filename );
     printf ( "Depending on how you compiled you might have to add 'Resources/' in front of filenames in CreateCharacterScene.cpp\n" );
 }
+
 void StoreUI::updateCoordinate ( float& x , float& y ) {
     Vec2 position = player1->getPosition ();
     if (x <= 725) {
