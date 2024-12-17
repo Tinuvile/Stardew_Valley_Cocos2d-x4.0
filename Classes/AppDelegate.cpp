@@ -158,9 +158,6 @@ void AppDelegate::runScene(cocos2d::Director* director) {
     // auto test = Cave::create();
     // director->runWithScene(test);
 
-    // 运行Beach
-    // auto test = Beach::create();
-    // director->runWithScene(test);
     
     // 运行森林
      auto test = Forest::create();

@@ -162,10 +162,10 @@ bool Beach::init ()
             }
             else if (keyCode == EventKeyboard::KeyCode::KEY_H) {
 
-                if (!this->getChildByName("FishingGameLayer")) {
+                if (!this->getChildByName ( "FishingGameLayer" )) {
                     //将钓鱼游戏界面加入场景中
-                    auto fishing_game = FishingGame::create(player1->getPosition());
-                    this->addChild(fishing_game, 10, "FishingGameLayer");
+                    auto fishing_game = FishingGame::create ( player1->getPosition () );
+                    this->addChild ( fishing_game , 10 , "FishingGameLayer" );
                     ////暂停场景中其他节点的活动
                     //player1->pause ();
                     //this->pause ();
@@ -177,15 +177,15 @@ bool Beach::init ()
                 // 如果当前没有打开 InventoryUI，则打开它  
                 if (currentInventoryUI == nullptr || isOpen == 0) {
                     isOpen = 1;
-                    CCLOG("Opening inventory.");
-                    currentInventoryUI = InventoryUI::create(inventory, "Beach");
-                    this->addChild(currentInventoryUI, 30);  // 将 InventoryUI 添加到上层  
+                    CCLOG ( "Opening inventory." );
+                    currentInventoryUI = InventoryUI::create ( inventory , "Beach" );
+                    this->addChild ( currentInventoryUI , 30 );  // 将 InventoryUI 添加到上层  
                 }
                 // 如果已经打开 InventoryUI，则关闭它  
                 else {
                     isOpen = 0;
-                    CCLOG("Closing inventory.");
-                    this->removeChild(currentInventoryUI, true);  // 从当前场景中移除 InventoryUI  
+                    CCLOG ( "Closing inventory." );
+                    this->removeChild ( currentInventoryUI , true );  // 从当前场景中移除 InventoryUI  
                     currentInventoryUI = nullptr;  // 重置指针  
                 }
             }
@@ -199,7 +199,6 @@ bool Beach::init ()
             }
         };
 
-  
     // 将监听器添加到事件分发器中
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listenerWithPlayer , this );
 
@@ -343,7 +342,7 @@ void Beach::CheckPlayerPosition ()
     miniBag->setPosition ( currentx , currenty );
 
 
-    // 是否进入农场
+    // 是否进入小镇
     if (Out_Beach.containsPoint ( playerPos )) {
         if (isEnterKeyPressed) {
             player1->removeFromParent ();
