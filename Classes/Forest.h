@@ -27,6 +27,12 @@ public:
     // 返回作物序号
     int getRegionNumber(Vec2 pos);
 
+    // 下雨效果
+    void createRainEffect();
+
+    // 更改雨滴生命周期
+    void updaterain(float deltaTime);
+
     // 创建一个列表，用于保存所有非透明像素的坐标
     std::vector<cocos2d::Vec2> nonTransparentPixels;
   
@@ -39,13 +45,10 @@ public:
     // 前往小镇
     Rect town_area = Rect(2500, 1850, 400, 150);
 
+    cocos2d::ParticleRain* emitter;
+
    
 private:
-  
-    // 用于显示计时的标签
-    cocos2d::Label* _timerLabelD;  
-    cocos2d::Label* _timerLabelH;
-    cocos2d::Label* _timerLabelS;
 
     // 用于显示玩家位置的 Label
     cocos2d::Label* _positionLabel;

@@ -25,6 +25,13 @@ public:
 
     static  Beach* create ();
 
+    // 下雨效果
+    void createRainEffect();
+
+    // 更改雨滴生命周期
+    void updaterain(float deltaTime);
+
+
     // 判断角色的位置
     void CheckPlayerPosition ();
 
@@ -35,14 +42,9 @@ public:
     // 离开海滩的区域
     Rect Out_Beach = Rect ( 240 , 1300 , 150 , 200 );
 
+    cocos2d::ParticleRain* emitter;
 
 private:
-
-
-    // 用于显示计时的标签
-    cocos2d::Label* _timerLabelD;
-    cocos2d::Label* _timerLabelH;
-    cocos2d::Label* _timerLabelS;
 
     // 用于显示玩家位置的 Label
     cocos2d::Label* _positionLabel;

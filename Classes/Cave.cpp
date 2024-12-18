@@ -21,17 +21,8 @@ bool Cave::init()
     this->addChild(button, 11);
 
     // 设置计时器标签
-    _timerLabelD = Label::createWithTTF("Day: 0", "fonts/Marker Felt.ttf", 24);
-    this->addChild(_timerLabelD, 10);
-    _timerLabelD->setScale(2.3f);
-
-    _timerLabelH = Label::createWithTTF("0:00", "fonts/Marker Felt.ttf", 24);
-    this->addChild(_timerLabelH, 10);
-    _timerLabelH->setScale(2.3f);
-
-    _timerLabelS = Label::createWithTTF("Spring", "fonts/Marker Felt.ttf", 24);
-    this->addChild(_timerLabelS, 10);
-    _timerLabelS->setScale(2.3f);
+    TimeUI = Timesystem::create ( "Cave" );
+    this->addChild(TimeUI, 13);
 
     // 恢复种植
     AllInitialize_ore();
@@ -235,13 +226,13 @@ void Cave::AllInitialize_ore() {
 
         auto ore = *it;  // 解引用迭代器以访问 Crop 对象
         
-        if (IsNextDay) {
-            if (!ore->available) {
-                if (season[Season] * 7 + day - ore->mining_day >= ore->recover_time) {
-                    ore->available = true;
-                }
+       
+        if (!ore->available) {
+            if (season[Season] * 7 + day - ore->mining_day >= ore->recover_time) {
+                ore->available = true;
             }
         }
+        
 
         cocos2d::log("Create Ore");
 
@@ -280,11 +271,8 @@ void Cave::checkPlayerPosition()
     
     // 更新计时器显示
     remainingTime++;
-    _timerLabelD->setString("Day: " + std ::to_string(day));
-    _timerLabelH->setString(std::to_string(remainingTime / 1800) + ":00");
-    _timerLabelS->setString(Season);
     if (remainingTime == 43200) {
-        
+
         day++;
 
         IsNextDay = true;
@@ -302,10 +290,28 @@ void Cave::checkPlayerPosition()
             day = 1;
         }
 
+        if (day % 3 == 1) {
+            Weather = "Rainy";
+        }
+        else {
+            Weather = "Sunny";
+        }
 
-        for (auto it = Crop_information.begin(); it != Crop_information.end(); /* no increment here */) {
+        if ((Season == "Spring") && (day == 1)) {
+            Festival = "Fishing Day";
+        }
+        else {
+            Festival = "Noraml Day";
+        }
+
+
+        for (auto it = Crop_information.begin(); it != Crop_information.end();) {
 
             auto crop = *it;  // 解引用迭代器以访问 Crop 对象
+
+            if (Weather == "Rainy") {
+                crop->watered = true;
+            }
 
             // 判断前一天是否浇水
             if ((crop->watered == false) && (crop->GetPhase() != Phase::MATURE)) {
@@ -313,27 +319,33 @@ void Cave::checkPlayerPosition()
                 if (crop->GetPhase() != Phase::SAPLESS) {
                     crop->ChangePhase(Phase::SAPLESS);
                     crop->ChangMatureNeeded(2); // 延迟两天收获
+                    it++;
                 }
                 else {
                     // 删除元素并更新迭代器
                     it = Crop_information.erase(it);
                 }
-                ++it;
-                continue;  // 跳过后续代码，直接继续循环
+
             }
             else {
                 // 更新状态
                 crop->UpdateGrowth();
+                it++;
             }
 
-            it++;
         }
 
-         remainingTime = 0;
-         player1->removeFromParent();
-         auto nextday = Myhouse::create();
-         Director::getInstance()->replaceScene(nextday);
-           
+        for (auto& pair : F_lastplace) {
+            if (pair.first.first == "myhouse") {  // 检查 bool 值是否为 true
+                pair.second = true;
+            }
+        }
+
+
+        remainingTime = 0;
+        player1->removeFromParent();
+        auto nextday = Myhouse::create();
+        Director::getInstance()->replaceScene(nextday);
 
     }
 
@@ -359,9 +371,7 @@ void Cave::checkPlayerPosition()
         currenty = playerPos.y;
     }
 
-    _timerLabelD->setPosition(currentx - 710, currenty + 570);
-    _timerLabelH->setPosition(currentx - 570, currenty + 570);
-    _timerLabelS->setPosition(currentx - 410, currenty + 570);
+    TimeUI->setPosition(currentx, currenty);
     _positionLabel->setPosition(currentx - 570, currenty + 490);
     button->setPosition(currentx + 730, currenty - 590);
     miniBag->setPosition ( currentx , currenty );

@@ -48,6 +48,18 @@ void SkillTreeUI::updateCoordinate ( float& x , float& y ) {
         upperboundary = 777.0f;
         lowerboundary = 500.0f;
     }
+    else if (SceneName == "Barn") {
+        Leftboundary = 805.0f;
+        rightboundary = 805.0f;
+        upperboundary = 569.0f;
+        lowerboundary = 569.0f;
+    }
+    else if (SceneName == "Myhouse") {
+        Leftboundary = 800.0f;
+        rightboundary = 800.0f;
+        upperboundary = 580.0f;
+        lowerboundary = 580.0f;
+    }
     if (x <= Leftboundary) {
         x = Leftboundary;
     }

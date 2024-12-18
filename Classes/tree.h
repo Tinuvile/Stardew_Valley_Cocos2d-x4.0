@@ -20,7 +20,9 @@ public:
     // 挖矿后恢复所需要的时间
     int recover_time;      
     // 是否可挖取
-    bool available;        
+    bool available;  
+    // 被砍的次数
+    int removetimes;
 
     
     Tree(const std::string& ore_name, const std::string& initial_pic,
@@ -29,7 +31,7 @@ public:
     Tree(const Tree& other);
     // 默认初始化函数
     Tree() :Item("Unkown", "Unkown"), G_Cut_pic("Unkown"), Y_Ini_pic("Unkown"), recover_time(0),
-        mining_day(0), position(1000,1000), available(true) {}
+        mining_day(0), position(1000,1000), available(true), removetimes(2) {}
 
 
     virtual ~Tree() {};

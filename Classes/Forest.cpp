@@ -21,20 +21,16 @@ bool Forest::init()
     this->addChild(button, 11);
 
     // 设置计时器标签
-    _timerLabelD = Label::createWithTTF("Day: 0", "fonts/Marker Felt.ttf", 24);
-    this->addChild(_timerLabelD, 10);
-    _timerLabelD->setScale(2.3f);
-
-    _timerLabelH = Label::createWithTTF("0:00", "fonts/Marker Felt.ttf", 24);
-    this->addChild(_timerLabelH, 10);
-    _timerLabelH->setScale(2.3f);
-
-    _timerLabelS = Label::createWithTTF("Spring", "fonts/Marker Felt.ttf", 24);
-    this->addChild(_timerLabelS, 10);
-    _timerLabelS->setScale(2.3f);
+    TimeUI = Timesystem::create ( "Forest" );
+    this->addChild(TimeUI, 13);
 
     // 恢复种植
     AllInitialize_ore();
+
+    if (Weather == "Rainy") {
+        // 下雨
+        createRainEffect();
+    }
 
     // 创建并初始化 Label 来显示角色的位置
     _positionLabel = Label::createWithTTF("Position: (0, 0)", "fonts/Marker Felt.ttf", 24);
@@ -244,13 +240,15 @@ void  Forest::AllInitialize_ore() {
 
         auto tree = *it;  // 解引用迭代器以访问 Crop 对象
 
-        if (IsNextDay) {
-            if (!tree->available) {
-                if (season[Season] * 7 + day - tree->mining_day >= tree->recover_time) {
-                    tree->available = true;
-                }
+      
+        tree->recover_time = 2;
+
+        if (!tree->available) {
+            if (season[Season] * 7 + day - tree->mining_day >= tree->recover_time) {
+                tree->available = true;
             }
         }
+        
 
         if (tree->available) {
 
@@ -298,11 +296,8 @@ void  Forest::checkPlayerPosition()
     
     // 更新计时器显示
     remainingTime++;
-    _timerLabelD->setString("Day: " + std ::to_string(day));
-    _timerLabelH->setString(std::to_string(remainingTime / 1800) + ":00");
-    _timerLabelS->setString(Season);
     if (remainingTime == 43200) {
-        
+
         day++;
 
         IsNextDay = true;
@@ -320,10 +315,28 @@ void  Forest::checkPlayerPosition()
             day = 1;
         }
 
+        if (day % 3 == 1) {
+            Weather = "Rainy";
+        }
+        else {
+            Weather = "Sunny";
+        }
 
-        for (auto it = Crop_information.begin(); it != Crop_information.end(); /* no increment here */) {
+        if ((Season == "Spring") && (day == 1)) {
+            Festival = "Fishing Day";
+        }
+        else {
+            Festival = "Noraml Day";
+        }
+
+
+        for (auto it = Crop_information.begin(); it != Crop_information.end();) {
 
             auto crop = *it;  // 解引用迭代器以访问 Crop 对象
+
+            if (Weather == "Rainy") {
+                crop->watered = true;
+            }
 
             // 判断前一天是否浇水
             if ((crop->watered == false) && (crop->GetPhase() != Phase::MATURE)) {
@@ -331,27 +344,33 @@ void  Forest::checkPlayerPosition()
                 if (crop->GetPhase() != Phase::SAPLESS) {
                     crop->ChangePhase(Phase::SAPLESS);
                     crop->ChangMatureNeeded(2); // 延迟两天收获
+                    it++;
                 }
                 else {
                     // 删除元素并更新迭代器
                     it = Crop_information.erase(it);
                 }
-                ++it;
-                continue;  // 跳过后续代码，直接继续循环
+
             }
             else {
                 // 更新状态
                 crop->UpdateGrowth();
+                it++;
             }
 
-            it++;
         }
 
-         remainingTime = 0;
-         player1->removeFromParent();
-         auto nextday = Myhouse::create();
-         Director::getInstance()->replaceScene(nextday);
-           
+        for (auto& pair : F_lastplace) {
+            if (pair.first.first == "myhouse") {  // 检查 bool 值是否为 true
+                pair.second = true;
+            }
+        }
+
+
+        remainingTime = 0;
+        player1->removeFromParent();
+        auto nextday = Myhouse::create();
+        Director::getInstance()->replaceScene(nextday);
 
     }
 
@@ -377,14 +396,16 @@ void  Forest::checkPlayerPosition()
         currenty = playerPos.y;
     }
 
-    _timerLabelD->setPosition(currentx - 710, currenty + 570);
-    _timerLabelH->setPosition(currentx - 570, currenty + 570);
-    _timerLabelS->setPosition(currentx - 410, currenty + 570);
+    TimeUI->setPosition(currentx, currenty);
     _positionLabel->setPosition(currentx - 570, currenty + 490);
     button->setPosition(currentx + 730, currenty - 590);
     miniBag->setPosition ( currentx , currenty );
+    emitter->setPositionY(currenty + 350);
 
     if (isLKeyPressed) {
+
+        isLKeyPressed = false;
+
         for (auto it = Tree_information.begin(); it != Tree_information.end(); ) {
 
             auto tree = *it;  
@@ -392,60 +413,103 @@ void  Forest::checkPlayerPosition()
             float distance = tree->position.distance(playerPos);
             if (distance <= 250 && tree->available) {
 
-                inventory->AddItem(Wood);
 
-                // 升级
-                skill_tree->AddExperience(foraging_skill, 10);
-
-
-
-
-                cocos2d::log("Cut Down");
-
-                tree->available = false;
-
-                tree->mining_day = season[Season] * 7 + day;
-
-
-                if (player1->pic_path == "character1/player_right3.png") {
-                    player1->setTexture("character1/player_plant3.png");
-                    player1->setScale(3.5f);
-
-                    // 延迟0.3秒后切换到第二个图片
-                    player1->scheduleOnce([=](float dt) {
-                        player1->setTexture("character1/player_plant4.png");  // 更换为player_plant2
-                        player1->setScale(3.7f);
-                        }, 0.15f, "change_image1_key");
-
-                    // 延迟0.6秒后切换到第三个图片
-                    player1->scheduleOnce([=](float dt) {
-                        player1->setTexture("character1/player_right3.png"); // 更换为player_left3
-                        player1->setScale(2.3f);
-                        auto temp = Sprite::create(tree->G_Cut_pic);
-                        this->addChild(temp, 5);
-                        temp->setPosition(tree->position);
-                        temp->setScale(3.1f);
-                        }, 0.35f, "change_image2_key");
+                if (skill_tree->GetSkillLevels()[foraging_skill] >= 5) {
+                    tree->removetimes -= 2;
                 }
                 else {
-                    player1->setTexture("character1/player_plant1.png");
-                    player1->setScale(3.5f);
+                    tree->removetimes -= 1;
+                }
 
-                    // 延迟0.3秒后切换到第二个图片
-                    player1->scheduleOnce([=](float dt) {
-                        player1->setTexture("character1/player_plant2.png");  // 更换为player_plant2
-                        player1->setScale(3.7f);
-                        }, 0.15f, "change_image1_key");
+                if (tree->removetimes <= 0) {
+                   
+                    inventory->AddItem(Wood);
 
-                    // 延迟0.6秒后切换到第三个图片
-                    player1->scheduleOnce([=](float dt) {
-                        player1->setTexture("character1/player_left3.png"); // 更换为player_left3
-                        player1->setScale(2.3f);
-                        auto temp = Sprite::create(tree->G_Cut_pic);
-                        this->addChild(temp, 5);
-                        temp->setPosition(tree->position);
-                        temp->setScale(3.1f);
-                        }, 0.35f, "change_image2_key");
+                    // 升级
+                    skill_tree->AddExperience(foraging_skill, 10);
+
+
+                    cocos2d::log("Cut Down");
+
+                    tree->available = false;
+
+                    tree->mining_day = season[Season] * 7 + day;
+
+
+                    if (player1->pic_path == "character1/player_right3.png") {
+                        player1->setTexture("character1/player_plant3.png");
+                        player1->setScale(3.5f);
+
+                        // 延迟0.3秒后切换到第二个图片
+                        player1->scheduleOnce([=](float dt) {
+                            player1->setTexture("character1/player_plant4.png");  // 更换为player_plant2
+                            player1->setScale(3.7f);
+                            }, 0.15f, "change_image1_key");
+
+                        // 延迟0.6秒后切换到第三个图片
+                        player1->scheduleOnce([=](float dt) {
+                            player1->setTexture("character1/player_right3.png"); // 更换为player_left3
+                            player1->setScale(2.3f);
+                            auto temp = Sprite::create(tree->G_Cut_pic);
+                            this->addChild(temp, 5);
+                            temp->setPosition(tree->position);
+                            temp->setScale(3.1f);
+                            }, 0.35f, "change_image2_key");
+                    }
+                    else {
+                        player1->setTexture("character1/player_plant1.png");
+                        player1->setScale(3.5f);
+
+                        // 延迟0.3秒后切换到第二个图片
+                        player1->scheduleOnce([=](float dt) {
+                            player1->setTexture("character1/player_plant2.png");  // 更换为player_plant2
+                            player1->setScale(3.7f);
+                            }, 0.15f, "change_image1_key");
+
+                        // 延迟0.6秒后切换到第三个图片
+                        player1->scheduleOnce([=](float dt) {
+                            player1->setTexture("character1/player_left3.png"); // 更换为player_left3
+                            player1->setScale(2.3f);
+                            auto temp = Sprite::create(tree->G_Cut_pic);
+                            this->addChild(temp, 5);
+                            temp->setPosition(tree->position);
+                            temp->setScale(3.1f);
+                            }, 0.35f, "change_image2_key");
+                    }
+                }
+                else {
+                    if (player1->pic_path == "character1/player_right3.png") {
+                        player1->setTexture("character1/player_plant3.png");
+                        player1->setScale(3.5f);
+
+                        // 延迟0.3秒后切换到第二个图片
+                        player1->scheduleOnce([=](float dt) {
+                            player1->setTexture("character1/player_plant4.png");  // 更换为player_plant2
+                            player1->setScale(3.7f);
+                            }, 0.15f, "change_image1_key");
+
+                        // 延迟0.6秒后切换到第三个图片
+                        player1->scheduleOnce([=](float dt) {
+                            player1->setTexture("character1/player_right3.png"); // 更换为player_left3
+                            player1->setScale(2.3f);
+                            }, 0.35f, "change_image2_key");
+                    }
+                    else {
+                        player1->setTexture("character1/player_plant1.png");
+                        player1->setScale(3.5f);
+
+                        // 延迟0.3秒后切换到第二个图片
+                        player1->scheduleOnce([=](float dt) {
+                            player1->setTexture("character1/player_plant2.png");  // 更换为player_plant2
+                            player1->setScale(3.7f);
+                            }, 0.15f, "change_image1_key");
+
+                        // 延迟0.6秒后切换到第三个图片
+                        player1->scheduleOnce([=](float dt) {
+                            player1->setTexture("character1/player_left3.png"); // 更换为player_left3
+                            player1->setScale(2.3f);
+                            }, 0.35f, "change_image2_key");
+                    }
                 }
             }
 
@@ -549,8 +613,31 @@ int Forest::getRegionNumber(Vec2 pos) {
     return region_number;
 }
 
+void Forest::createRainEffect() {
 
+    emitter = ParticleRain::create();
+    emitter->setDuration(ParticleSystem::DURATION_INFINITY);
+    emitter->setScale(5.7f);
+    emitter->setTotalParticles(100);
+    emitter->setSpeed(250);
 
+    addChild(emitter, 10);
 
+    // 每帧更新粒子生命周期
+    schedule([this](float dt) {
+        updaterain(dt);
+        }, "update_rain_key");
 
+}
 
+void Forest::updaterain(float deltaTime) {
+    if (emitter) {
+        // 随机生成一个生命周期（范围 1 到 1.5 秒之间）
+        float newLife = cocos2d::rand_0_1() * 1.5f;
+
+        // 设置新的生命周期
+        emitter->setLife(newLife);
+
+        emitter->setEmissionRate(emitter->getTotalParticles() / emitter->getLife() * 1.3);
+    }
+}

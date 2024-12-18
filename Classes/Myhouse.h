@@ -36,12 +36,6 @@ public:
 
 private:
 
-
-    // 用于显示计时的标签
-    cocos2d::Label* _timerLabelD;
-    cocos2d::Label* _timerLabelH;
-    cocos2d::Label* _timerLabelS;
-
     // 用于显示玩家位置的 Label
     cocos2d::Label* _positionLabel;
 

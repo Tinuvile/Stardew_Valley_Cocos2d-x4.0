@@ -72,12 +72,52 @@ void StoreUI::backgroundcreate () {
                     //economicSystem->buyItem ( chosen_Item->GetName () );
                     int goldAmount = economicSystem->getGoldAmount ();
                     CCLOG ( "goldAmount: %d , Value: %d" , goldAmount , chosen_Item->GetValue () );
+                    std::string chosen_item_name = chosen_Item->GetName ();
                     if (goldAmount >= chosen_Item->GetValue ()) {
-                        economicSystem->subtractGold ( chosen_Item->GetValue () );
-                        _mybag->AddItem ( *chosen_Item );
-                        _mybag->is_updated = true;
-                        updateDisplay ();
-                        CCLOG ( "Purchased item: %s" , chosen_Item->GetName().c_str ());
+                        //若所选物品为动物
+                        if (chosen_item_name.find ( "Animal" )!=std::string::npos) {
+                            std::pair<Rect , bool>* space = nullptr;
+                            for (auto& pair : barn_space) {
+                                //畜棚仍有空间
+                                if (!pair.second) {
+                                    space = &pair;
+                                    break;
+                                }
+                            }
+                            //若有空间
+                            if (space != nullptr) {
+                                Livestock* livestock = nullptr;
+                                //检查品种
+                                if (chosen_item_name == "AnimalChicken") {
+                                    livestock = Chicken::create ( space->first );
+                                }
+                                else if (chosen_item_name == "AnimalSheep") {
+                                    livestock = Sheep::create ( space->first );
+                                }
+                                else if (chosen_item_name == "AnimalCow") {
+                                    livestock = Cow::create ( space->first );
+                                }
+                                if (livestock != nullptr) {
+                                    space->second = true;
+                                    livestocks.push_back ( livestock );
+                                    livestock->retain ();
+                                    economicSystem->subtractGold ( chosen_Item->GetValue () );
+                                    updateDisplay ();
+                                    CCLOG ( "Purchased item: %s" , chosen_Item->GetName ().c_str () );
+                                }
+                            }
+                            else {
+                                CCLOG ( "fail to place %s in your barn" , chosen_item_name.c_str () );
+                            }
+                            
+                        }
+                        else {
+                            economicSystem->subtractGold ( chosen_Item->GetValue () );
+                            _mybag->AddItem ( *chosen_Item );
+                            _mybag->is_updated = true;
+                            updateDisplay ();
+                            CCLOG ( "Purchased item: %s" , chosen_Item->GetName ().c_str () );
+                        }
                     }
                     else {
                         CCLOG ( "Not enough gold to buy %s." , chosen_Item->GetName ().c_str () );

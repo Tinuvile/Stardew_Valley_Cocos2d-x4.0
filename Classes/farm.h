@@ -28,6 +28,9 @@ public:
     // 下雨效果
     void createRainEffect();
 
+    // 更改雨滴生命周期
+    void updaterain(float deltaTime);
+
 
 
     // 返回作物序号
@@ -54,19 +57,12 @@ public:
     // 可以进入森林的区域
     Rect forest_area = Rect ( 750 , -70 , 100 , 50 );
 
-
-
+    cocos2d::ParticleRain* emitter;
 
     // 恢复种植
     void AllInitialize_crop ();
 
 private:
-
-
-    // 用于显示计时的标签
-    cocos2d::Label* _timerLabelD;
-    cocos2d::Label* _timerLabelH;
-    cocos2d::Label* _timerLabelS;
 
     // 用于显示玩家位置的 Label
     cocos2d::Label* _positionLabel;

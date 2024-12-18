@@ -52,6 +52,9 @@ std::shared_ptr<Item> Chicken::ProduceProduct () {
 }
 
 void Chicken::UpdateTexture ( float deltaTime ) {
+	if (this->getParent () == nullptr) {
+		return;
+	}
 	if (moving) {
 		current_frame = (current_frame + 1) % 4;
 		this->setTexture ( chicken_icon[(move_direction - 2) * 4 + current_frame] );
