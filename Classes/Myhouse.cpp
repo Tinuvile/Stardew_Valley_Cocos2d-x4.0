@@ -21,22 +21,6 @@ bool Myhouse::init()
     button = cocos2d::Sprite::create("CloseNormal.png");
     this->addChild(button, 11);
 
-    // 设置计时器标签
-    _timerLabelD = Label::createWithTTF("Day: 0", "fonts/Marker Felt.ttf", 24);
-    this->addChild(_timerLabelD, 10);
-    _timerLabelD->setScale(1.3f);
-    _timerLabelD->setPosition(Vec2(50, 1250));
-
-    _timerLabelH = Label::createWithTTF("0:00", "fonts/Marker Felt.ttf", 24);
-    this->addChild(_timerLabelH, 10);
-    _timerLabelH->setScale(1.3f);
-    _timerLabelH->setPosition(Vec2(130, 1250));
-
-    _timerLabelS = Label::createWithTTF("Spring", "fonts/Marker Felt.ttf", 24);
-    this->addChild(_timerLabelS, 10);
-    _timerLabelS->setScale(1.3f);
-    _timerLabelS->setPosition(Vec2(210, 1250));
-
 
     // 创建并初始化 Label 来显示角色的位置
     _positionLabel = Label::createWithTTF("Position: (0, 0)", "fonts/Marker Felt.ttf", 24);
@@ -106,6 +90,7 @@ bool Myhouse::init()
         }
     }
 
+   
 
     // 初始化角色并将其添加到场景
     if (player1->getParent() == NULL) {
@@ -114,14 +99,13 @@ bool Myhouse::init()
         player1->speed = 7.0f;
         player1->setAnchorPoint(Vec2(0.5f, 0.2f));
         if (frombed == false) {
-            player1->setPosition(650, 550);
+            player1->setPosition(580, 270);
         }
         else {
             frombed = false;
             player1->setPosition(1050, 550);
         }
     }
-
 
     // 启动人物的定时器
     player1->schedule([=](float dt) {
@@ -143,6 +127,10 @@ bool Myhouse::init()
     // 创建 Follow 动作并限制玩家在背景范围内移动
     auto followAction = Follow::create(player1, followRect);
     this->runAction(followAction);
+
+    // 设置计时器标签
+    TimeUI = Timesystem::create();
+    this->addChild(TimeUI, 17);
 
     // 定期更新玩家状态
     this->schedule([this](float dt) {
@@ -207,6 +195,9 @@ Myhouse* Myhouse::create()
 void Myhouse::checkPlayerPosition()
 {
 
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    TimeUI->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+
     // 获取玩家的位置
     Vec2 playerPos = player1->getPosition();
 
@@ -219,12 +210,10 @@ void Myhouse::checkPlayerPosition()
 
     // 更新计时器显示
     remainingTime++;
-    _timerLabelD->setString("Day: " + std::to_string(day));
-    _timerLabelH->setString(std::to_string(remainingTime / 1800) + ":00");
-    _timerLabelS->setString(Season);
-    if (remainingTime == 432000) {
+    if (remainingTime == 43200) {
 
         day++;
+
         IsNextDay = true;
 
         if (day == 8) {
@@ -240,11 +229,28 @@ void Myhouse::checkPlayerPosition()
             day = 1;
         }
 
-        remainingTime = 0;
+        if (day % 3 == 1) {
+            Weather = "Rainy";
+        }
+        else {
+            Weather = "Sunny";
+        }
+
+        if ((Season == "Spring") && (day == 1)) {
+            Festival = "Fishing Day";
+        }
+        else {
+            Festival = "Noraml Day";
+        }
+
 
         for (auto it = Crop_information.begin(); it != Crop_information.end();) {
 
             auto crop = *it;  // 解引用迭代器以访问 Crop 对象
+
+            if (Weather == "Rainy") {
+                crop->watered = true;
+            }
 
             // 判断前一天是否浇水
             if ((crop->watered == false) && (crop->GetPhase() != Phase::MATURE)) {
@@ -274,14 +280,13 @@ void Myhouse::checkPlayerPosition()
             }
         }
 
+
+        remainingTime = 0;
         player1->removeFromParent();
         auto nextday = Myhouse::create();
         Director::getInstance()->replaceScene(nextday);
 
-
     }
-
-   
 
     // 是否进入农场
     if (OutDoor.containsPoint(playerPos)) {
@@ -295,7 +300,11 @@ void Myhouse::checkPlayerPosition()
     // 是否睡觉
     if (GoBed.containsPoint(playerPos)) {
         if (isEnterKeyPressed) {
-            
+
+            IsNextDay = true;
+
+            isEnterKeyPressed = false;
+
             day++;
 
             if (day == 8) {
@@ -311,13 +320,28 @@ void Myhouse::checkPlayerPosition()
                 day = 1;
             }
 
-            remainingTime = 0;
+            if (day % 3 == 1) {
+                Weather = "Rainy";
+            }
+            else {
+                Weather = "Sunny";
+            }
 
-            isEnterKeyPressed = false;
+            if ((Season == "Spring") && (day == 1)) {
+                Festival = "Fishing Day";
+            }
+            else {
+                Festival = "Noraml Day";
+            }
+
 
             for (auto it = Crop_information.begin(); it != Crop_information.end();) {
 
                 auto crop = *it;  // 解引用迭代器以访问 Crop 对象
+
+                if (Weather == "Rainy") {
+                    crop->watered = true;
+                }
 
                 // 判断前一天是否浇水
                 if ((crop->watered == false) && (crop->GetPhase() != Phase::MATURE)) {
@@ -331,7 +355,7 @@ void Myhouse::checkPlayerPosition()
                         // 删除元素并更新迭代器
                         it = Crop_information.erase(it);
                     }
-                   
+
                 }
                 else {
                     // 更新状态
@@ -348,9 +372,11 @@ void Myhouse::checkPlayerPosition()
             }
 
             frombed = true;
+            remainingTime = 0;
             player1->removeFromParent();
             auto nextday = Myhouse::create();
             Director::getInstance()->replaceScene(nextday);
+
         }
     }
 

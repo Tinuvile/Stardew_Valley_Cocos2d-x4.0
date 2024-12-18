@@ -14,7 +14,7 @@ Town::~Town() {}
 
 bool Town::init()
 {
-    inventory->AddItem ( Duck , 12 );
+    inventory->AddItem ( AnimalDuck , 12 );
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -24,17 +24,13 @@ bool Town::init()
 
 
     // 设置计时器标签
-    _timerLabelD = Label::createWithTTF("Day: 0", "fonts/Marker Felt.ttf", 24);
-    this->addChild(_timerLabelD, 10);
-    _timerLabelD->setScale(2.3f);
+    TimeUI = Timesystem::create();
+    this->addChild(TimeUI, 13);
 
-    _timerLabelH = Label::createWithTTF("0:00", "fonts/Marker Felt.ttf", 24);
-    this->addChild(_timerLabelH, 10);
-    _timerLabelH->setScale(2.3f);
-
-    _timerLabelS = Label::createWithTTF("Spring", "fonts/Marker Felt.ttf", 24);
-    this->addChild(_timerLabelS, 10);
-    _timerLabelS->setScale(2.3f);
+    if (Weather == "Rainy") {
+        // 下雨
+        createRainEffect();
+    }
 
     // 创建并初始化 Label 来显示角色的位置
     _positionLabel = Label::createWithTTF("Position: (0, 0)", "fonts/Marker Felt.ttf", 24);
@@ -173,6 +169,7 @@ bool Town::init()
 
     // 允许的交互半径  
     const float interactionRadius = 300.0f;
+
 
     // 使用 getAlexAnimations() 获取 NPC 动画帧  
     auto alexAnimations = getAlexAnimations ();
@@ -486,9 +483,6 @@ void Town::checkPlayerPosition()
 
     // 更新计时器显示
     remainingTime++;
-    _timerLabelD->setString("Day: " + std::to_string(day));
-    _timerLabelH->setString(std::to_string(remainingTime / 1800) + ":00");
-    _timerLabelS->setString(Season);
     if (remainingTime == 43200) {
 
         day++;
@@ -508,9 +502,28 @@ void Town::checkPlayerPosition()
             day = 1;
         }
 
+        if (day % 3 == 1) {
+            Weather = "Rainy";
+        }
+        else {
+            Weather = "Sunny";
+        }
+
+        if ((Season == "Spring") && (day == 1)) {
+            Festival = "Fishing Day";
+        }
+        else {
+            Festival = "Noraml Day";
+        }
+
+
         for (auto it = Crop_information.begin(); it != Crop_information.end();) {
 
             auto crop = *it;  // 解引用迭代器以访问 Crop 对象
+
+            if (Weather == "Rainy") {
+                crop->watered = true;
+            }
 
             // 判断前一天是否浇水
             if ((crop->watered == false) && (crop->GetPhase() != Phase::MATURE)) {
@@ -546,8 +559,6 @@ void Town::checkPlayerPosition()
         auto nextday = Myhouse::create();
         Director::getInstance()->replaceScene(nextday);
 
-
-
     }
 
     // 更新标签位置
@@ -572,12 +583,11 @@ void Town::checkPlayerPosition()
         currenty = playerPos.y;
     }
 
-    _timerLabelD->setPosition(currentx - 710, currenty + 570);
-    _timerLabelH->setPosition(currentx - 570, currenty + 570);
-    _timerLabelS->setPosition(currentx - 430, currenty + 570);
+    TimeUI->setPosition(currentx, currenty);
     _positionLabel->setPosition(currentx - 570, currenty + 490);
     button->setPosition(currentx + 730, currenty - 590);
     miniBag->setPosition (currentx, currenty);
+    emitter->setPositionY(currenty + 350);
    
     // 检查玩家是否进入目标区域，并且按下 Enter 键
     if (Region_supermarket.containsPoint(playerPos)) {
@@ -695,8 +705,35 @@ void Town::checkPlayerPosition()
 
 }
 
+void Town::createRainEffect() {
+
+    emitter = ParticleRain::create();
+    emitter->setDuration(ParticleSystem::DURATION_INFINITY);
+    emitter->setScale(5.7f);
+    emitter->setTotalParticles(100);
+    emitter->setSpeed(250);
+
+    addChild(emitter, 10);
+
+    // 每帧更新粒子生命周期
+    schedule([this](float dt) {
+        updaterain(dt);
+        }, "update_rain_key");
+
+}
 
 
 
+void Town::updaterain(float deltaTime) {
+    if (emitter) {
+        // 随机生成一个生命周期（范围 1 到 1.5 秒之间）
+        float newLife = cocos2d::rand_0_1() * 1.5f;
+
+        // 设置新的生命周期
+        emitter->setLife(newLife);
+
+        emitter->setEmissionRate(emitter->getTotalParticles() / emitter->getLife() * 1.3);
+    }
+}
 
 

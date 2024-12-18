@@ -25,20 +25,16 @@ bool farm::init()
     this->addChild(button, 11);
 
     // 设置计时器标签
-    _timerLabelD = Label::createWithTTF("Day: 0", "fonts/Marker Felt.ttf", 24);
-    this->addChild(_timerLabelD, 10);
-    _timerLabelD->setScale(2.3f);
-
-    _timerLabelH = Label::createWithTTF("0:00", "fonts/Marker Felt.ttf", 24);
-    this->addChild(_timerLabelH, 10);
-    _timerLabelH->setScale(2.3f);
-
-    _timerLabelS = Label::createWithTTF("Spring", "fonts/Marker Felt.ttf", 24);
-    this->addChild(_timerLabelS, 10);
-    _timerLabelS->setScale(2.3f);
+    TimeUI = Timesystem::create();
+    this->addChild(TimeUI, 13);
 
     // 恢复种植
     AllInitialize_crop();
+
+    if (Weather == "Rainy") {
+        // 下雨
+        createRainEffect();
+    }
 
     // 创建并初始化 Label 来显示角色的位置
     _positionLabel = Label::createWithTTF("Position: (0, 0)", "fonts/Marker Felt.ttf", 24);
@@ -62,14 +58,14 @@ bool farm::init()
 
     Vec2 spritePosition = background->getPosition();   // 获取精灵的位置（中心点）
     Size spriteSize = background->getContentSize();    // 获取精灵的尺寸（宽度和高度）
-
+  
 
     // 计算左下角的坐标
     Vec2 leftBottomPosition = Vec2(
         spritePosition.x - background->getScaleX() * spriteSize.width / 2,   // 中心点 x 坐标减去宽度的一半
         spritePosition.y - background->getScaleY() * spriteSize.height / 2   // 中心点 y 坐标减去高度的一半
     );
-
+   
 
     Image img;
     if (img.initWithImageFile("farm/farm_path.png"))
@@ -114,7 +110,7 @@ bool farm::init()
         player1->setAnchorPoint(Vec2(0.5f, 0.2f));
     }    
 
-
+    
     // 启动人物的定时器
     player1->schedule([=](float dt) {
         player1->player1_move();
@@ -143,7 +139,7 @@ bool farm::init()
 
     auto listener = EventListenerMouse::create();
     listener->onMouseDown = [this](Event* event) {
-
+       
         // 获取鼠标点击的位置
         auto mouseEvent = static_cast<EventMouse*>(event);
         Vec2 clickPos(mouseEvent->getCursorX(), mouseEvent->getCursorY());
@@ -160,7 +156,7 @@ bool farm::init()
     auto listenerWithPlayer = EventListenerKeyboard::create();
     listenerWithPlayer->onKeyPressed = [this](EventKeyboard::KeyCode keyCode, Event* event)
         {
-            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER || keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER) {
+            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER) {
                 isEnterKeyPressed = true;
                 CCLOG("Enter key pressed. ");
             }
@@ -191,12 +187,13 @@ bool farm::init()
                     currentInventoryUI = nullptr;  // 重置指针  
                 }
             }
+            
         };
 
     listenerWithPlayer->onKeyReleased = [this](EventKeyboard::KeyCode keyCode, Event* event)
         {
             // 释放 Enter 键时，设置为 false
-            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER || keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER) {
+            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER) {
                 isEnterKeyPressed = false;
             }
             else if (keyCode == EventKeyboard::KeyCode::KEY_P) {
@@ -253,7 +250,7 @@ void farm::AllInitialize_crop() {
 
 
     for (auto it = Crop_information.begin(); it != Crop_information.end(); /* no increment here */) {
-
+        
         auto crop = *it;  // 解引用迭代器以访问 Crop 对象
         int nums = crop->nums;
 
@@ -306,14 +303,11 @@ void farm::checkPlayerPosition()
     if (_positionLabel)
     {
         _positionLabel->setString("Position: (" + std::to_string(static_cast<int>(playerPos.x)) + ", " + std::to_string(static_cast<int>(playerPos.y)) + ")");
-
+    
     }
-
+    
     // 更新计时器显示
     remainingTime++;
-    _timerLabelD->setString("Day: " + std ::to_string(day));
-    _timerLabelH->setString(std::to_string(remainingTime / 1800) + ":00");
-    _timerLabelS->setString(Season);
     if (remainingTime == 43200) {
 
         day++;
@@ -333,9 +327,28 @@ void farm::checkPlayerPosition()
             day = 1;
         }
 
+        if (day % 3 == 1) {
+            Weather = "Rainy";
+        }
+        else {
+            Weather = "Sunny";
+        }
+
+        if ((Season == "Spring") && (day == 1)) {
+            Festival = "Fishing Day";
+        }
+        else {
+            Festival = "Noraml Day";
+        }
+
+
         for (auto it = Crop_information.begin(); it != Crop_information.end();) {
 
             auto crop = *it;  // 解引用迭代器以访问 Crop 对象
+
+            if (Weather == "Rainy") {
+                crop->watered = true;
+            }
 
             // 判断前一天是否浇水
             if ((crop->watered == false) && (crop->GetPhase() != Phase::MATURE)) {
@@ -366,15 +379,12 @@ void farm::checkPlayerPosition()
         }
 
 
-         remainingTime = 0;
-         player1->removeFromParent();
-         auto nextday = Myhouse::create();
-         Director::getInstance()->replaceScene(nextday);
-
-
+        remainingTime = 0;
+        player1->removeFromParent();
+        auto nextday = Myhouse::create();
+        Director::getInstance()->replaceScene(nextday);
 
     }
-
     // 更新标签位置
     float currentx = 0, currenty = 0;
     if (playerPos.x <= 637) {
@@ -397,21 +407,19 @@ void farm::checkPlayerPosition()
         currenty = playerPos.y;
     }
 
-    _timerLabelD->setPosition(currentx - 710, currenty + 570);
-    _timerLabelH->setPosition(currentx - 570, currenty + 570);
-    _timerLabelS->setPosition(currentx - 430, currenty + 570);
+    TimeUI->setPosition(currentx, currenty);
     _positionLabel->setPosition(currentx - 570, currenty + 490);
     button->setPosition(currentx + 730, currenty - 590);
     miniBag->setPosition ( currentx , currenty );
-
+    
     // 与种植有关的操作
     if (plant_area.containsPoint(playerPos)) {
-
+       
         // 是否执行种植
         if (isPKeyPressed) {
 
             int nums = getRegionNumber(Vec2(playerPos.x + 10, playerPos.y - 10));
-
+           
             bool Isplant = false;
 
             cocos2d::log("plant nums = %d", nums);
@@ -428,60 +436,66 @@ void farm::checkPlayerPosition()
 
             if (Isplant == false) {
 
-                std::string TypeName = "wheat";
+                auto temp = miniBag->getSelectedItem();
+                if (temp != nullptr) {
+                    cocos2d::log("copy item");
+                    std::string TypeName = temp->GetName();
+                    auto point = cropbasicinformation.find(TypeName);
+                    if (point != cropbasicinformation.end()) {
+                        cocos2d::log("find crop");
+                        // 判断是否符合种植的季节
+                        if ((cropbasicinformation[TypeName].GetSeason() == Season) || (cropbasicinformation[TypeName].GetSeason() == "All")) {
 
-                // 判断是否符合种植的季节
-                if ((cropbasicinformation[TypeName].GetSeason() == Season) || (cropbasicinformation[TypeName].GetSeason() == "All")) {
+                            Crop_information.push_back(cropbasicinformation[TypeName].GetCropCopy());
+                            Crop_information.back()->plant_day = season[Season] * 7 + day;
+                            Crop_information.back()->nums = nums;
 
-                    Crop_information.push_back(cropbasicinformation[TypeName].GetCropCopy());
-                    Crop_information.back()->plant_day = season[Season] * 7 + day;
-                    Crop_information.back()->nums = nums;
+                            if (player1->pic_path == "character1/player_right3.png") {
+                                // 初始设置：设置第一个图片并放大
+                                player1->setTexture("character1/player_plant3.png");
+                                player1->setScale(2.5f);
 
-                    if (player1->pic_path == "character1/player_right3.png") {
-                        // 初始设置：设置第一个图片并放大
-                        player1->setTexture("character1/player_plant3.png");
-                        player1->setScale(2.5f);
+                                // 延迟0.3秒后切换到第二个图片
+                                player1->scheduleOnce([=](float dt) {
+                                    player1->setTexture("character1/player_plant4.png");  // 更换为player_plant2
+                                    player1->setScale(2.7f);
+                                    }, 0.15f, "change_image1_key");
 
-                        // 延迟0.3秒后切换到第二个图片
-                        player1->scheduleOnce([=](float dt) {
-                            player1->setTexture("character1/player_plant4.png");  // 更换为player_plant2
-                            player1->setScale(2.7f);
-                            }, 0.15f, "change_image1_key");
+                                // 延迟0.6秒后切换到第三个图片
+                                player1->scheduleOnce([=](float dt) {
+                                    player1->setTexture("character1/player_right3.png"); // 更换为player_left3
+                                    player1->setScale(1.5f);
+                                    auto temp = Sprite::create(Crop_information.back()->initial_pic);
+                                    this->addChild(temp, 15 - nums / 19);
+                                    temp->setPosition(500 + ((nums % 19) - 1) * 48, 910 - ((nums / 19) - 1) * 48);
+                                    temp->setScale(2.1f);
+                                    }, 0.35f, "change_image2_key");
+                            }
+                            else {
+                                // 初始设置：设置第一个图片并放大
+                                player1->setTexture("character1/player_plant1.png");
+                                player1->setScale(2.5f);
 
-                        // 延迟0.6秒后切换到第三个图片
-                        player1->scheduleOnce([=](float dt) {
-                            player1->setTexture("character1/player_right3.png"); // 更换为player_left3
-                            player1->setScale(1.5f);
-                            auto temp = Sprite::create(Crop_information.back()->initial_pic);
-                            this->addChild(temp, 15 - nums / 19);
-                            temp->setPosition(500 + ((nums % 19) - 1) * 48, 910 - ((nums / 19) - 1) * 48);
-                            temp->setScale(2.1f);
-                            }, 0.35f, "change_image2_key");
+                                // 延迟0.3秒后切换到第二个图片
+                                player1->scheduleOnce([=](float dt) {
+                                    player1->setTexture("character1/player_plant2.png");  // 更换为player_plant2
+                                    player1->setScale(2.7f);
+                                    }, 0.15f, "change_image1_key");
+
+                                // 延迟0.6秒后切换到第三个图片
+                                player1->scheduleOnce([=](float dt) {
+                                    player1->setTexture("character1/player_left3.png"); // 更换为player_left3
+                                    player1->setScale(1.5f);
+                                    auto temp = Sprite::create(Crop_information.back()->initial_pic);
+                                    this->addChild(temp, 15 - nums / 19);
+                                    temp->setPosition(500 + ((nums % 19) - 1) * 48, 910 - ((nums / 19) - 1) * 48);
+                                    temp->setScale(2.1f);
+                                    }, 0.35f, "change_image2_key");
+                            }
+
+                        }
                     }
-                    else {
-                        // 初始设置：设置第一个图片并放大
-                        player1->setTexture("character1/player_plant1.png");
-                        player1->setScale(2.5f);
-
-                        // 延迟0.3秒后切换到第二个图片
-                        player1->scheduleOnce([=](float dt) {
-                            player1->setTexture("character1/player_plant2.png");  // 更换为player_plant2
-                            player1->setScale(2.7f);
-                            }, 0.15f, "change_image1_key");
-
-                        // 延迟0.6秒后切换到第三个图片
-                        player1->scheduleOnce([=](float dt) {
-                            player1->setTexture("character1/player_left3.png"); // 更换为player_left3
-                            player1->setScale(1.5f);
-                            auto temp = Sprite::create(Crop_information.back()->initial_pic);
-                            this->addChild(temp, 15 - nums / 19);
-                            temp->setPosition(500 + ((nums % 19) - 1) * 48, 910 - ((nums / 19) - 1) * 48);
-                            temp->setScale(2.1f);
-                            }, 0.35f, "change_image2_key");
-                    }
-
                 }
-
             }
         }
         // 是否执行浇水
@@ -548,10 +562,17 @@ void farm::checkPlayerPosition()
         else if (isGKeyPressed) {
 
             int nums = getRegionNumber(Vec2(playerPos.x + 10, playerPos.y - 10));
+            
 
             for (auto it = Crop_information.begin(); it != Crop_information.end(); /* no increment here */) {
                 if ((*it)->nums == nums) {  // 使用 *it 解引用迭代器
                     if ((*it)->GetPhase() == Phase::MATURE) {
+
+                        auto find_temp = (*it);
+                        
+                        if (find_temp->GetName() == "potato") {
+                            inventory->AddItem(potato);
+                        }
 
                         // 覆盖精灵
                         auto test = Sprite::create("farm/tile.png");
@@ -655,7 +676,7 @@ void farm::checkPlayerPosition()
             Director::getInstance()->replaceScene(NextSence);
         }
     }
-
+  
     for (const auto& point : nonTransparentPixels)
     {
         // 计算玩家与轮廓点之间的距离
@@ -673,7 +694,7 @@ void farm::checkPlayerPosition()
                 player1->moveLeft = true;
             }
         }
-
+        
         temp = playerPos;
         temp.y -= 10;
         distance = temp.distance(point);
@@ -709,9 +730,9 @@ void farm::checkPlayerPosition()
                 player1->moveRight = true;
             }
         }
-
+       
     }
-
+    
 
 }
 
@@ -743,3 +764,40 @@ int farm::getRegionNumber(Vec2 pos) {
 
     return region_number;
 }
+
+void farm::createRainEffect() {
+    
+    emitter = ParticleRain::create();
+    emitter->setDuration(ParticleSystem::DURATION_INFINITY);
+    emitter->setScale(5.7f);
+    emitter->setTotalParticles(100);
+    emitter->setSpeed(250);
+
+    addChild(emitter, 10);
+
+    // 每帧更新粒子生命周期
+    schedule([this](float dt) {
+        updaterain(dt);
+        }, "update_rain_key");
+
+}
+
+
+void farm::updaterain(float deltaTime) {
+    if (emitter) {
+        // 随机生成一个生命周期（范围 1 到 1.5 秒之间）
+        float newLife = cocos2d::rand_0_1() * 1.5f;
+
+        // 设置新的生命周期
+        emitter->setLife(newLife);
+
+        emitter->setEmissionRate(emitter->getTotalParticles() / emitter->getLife() * 1.3);
+    }
+}
+
+
+
+
+
+
+

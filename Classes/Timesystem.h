@@ -13,6 +13,8 @@ public:
     cocos2d::Label* _timerLabelD;
     cocos2d::Label* _timerLabelH;
     cocos2d::Label* _timerLabelS;
+    cocos2d::Label* _timerLabelW;
+    cocos2d::Label* _timerLabelF;
     cocos2d::Sprite* TimePic;
 
     // 所处的场景

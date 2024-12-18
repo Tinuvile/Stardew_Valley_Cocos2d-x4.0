@@ -23,21 +23,14 @@ bool Beach::init ()
     this->addChild ( button , 11 );
 
     // 设置计时器标签
-    _timerLabelD = Label::createWithTTF ( "Day: 0" , "fonts/Marker Felt.ttf" , 24 );
-    this->addChild ( _timerLabelD , 10 );
-    _timerLabelD->setScale ( 1.3f );
-    _timerLabelD->setPosition ( Vec2 ( 50 , 1250 ) );
+   // 设置计时器标签
+    TimeUI = Timesystem::create();
+    this->addChild(TimeUI, 13);
 
-    _timerLabelH = Label::createWithTTF ( "0:00" , "fonts/Marker Felt.ttf" , 24 );
-    this->addChild ( _timerLabelH , 10 );
-    _timerLabelH->setScale ( 1.3f );
-    _timerLabelH->setPosition ( Vec2 ( 130 , 1250 ) );
-
-    _timerLabelS = Label::createWithTTF ( "Spring" , "fonts/Marker Felt.ttf" , 24 );
-    this->addChild ( _timerLabelS , 10 );
-    _timerLabelS->setScale ( 1.3f );
-    _timerLabelS->setPosition ( Vec2 ( 210 , 1250 ) );
-
+    if (Weather == "Rainy") {
+        // 下雨
+        createRainEffect();
+    }
     // 创建并初始化 Label 来显示角色的位置
     _positionLabel = Label::createWithTTF ( "Position: (0, 0)" , "fonts/Marker Felt.ttf" , 24 );
     if (_positionLabel) {
@@ -259,13 +252,11 @@ bool Beach::init ()
 
         // 更新计时器显示
         remainingTime++;
-        _timerLabelD->setString ( "Day: " + std::to_string ( day ) );
-        _timerLabelH->setString ( std::to_string ( remainingTime / 1800 ) + ":00" );
-        _timerLabelS->setString ( Season );
-        if (remainingTime == 432000) {
+        if (remainingTime == 43200) {
 
             day++;
-            /*IsNextDay = true;*/
+
+            IsNextDay = true;
 
             if (day == 8) {
                 if (Season == "Spring") {
@@ -280,38 +271,62 @@ bool Beach::init ()
                 day = 1;
             }
 
+            if (day % 3 == 1) {
+                Weather = "Rainy";
+            }
+            else {
+                Weather = "Sunny";
+            }
+
+            if ((Season == "Spring") && (day == 1)) {
+                Festival = "Fishing Day";
+            }
+            else {
+                Festival = "Noraml Day";
+            }
+
+
+            for (auto it = Crop_information.begin(); it != Crop_information.end();) {
+
+                auto crop = *it;  // 解引用迭代器以访问 Crop 对象
+
+                if (Weather == "Rainy") {
+                    crop->watered = true;
+                }
+
+                // 判断前一天是否浇水
+                if ((crop->watered == false) && (crop->GetPhase() != Phase::MATURE)) {
+                    // 判断是否已经进入枯萎状态
+                    if (crop->GetPhase() != Phase::SAPLESS) {
+                        crop->ChangePhase(Phase::SAPLESS);
+                        crop->ChangMatureNeeded(2); // 延迟两天收获
+                        it++;
+                    }
+                    else {
+                        // 删除元素并更新迭代器
+                        it = Crop_information.erase(it);
+                    }
+
+                }
+                else {
+                    // 更新状态
+                    crop->UpdateGrowth();
+                    it++;
+                }
+
+            }
+
+            for (auto& pair : F_lastplace) {
+                if (pair.first.first == "myhouse") {  // 检查 bool 值是否为 true
+                    pair.second = true;
+                }
+            }
+
+
             remainingTime = 0;
-
-            //for (auto it = Crop_information.begin(); it != Crop_information.end(); /* no increment here */) {
-
-            //    auto crop = *it;  // 解引用迭代器以访问 Crop 对象
-
-            //     判断前一天是否浇水
-            //    if ((crop->watered == false) && (crop->GetPhase() != Phase::MATURE)) {
-            //         判断是否已经进入枯萎状态
-            //        if (crop->GetPhase() != Phase::SAPLESS) {
-            //            crop->ChangePhase(Phase::SAPLESS);
-            //            crop->ChangMatureNeeded(2); // 延迟两天收获
-            //        }
-            //        else {
-            //             删除元素并更新迭代器
-            //            it = Crop_information.erase(it);
-            //        }
-            //        ++it;
-            //        continue;  // 跳过后续代码，直接继续循环
-            //    }
-            //    else {
-            //         更新状态
-            //        crop->UpdateGrowth();
-            //    }
-
-            //    it++;
-            //}
-
-            player1->removeFromParent ();
-            auto nextday = farm::create ();
-            Director::getInstance ()->replaceScene ( nextday );
-
+            player1->removeFromParent();
+            auto nextday = Myhouse::create();
+            Director::getInstance()->replaceScene(nextday);
 
         }
 
@@ -337,13 +352,10 @@ bool Beach::init ()
             currenty = playerPos.y;
         }
 
-        _timerLabelD->setPosition ( currentx - 710 , currenty + 570 );
-        _timerLabelH->setPosition ( currentx - 570 , currenty + 570 );
-        _timerLabelS->setPosition ( currentx - 410 , currenty + 570 );
         _positionLabel->setPosition ( currentx - 570 , currenty + 490 );
         button->setPosition ( currentx + 730 , currenty - 590 );
         miniBag->setPosition ( currentx , currenty );
-
+        TimeUI->setPosition(currentx, currenty);
 
         // 是否进入农场
         if (Out_Beach.containsPoint ( playerPos )) {
@@ -412,4 +424,33 @@ bool Beach::init ()
         }
 
 
+    }
+
+    void Beach::createRainEffect() {
+
+        emitter = ParticleRain::create();
+        emitter->setDuration(ParticleSystem::DURATION_INFINITY);
+        emitter->setScale(5.7f);
+        emitter->setTotalParticles(100);
+        emitter->setSpeed(250);
+
+        addChild(emitter, 10);
+
+        // 每帧更新粒子生命周期
+        schedule([this](float dt) {
+            updaterain(dt);
+            }, "update_rain_key");
+
+    }
+
+    void Beach::updaterain(float deltaTime) {
+        if (emitter) {
+            // 随机生成一个生命周期（范围 1 到 1.5 秒之间）
+            float newLife = cocos2d::rand_0_1() * 1.5f;
+
+            // 设置新的生命周期
+            emitter->setLife(newLife);
+
+            emitter->setEmissionRate(emitter->getTotalParticles() / emitter->getLife() * 1.3);
+        }
     }

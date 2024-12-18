@@ -30,7 +30,7 @@ USING_NS_CC;  // 使用cocos2d的命名空间
 int remainingTime = 0;
 int day = 1;
 int GoldAmount = 4000;
-bool frombed = false;
+bool frombed = true;
 bool IsNextDay = false;
 
 Crop wheat ( "wheat" , "crop/wheat1.png" , "crop/wheat2.png" , "crop/wheat3.png" , "All" , Phase::SEED , 50 , 0 , false , 4 );
@@ -40,6 +40,8 @@ Crop pumpkin ( "pumpkin" , "crop/pumpkin1.png" , "crop/pumpkin2.png" , "crop/pum
 Crop blueberry ( "blueberry" , "crop/blueberry1.png" , "crop/blueberry2.png" , "crop/blueberry3.png" , "Summer" , Phase::SEED , 100 , 0 , false , 7 );
 
 std::string Season = "Spring";
+std::string Weather = "Rainy";
+std::string Festival = "Fishing Festival";
 std::map<std::string , int> season;
 std::vector<std::shared_ptr<Crop>> Crop_information;
 std::vector<std::shared_ptr<Ore>> Ore_information;
@@ -55,15 +57,12 @@ mini_bag* miniBag = nullptr;
 Town* town = nullptr;
 supermarket* seedshop = nullptr;
 farm* Farm = nullptr;
-
+Timesystem* TimeUI = nullptr;
 Inventory* inventory = new Inventory ();
-Inventory* StoreItem = new Inventory ();
 NpcRelationship* npc_relationship = new NpcRelationship();
 std::vector<std::pair<Rect , bool>> barn_space;
 std::vector<Livestock*> livestocks;
 SkillTree* skill_tree = new SkillTree ();
-
-// 创建任务管理器
 TaskManagement* taskManager = new TaskManagement();
 /****************************************************************************************/
 
@@ -139,12 +138,8 @@ void AppDelegate::runScene(cocos2d::Director* director) {
     key = { "seedshop",Vec2(230,470) };
     T_lastplace.insert(std::make_pair(key, false));
 
-    //运行Barn
-    //auto barn = Barn::create ();
-    //director->runWithScene ( barn );
-
     // 运行农场
-   /* auto farm = farm::create ();
+    /*auto farm = farm::create ();
     director->runWithScene ( farm );*/
 
     //运行海滩场景
@@ -152,26 +147,33 @@ void AppDelegate::runScene(cocos2d::Director* director) {
     director->runWithScene ( beach );*/
 
     // 运行家的场景
-    /*auto test = Myhouse::create();
-    director->runWithScene(test); */
+    auto test = Myhouse::create();
+    director->runWithScene(test); 
 
     // 运行小镇的场景
-    auto test = Town::create();
-    director->runWithScene(test);
+    /*auto test = Town::create();
+    director->runWithScene(test);*/
 
     // 运行商店的场景
-    //auto test = supermarket::create();
-    //director->runWithScene(test);
+    /*auto test = supermarket::create();
+    director->runWithScene(test);*/
 
     // 运行Cave
     // auto test = Cave::create();
     // director->runWithScene(test);
 
+    // 运行Beach
+    // auto test = Beach::create();
+    // director->runWithScene(test);
     
     // 运行森林
-     //auto test = Forest::create();
-     //director->runWithScene(test);
-    
+    /* auto test = Forest::create();
+     director->runWithScene(test);*/
+
+     // 运行畜棚
+     /* auto test = Barn::create();
+      director->runWithScene(test);*/
+
     //开局UI运行
     //director->runWithScene ( BeginScene::create () );
     //创建人物界面运行
@@ -190,7 +192,7 @@ void AppDelegate::Initialize () {
     cropbasicinformation.insert({ "Blueberry_Seeds", blueberry });
 
     // 初始化宝石信息
-    Ore Ruby("Ruby", "Ore/Ruby1.png", "Ore/Ruby2.png", 5, 5, Vec2(350, 500));                   // 红宝石
+    Ore Ruby("Ruby", "Ore/Ruby1.png", "Ore/Ruby2.png", 3, 3, Vec2(350, 500));                   // 红宝石
     Ore_information.push_back(Ruby.GetOreCopy());
     Ruby.position = Vec2(950, 750);
     Ore_information.push_back(Ruby.GetOreCopy());
@@ -247,45 +249,46 @@ void AppDelegate::Initialize () {
     key = { "farm",Vec2(1150, 2650) };
     W_lastplace.insert(std::make_pair(key, false));
 
+
+    // 创建任务  
+    TaskManagement::Task task1("Fetch the Amethyst", TaskManagement::NPC_TASK);
+    task1.npcName = "Abigail"; // 发布任务的 NPC 名字  
+    task1.requiredItems.push_back(amethyst); // 需要的物品  
+    task1.rewardCoins = 500; // 奖励金币  
+    task1.relationshipPoints = 10; // NPC 好感度  
+
+    TaskManagement::Task task2("Collect Emerald", TaskManagement::SYSTEM_TASK);
+    task2.requiredItems.push_back(emerald); // 需要的物品  
+    task2.rewardCoins = 30; // 奖励金币  
+
+    TaskManagement::Task task3("Festival Gathering", TaskManagement::FESTIVAL_TASK);
+    task3.specialRewards.push_back(Gold_Hoe);   // 特殊奖励  
+    task3.relationshipPoints = 5; // 与所有人的好感度  
+
+    // 将任务添加到任务管理器  
+    taskManager->createTask(task1);
+    taskManager->createTask(task2);
+    taskManager->createTask(task3);
+
     //初始化Barn内可放置家畜矩阵
-    barn_space.push_back ( std::make_pair ( Rect ( 685.714294 , 213.333328 , 114.285713 , 106.666664 ) , false ) );
-    barn_space.push_back ( std::make_pair ( Rect ( 800.000000 , 213.333328 , 114.285713 , 106.666664 ) , false ) );
-    barn_space.push_back ( std::make_pair ( Rect ( 914.285706 , 213.333328 , 114.285713 , 106.666664 ) , false ) );
-    barn_space.push_back ( std::make_pair ( Rect ( 1142.857178 , 213.333328 , 114.285713 , 106.666664 ) , false ) );
-    barn_space.push_back ( std::make_pair ( Rect ( 685.714294 , 426.666656 , 114.285713 , 106.666664) , false ) );
-    barn_space.push_back ( std::make_pair ( Rect ( 800.000000 , 426.666656 , 114.285713 , 106.666664 ) , false ) );
-    barn_space.push_back ( std::make_pair ( Rect ( 914.285706 , 426.666656 , 114.285713 , 106.666664 ) , false ) );
-    barn_space.push_back ( std::make_pair ( Rect ( 1142.857178 , 426.666656 , 114.285713 , 106.666664 ) , false ) );
-    barn_space.push_back ( std::make_pair ( Rect ( 685.714294 , 640.000000 , 114.285713 , 106.666664 ) , false ) );
-    barn_space.push_back ( std::make_pair ( Rect ( 800.000000 , 640.000000 , 114.285713 , 106.666664) , false ) );
-    barn_space.push_back ( std::make_pair ( Rect ( 914.285706 , 640.000000 , 114.285713 , 106.666664 ) , false ) );
-    barn_space.push_back ( std::make_pair ( Rect ( 1142.857178 , 640.000000 , 114.285713 , 106.666664 ) , false ) );
+    barn_space.push_back(std::make_pair(Rect(685.714294, 213.333328, 114.285713, 106.666664), false));
+    barn_space.push_back(std::make_pair(Rect(800.000000, 213.333328, 114.285713, 106.666664), false));
+    barn_space.push_back(std::make_pair(Rect(914.285706, 213.333328, 114.285713, 106.666664), false));
+    barn_space.push_back(std::make_pair(Rect(1142.857178, 213.333328, 114.285713, 106.666664), false));
+    barn_space.push_back(std::make_pair(Rect(685.714294, 426.666656, 114.285713, 106.666664), false));
+    barn_space.push_back(std::make_pair(Rect(800.000000, 426.666656, 114.285713, 106.666664), false));
+    barn_space.push_back(std::make_pair(Rect(914.285706, 426.666656, 114.285713, 106.666664), false));
+    barn_space.push_back(std::make_pair(Rect(1142.857178, 426.666656, 114.285713, 106.666664), false));
+    barn_space.push_back(std::make_pair(Rect(685.714294, 640.000000, 114.285713, 106.666664), false));
+    barn_space.push_back(std::make_pair(Rect(800.000000, 640.000000, 114.285713, 106.666664), false));
+    barn_space.push_back(std::make_pair(Rect(914.285706, 640.000000, 114.285713, 106.666664), false));
+    barn_space.push_back(std::make_pair(Rect(1142.857178, 640.000000, 114.285713, 106.666664), false));
 
     // 初始化季节
     season.insert ( { "Spring", 1 } );
     season.insert ( { "Summer", 2 } );
     season.insert ( { "Autumn", 3 } );
     season.insert ( { "Winter", 4 } );
-
-    // 创建任务  
-    TaskManagement::Task task1 ( "Fetch the Amethyst" , TaskManagement::NPC_TASK );
-    task1.npcName = "Abigail"; // 发布任务的 NPC 名字  
-    task1.requiredItems.push_back ( amethyst ); // 需要的物品  
-    task1.rewardCoins = 500; // 奖励金币  
-    task1.relationshipPoints = 10; // NPC 好感度  
-
-    TaskManagement::Task task2 ( "Collect Emerald" , TaskManagement::SYSTEM_TASK );
-    task2.requiredItems.push_back ( emerald ); // 需要的物品  
-    task2.rewardCoins = 30; // 奖励金币  
-
-    TaskManagement::Task task3 ( "Festival Gathering" , TaskManagement::FESTIVAL_TASK );
-    task3.specialRewards.push_back ( Gold_Hoe );   // 特殊奖励  
-    task3.relationshipPoints = 5; // 与所有人的好感度  
-
-    // 将任务添加到任务管理器  
-    taskManager->createTask ( task1 );
-    taskManager->createTask ( task2 );
-    taskManager->createTask ( task3 );
 }
 
 

@@ -3,13 +3,13 @@
 // 动物设定为购买后直接加入牧场，在背包中不可见
 
 // 动物  
-Item AnimalChicken ( "AnimalChicken" , "Item/Surpermarket/Animal/Brown_Chicken.png" , 4000 , 99 );
-Item AnimalDuck ( "AnimalDuck" , "Item/Surpermarket/Animal/Duck.png" , 1200 , 99 );
-Item AnimalGoat ( "AnimalGoat" , "Item/Surpermarket/Animal/Goat.png" , 4000 , 99 );
-Item AnimalPig ( "AnimalPig" , "Item/Surpermarket/Animal/Pig.png" , 16000 , 99 );
-Item AnimalRabbit ( "AnimalRabbit" , "Item/Surpermarket/Animal/Rabbit.png" , 800 , 99 );
-Item AnimalSheep ( "AnimalSheep" , "Item/Surpermarket/Animal/Sheep.png" , 8000 , 99 );
-Item AnimalCow ( "AnimalCow" , "Item/Surpermarket/Animal/White_Cow.png" , 800 , 99 );
+Item AnimalChicken("AnimalChicken", "Item/Surpermarket/Animal/Brown_Chicken.png", 4000, 99);
+Item AnimalDuck("AnimalDuck", "Item/Surpermarket/Animal/Duck.png", 1200, 99);
+Item AnimalGoat("AnimalGoat", "Item/Surpermarket/Animal/Goat.png", 4000, 99);
+Item AnimalPig("AnimalPig", "Item/Surpermarket/Animal/Pig.png", 16000, 99);
+Item AnimalRabbit("AnimalRabbit", "Item/Surpermarket/Animal/Rabbit.png", 800, 99);
+Item AnimalSheep("AnimalSheep", "Item/Surpermarket/Animal/Sheep.png", 8000, 99);
+Item AnimalCow("AnimalCow", "Item/Surpermarket/Animal/White_Cow.png", 800, 99);
 
 // 春季种子物品列表  
 Item Bean_Starter ( "Bean_Starter" , "Item/Surpermarket/Spring/Bean_Starter.png" , 60 , 99 );
