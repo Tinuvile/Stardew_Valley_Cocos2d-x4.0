@@ -79,3 +79,16 @@ void NpcRelationship::printRelationships() const {
         }
     }
 }
+
+// 增加礼物接受次数  
+void NpcRelationship::AddGiftTime ( const std::string& npc ) {
+    add_npc ( npc );
+    // 找到该 NPC，并增加接受礼物的次数  
+    GiftTime[npc]++;
+}
+
+// 获取该 NPC 接受的礼物次数  
+int NpcRelationship::NpcGiftTIme ( const std::string& npc ) {
+    // 查找并返回礼物次数，未记录则返回 0  
+    return GiftTime[npc];
+}

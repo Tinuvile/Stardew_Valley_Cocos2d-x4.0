@@ -32,8 +32,15 @@ public:
 	// 打印所有npc之间的关系(用于调试)
 	void printRelationships() const;
 
+	// 送礼
+	void AddGiftTime ( const std::string& npc );
+
+	int NpcGiftTIme ( const std::string& npc );
+
 private:
-	unordered_map<string, unordered_map<string, double>>relationships;
+	unordered_map<string, unordered_map<string, double>> relationships;
+
+	unordered_map<string , int> GiftTime;
 
 	// 关系值上下限  
 	static const int MIN_RELATIONSHIP = -100;
