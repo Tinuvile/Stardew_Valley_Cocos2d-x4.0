@@ -151,12 +151,12 @@ void AppDelegate::runScene(cocos2d::Director* director) {
     //director->runWithScene(test); 
 
     // 运行小镇的场景
-    //auto test = Town::create();
-    //director->runWithScene(test);
+    auto test = Town::create();
+    director->runWithScene(test);
 
     // 运行商店的场景
-    auto test = supermarket::create();
-    director->runWithScene(test);
+    //auto test = supermarket::create();
+    //director->runWithScene(test);
 
     // 运行Cave
     // auto test = Cave::create();
