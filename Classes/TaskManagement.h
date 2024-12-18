@@ -2,6 +2,7 @@
 #include "cocos2d.h" 
  #include "AppDelegate.h"
 
+
 class TaskManagement {
 public:
 	/* ≥ı º–≈œ¢

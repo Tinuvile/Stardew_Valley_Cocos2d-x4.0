@@ -384,7 +384,7 @@ bool Town::init()
                             npc_relationship->increaseRelationship ( "player" , npc->GetName () , 15.2 );
                             inventory->RemoveItem ( miniBag->getSelectedSlot () );
                             inventory->is_updated = true;
-                            npc->AddGiftTime ();
+                            npc_relationship->AddGiftTime ( npc->GetName () );
                             // 这里改成礼物的图
                             auto ItemClickByminiBag = Sprite::create ( "npc/gift.png" );
                             ItemClickByminiBag->setPosition ( playerPos );
