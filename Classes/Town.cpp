@@ -14,7 +14,7 @@ Town::~Town() {}
 
 bool Town::init()
 {
-    inventory->AddItem ( AnimalDuck , 12 );
+    /*inventory->AddItem ( AnimalDuck , 12 );*/
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -111,7 +111,9 @@ bool Town::init()
                 pair.second = false;
             }
         }
-        player1->speed = 3.7f;
+        /*player1->speed = 3.7f;*/
+        //仅为方便测试
+        player1->speed = 20.0f;
     }
 
     //界面下的背包显示

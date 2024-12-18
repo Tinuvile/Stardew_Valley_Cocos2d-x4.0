@@ -105,7 +105,9 @@ bool farm::init()
                 pair.second = false;
             }
         }
-        player1->speed = 3.5f;
+       /* player1->speed = 3.5f;*/
+        //½öÎª·½±ã²âÊÔ
+        player1->speed = 20.0f;
         player1->setScale(1.5f);
         player1->setAnchorPoint(Vec2(0.5f, 0.2f));
     }    

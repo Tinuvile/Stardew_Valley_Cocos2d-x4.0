@@ -37,6 +37,7 @@
 #include "NPCtalkUI.h"
 #include "NpcRelationship.h"
 #include "intimacyUI.h"
+//#include "TaskManagement.h"
 
 #include "StoreUI.h"
 #include "EconomicSystem.h"
@@ -155,4 +156,4 @@ public:
 
 };
 
-#endif // _APP_DELEGATE_H_  // 结束防止头文件被多次包含的宏
+#endif  _APP_DELEGATE_H_  // 结束防止头文件被多次包含的宏
