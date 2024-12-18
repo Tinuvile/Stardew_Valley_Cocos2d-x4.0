@@ -21,7 +21,7 @@ bool Cave::init()
     this->addChild(button, 11);
 
     // 设置计时器标签
-    TimeUI = Timesystem::create();
+    TimeUI = Timesystem::create ( "Cave" );
     this->addChild(TimeUI, 13);
 
     // 恢复种植

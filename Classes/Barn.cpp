@@ -59,11 +59,12 @@ bool Barn::init ()
     // 设置计时器标签
     // 设置计时器标签
     auto temp_pos = player1->getPosition();
-    TimeUI = Timesystem::create();
+    TimeUI = Timesystem::create ( "Baen" );
     this->addChild(TimeUI, 17);
     temp_pos.x += 90;
     temp_pos.y += 150;
     TimeUI->setPosition(temp_pos.x, temp_pos.y);
+    
 
     // 创建并初始化 Label 来显示角色的位置
     _positionLabel = Label::createWithTTF("Position: (0, 0)", "fonts/Marker Felt.ttf", 24);
