@@ -24,7 +24,7 @@ bool Beach::init ()
 
     // 设置计时器标签
    // 设置计时器标签
-    TimeUI = Timesystem::create();
+    TimeUI = Timesystem::create ( "Beach" );
     this->addChild(TimeUI, 13);
 
     if (Weather == "Rainy") {

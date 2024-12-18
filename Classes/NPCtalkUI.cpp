@@ -49,6 +49,18 @@ void NPCtalkUI::updateCoordinate ( float& x , float& y ) {
         upperboundary = 777.0f;
         lowerboundary = 500.0f;
     }
+    else if (SceneName == "Barn") {
+        Leftboundary = 805.0f;
+        rightboundary = 805.0f;
+        upperboundary = 569.0f;
+        lowerboundary = 569.0f;
+    }
+    else if (SceneName == "Myhouse") {
+        Leftboundary = 800.0f;
+        rightboundary = 800.0f;
+        upperboundary = 580.0f;
+        lowerboundary = 580.0f;
+    }
     if (x <= Leftboundary) {
         x = Leftboundary;
     }
@@ -271,7 +283,7 @@ void NPCtalkUI::close () {
         float scaleX = visibleSize.width / originalWidth;
         float scaleY = visibleSize.height / originalHeight;
         float scale = std::min ( scaleX , scaleY );
-        closeIcon->setScale ( scale / 40 );
+        closeIcon->setScale ( scale / 20.5 );
         closeIcon->setPosition ( Vec2 ( currentx + visibleSize.width * 0.40 , currenty - visibleSize.height * 0.13 ) );
 
         this->addChild ( closeIcon , 1 );

@@ -5,9 +5,9 @@
 
 class Timesystem : public cocos2d::Node {  // 继承自Node
 public:
-    static Timesystem* create();
+    bool init ( std::string place );
 
-    bool init() override;
+    static Timesystem* create ( std::string place );
 
     // 其他成员变量和方法
     cocos2d::Label* _timerLabelD;
@@ -17,7 +17,11 @@ public:
     cocos2d::Label* _timerLabelF;
     cocos2d::Sprite* TimePic;
 
-    // 所处的场景
-    std::string place;
+    cocos2d::Sprite* moneyDisplay;
+    cocos2d::Label* GoldAmountDisplay;
 
+    cocos2d::Sprite* DailyRecord;
+
+    // 所处的场景
+    std::string Place;
 };

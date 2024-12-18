@@ -285,7 +285,7 @@ bool supermarket::init()
 
 
     // 设置计时器标签
-    TimeUI = Timesystem::create();
+    TimeUI = Timesystem::create ( "supermarket" );
     this->addChild(TimeUI, 13);
 
     // 创建并初始化 Label 来显示角色的位置

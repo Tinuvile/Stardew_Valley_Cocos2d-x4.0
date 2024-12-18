@@ -24,13 +24,15 @@ bool Town::init()
 
 
     // 设置计时器标签
-    TimeUI = Timesystem::create();
+    TimeUI = Timesystem::create ( "Town" );
     this->addChild(TimeUI, 13);
+
 
     if (Weather == "Rainy") {
         // 下雨
         createRainEffect();
     }
+
 
     // 创建并初始化 Label 来显示角色的位置
     _positionLabel = Label::createWithTTF("Position: (0, 0)", "fonts/Marker Felt.ttf", 24);
@@ -420,6 +422,7 @@ bool Town::init()
                 CCLOG("Enter key pressed. ");
             }
             else if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
+                CCLOG ( "%d" , GoldAmount );
                 static int isOpen = 0;
                 static InventoryUI* currentInventoryUI = nullptr;  // 保存当前显示的 InventoryUI  
                 // 如果当前没有打开 InventoryUI，则打开它  
@@ -480,7 +483,6 @@ void Town::checkPlayerPosition()
         _positionLabel->setString("Position: (" + std::to_string(static_cast<int>(playerPos.x)) + ", " + std::to_string(static_cast<int>(playerPos.y)) + ")");
     
     }
-
     // 更新计时器显示
     remainingTime++;
     if (remainingTime == 43200) {
