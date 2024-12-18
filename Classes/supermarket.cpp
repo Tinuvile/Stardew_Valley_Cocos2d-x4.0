@@ -27,8 +27,6 @@ bool supermarket::init()
     button = cocos2d::Sprite::create("CloseNormal.png");
     this->addChild(button, 11);
 
-    StoreItem = new Inventory ();
-
     // ¶¯Îï  
     StoreItem->AddItem ( AnimalChicken );
     StoreItem->SetSelectedItem ( 1 );

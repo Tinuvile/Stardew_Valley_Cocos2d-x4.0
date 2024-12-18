@@ -174,7 +174,6 @@ bool Town::init()
     // 允许的交互半径  
     const float interactionRadius = 300.0f;
 
-
     // 使用 getAlexAnimations() 获取 NPC 动画帧  
     auto alexAnimations = getAlexAnimations ();
     // 创建 NPC 示例  

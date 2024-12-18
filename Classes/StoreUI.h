@@ -25,7 +25,9 @@ public:
     void SliderDisplay ();
 
     void updateCoordinate ( float& x , float& y );
+
 private:
+
     Inventory* _mybag; // 指向自己背包实例的指针  
 
     Inventory* _goods; // 指向商品实例的指针  
