@@ -1,6 +1,7 @@
 #ifndef  _APP_DELEGATE_H_  // 防止头文件被多次包含的宏
 #define  _APP_DELEGATE_H_
 
+#include "Timesystem.h"
 #include "cocos2d.h"  
 //#include "GameBeginUI.h"
 #include "Barn.h"
@@ -30,13 +31,12 @@
 #include "Chicken.h"
 #include "Cow.h"
 #include "Sheep.h"
-
+#include "TaskManagement.h"
 #include "NPC.h"
 #include "NPCreate.h"
 #include "NPCtalkUI.h"
 #include "NpcRelationship.h"
 #include "intimacyUI.h"
-#include "TaskManagement.h"
 
 #include "StoreUI.h"
 #include "EconomicSystem.h"
@@ -61,7 +61,11 @@ class Barn;
 class Inventory;
 class NpcRelationship;
 class mini_bag;
+<<<<<<< HEAD
 class TaskManagement;
+=======
+class Timesystem;
+>>>>>>> b9a0d5c05becfb4e1a570e81ad94622ddc23bcec
 /******************************** 全局变量声明区 ***************************************/
 extern int remainingTime;  // 声明，不初始化
 extern int day;
@@ -69,6 +73,8 @@ extern int GoldAmount;
 extern bool IsNextDay;
 extern bool frombed;
 extern std::string Season;
+extern std::string Weather;
+extern std::string Festival;
 extern std::map<std::string , int> season;
 // 每种作物的基本信息
 extern std::map<std::string , Crop> cropbasicinformation;
@@ -95,8 +101,12 @@ extern SkillTree* skill_tree;
 extern mini_bag* miniBag;
 extern Inventory* inventory;
 extern NpcRelationship* npc_relationship;
+<<<<<<< HEAD
 extern Inventory* StoreItem;
 extern TaskManagement* taskManager;
+=======
+extern Timesystem* TimeUI;
+>>>>>>> b9a0d5c05becfb4e1a570e81ad94622ddc23bcec
 //存储畜棚中可有家畜活动的矩形区域，并记录该区域是否已存在家畜
 extern std::vector<std::pair<Rect , bool>> barn_space;
 //存储畜棚中的家畜
