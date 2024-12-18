@@ -12,36 +12,38 @@ Barn::~Barn() {}
 bool Barn::init ()
 {
     //获取允许动物活动的矩形块
-    if (barn_space.size () < kMaxLivestock) {
-        auto scene_size = Director::getInstance ()->getVisibleSize ();
+    //if (barn_space.size () < kMaxLivestock) {
+    //    auto scene_size = Director::getInstance ()->getVisibleSize ();
 
-        float rectWidth = scene_size.width / 14;
-        float rectHeight = scene_size.height / 12;
+    //    float rectWidth = scene_size.width / 14;
+    //    float rectHeight = scene_size.height / 12;
 
-        // 遍历每个矩形区域
-        for (int row = 0; row < 12; ++row) {
-            for (int col = 0; col < 14; ++col) {
-                if ((row == 2 || row == 4 || row == 6) &&
-                    col % 2 == 0 && col >= 6) {
-                    // 左下角坐标
-                    float x = col * rectWidth;
-                    float y = row * rectHeight;
+    //    // 遍历每个矩形区域
+    //    for (int row = 0; row < 12; ++row) {
+    //        for (int col = 0; col < 14; ++col) {
+    //            if ((row == 2 || row == 4 || row == 6) &&
+    //                (col == 6 || col == 7 || col == 8 || col == 10)) {
+    //                // 左下角坐标
+    //                float x = col * rectWidth;
+    //                float y = row * rectHeight;
 
-                    // 创建矩形并存储到 vector 中
-                    cocos2d::Rect rect ( x , y , rectWidth , rectHeight );
-                    barn_space.push_back ( std::make_pair ( rect , false ) );
-                    if (row == 6 && col == 7) {
-                        break;
-                    }
-                }
-                else {
-                    continue;
-                }
-            }
-        }
-    }
-
-    for (int i = 0; i < 3; i++) {
+    //                // 创建矩形并存储到 vector 中
+    //                cocos2d::Rect rect ( x , y , rectWidth , rectHeight );
+    //                CCLOG ( "%f,%f,%f,%f\n" ,x,y,rectWidth,rectHeight);
+    //                barn_space.push_back ( std::make_pair ( rect , false ) );
+    //                if (row == 6 && col == 10) {
+    //                    break;
+    //                }
+    //            }
+    //            else {
+    //                continue;
+    //            }
+    //        }
+    //    }
+    //}
+    
+    //创建测试家畜
+   /* for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 4; j++) {
             Livestock* livestock;
             Rect area = barn_space[4 * i + j].first;
@@ -61,7 +63,7 @@ bool Barn::init ()
             }
             livestocks.push_back ( livestock );
         }
-    }
+    }*/
 
     //加入家畜
     if (!livestocks.empty ()) {

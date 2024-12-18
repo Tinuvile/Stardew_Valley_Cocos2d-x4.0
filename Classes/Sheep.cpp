@@ -49,6 +49,9 @@ std::shared_ptr<Item> Sheep::ProduceProduct () {
 }
 
 void Sheep::UpdateTexture ( float deltaTime ) {
+	if (this->getParent () == nullptr) {
+		return;
+	}
 	if (moving) {
 		current_frame = (current_frame + 1) % 4;
 		this->setTexture ( sheep_icon[move_direction * 4 + current_frame] );

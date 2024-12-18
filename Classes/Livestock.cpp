@@ -17,6 +17,9 @@ Livestock* Livestock::create ( const std::string& species , const std::string& i
 }
 
 void Livestock::RandomMove() {
+    if (this->getParent () == nullptr) {
+        return;
+    }
     // 随机选择一个方向：0 - 下 , 1 - 上 , 2 - 左 , 3 - 右
     int direction = cocos2d::RandomHelper::random_int ( 0 , 3 );
     if (species == "Chicken") {

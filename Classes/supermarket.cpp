@@ -30,25 +30,25 @@ bool supermarket::init()
     StoreItem = new Inventory ();
 
     // 动物  
-    StoreItem->AddItem ( Golden_Chicken );
+    StoreItem->AddItem ( AnimalChicken );
     StoreItem->SetSelectedItem ( 1 );
 
-    StoreItem->AddItem ( Duck );
+    StoreItem->AddItem ( AnimalDuck );
     StoreItem->SetSelectedItem ( 2 );
 
-    StoreItem->AddItem ( Goat );
+    StoreItem->AddItem ( AnimalGoat );
     StoreItem->SetSelectedItem ( 3 );
 
-    StoreItem->AddItem ( Pig );
+    StoreItem->AddItem ( AnimalPig );
     StoreItem->SetSelectedItem ( 4 );
 
-    StoreItem->AddItem ( Rabbit );
+    StoreItem->AddItem ( AnimalCow );
     StoreItem->SetSelectedItem ( 5 );
 
-    StoreItem->AddItem ( Sheep );
+    StoreItem->AddItem ( AnimalSheep );
     StoreItem->SetSelectedItem ( 6 );
 
-    StoreItem->AddItem ( White_Chicken );
+    StoreItem->AddItem ( AnimalRabbit );
     StoreItem->SetSelectedItem ( 7 );
 
     // 春季种子物品列表  
@@ -419,7 +419,7 @@ bool supermarket::init()
     listenerWithPlayer->onKeyPressed = [this](EventKeyboard::KeyCode keyCode, Event* event)
         {
             // 记录 Enter 键被按下
-            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER) {
+            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER || keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER) {
                 isEnterKeyPressed = true;
                 CCLOG("Enter key pressed.");
             }

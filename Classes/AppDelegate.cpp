@@ -135,9 +135,13 @@ void AppDelegate::runScene(cocos2d::Director* director) {
     key = { "seedshop",Vec2(230,470) };
     T_lastplace.insert(std::make_pair(key, false));
 
+    //运行Barn
+    //auto barn = Barn::create ();
+    //director->runWithScene ( barn );
+
     // 运行农场
-    auto farm = farm::create ();
-    director->runWithScene ( farm );
+   /* auto farm = farm::create ();
+    director->runWithScene ( farm );*/
 
     //运行海滩场景
    /* auto beach = Beach::create ();
@@ -148,12 +152,12 @@ void AppDelegate::runScene(cocos2d::Director* director) {
     director->runWithScene(test); */
 
     // 运行小镇的场景
-    /*auto test = Town::create();
-    director->runWithScene(test);*/
+    auto test = Town::create();
+    director->runWithScene(test);
 
     // 运行商店的场景
-    /*auto test = supermarket::create();
-    director->runWithScene(test);*/
+    //auto test = supermarket::create();
+    //director->runWithScene(test);
 
     // 运行Cave
     // auto test = Cave::create();
@@ -238,6 +242,20 @@ void AppDelegate::Initialize () {
     W_lastplace.insert(std::make_pair(key, false));
     key = { "farm",Vec2(1150, 2650) };
     W_lastplace.insert(std::make_pair(key, false));
+
+    //初始化Barn内可放置家畜矩阵
+    barn_space.push_back ( std::make_pair ( Rect ( 685.714294 , 213.333328 , 114.285713 , 106.666664 ) , false ) );
+    barn_space.push_back ( std::make_pair ( Rect ( 800.000000 , 213.333328 , 114.285713 , 106.666664 ) , false ) );
+    barn_space.push_back ( std::make_pair ( Rect ( 914.285706 , 213.333328 , 114.285713 , 106.666664 ) , false ) );
+    barn_space.push_back ( std::make_pair ( Rect ( 1142.857178 , 213.333328 , 114.285713 , 106.666664 ) , false ) );
+    barn_space.push_back ( std::make_pair ( Rect ( 685.714294 , 426.666656 , 114.285713 , 106.666664) , false ) );
+    barn_space.push_back ( std::make_pair ( Rect ( 800.000000 , 426.666656 , 114.285713 , 106.666664 ) , false ) );
+    barn_space.push_back ( std::make_pair ( Rect ( 914.285706 , 426.666656 , 114.285713 , 106.666664 ) , false ) );
+    barn_space.push_back ( std::make_pair ( Rect ( 1142.857178 , 426.666656 , 114.285713 , 106.666664 ) , false ) );
+    barn_space.push_back ( std::make_pair ( Rect ( 685.714294 , 640.000000 , 114.285713 , 106.666664 ) , false ) );
+    barn_space.push_back ( std::make_pair ( Rect ( 800.000000 , 640.000000 , 114.285713 , 106.666664) , false ) );
+    barn_space.push_back ( std::make_pair ( Rect ( 914.285706 , 640.000000 , 114.285713 , 106.666664 ) , false ) );
+    barn_space.push_back ( std::make_pair ( Rect ( 1142.857178 , 640.000000 , 114.285713 , 106.666664 ) , false ) );
 
     // 初始化季节
     season.insert ( { "Spring", 1 } );
