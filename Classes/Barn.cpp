@@ -59,7 +59,7 @@ bool Barn::init ()
     // 设置计时器标签
     // 设置计时器标签
     auto temp_pos = player1->getPosition();
-    TimeUI = Timesystem::create ( "Baen" );
+    TimeUI = Timesystem::create ( "Barn" );
     this->addChild(TimeUI, 17);
     temp_pos.x += 90;
     temp_pos.y += 150;

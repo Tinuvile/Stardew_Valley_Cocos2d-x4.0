@@ -127,10 +127,10 @@ void mailBoxUI::taskDisplay ( TaskManagement& taskManager ) {
     scrollView->setBounceEnabled ( true ); // 启用弹性效果
     scrollView->setScrollBarEnabled ( false );    // 禁用垂直和水平滑动条
 
-    // 计算商品的总高度  
+    // 计算总高度  
     float totalItemHeight = 0;
     const int itemCount = 5; // 任务数量  
-    const float itemHeight = 500; // 每个商品的高度  
+    const float itemHeight = 500; // 每个高度  
     totalItemHeight = itemCount * itemHeight; // 计算总高度  
 
     // 设置内部容器的大小  
@@ -153,7 +153,7 @@ void mailBoxUI::taskDisplay ( TaskManagement& taskManager ) {
         float lowerLimit = scrollView->getContentSize ().height - innerContainer->getContentSize ().height;
         float upperLimit = -1400;
 
-        CCLOG ( "currentPosY: %f, newPosY: %f, lowerLimit: %f, upperLimit: %f" , currentPosY , newPosY , lowerLimit , upperLimit );
+        //CCLOG ( "currentPosY: %f, newPosY: %f, lowerLimit: %f, upperLimit: %f" , currentPosY , newPosY , lowerLimit , upperLimit );
 
         // 使用 std::max 和 std::min 确保 newPosY 在边界内  
         newPosY = std::max ( newPosY , lowerLimit );
@@ -241,42 +241,6 @@ void mailBoxUI::taskDisplay ( TaskManagement& taskManager ) {
     }
     // 将滚动视图添加到Layer中
     this->addChild ( scrollView , 5 );
-}
-
-void mailBoxUI::displayAllTasks ( TaskManagement& taskManager ) {
-    Vec2 position = player1->getPosition ();
-    float currentx = position.x , currenty = position.y;
-    updateCoordinate ( currentx , currenty );
-    // 获取所有任务  
-    std::vector<TaskManagement::Task> tasks = taskManager.returnTasks ();
-
-    // 创建一个字符串以存储所有任务的信息  
-    std::string allTasksInfo;
-
-    for (const auto& task : tasks) {
-        // 格式化任务信息  
-        std::string taskInfo = "任务名称: " + task.name + "\n";
-        taskInfo += "任务类型: " + std::to_string ( task.type ) + "\n";
-        if (task.type == TaskManagement::NPC_TASK) {
-            taskInfo += "发布NPC: " + task.npcName + "\n";
-        }
-        taskInfo += "奖励金币: " + std::to_string ( task.rewardCoins ) + "\n";
-        taskInfo += "好感度: " + std::to_string ( task.relationshipPoints ) + "\n";
-        taskInfo += "------------------------\n";
-
-        allTasksInfo += taskInfo; // 将每个任务信息添加到总字符串中  
-    }
-
-    // 创建标签来显示任务信息  
-    auto taskMessage = Label::createWithSystemFont ( allTasksInfo , "fonts/Comic Sans MS.ttf" , 40 );
-    taskMessage->setTextColor ( Color4B::BLACK );
-
-    // 设置标签的位置  
-    Vec2 visibleSize = Director::getInstance ()->getVisibleSize ();
-    taskMessage->setPosition ( Vec2 ( currentx , currenty ) );
-
-    // 将标签添加到Layer中  
-    this->addChild ( taskMessage ,2 );
 }
 
 bool mailBoxUI::init () {

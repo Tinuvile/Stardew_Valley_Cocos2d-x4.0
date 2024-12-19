@@ -83,12 +83,11 @@ bool Timesystem::init( std::string place ) {
         else
             DailyRecord->setScale ( 1.5f );
         };
-    listener->onMouseDown = [this]( EventMouse* event ) {
+    listener->onMouseDown = [this , place]( EventMouse* event ) {
         Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
         mousePos = this->convertToNodeSpace ( mousePos );
         if (DailyRecord->getBoundingBox ().containsPoint ( mousePos )) {
-            DailyRecordUI* Dailyrecord = DailyRecordUI::create ( Place );
-            Dailyrecord->setScale ( 0.9f );
+            DailyRecordUI* Dailyrecord = DailyRecordUI::create ( place );
             // 获取当前运行的场景
             Scene* currentScene = Director::getInstance ()->getRunningScene ();
             currentScene->addChild ( Dailyrecord , 20 );

@@ -42,6 +42,9 @@ public:
 	// 获取已经创建的任务
 	std::vector<Task> returnTasks () { return tasks; }
 
+	// 获取已经接受的任务
+	std::vector<Task> returnAcceptTasks () { return acceptTasks; }
+
 	// 添加已接受的任务
 	void AddAcceptTask ( const Task& task );
 

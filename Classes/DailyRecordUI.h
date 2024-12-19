@@ -18,4 +18,6 @@ private:
     void backgroundcreate ();
 
     void updateCoordinate ( float& x , float& y );
+
+    void taskDisplay ( TaskManagement& taskManager );
 };
