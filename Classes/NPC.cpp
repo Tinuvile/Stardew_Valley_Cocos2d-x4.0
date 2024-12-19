@@ -207,6 +207,51 @@ std::vector<std::vector<std::string>> getDialog ( std::string npc , std::string 
     return {};
 }
 
+// 获取节日对话信息的函数
+std::vector<std::vector<std::string>> getFestivalDialog ( std::string npc , std::string relation_ship ) {
+    if (npc_relationship->getRelationship ( "player" , npc ) >= 80) {
+        return {
+            {"Here, I brought you a gift!", "I really appreciate it!", "How have you been?", "Can we talk?", "Sure"},
+            {"I have something special for you.", "Thank you! That means a lot.", "I just wanted to check in.", "I don't care.", "Leave me alone!"},
+            {"Look what I got for you, a little present!", "Wow, this is amazing!", "I am not.", "Okay", "Alright"},
+            {"I thought you might like this.", "This is so thoughtful of you!", "Why not?", "I just don't.", "That's rude!"}
+        };
+    }
+    else if (relation_ship == "非常差") {
+        return {
+            {"I'm busy, I don't have time for you.", "Okay", "How have you been?", "Can we talk?", "Sure"},
+            {"Why are you bothering me?", "Just wanted to check in.", "I don't care.", "Leave me alone!", "Okay"},
+            {"You are a baby dragon, you are a baby dragon.", "I am not.", "Okay", "Alright", "Whatever"},
+            {"I don't want to talk to you.", "Why not?", "I just don't.", "That's rude!", "Okay"}
+        };
+    }
+    else if (relation_ship == "一般") {
+        return {
+            {"Hello, is there something you need?", "Nothing, just wanted to ask you.", "How have you been?", "Can we talk?", "Sure"},
+            {"How have you been?", "Pretty good, just busy with work.", "What about you?", "Let's catch up!", "Okay"},
+            {"Can we talk?", "Sure, but I have limited time.", "What do you want to discuss?", "I'm all ears.", "Okay"},
+            {"What do you think about our relationship?", "It's average, nothing special.", "I hope it improves.", "Let's work on it.", "Okay"}
+        };
+    }
+    else if (relation_ship == "友好") {
+        return {
+            {"Hey, how's it going?", "I'm good, thanks!", "What about you?", "Let's hang out!", "Sure"},
+            {"What are you up to?", "Just relaxing, you?", "Same here, want to chat?", "Sure, let's talk.", "Okay"},
+            {"Can we chat for a bit?", "Absolutely, what's on your mind?", "I have some ideas.", "I'd love to hear them.", "Okay"},
+            {"How do you feel about us?", "I think we're getting along well.", "I agree, it's nice.", "Let's keep it that way.", "Okay"}
+        };
+    }
+    else if (relation_ship == "亲密") {
+        return {
+            {"Let's go on a date.", "Oh, I have a gift for you.", "Let's do this more often.", "Absolutely!", "Sure"},
+            {"We should go on a trip together!", "That sounds amazing!", "I can't wait!", "Yeah!", "Okay"},
+            {"You know how much I care about you, right?", "Of course, I feel the same way.", "You're very important to me.", "Thank you, that means a lot.", "Okay"},
+            {"You're my best friend.", "And you're mine, always here for you.", "Let's stick together.", "Forever!", "Okay"}
+        };
+    }
+    return {};
+}
+
 // 获取 NPC 大头照路径
 std::string getNPCportraits ( std::string name , std::string status ) {
     std::map<std::string , std::map<std::string , std::string>> npcPortraits;
@@ -310,51 +355,158 @@ std::string getNPCportraits ( std::string name , std::string status ) {
 }
 
 // 获取 Abigail 动画帧信息的函数  
-std::vector<std::vector<std::string>> getAbigailAnimations () {
-    return {
+std::vector<std::vector<std::string>> getAbigailAnimations (std::string season) {
+    if (season == "Winter") {
+        return {
+        {"npc/Abigail_Winter/Abigail_Winter-8.png", "npc/Abigail_Winter/Abigail_Winter-9.png", "npc/Abigail_Winter/Abigail_Winter-10.png", "npc/Abigail_Winter/Abigail_Winter-11.png"},
+        {"npc/Abigail_Winter/Abigail_Winter-0.png", "npc/Abigail_Winter/Abigail_Winter-1.png", "npc/Abigail_Winter/Abigail_Winter-2.png", "npc/Abigail_Winter/Abigail_Winter-3.png"},
+        {"npc/Abigail_Winter/Abigail_Winter-14.png", "npc/Abigail_Winter/Abigail_Winter-13.png", "npc/Abigail_Winter/Abigail_Winter-14.png", "npc/Abigail_Winter/Abigail_Winter-15.png"},
+        {"npc/Abigail_Winter/Abigail_Winter-4.png", "npc/Abigail_Winter/Abigail_Winter-5.png", "npc/Abigail_Winter/Abigail_Winter-6.png", "npc/Abigail_Winter/Abigail_Winter-7.png"}
+        };
+    }
+    else if (season == "Beach") {
+        return {
+        {"npc/Abigail_Beach/Abigail_Beach-8.png", "npc/Abigail_Beach/Abigail_Beach-9.png", "npc/Abigail_Beach/Abigail_Beach-10.png", "npc/Abigail_Beach/Abigail_Beach-11.png"},
+        {"npc/Abigail_Beach/Abigail_Beach-0.png", "npc/Abigail_Beach/Abigail_Beach-1.png", "npc/Abigail_Beach/Abigail_Beach-2.png", "npc/Abigail_Beach/Abigail_Beach-3.png"},
+        {"npc/Abigail_Beach/Abigail_Beach-14.png", "npc/Abigail_Beach/Abigail_Beach-13.png", "npc/Abigail_Beach/Abigail_Beach-14.png", "npc/Abigail_Beach/Abigail_Beach-15.png"},
+        {"npc/Abigail_Beach/Abigail_Beach-4.png", "npc/Abigail_Beach/Abigail_Beach-5.png", "npc/Abigail_Beach/Abigail_Beach-6.png", "npc/Abigail_Beach/Abigail_Beach-7.png"}
+        };
+    }
+    else {
+        return {
         {"npc/Abigail/Abigail-8.png", "npc/Abigail/Abigail-9.png", "npc/Abigail/Abigail-10.png", "npc/Abigail/Abigail-11.png"},
         {"npc/Abigail/Abigail-0.png", "npc/Abigail/Abigail-1.png", "npc/Abigail/Abigail-2.png", "npc/Abigail/Abigail-3.png"},
         {"npc/Abigail/Abigail-14.png", "npc/Abigail/Abigail-13.png", "npc/Abigail/Abigail-14.png", "npc/Abigail/Abigail-15.png"},
         {"npc/Abigail/Abigail-4.png", "npc/Abigail/Abigail-5.png", "npc/Abigail/Abigail-6.png", "npc/Abigail/Abigail-7.png"}
-    };
+        };
+    }
 }
 
 // 获取 Alex 动画信息的函数
-std::vector<std::vector<std::string>> getAlexAnimations () {
-    return {
+std::vector<std::vector<std::string>> getAlexAnimations (std::string season) {
+    if (season == "Winter") {
+        return {
+        {"npc/Alex_Winter/Alex_Winter-8.png", "npc/Alex_Winter/Alex_Winter-9.png", "npc/Alex_Winter/Alex_Winter-10.png", "npc/Alex_Winter/Alex_Winter-11.png"},
+        {"npc/Alex_Winter/Alex_Winter-0.png", "npc/Alex_Winter/Alex_Winter-1.png", "npc/Alex_Winter/Alex_Winter-2.png", "npc/Alex_Winter/Alex_Winter-3.png"},
+        {"npc/Alex_Winter/Alex_Winter-14.png", "npc/Alex_Winter/Alex_Winter-13.png", "npc/Alex_Winter/Alex_Winter-14.png", "npc/Alex_Winter/Alex_Winter-15.png"},
+        {"npc/Alex_Winter/Alex_Winter-4.png", "npc/Alex_Winter/Alex_Winter-5.png", "npc/Alex_Winter/Alex_Winter-6.png", "npc/Alex_Winter/Alex_Winter-7.png"}
+        };
+    }
+    else if (season == "Beach") {
+        return {
+        {"npc/Alex_Beach/Alex_Beach-8.png", "npc/Alex_Beach/Alex_Beach-9.png", "npc/Alex_Beach/Alex_Beach-10.png", "npc/Alex_Beach/Alex_Beach-11.png"},
+        {"npc/Alex_Beach/Alex_Beach-0.png", "npc/Alex_Beach/Alex_Beach-1.png", "npc/Alex_Beach/Alex_Beach-2.png", "npc/Alex_Beach/Alex_Beach-3.png"},
+        {"npc/Alex_Beach/Alex_Beach-14.png", "npc/Alex_Beach/Alex_Beach-13.png", "npc/Alex_Beach/Alex_Beach-14.png", "npc/Alex_Beach/Alex_Beach-15.png"},
+        {"npc/Alex_Beach/Alex_Beach-4.png", "npc/Alex_Beach/Alex_Beach-5.png", "npc/Alex_Beach/Alex_Beach-6.png", "npc/Alex_Beach/Alex_Beach-7.png"}
+        };
+    }
+    else {
+        return {
         {"npc/Alex/Alex-8.png", "npc/Alex/Alex-9.png", "npc/Alex/Alex-10.png", "npc/Alex/Alex-11.png"},
         {"npc/Alex/Alex-0.png", "npc/Alex/Alex-1.png", "npc/Alex/Alex-2.png", "npc/Alex/Alex-3.png"},
         {"npc/Alex/Alex-14.png", "npc/Alex/Alex-13.png", "npc/Alex/Alex-14.png", "npc/Alex/Alex-15.png"},
         {"npc/Alex/Alex-4.png", "npc/Alex/Alex-5.png", "npc/Alex/Alex-6.png", "npc/Alex/Alex-7.png"}
-    };
+        };
+    }
 }
 
 // 获取 Caroline 动画信息的函数
-std::vector<std::vector<std::string>> getCarolineAnimations () {
-    return {
+std::vector<std::vector<std::string>> getCarolineAnimations (std::string season) {
+    if (season == "Winter") {
+        return {
+        {"npc/Caroline_Winter/Caroline_Winter-8.png", "npc/Caroline_Winter/Caroline_Winter-9.png", "npc/Caroline_Winter/Caroline_Winter-10.png", "npc/Caroline_Winter/Caroline_Winter-11.png"},
+        {"npc/Caroline_Winter/Caroline_Winter-0.png", "npc/Caroline_Winter/Caroline_Winter-1.png", "npc/Caroline_Winter/Caroline_Winter-2.png", "npc/Caroline_Winter/Caroline_Winter-3.png"},
+        {"npc/Caroline_Winter/Caroline_Winter-14.png", "npc/Caroline_Winter/Caroline_Winter-13.png", "npc/Caroline_Winter/Caroline_Winter-14.png", "npc/Caroline_Winter/Caroline_Winter-15.png"},
+        {"npc/Caroline_Winter/Caroline_Winter-4.png", "npc/Caroline_Winter/Caroline_Winter-5.png", "npc/Caroline_Winter/Caroline_Winter-6.png", "npc/Caroline_Winter/Caroline_Winter-7.png"}
+        };
+    }
+    else if (season == "Beach") {
+        return {
+        {"npc/Caroline_Beach/Caroline_Beach-8.png", "npc/Caroline_Beach/Caroline_Beach-9.png", "npc/Caroline_Beach/Caroline_Beach-10.png", "npc/Caroline_Beach/Caroline_Beach-11.png"},
+        {"npc/Caroline_Beach/Caroline_Beach-0.png", "npc/Caroline_Beach/Caroline_Beach-1.png", "npc/Caroline_Beach/Caroline_Beach-2.png", "npc/Caroline_Beach/Caroline_Beach-3.png"},
+        {"npc/Caroline_Beach/Caroline_Beach-14.png", "npc/Caroline_Beach/Caroline_Beach-13.png", "npc/Caroline_Beach/Caroline_Beach-14.png", "npc/Caroline_Beach/Caroline_Beach-15.png"},
+        {"npc/Caroline_Beach/Caroline_Beach-4.png", "npc/Caroline_Beach/Caroline_Beach-5.png", "npc/Caroline_Beach/Caroline_Beach-6.png", "npc/Caroline_Beach/Caroline_Beach-7.png"}
+        };
+    }
+    else {
+        return {
         {"npc/Caroline/Caroline-8.png", "npc/Caroline/Caroline-9.png", "npc/Caroline/Caroline-10.png", "npc/Caroline/Caroline-11.png"},
         {"npc/Caroline/Caroline-0.png", "npc/Caroline/Caroline-1.png", "npc/Caroline/Caroline-2.png", "npc/Caroline/Caroline-3.png"},
         {"npc/Caroline/Caroline-14.png", "npc/Caroline/Caroline-13.png", "npc/Caroline/Caroline-14.png", "npc/Caroline/Caroline-15.png"},
         {"npc/Caroline/Caroline-4.png", "npc/Caroline/Caroline-5.png", "npc/Caroline/Caroline-6.png", "npc/Caroline/Caroline-7.png"}
-    };
+        };
+    }
 }
 
 // 获取 Elliott 动画信息的函数
-std::vector<std::vector<std::string>> getElliottAnimations () {
-    return {
+std::vector<std::vector<std::string>> getElliottAnimations (std::string season) {
+    if (season == "Winter") {
+        return {
+        {"npc/Elliott_Winter/Elliott_Winter-8.png", "npc/Elliott_Winter/Elliott_Winter-9.png", "npc/Elliott_Winter/Elliott_Winter-10.png", "npc/Elliott_Winter/Elliott_Winter-11.png"},
+        {"npc/Elliott_Winter/Elliott_Winter-0.png", "npc/Elliott_Winter/Elliott_Winter-1.png", "npc/Elliott_Winter/Elliott_Winter-2.png", "npc/Elliott_Winter/Elliott_Winter-3.png"},
+        {"npc/Elliott_Winter/Elliott_Winter-14.png", "npc/Elliott_Winter/Elliott_Winter-13.png", "npc/Elliott_Winter/Elliott_Winter-14.png", "npc/Elliott_Winter/Elliott_Winter-15.png"},
+        {"npc/Elliott_Winter/Elliott_Winter-4.png", "npc/Elliott_Winter/Elliott_Winter-5.png", "npc/Elliott_Winter/Elliott_Winter-6.png", "npc/Elliott_Winter/Elliott_Winter-7.png"}
+        };
+    }
+    else if (season == "Beach") {
+        return {
+        {"npc/Elliott_Beach/Elliott_Beach-8.png", "npc/Elliott_Beach/Elliott_Beach-9.png", "npc/Elliott_Beach/Elliott_Beach-10.png", "npc/Elliott_Beach/Elliott_Beach-11.png"},
+        {"npc/Elliott_Beach/Elliott_Beach-0.png", "npc/Elliott_Beach/Elliott_Beach-1.png", "npc/Elliott_Beach/Elliott_Beach-2.png", "npc/Elliott_Beach/Elliott_Beach-3.png"},
+        {"npc/Elliott_Beach/Elliott_Beach-14.png", "npc/Elliott_Beach/Elliott_Beach-13.png", "npc/Elliott_Beach/Elliott_Beach-14.png", "npc/Elliott_Beach/Elliott_Beach-15.png"},
+        {"npc/Elliott_Beach/Elliott_Beach-4.png", "npc/Elliott_Beach/Elliott_Beach-5.png", "npc/Elliott_Beach/Elliott_Beach-6.png", "npc/Elliott_Beach/Elliott_Beach-7.png"}
+        };
+    }
+    else {
+        return {
         {"npc/Elliott/Elliott-8.png", "npc/Elliott/Elliott-9.png", "npc/Elliott/Elliott-10.png", "npc/Elliott/Elliott-11.png"},
         {"npc/Elliott/Elliott-0.png", "npc/Elliott/Elliott-1.png", "npc/Elliott/Elliott-2.png", "npc/Elliott/Elliott-3.png"},
         {"npc/Elliott/Elliott-14.png", "npc/Elliott/Elliott-13.png", "npc/Elliott/Elliott-14.png", "npc/Elliott/Elliott-15.png"},
         {"npc/Elliott/Elliott-4.png", "npc/Elliott/Elliott-5.png", "npc/Elliott/Elliott-6.png", "npc/Elliott/Elliott-7.png"}
-    };
+        };
+    }
 }
 
 // 获取 Emily 动画信息的函数
-std::vector<std::vector<std::string>> getEmilyAnimations () {
-    return {
+std::vector<std::vector<std::string>> getEmilyAnimations (std::string season) {
+    if (season == "Winter") {
+        return {
+        {"npc/Emily_Winter/Emily_Winter-8.png", "npc/Emily_Winter/Emily_Winter-9.png", "npc/Emily_Winter/Emily_Winter-10.png", "npc/Emily_Winter/Emily_Winter-11.png"},
+        {"npc/Emily_Winter/Emily_Winter-0.png", "npc/Emily_Winter/Emily_Winter-1.png", "npc/Emily_Winter/Emily_Winter-2.png", "npc/Emily_Winter/Emily_Winter-3.png"},
+        {"npc/Emily_Winter/Emily_Winter-14.png", "npc/Emily_Winter/Emily_Winter-13.png", "npc/Emily_Winter/Emily_Winter-14.png", "npc/Emily_Winter/Emily_Winter-15.png"},
+        {"npc/Emily_Winter/Emily_Winter-4.png", "npc/Emily_Winter/Emily_Winter-5.png", "npc/Emily_Winter/Emily_Winter-6.png", "npc/Emily_Winter/Emily_Winter-7.png"}
+        };
+    }
+    else if (season == "Beach") {
+        return {
+        {"npc/Emily_Beach/Emily_Beach-8.png", "npc/Emily_Beach/Emily_Beach-9.png", "npc/Emily_Beach/Emily_Beach-10.png", "npc/Emily_Beach/Emily_Beach-11.png"},
+        {"npc/Emily_Beach/Emily_Beach-0.png", "npc/Emily_Beach/Emily_Beach-1.png", "npc/Emily_Beach/Emily_Beach-2.png", "npc/Emily_Beach/Emily_Beach-3.png"},
+        {"npc/Emily_Beach/Emily_Beach-14.png", "npc/Emily_Beach/Emily_Beach-13.png", "npc/Emily_Beach/Emily_Beach-14.png", "npc/Emily_Beach/Emily_Beach-15.png"},
+        {"npc/Emily_Beach/Emily_Beach-4.png", "npc/Emily_Beach/Emily_Beach-5.png", "npc/Emily_Beach/Emily_Beach-6.png", "npc/Emily_Beach/Emily_Beach-7.png"}
+        };
+    }
+    else {
+        return {
         {"npc/Emily/Emily-8.png", "npc/Emily/Emily-9.png", "npc/Emily/Emily-10.png", "npc/Emily/Emily-11.png"},
         {"npc/Emily/Emily-0.png", "npc/Emily/Emily-1.png", "npc/Emily/Emily-2.png", "npc/Emily/Emily-3.png"},
         {"npc/Emily/Emily-14.png", "npc/Emily/Emily-13.png", "npc/Emily/Emily-14.png", "npc/Emily/Emily-15.png"},
         {"npc/Emily/Emily-4.png", "npc/Emily/Emily-5.png", "npc/Emily/Emily-6.png", "npc/Emily/Emily-7.png"}
-    };
+        };
+    }
+}
+
+// 获取节日时的 Fisherman 的图函数
+std::vector<std::string> getFisherman ( std::string season ) {
+    if (season == "Summer") {
+        return{
+            "npc/Assorted_Fishermen/Assorted_Fishermen-0.png","npc/Assorted_Fishermen/Assorted_Fishermen-1.png",
+            "npc/Assorted_Fishermen/Assorted_Fishermen-2.png","npc/Assorted_Fishermen/Assorted_Fishermen-3.png"
+        };
+    }
+    else if (season == "Winter") {
+        return{
+            "npc/Assorted_Fishermen_Winter/Assorted_Fishermen_Winter-0.png","npc/Assorted_Fishermen_Winter/Assorted_Fishermen_Winter-1.png",
+            "npc/Assorted_Fishermen_Winter/Assorted_Fishermen_Winter-2.png","npc/Assorted_Fishermen_Winter/Assorted_Fishermen_Winter-3.png"
+        };
+    }
+    return {};
 }

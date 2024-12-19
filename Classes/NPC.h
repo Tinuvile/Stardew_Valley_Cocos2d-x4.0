@@ -55,16 +55,20 @@ protected:
 };
 
 
-std::vector<std::vector<std::string>> getAbigailAnimations ();
-
 std::vector<std::vector<std::string>> getDialog ( std::string npc , std::string relation_ship );
+
+std::vector<std::vector<std::string>> getFestivalDialog ( std::string npc , std::string relation_ship );
 
 std::string getNPCportraits ( std::string name , std::string status );
 
-std::vector<std::vector<std::string>> getAlexAnimations ();
+std::vector<std::vector<std::string>> getAbigailAnimations ( std::string season );
 
-std::vector<std::vector<std::string>> getCarolineAnimations ();
+std::vector<std::vector<std::string>> getAlexAnimations ( std::string season );
 
-std::vector<std::vector<std::string>> getElliottAnimations ();
+std::vector<std::vector<std::string>> getCarolineAnimations ( std::string season );
 
-std::vector<std::vector<std::string>> getEmilyAnimations ();
+std::vector<std::vector<std::string>> getElliottAnimations ( std::string season );
+
+std::vector<std::vector<std::string>> getEmilyAnimations ( std::string season );
+
+std::vector<std::string> getFisherman ( std::string season );

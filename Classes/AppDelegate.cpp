@@ -28,7 +28,7 @@ USING_NS_CC;  // 使用cocos2d的命名空间
 /******************************** 全局变量声明区 ****************************************/
 // 在此文件中定义并初始化全局变量
 int remainingTime = 0;
-int day = 1;
+int day = 3;
 int GoldAmount = 4000;
 bool frombed = true;
 bool IsNextDay = false;
@@ -39,7 +39,7 @@ Crop potato ( "potato" , "crop/potato1.png" , "crop/potato2.png" , "crop/potato3
 Crop pumpkin ( "pumpkin" , "crop/pumpkin1.png" , "crop/pumpkin2.png" , "crop/pumpkin3.png" , "Autumn" , Phase::SEED , 70 , 0 , false , 6 );
 Crop blueberry ( "blueberry" , "crop/blueberry1.png" , "crop/blueberry2.png" , "crop/blueberry3.png" , "Summer" , Phase::SEED , 100 , 0 , false , 7 );
 
-std::string Season = "Spring";
+std::string Season = "Summer";
 std::string Weather = "Rainy";
 std::string Festival = "Fishing Festival";
 std::map<std::string , int> season;
