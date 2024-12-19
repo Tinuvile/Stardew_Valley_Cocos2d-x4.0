@@ -129,9 +129,9 @@ void mailBoxUI::taskDisplay ( TaskManagement& taskManager ) {
 
     // 计算总高度  
     float totalItemHeight = 0;
-    const int itemCount = 5; // 任务数量  
-    const float itemHeight = 500; // 每个高度  
-    totalItemHeight = itemCount * itemHeight; // 计算总高度  
+    static int TasksNUm = taskManager.returnTaskNUMs ();// 任务数量  
+    const float itemHeight = 850; // 每个高度  
+    totalItemHeight = TasksNUm * itemHeight; // 计算总高度  
 
     // 设置内部容器的大小  
     scrollView->setInnerContainerSize ( Size ( 1630 , totalItemHeight ) ); // 设置内部容器的大小
