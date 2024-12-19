@@ -110,7 +110,13 @@ void NPCtalkUI::backgroundcreate () {
         this->addChild ( dialogBox , 1 );
     }
     //Í·Ïñ
-    std::string photo = getNPCportraits ( npc->GetName () , "Normal" );
+    std::string photo;
+    if (Season == "Spring" || Season == "Autumn") {
+        photo = getNPCportraits ( npc->GetName () , "Normal" );
+    }
+    else {
+        photo = getNPCportraits ( npc->GetName () , Season + "Normal" );
+    }
     auto characterPhoto = Sprite::create ( photo );
 
     float originalWidth = characterPhoto->getContentSize ().width;

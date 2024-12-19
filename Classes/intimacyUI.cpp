@@ -130,11 +130,20 @@ void intimacyUI::backgroundcreate () {
 
         }
     }
-    characterInfo ( "Abigail" , "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty + visibleSize.height * 0.2215 ) );
-    characterInfo ( "Alex" , "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty + visibleSize.height * 0.1165 ) );
-    characterInfo ( "Caroline" , "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty + visibleSize.height * 0.0115 ) );
-    characterInfo ( "Elliott" , "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty - visibleSize.height * 0.0935 ) );
-    characterInfo ( "Emily" , "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty - visibleSize.height * 0.1985 ) );
+    if (Season == "Spring" || Season == "Autumn") {
+        characterInfo ( "Abigail" , "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty + visibleSize.height * 0.2215 ) );
+        characterInfo ( "Alex" , "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty + visibleSize.height * 0.1165 ) );
+        characterInfo ( "Caroline" , "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty + visibleSize.height * 0.0115 ) );
+        characterInfo ( "Elliott" , "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty - visibleSize.height * 0.0935 ) );
+        characterInfo ( "Emily" , "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty - visibleSize.height * 0.1985 ) );
+    }
+    else {
+        characterInfo ( "Abigail" , Season + "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty + visibleSize.height * 0.2215 ) );
+        characterInfo ( "Alex" , Season + "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty + visibleSize.height * 0.1165 ) );
+        characterInfo ( "Caroline" , Season + "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty + visibleSize.height * 0.0115 ) );
+        characterInfo ( "Elliott" , Season + "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty - visibleSize.height * 0.0935 ) );
+        characterInfo ( "Emily" , Season + "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty - visibleSize.height * 0.1985 ) );
+    }
 
     intimacyDisplay ( "Abigail" , Vec2 ( currentx - visibleSize.width * 0.09 , currenty + visibleSize.height * 0.217 ) );
     intimacyDisplay ( "Alex" , Vec2 ( currentx - visibleSize.width * 0.09 , currenty + visibleSize.height * 0.112 ) );
