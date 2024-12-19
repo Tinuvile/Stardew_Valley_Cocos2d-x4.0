@@ -90,10 +90,10 @@ void DailyRecordUI::backgroundcreate () {
     darkLayer->setPosition ( Vec2 ( currentx , currenty ) - visibleSize  );// ÉèÖÃÕÚÕÖ²ãµÄÎ»ÖÃ
     this->addChild ( darkLayer , 0 );
     //´ó¿ò¼Ü
-    auto DailyRecord = Sprite::create ( "UIresource/rizhi/renwu3.png" );
+    auto DailyRecord = Sprite::create ( "UIresource/rizhi/renwu4.png" );
     if (DailyRecord == nullptr)
     {
-        problemLoading ( "'renwu3.png'" );
+        problemLoading ( "'renwu4.png'" );
     }
     else
     {
@@ -129,7 +129,7 @@ void DailyRecordUI::close () {
         float scaleX = visibleSize.width / originalWidth;
         float scaleY = visibleSize.height / originalHeight;
         float scale = std::min ( scaleX , scaleY );
-        closeIcon->setScale ( scale / 40 );
+        closeIcon->setScale ( scale / 20.5 );
         closeIcon->setPosition ( Vec2 ( currentx + visibleSize.width * 0.45 , currenty + visibleSize.height * 0.4 ) );
 
         this->addChild ( closeIcon , 1 );

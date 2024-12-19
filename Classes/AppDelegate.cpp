@@ -144,20 +144,20 @@ void AppDelegate::runScene(cocos2d::Director* director) {
     T_lastplace.insert(std::make_pair(key, false));
 
     // 运行农场
-    //auto farm = farm::create ();
-    //director->runWithScene ( farm );
+    /*auto farm = farm::create ();
+    director->runWithScene ( farm );*/
 
     //运行海滩场景
-   /* auto beach = Beach::create ();
-    director->runWithScene ( beach );*/
+    auto beach = Beach::create ();
+    director->runWithScene ( beach );
 
     // 运行家的场景
     //auto test = Myhouse::create();
     //director->runWithScene(test); 
 
     // 运行小镇的场景
-    auto test = Town::create();
-    director->runWithScene(test);
+    //auto test = Town::create ();
+    //director->runWithScene(test);
 
     // 运行商店的场景
     //auto test = supermarket::create();
@@ -254,26 +254,43 @@ void AppDelegate::Initialize () {
     key = { "farm",Vec2(1150, 2650) };
     W_lastplace.insert(std::make_pair(key, false));
 
-
     // 创建任务  
-    TaskManagement::Task task1("Fetch the Amethyst", TaskManagement::NPC_TASK);
+    TaskManagement::Task task1 (
+        "Fetch the Amethyst" ,
+        TaskManagement::NPC_TASK ,
+        "Retrieve the Amethyst for Abigail." , // 详细说明  
+        "Spring" , // 初始日期  
+        "Summer"  // 截至日期  
+    );
     task1.npcName = "Abigail"; // 发布任务的 NPC 名字  
-    task1.requiredItems.push_back(amethyst); // 需要的物品  
+    task1.requiredItems.push_back ( amethyst ); // 需要的物品  
     task1.rewardCoins = 500; // 奖励金币  
     task1.relationshipPoints = 10; // NPC 好感度  
 
-    TaskManagement::Task task2("Collect Emerald", TaskManagement::SYSTEM_TASK);
-    task2.requiredItems.push_back(emerald); // 需要的物品  
+    TaskManagement::Task task2 (
+        "Collect Emerald" ,
+        TaskManagement::SYSTEM_TASK ,
+        "Collect an Emerald for system tasks." , // 详细说明  
+        "Summer" , // 初始日期  
+        "Autumn"  // 截至日期  
+    );
+    task2.requiredItems.push_back ( emerald ); // 需要的物品  
     task2.rewardCoins = 30; // 奖励金币  
 
-    TaskManagement::Task task3("Festival Gathering", TaskManagement::FESTIVAL_TASK);
-    task3.specialRewards.push_back(Gold_Hoe);   // 特殊奖励  
+    TaskManagement::Task task3 (
+        "Festival Gathering" ,
+        TaskManagement::FESTIVAL_TASK ,
+        "Join the festival and collect special items." , // 详细说明  
+        "Winter" , // 初始日期  
+        "Summer"  // 截至日期  
+    );
+    task3.specialRewards.push_back ( Gold_Hoe );   // 特殊奖励  
     task3.relationshipPoints = 5; // 与所有人的好感度  
 
     // 将任务添加到任务管理器  
-    //taskManager->createTask(task1);
-    //taskManager->createTask(task2);
-    //taskManager->createTask(task3);
+    taskManager->createTask ( task1 );
+    taskManager->createTask ( task2 );
+    taskManager->createTask ( task3 );
 
     //初始化Barn内可放置家畜矩阵
     barn_space.push_back(std::make_pair(Rect(685.714294, 213.333328, 114.285713, 106.666664), false));
