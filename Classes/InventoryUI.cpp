@@ -110,6 +110,33 @@ void InventoryUI::backgroundcreate(){
         bag->setPosition ( Vec2 ( currentx , currenty ) );
         this->addChild ( bag , 0 );
     }
+
+    //人物形象
+    auto CharacterDisplay = Sprite::create ( "character1/player_down3.png" );
+    if (CharacterDisplay == nullptr)
+    {
+        problemLoading ( "'character1/player_down3.png'" );
+    }
+    else
+    {
+        float originalWidth = CharacterDisplay->getContentSize ().width;
+        float originalHeight = CharacterDisplay->getContentSize ().height;
+        float scaleX = visibleSize.width / originalWidth;
+        float scaleY = visibleSize.height / originalHeight;
+        float scale = std::min ( scaleX , scaleY );
+        CharacterDisplay->setScale ( scale / 7.5 );
+        CharacterDisplay->setPosition ( Vec2 ( currentx - visibleSize.width * 0.2 , currenty - visibleSize.height * 0.12 ) );
+        this->addChild ( CharacterDisplay , 0 );
+    }
+    auto NameDisplay = Label::createWithTTF ( protagonistName , "fonts/Marker Felt.ttf" , 45 );
+    NameDisplay->setTextColor ( Color4B::BLACK );
+    NameDisplay->setPosition ( Vec2 ( currentx + visibleSize.width * 0.1 , currenty - visibleSize.height * 0.07 ) );
+    this->addChild ( NameDisplay , 4 );
+
+    auto FarmNameDisplay = Label::createWithTTF ( FarmName , "fonts/Marker Felt.ttf" , 45 );
+    FarmNameDisplay->setTextColor ( Color4B::BLACK );
+    FarmNameDisplay->setPosition ( Vec2 ( currentx + visibleSize.width * 0.1 , currenty - visibleSize.height * 0.15 ) );
+    this->addChild ( FarmNameDisplay , 4 );
 }
 
 void InventoryUI::Itemblock ( Inventory* inventory ) {
@@ -163,16 +190,6 @@ bool InventoryUI::init ( Inventory* inventory , std::string sceneName ) {
     Itemblock ( inventory );
 
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
-
-    // 初始化物品信息标签（用于调试）  
-    _itemLabel = Label::createWithSystemFont ( "Selected: None" , "Arial" , 24 );
-    if (_itemLabel) {
-        _itemLabel->setPosition ( visibleSize.width / 2 , visibleSize.height / 4 );
-        this->addChild ( _itemLabel , 10 ); // 添加到层级中  
-    }
-    else {
-        CCLOG ( "Failed to create _itemLabel" );
-    }
 
     updateDisplay (); // 更新显示内容  
 

@@ -43,3 +43,15 @@ void TaskManagement::completeTask ( const Task& task ) {
     tasks.erase ( it );
     acceptTasks.erase ( it );
 }
+
+
+//任务接受后从发布任务中删除
+void TaskManagement::DeleteAcceptTask ( const Task& task ) {
+    // 从 Tasks 中删除任务
+    tasks.erase ( std::remove_if ( tasks.begin () , tasks.end () ,
+        [&task]( const Task& t ) {
+            return t.name == task.name && t.npcName == task.npcName && t.type == task.type;  // 根据多个条件进行匹配
+        } ) ,
+        tasks.end () );
+}
+

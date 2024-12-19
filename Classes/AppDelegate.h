@@ -94,6 +94,10 @@ extern Crop potato;
 extern Crop pumpkin;
 extern Crop blueberry;
 
+//人物基本信息
+extern std::string protagonistName;
+extern std::string FarmName;
+
 extern Player* player1;  // 声明指针变量，不初始化
 extern SkillTree* skill_tree;
 extern mini_bag* miniBag;

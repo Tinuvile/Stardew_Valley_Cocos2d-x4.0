@@ -51,6 +51,9 @@ public:
 	// 完成任务并处理奖励  
 	void completeTask ( const Task& task );
 
+	//任务接受后从发布任务中删除
+	void DeleteAcceptTask ( const Task& task );
+
 protected:
 
 	std::vector<Task> tasks;              // 存储任务的容器

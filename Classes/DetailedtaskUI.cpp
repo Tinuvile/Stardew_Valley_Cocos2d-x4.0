@@ -147,6 +147,38 @@ void DetailedtaskUI::displayTask ( TaskManagement::Task task ) {
 
     // 将标签添加到Layer中  
     this->addChild ( taskMessage , 2 );
+
+    //确定接受任务
+    auto OK = ui::Button::create ( "UIresource/create/OK.png" , "UIresource/create/OK.png" );
+    float originalWidth = OK->getContentSize ().width;
+    float originalHeight = OK->getContentSize ().height;
+    float scaleX = visibleSize.x / originalWidth;
+    float scaleY = visibleSize.y / originalHeight;
+    float scale = std::min ( scaleX , scaleY );
+    OK->setScale ( scale / 8 );
+    auto listener = EventListenerMouse::create ();
+    listener->onMouseMove = [this , OK , scale]( EventMouse* event ) {
+        Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
+        mousePos = this->convertToNodeSpace ( mousePos );
+        if (OK->getBoundingBox ().containsPoint ( mousePos )) {
+            OK->setScale ( scale / 8 * 1.2f );
+        }
+        else
+            OK->setScale ( scale / 8 );
+        };
+    listener->onMouseDown = [this , OK , task]( EventMouse* event ) {
+        Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
+        mousePos = this->convertToNodeSpace ( mousePos );
+        taskManager->AddAcceptTask ( task );
+        taskManager->DeleteAcceptTask ( task );
+        this->removeFromParent ();
+        Scene* currentScene = Director::getInstance ()->getRunningScene ();
+        currentScene->addChild ( mailBoxUI::create () , 20 );
+        };
+    _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , OK );
+
+    OK->setPosition ( Vec2 ( currentx + visibleSize.x * 0.4 , currenty - visibleSize.y * 0.23 ) );
+    this->addChild ( OK , 2 );
 }
 
 bool DetailedtaskUI::init ( TaskManagement::Task task ) {
