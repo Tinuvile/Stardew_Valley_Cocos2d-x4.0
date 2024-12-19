@@ -14,7 +14,7 @@ Town::~Town() {}
 
 bool Town::init()
 {
-    /*inventory->AddItem ( AnimalDuck , 12 );*/
+    inventory->AddItem ( AnimalDuck , 12 );
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();

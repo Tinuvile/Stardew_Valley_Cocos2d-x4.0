@@ -228,7 +228,7 @@ void intimacyUI::intimacyDisplay ( const string& name , Vec2 Pos ) {
         auto IsTalked = Sprite::create ( "UIresource/qinmidu/is.png" );
         if (IsTalked == nullptr)
         {
-            problemLoading ( "'intimacyDisplay.png'" );
+            problemLoading ( "'is.png'" );
         }
         else
         {
@@ -242,6 +242,39 @@ void intimacyUI::intimacyDisplay ( const string& name , Vec2 Pos ) {
             IsTalked->setPosition ( Vec2 ( Pos.x + visibleSize.width * 0.374 , Pos.y - 27 ) );
 
             this->addChild ( IsTalked , 3 );
+        }
+    }
+
+    //送礼显示
+    int GiftTime = 0;
+    CCLOG ( "%d" , NPC_RELATIONSHIP->NpcGiftTIme ( name ) );
+    if (NPC_RELATIONSHIP->NpcGiftTIme ( name ) > 0)
+    {
+        if (NPC_RELATIONSHIP->NpcGiftTIme ( name ) >= 2) {
+            GiftTime = 2;
+        }
+        else
+            GiftTime = 1;
+        for (int i = 0; i < GiftTime; i++)
+        {
+            auto IsGifted = Sprite::create ( "UIresource/qinmidu/is.png" );
+            if (IsGifted == nullptr)
+            {
+                problemLoading ( "'is.png'" );
+            }
+            else
+            {
+                float originalWidth = IsGifted->getContentSize ().width;
+                float originalHeight = IsGifted->getContentSize ().height;
+                float scaleX = visibleSize.width / originalWidth;
+                float scaleY = visibleSize.height / originalHeight;
+                // 选择最小的缩放比例，以保证图片完全显示在屏幕上且不变形
+                float scale = std::min ( scaleX , scaleY );
+                IsGifted->setScale ( scale * 0.026 );
+                IsGifted->setPosition ( Vec2 ( Pos.x + visibleSize.width * 0.271 + i * 50.0f , Pos.y - 27 ) );
+
+                this->addChild ( IsGifted , 3 );
+            }
         }
     }
 }
