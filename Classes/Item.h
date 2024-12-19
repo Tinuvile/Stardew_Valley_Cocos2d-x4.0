@@ -18,7 +18,8 @@ public:
     const int max_count_in_one_grid;
 
     Item(const Item& other);
-    virtual ~Item() {}
+
+    virtual ~Item () {};
 
     //返回对应Item的name
     const std::string& GetName() const { return name; }

@@ -19,6 +19,10 @@ farm::~farm() {}
 
 bool farm::init ()
 {
+    auto test_milk = Food::create ( FoodType::Milk );
+    inventory->AddItem ( *test_milk , 3 );
+    inventory->DisplayPackageInCCLOG ();
+
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     Vec2 origin = Director::getInstance ()->getVisibleOrigin ();
 
@@ -185,7 +189,7 @@ bool farm::init ()
     auto listenerWithPlayer = EventListenerKeyboard::create ();
     listenerWithPlayer->onKeyPressed = [this]( EventKeyboard::KeyCode keyCode , Event* event )
         {
-            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER || keyCode == EventKeyboard::KeyCode::KEY_ENTER) {
+            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER || keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER) {
                 isEnterKeyPressed = true;
                 CCLOG ( "Enter key pressed. " );
             }
@@ -485,6 +489,7 @@ void farm::checkPlayerPosition()
                         cocos2d::log("find crop");
                         // 判断是否符合种植的季节
                         if (((cropbasicinformation[TypeName].GetSeason() == Season) || (cropbasicinformation[TypeName].GetSeason() == "All")) && strength >= 10) {
+                            inventory->RemoveItem ( *temp );
 
                             strength -= 10;
                             TimeUI->StrengthValue->setScaleY(strength / 100.0 * 16.5f);

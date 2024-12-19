@@ -25,9 +25,14 @@ public:
 	//构造函数
 	Food ( const std::string& name , const std::string& path1 , const int value , int energy , int num_limit = 99 );
 
+	//复制构造函数
+	Food ( const Food& other ) :Item ( other ) , energy ( other.energy ) {};
+
 	static std::shared_ptr<Food> create ( FoodType type );
 	
 	virtual ~Food () {};
+
+	virtual std::shared_ptr<Item> GetCopy () const;
 
 	int GetEnergy () const { return energy; }
 

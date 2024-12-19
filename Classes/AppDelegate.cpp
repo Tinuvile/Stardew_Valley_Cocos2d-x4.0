@@ -146,8 +146,8 @@ void AppDelegate::runScene(cocos2d::Director* director) {
     T_lastplace.insert(std::make_pair(key, false));
 
     // 运行农场
-    /*auto farm = farm::create ();
-    director->runWithScene ( farm );*/
+    auto farm = farm::create ();
+    director->runWithScene ( farm );
 
     //运行海滩场景
     /*auto beach = Beach::create ();
@@ -158,16 +158,16 @@ void AppDelegate::runScene(cocos2d::Director* director) {
     //director->runWithScene(test); 
 
     // 运行小镇的场景
-   auto test = Town::create ();
-    director->runWithScene(test);
+   /* auto test = Town::create ();
+    director->runWithScene(test);*/
 
     // 运行商店的场景
     //auto test = supermarket::create();
     //director->runWithScene(test);
 
     // 运行Cave
-    // auto test = Cave::create();
-    // director->runWithScene(test);
+     //auto test = Cave::create();
+     //director->runWithScene(test);
 
     // 运行Beach
     // auto test = Beach::create();

@@ -14,6 +14,9 @@ Cave::~Cave() {}
 
 bool Cave::init()
 {
+    auto test_milk = Food::create ( FoodType::Milk );
+    inventory->AddItem ( *test_milk , 3 );
+
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
