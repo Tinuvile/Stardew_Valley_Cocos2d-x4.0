@@ -146,25 +146,13 @@ bool Beach::init ()
 
     // 设置键盘监听器
     auto listenerWithPlayer = EventListenerKeyboard::create ();
-    listenerWithPlayer->onKeyPressed = [this]( EventKeyboard::KeyCode keyCode , Event* event )
-        {
-            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER || keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER) {
-                isEnterKeyPressed = true;
-                CCLOG ( "Enter key pressed. " );
-            }
-        };
-
-    listenerWithPlayer->onKeyReleased = [this]( EventKeyboard::KeyCode keyCode , Event* event )
-        {
-            // 释放 Enter 键时，设置为 false
-            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER || keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER) {
-                isEnterKeyPressed = false;
-            }
-        };
 
     listenerWithPlayer->onKeyPressed = [this]( EventKeyboard::KeyCode key_code , Event* event ) {
-        if (key_code == EventKeyboard::KeyCode::KEY_H) {
-
+        if (key_code == EventKeyboard::KeyCode::KEY_ENTER || key_code == EventKeyboard::KeyCode::KEY_KP_ENTER) {
+            isEnterKeyPressed = true;
+            CCLOG ( "Enter key pressed. " );
+        }
+        else if (key_code == EventKeyboard::KeyCode::KEY_H) {
             if (!this->getChildByName ( "FishingGameLayer" )) {
                 //将钓鱼游戏界面加入场景中
                 auto fishing_game = FishingGame::create ( player1->getPosition () );
@@ -193,6 +181,16 @@ bool Beach::init ()
             }
         }
         };
+
+    listenerWithPlayer->onKeyReleased = [this]( EventKeyboard::KeyCode keyCode , Event* event )
+        {
+            // 释放 Enter 键时，设置为 false
+            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER || keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER) {
+                isEnterKeyPressed = false;
+            }
+        };
+
+ 
 
     // 将监听器添加到事件分发器中
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listenerWithPlayer , this );
@@ -356,11 +354,11 @@ void Beach::CheckPlayerPosition ()
     miniBag->setPosition ( currentx , currenty );
     TimeUI->setPosition ( currentx , currenty );
 
-    // 是否进入农场
+    // 是否进入小镇
     if (Out_Beach.containsPoint ( playerPos )) {
         if (isEnterKeyPressed) {
             player1->removeFromParent ();
-            auto NextSence = farm::create ();
+            auto NextSence = Town::create ();
             Director::getInstance ()->replaceScene ( NextSence );
         }
     }

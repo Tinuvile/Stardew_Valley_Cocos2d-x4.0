@@ -68,7 +68,7 @@ std::vector<Livestock*> livestocks;
 SkillTree* skill_tree = new SkillTree ();
 
 // 创建任务管理器
-//TaskManagement* taskManager = new TaskManagement();
+TaskManagement* taskManager = new TaskManagement();
 /****************************************************************************************/
 
 

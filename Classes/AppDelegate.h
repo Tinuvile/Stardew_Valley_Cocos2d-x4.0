@@ -37,7 +37,7 @@
 #include "NPCtalkUI.h"
 #include "NpcRelationship.h"
 #include "intimacyUI.h"
-//#include "TaskManagement.h"
+#include "TaskManagement.h"
 
 #include "StoreUI.h"
 #include "EconomicSystem.h"
