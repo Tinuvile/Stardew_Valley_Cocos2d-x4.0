@@ -2,7 +2,7 @@
 #include "cocos2d.h"
 #include <string>
 
-//抽象物品基类
+//物品基类
 class Item {
 protected:
     std::string name;

@@ -177,7 +177,7 @@ bool farm::init ()
     auto listenerWithPlayer = EventListenerKeyboard::create ();
     listenerWithPlayer->onKeyPressed = [this]( EventKeyboard::KeyCode keyCode , Event* event )
         {
-            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER) {
+            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER || keyCode == EventKeyboard::KeyCode::KEY_ENTER) {
                 isEnterKeyPressed = true;
                 CCLOG ( "Enter key pressed. " );
             }
@@ -214,7 +214,7 @@ bool farm::init ()
     listenerWithPlayer->onKeyReleased = [this]( EventKeyboard::KeyCode keyCode , Event* event )
         {
             // 释放 Enter 键时，设置为 false
-            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER) {
+            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER || keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER) {
                 isEnterKeyPressed = false;
             }
             else if (keyCode == EventKeyboard::KeyCode::KEY_P) {

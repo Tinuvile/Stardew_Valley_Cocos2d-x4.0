@@ -94,6 +94,7 @@ extern Crop corn;
 extern Crop potato;
 extern Crop pumpkin;
 extern Crop blueberry;
+
 extern Player* player1;  // 声明指针变量，不初始化
 extern SkillTree* skill_tree;
 extern mini_bag* miniBag;

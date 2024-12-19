@@ -26,10 +26,10 @@ public:
     static  Beach* create ();
 
     // 下雨效果
-    void createRainEffect();
+    void createRainEffect ();
 
     // 更改雨滴生命周期
-    void updaterain(float deltaTime);
+    void updaterain ( float deltaTime );
 
 
     // 判断角色的位置

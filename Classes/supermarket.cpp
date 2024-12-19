@@ -27,6 +27,8 @@ bool supermarket::init()
     button = cocos2d::Sprite::create("CloseNormal.png");
     this->addChild(button, 11);
 
+    StoreItem = new Inventory ();
+
     // 动物  
     StoreItem->AddItem ( AnimalChicken );
     StoreItem->SetSelectedItem ( 1 );
@@ -415,7 +417,7 @@ bool supermarket::init()
     listenerWithPlayer->onKeyPressed = [this](EventKeyboard::KeyCode keyCode, Event* event)
         {
             // 记录 Enter 键被按下
-            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER) {
+            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER || keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER) {
                 isEnterKeyPressed = true;
                 CCLOG("Enter key pressed.");
             }
@@ -439,7 +441,7 @@ bool supermarket::init()
     listenerWithPlayer->onKeyReleased = [this](EventKeyboard::KeyCode keyCode, Event* event)
         {
             // 释放 Enter 键时，设置为 false
-            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER) {
+            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER || keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER) {
                 isEnterKeyPressed = false;
                 CCLOG("Enter key released.");
             }

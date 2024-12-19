@@ -1,6 +1,5 @@
 #include "AppDelegate.h"
 #include "Beach.h"
-#include "farm.h"
 #include "Player.h"
 #include "physics/CCPhysicsWorld.h"
 #include "ui/CocosGUI.h"
@@ -25,11 +24,11 @@ bool Beach::init ()
     // 设置计时器标签
    // 设置计时器标签
     TimeUI = Timesystem::create ( "Beach" );
-    this->addChild(TimeUI, 13);
+    this->addChild ( TimeUI , 13 );
 
     if (Weather == "Rainy") {
         // 下雨
-        createRainEffect();
+        createRainEffect ();
     }
     // 创建并初始化 Label 来显示角色的位置
     _positionLabel = Label::createWithTTF ( "Position: (0, 0)" , "fonts/Marker Felt.ttf" , 24 );
@@ -219,238 +218,238 @@ bool Beach::init ()
         }
         } , 0.1f , "item_update_key" );
 
-        return true;
-        }
+    return true;
+}
 
 
-        Beach * Beach::create ()
+Beach* Beach::create ()
+{
+    Beach* scene = new Beach ();
+    if (scene && scene->init ())
     {
-        Beach* scene = new Beach ();
-        if (scene && scene->init ())
-        {
-            scene->autorelease ();
-            return scene;
-        }
-        CC_SAFE_DELETE ( scene );
-        return nullptr;
+        scene->autorelease ();
+        return scene;
+    }
+    CC_SAFE_DELETE ( scene );
+    return nullptr;
+}
+
+
+// 检查玩家是否接近背景的轮廓点
+void Beach::CheckPlayerPosition ()
+{
+
+    // 获取玩家的位置
+    Vec2 playerPos = player1->getPosition ();
+
+    // 更新位置标签的内容
+    if (_positionLabel)
+    {
+        _positionLabel->setString ( "Position: (" + std::to_string ( static_cast<int>(playerPos.x) ) + ", " + std::to_string ( static_cast<int>(playerPos.y) ) + ")" );
+
     }
 
+    // 更新计时器显示
+    remainingTime++;
+    if (remainingTime == 43200) {
 
-    // 检查玩家是否接近背景的轮廓点
-    void Beach::CheckPlayerPosition ()
-    {
+        day++;
 
-        // 获取玩家的位置
-        Vec2 playerPos = player1->getPosition ();
+        IsNextDay = true;
 
-        // 更新位置标签的内容
-        if (_positionLabel)
-        {
-            _positionLabel->setString ( "Position: (" + std::to_string ( static_cast<int>(playerPos.x) ) + ", " + std::to_string ( static_cast<int>(playerPos.y) ) + ")" );
-
+        if (day == 8) {
+            if (Season == "Spring") {
+                Season = "Summer";
+            }
+            else if (Season == "Summer") {
+                Season = "Autumn";
+            }
+            else {
+                Season = "Winter";
+            }
+            day = 1;
         }
 
-        // 更新计时器显示
-        remainingTime++;
-        if (remainingTime == 43200) {
+        if (day % 3 == 1) {
+            Weather = "Rainy";
+        }
+        else {
+            Weather = "Sunny";
+        }
 
-            day++;
+        if ((Season == "Spring") && (day == 1)) {
+            Festival = "Fishing Day";
+        }
+        else {
+            Festival = "Noraml Day";
+        }
 
-            IsNextDay = true;
 
-            if (day == 8) {
-                if (Season == "Spring") {
-                    Season = "Summer";
-                }
-                else if (Season == "Summer") {
-                    Season = "Autumn";
-                }
-                else {
-                    Season = "Winter";
-                }
-                day = 1;
+        for (auto it = Crop_information.begin (); it != Crop_information.end ();) {
+
+            auto crop = *it;  // 解引用迭代器以访问 Crop 对象
+
+            if (Weather == "Rainy") {
+                crop->watered = true;
             }
 
-            if (day % 3 == 1) {
-                Weather = "Rainy";
-            }
-            else {
-                Weather = "Sunny";
-            }
-
-            if ((Season == "Spring") && (day == 1)) {
-                Festival = "Fishing Day";
-            }
-            else {
-                Festival = "Noraml Day";
-            }
-
-
-            for (auto it = Crop_information.begin(); it != Crop_information.end();) {
-
-                auto crop = *it;  // 解引用迭代器以访问 Crop 对象
-
-                if (Weather == "Rainy") {
-                    crop->watered = true;
-                }
-
-                // 判断前一天是否浇水
-                if ((crop->watered == false) && (crop->GetPhase() != Phase::MATURE)) {
-                    // 判断是否已经进入枯萎状态
-                    if (crop->GetPhase() != Phase::SAPLESS) {
-                        crop->ChangePhase(Phase::SAPLESS);
-                        crop->ChangMatureNeeded(2); // 延迟两天收获
-                        it++;
-                    }
-                    else {
-                        // 删除元素并更新迭代器
-                        it = Crop_information.erase(it);
-                    }
-
-                }
-                else {
-                    // 更新状态
-                    crop->UpdateGrowth();
+            // 判断前一天是否浇水
+            if ((crop->watered == false) && (crop->GetPhase () != Phase::MATURE)) {
+                // 判断是否已经进入枯萎状态
+                if (crop->GetPhase () != Phase::SAPLESS) {
+                    crop->ChangePhase ( Phase::SAPLESS );
+                    crop->ChangMatureNeeded ( 2 ); // 延迟两天收获
                     it++;
                 }
-
-            }
-
-            for (auto& pair : F_lastplace) {
-                if (pair.first.first == "myhouse") {  // 检查 bool 值是否为 true
-                    pair.second = true;
+                else {
+                    // 删除元素并更新迭代器
+                    it = Crop_information.erase ( it );
                 }
+
+            }
+            else {
+                // 更新状态
+                crop->UpdateGrowth ();
+                it++;
             }
 
-
-            remainingTime = 0;
-            player1->removeFromParent();
-            auto nextday = Myhouse::create();
-            Director::getInstance()->replaceScene(nextday);
-
         }
 
-        // 更新标签位置
-        float currentx = 0 , currenty = 0;
-        if (playerPos.x <= -315) {
-            currentx = -315;
+        for (auto& pair : F_lastplace) {
+            if (pair.first.first == "myhouse") {  // 检查 bool 值是否为 true
+                pair.second = true;
+            }
         }
-        else if (playerPos.x >= 20000) {
-            currentx = 20000;
+
+
+        remainingTime = 0;
+        player1->removeFromParent ();
+        auto nextday = Myhouse::create ();
+        Director::getInstance ()->replaceScene ( nextday );
+
+    }
+
+    // 更新标签位置
+    float currentx = 0 , currenty = 0;
+    if (playerPos.x <= -315) {
+        currentx = -315;
+    }
+    else if (playerPos.x >= 20000) {
+        currentx = 20000;
+    }
+    else {
+        currentx = playerPos.x;
+    }
+
+    if (playerPos.y >= 920) {
+        currenty = 920;
+    }
+    else if (playerPos.y <= 360) {
+        currenty = 360;
+    }
+    else {
+        currenty = playerPos.y;
+    }
+
+    _positionLabel->setPosition ( currentx - 570 , currenty + 490 );
+    button->setPosition ( currentx + 730 , currenty - 590 );
+    miniBag->setPosition ( currentx , currenty );
+    TimeUI->setPosition ( currentx , currenty );
+
+    // 是否进入农场
+    if (Out_Beach.containsPoint ( playerPos )) {
+        if (isEnterKeyPressed) {
+            player1->removeFromParent ();
+            auto NextSence = farm::create ();
+            Director::getInstance ()->replaceScene ( NextSence );
+        }
+    }
+
+
+    for (const auto& point : non_transparent_pixels)
+    {
+        // 计算玩家与轮廓点之间的距离
+        float distance = 0;
+
+        Vec2 temp;
+        temp = playerPos;
+        temp.x -= player1->speed;
+        distance = temp.distance ( point );
+        if (distance <= 17) {
+            player1->moveLeft = false;
         }
         else {
-            currentx = playerPos.x;
+            if (player1->leftpressed == false) {
+                player1->moveLeft = true;
+            }
         }
 
-        if (playerPos.y >= 920) {
-            currenty = 920;
-        }
-        else if (playerPos.y <= 360) {
-            currenty = 360;
+        temp = playerPos;
+        temp.y -= 10;
+        distance = temp.distance ( point );
+        if (distance <= 15) {
+            player1->moveDown = false;
         }
         else {
-            currenty = playerPos.y;
-        }
-
-        _positionLabel->setPosition ( currentx - 570 , currenty + 490 );
-        button->setPosition ( currentx + 730 , currenty - 590 );
-        miniBag->setPosition ( currentx , currenty );
-        TimeUI->setPosition(currentx, currenty);
-
-        // 是否进入农场
-        if (Out_Beach.containsPoint ( playerPos )) {
-            if (isEnterKeyPressed) {
-                player1->removeFromParent ();
-                auto NextSence = farm::create ();
-                Director::getInstance ()->replaceScene ( NextSence );
+            if (player1->downpressed == false) {
+                player1->moveDown = true;
             }
         }
 
-
-        for (const auto& point : non_transparent_pixels)
-        {
-            // 计算玩家与轮廓点之间的距离
-            float distance = 0;
-
-            Vec2 temp;
-            temp = playerPos;
-            temp.x -= player1->speed;
-            distance = temp.distance ( point );
-            if (distance <= 17) {
-                player1->moveLeft = false;
+        temp = playerPos;
+        temp.y += 10;
+        distance = temp.distance ( point );
+        if (distance <= 15) {
+            player1->moveUp = false;
+        }
+        else {
+            if (player1->uppressed == false) {
+                player1->moveUp = true;
             }
-            else {
-                if (player1->leftpressed == false) {
-                    player1->moveLeft = true;
-                }
-            }
-
-            temp = playerPos;
-            temp.y -= 10;
-            distance = temp.distance ( point );
-            if (distance <= 15) {
-                player1->moveDown = false;
-            }
-            else {
-                if (player1->downpressed == false) {
-                    player1->moveDown = true;
-                }
-            }
-
-            temp = playerPos;
-            temp.y += 10;
-            distance = temp.distance ( point );
-            if (distance <= 15) {
-                player1->moveUp = false;
-            }
-            else {
-                if (player1->uppressed == false) {
-                    player1->moveUp = true;
-                }
-            }
-
-            temp = playerPos;
-            temp.x += 10;
-            distance = temp.distance ( point );
-            if (distance <= 15) {
-                player1->moveRight = false;
-            }
-            else {
-                if (player1->rightpressed == false) {
-                    player1->moveRight = true;
-                }
-            }
-
         }
 
+        temp = playerPos;
+        temp.x += 10;
+        distance = temp.distance ( point );
+        if (distance <= 15) {
+            player1->moveRight = false;
+        }
+        else {
+            if (player1->rightpressed == false) {
+                player1->moveRight = true;
+            }
+        }
 
     }
 
-    void Beach::createRainEffect() {
 
-        emitter = ParticleRain::create();
-        emitter->setDuration(ParticleSystem::DURATION_INFINITY);
-        emitter->setScale(5.7f);
-        emitter->setTotalParticles(100);
-        emitter->setSpeed(250);
+}
 
-        addChild(emitter, 10);
+void Beach::createRainEffect () {
 
-        // 每帧更新粒子生命周期
-        schedule([this](float dt) {
-            updaterain(dt);
-            }, "update_rain_key");
+    emitter = ParticleRain::create ();
+    emitter->setDuration ( ParticleSystem::DURATION_INFINITY );
+    emitter->setScale ( 5.7f );
+    emitter->setTotalParticles ( 100 );
+    emitter->setSpeed ( 250 );
 
+    addChild ( emitter , 10 );
+
+    // 每帧更新粒子生命周期
+    schedule ( [this]( float dt ) {
+        updaterain ( dt );
+        } , "update_rain_key" );
+
+}
+
+void Beach::updaterain ( float deltaTime ) {
+    if (emitter) {
+        // 随机生成一个生命周期（范围 1 到 1.5 秒之间）
+        float newLife = cocos2d::rand_0_1 () * 1.5f;
+
+        // 设置新的生命周期
+        emitter->setLife ( newLife );
+
+        emitter->setEmissionRate ( emitter->getTotalParticles () / emitter->getLife () * 1.3 );
     }
-
-    void Beach::updaterain(float deltaTime) {
-        if (emitter) {
-            // 随机生成一个生命周期（范围 1 到 1.5 秒之间）
-            float newLife = cocos2d::rand_0_1() * 1.5f;
-
-            // 设置新的生命周期
-            emitter->setLife(newLife);
-
-            emitter->setEmissionRate(emitter->getTotalParticles() / emitter->getLife() * 1.3);
-        }
-    }
+}

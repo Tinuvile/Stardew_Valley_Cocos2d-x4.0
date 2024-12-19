@@ -58,8 +58,11 @@ Town* town = nullptr;
 supermarket* seedshop = nullptr;
 farm* Farm = nullptr;
 Timesystem* TimeUI = nullptr;
+
 Inventory* inventory = new Inventory ();
+
 NpcRelationship* npc_relationship = new NpcRelationship();
+
 std::vector<std::pair<Rect , bool>> barn_space;
 std::vector<Livestock*> livestocks;
 SkillTree* skill_tree = new SkillTree ();
@@ -268,9 +271,9 @@ void AppDelegate::Initialize () {
     task3.relationshipPoints = 5; // 与所有人的好感度  
 
     // 将任务添加到任务管理器  
-    taskManager->createTask(task1);
-    taskManager->createTask(task2);
-    taskManager->createTask(task3);
+    //taskManager->createTask(task1);
+    //taskManager->createTask(task2);
+    //taskManager->createTask(task3);
 
     //初始化Barn内可放置家畜矩阵
     barn_space.push_back(std::make_pair(Rect(685.714294, 213.333328, 114.285713, 106.666664), false));
