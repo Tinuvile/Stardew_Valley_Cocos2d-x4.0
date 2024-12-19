@@ -61,9 +61,9 @@ bool Timesystem::init( std::string place ) {
     GoldAmountDisplay = nullptr;
     int goldAmount = GoldAmount;
     if (GoldAmountDisplay == nullptr) {
-        GoldAmountDisplay = Label::createWithSystemFont ( std::to_string ( goldAmount ) , "fonts/Marker Felt.ttf" , 45 );
-        GoldAmountDisplay->setTextColor ( Color4B::BLACK );
-        GoldAmountDisplay->setPosition ( 630 , 330 );
+        GoldAmountDisplay = Label::createWithTTF ( std::to_string ( goldAmount ) , "fonts/Marker Felt.ttf" , 45 );
+        GoldAmountDisplay->setTextColor ( Color4B::WHITE );
+        GoldAmountDisplay->setPosition ( 630 , 320 );
         this->addChild ( GoldAmountDisplay , 4 );
     }
 

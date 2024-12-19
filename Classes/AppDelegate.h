@@ -62,6 +62,7 @@ class Barn;
 class Inventory;
 class NpcRelationship;
 class mini_bag;
+class TaskManagement;
 class Timesystem;
 /******************************** 全局变量声明区 ***************************************/
 extern int remainingTime;  // 声明，不初始化
@@ -98,6 +99,8 @@ extern SkillTree* skill_tree;
 extern mini_bag* miniBag;
 extern Inventory* inventory;
 extern NpcRelationship* npc_relationship;
+extern Inventory* StoreItem;
+extern TaskManagement* taskManager;
 extern Timesystem* TimeUI;
 //存储畜棚中可有家畜活动的矩形区域，并记录该区域是否已存在家畜
 extern std::vector<std::pair<Rect , bool>> barn_space;

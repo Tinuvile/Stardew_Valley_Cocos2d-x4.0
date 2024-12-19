@@ -27,16 +27,10 @@ public:
 
     bool IsPositionValid ( const cocos2d::Vec2& targetPosition , const cocos2d::Vec2& direction );
 
-    int GetGiftTime () { return GiftTime; }
-
-    void AddGiftTime () { GiftTime++; }
-
 protected:
     std::string name;            // NPC 的名字  
     cocos2d::Vec2 position;      // NPC 的坐标位置  
     cocos2d::Sprite* sprite;     // NPC 的精灵
-
-    int GiftTime = 0;                // NPC 是否送过礼物
 
     std::vector<cocos2d::Vec2> nonTransparentPixels;
 
