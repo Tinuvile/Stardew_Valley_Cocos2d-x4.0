@@ -53,6 +53,9 @@ std::map<std::pair<std::string , Vec2> , bool> T_lastplace;
 std::map<std::pair<std::string , Vec2> , bool> F_lastplace;
 std::map<std::pair<std::string , Vec2>, bool> W_lastplace;
 
+std::string protagonistName = "player";
+std::string FarmName = "An ordinary farm";
+
 // 全局指针变量定义
 Player* player1 = nullptr;
 mini_bag* miniBag = nullptr;
@@ -140,22 +143,22 @@ void AppDelegate::runScene(cocos2d::Director* director) {
     auto visibleSize = Director::getInstance()->getVisibleSize();  // 获取屏幕可视区域的大小
     Vec2 origin = Director::getInstance()->getVisibleOrigin();  // 获取屏幕原点的位置（左下角）
   
-    std::pair<std::string, Vec2> key = { "initiation",Vec2(350,350)};
+    std::pair<std::string , Vec2> key = { "initiation",Vec2 ( 350,350 ) };
     T_lastplace.insert(std::make_pair(key, true));
-    key = { "seedshop",Vec2(230,470) };
+    key = { "seedshop",Vec2 ( 230,470 ) };
     T_lastplace.insert(std::make_pair(key, false));
 
     // 运行农场
-    auto farm = farm::create ();
-    director->runWithScene ( farm );
+    //auto farm = farm::create ();
+    //director->runWithScene ( farm );
 
     //运行海滩场景
     /*auto beach = Beach::create ();
     director->runWithScene ( beach );*/
 
     // 运行家的场景
-    //auto test = Myhouse::create();
-    //director->runWithScene(test); 
+    auto test = Myhouse::create();
+    director->runWithScene(test); 
 
     // 运行小镇的场景
    /* auto test = Town::create ();

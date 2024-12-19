@@ -55,18 +55,3 @@ void TaskManagement::DeleteAcceptTask ( const Task& task ) {
         tasks.end () );
 }
 
-//返回目前发布任务数量
-int TaskManagement::returnTaskNUMs () {
-    int num = 0;
-    for (const auto& task : tasks)
-        num++;
-    return num;
-}
-
-//返回目前接受任务数量
-int TaskManagement::returnAcceptTaskNUMs () {
-    int num = 0;
-    for (const auto& task : acceptTasks)
-        num++;
-    return num;
-}

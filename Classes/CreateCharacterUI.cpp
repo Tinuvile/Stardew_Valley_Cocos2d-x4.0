@@ -1,9 +1,9 @@
 #include "CreateCharacterUI.h"
 #include "Town.h"
+#include "AppDelegate.h"
 
 USING_NS_CC;
 
-extern std::map <std::pair<std::string , Vec2> , bool> T_lastplace;
 
 Scene* CreateCharacter::createScene ()
 {
@@ -41,7 +41,6 @@ void CreateCharacter::cloudAni ( float dt )
     clouds->runAction ( cocos2d::RepeatForever::create ( moveTo_s ) );
 }
 
-// on "init" you need to initialize your instance
 void CreateCharacter::BackgroundAdd () {
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     Vec2 origin = Director::getInstance ()->getVisibleOrigin ();
@@ -226,13 +225,7 @@ void CreateCharacter::optionFace () {
     OK->setEnabled ( false );  // 禁用点击事件
     //跳转位置待修改
     OK->addClickEventListener ( [this]( Ref* sender ) {
-        // 按钮点击跳转
-        //player1 = Player::create ();
-        //std::pair<std::string , Vec2> key = { "initiation",Vec2 ( 350,350 ) };
-        //T_lastplace.insert ( std::make_pair ( key , false ) );
-        //key = { "seedshop",Vec2 ( 230,470 ) };
-        //T_lastplace.insert ( std::make_pair ( key , false ) );
-        Director::getInstance ()->replaceScene ( TransitionFade::create ( 2.0f , Town::create () ) );
+        Director::getInstance ()->replaceScene ( TransitionFade::create ( 2.0f , Myhouse::create () ) );
 } );
     Vec2 Pos = Vec2 ( visibleSize.width * 0.5 , visibleSize.height * 0.2 );
     OK->setPosition ( Pos );
@@ -425,7 +418,11 @@ ui::TextField* CreateCharacter::createTextIn ( float sizex , float sizey , const
 void CreateCharacter::checkTextFields ( ui::TextField* textfield1 , ui::TextField* textfield2 , ui::TextField* textfield3 ) {
     auto OK = dynamic_cast<cocos2d::ui::Button*>(this->getChildByTag ( 202 ));
     std::string text1 = textfield1->getString ();
+    protagonistName = text1;
+    CCLOG ( "%s" , protagonistName );
     std::string text2 = textfield2->getString ();
+    FarmName = text2;
+    CCLOG ( "%s" , FarmName );
     std::string text3 = textfield3->getString ();
     auto namelable = getChildByTag ( 10 );
     auto farmname = getChildByTag ( 20 );
