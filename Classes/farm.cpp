@@ -399,8 +399,9 @@ void farm::checkPlayerPosition()
             }
         }
 
-
-        remainingTime = 0;
+        IsSleep = false;
+        frombed = true;
+        remainingTime = 10800;
         player1->removeFromParent();
         auto nextday = Myhouse::create();
         Director::getInstance()->replaceScene(nextday);
@@ -465,7 +466,10 @@ void farm::checkPlayerPosition()
                     if (point != cropbasicinformation.end()) {
                         cocos2d::log("find crop");
                         // 判断是否符合种植的季节
-                        if ((cropbasicinformation[TypeName].GetSeason() == Season) || (cropbasicinformation[TypeName].GetSeason() == "All")) {
+                        if (((cropbasicinformation[TypeName].GetSeason() == Season) || (cropbasicinformation[TypeName].GetSeason() == "All")) && strength >= 10) {
+
+                            strength -= 10;
+                            TimeUI->StrengthValue->setScaleY(strength / 100.0 * 16.5f);
 
                             Crop_information.push_back(cropbasicinformation[TypeName].GetCropCopy());
                             Crop_information.back()->plant_day = season[Season] * 7 + day;
@@ -587,13 +591,16 @@ void farm::checkPlayerPosition()
 
             for (auto it = Crop_information.begin(); it != Crop_information.end(); /* no increment here */) {
                 if ((*it)->nums == nums) {  // 使用 *it 解引用迭代器
-                    if ((*it)->GetPhase() == Phase::MATURE) {
+                    if ((*it)->GetPhase() == Phase::MATURE && strength >= 10) {
 
                         auto find_temp = (*it);
                         
                         if (find_temp->GetName() == "potato") {
                             inventory->AddItem(potato);
                         }
+
+                        strength -= 10;
+                        TimeUI->StrengthValue->setScaleY(strength / 100.0 * 16.5f);
 
                         // 覆盖精灵
                         auto test = Sprite::create("farm/tile.png");

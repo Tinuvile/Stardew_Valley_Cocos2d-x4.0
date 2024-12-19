@@ -44,14 +44,27 @@ bool Timesystem::init( std::string place ) {
     TimePic->setScale(1.7f);
     this->addChild(TimePic, 1);  // 设置图片层级在标签下方
 
-    // 设置各元素的位置
+    // 创建体力边框
+    Strength = Sprite::create("UIresource/strength.png");
+    Strength->setScale(3.7f);
+    this->addChild(Strength, 1);
+    Strength->setPosition(435, 500);
 
+    StrengthValue = Sprite::create("Beach/green_bar.png");
+    StrengthValue->setScaleY(strength / 100 * 16.5f);
+    StrengthValue->setScaleX(3.1f);
+    StrengthValue->setAnchorPoint(Vec2(0.5f, 0.0f));
+    this->addChild(StrengthValue, 3);
+    StrengthValue->setPosition(435, 405);
+
+    // 设置各元素的位置
     _timerLabelD->setPosition(585, 575);
     _timerLabelH->setPosition(690, 575);
     _timerLabelS->setPosition(570, 500);
     _timerLabelW->setPosition(710, 500);
     _timerLabelF->setPosition(630, 415);
     TimePic->setPosition(630, 490);
+   
 
     //金币显示
     moneyDisplay = Sprite::create ( "UIresource/supermarket/moneyFrame_new.png" );
@@ -83,11 +96,11 @@ bool Timesystem::init( std::string place ) {
         else
             DailyRecord->setScale ( 1.5f );
         };
-    listener->onMouseDown = [this , place]( EventMouse* event ) {
+    listener->onMouseDown = [this, place](EventMouse* event) {
         Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
         mousePos = this->convertToNodeSpace ( mousePos );
         if (DailyRecord->getBoundingBox ().containsPoint ( mousePos )) {
-            DailyRecordUI* Dailyrecord = DailyRecordUI::create ( place );
+            DailyRecordUI* Dailyrecord = DailyRecordUI::create(place);
             // 获取当前运行的场景
             Scene* currentScene = Director::getInstance ()->getRunningScene ();
             currentScene->addChild ( Dailyrecord , 20 );

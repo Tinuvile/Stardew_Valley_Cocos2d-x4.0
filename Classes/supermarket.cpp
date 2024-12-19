@@ -554,8 +554,9 @@ void supermarket::checkPlayerPosition()
             }
         }
 
-
-        remainingTime = 0;
+        IsSleep = false;
+        frombed = true;
+        remainingTime = 10800;
         player1->removeFromParent();
         auto nextday = Myhouse::create();
         Director::getInstance()->replaceScene(nextday);

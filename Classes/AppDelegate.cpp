@@ -27,11 +27,13 @@ USING_NS_CC;  // 使用cocos2d的命名空间
 
 /******************************** 全局变量声明区 ****************************************/
 // 在此文件中定义并初始化全局变量
-int remainingTime = 0;
-int day = 3;
+int remainingTime = 10800;
+int day = 1;
 int GoldAmount = 4000;
+int strength = 100;
 bool frombed = true;
 bool IsNextDay = false;
+bool IsSleep = true;
 
 Crop wheat ( "wheat" , "crop/wheat1.png" , "crop/wheat2.png" , "crop/wheat3.png" , "All" , Phase::SEED , 50 , 0 , false , 4 );
 Crop corn ( "corn" , "crop/corn1.png" , "crop/corn2.png" , "crop/corn3.png" , "Spring" , Phase::SEED , 50 , 0 , false , 6 );
@@ -39,7 +41,7 @@ Crop potato ( "potato" , "crop/potato1.png" , "crop/potato2.png" , "crop/potato3
 Crop pumpkin ( "pumpkin" , "crop/pumpkin1.png" , "crop/pumpkin2.png" , "crop/pumpkin3.png" , "Autumn" , Phase::SEED , 70 , 0 , false , 6 );
 Crop blueberry ( "blueberry" , "crop/blueberry1.png" , "crop/blueberry2.png" , "crop/blueberry3.png" , "Summer" , Phase::SEED , 100 , 0 , false , 7 );
 
-std::string Season = "Summer";
+std::string Season = "Spring";
 std::string Weather = "Rainy";
 std::string Festival = "Fishing Festival";
 std::map<std::string , int> season;
@@ -148,16 +150,16 @@ void AppDelegate::runScene(cocos2d::Director* director) {
     director->runWithScene ( farm );*/
 
     //运行海滩场景
-    auto beach = Beach::create ();
-    director->runWithScene ( beach );
+    /*auto beach = Beach::create ();
+    director->runWithScene ( beach );*/
 
     // 运行家的场景
-    //auto test = Myhouse::create();
-    //director->runWithScene(test); 
+    auto test = Myhouse::create();
+    director->runWithScene(test); 
 
     // 运行小镇的场景
-    //auto test = Town::create ();
-    //director->runWithScene(test);
+   /* auto test = Town::create ();
+    director->runWithScene(test);*/
 
     // 运行商店的场景
     //auto test = supermarket::create();

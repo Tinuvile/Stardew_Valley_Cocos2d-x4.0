@@ -368,8 +368,9 @@ void  Forest::checkPlayerPosition()
             }
         }
 
-
-        remainingTime = 0;
+        IsSleep = false;
+        frombed = true;
+        remainingTime = 10800;
         player1->removeFromParent();
         auto nextday = Myhouse::create();
         Director::getInstance()->replaceScene(nextday);
@@ -413,8 +414,10 @@ void  Forest::checkPlayerPosition()
             auto tree = *it;  
 
             float distance = tree->position.distance(playerPos);
-            if (distance <= 250 && tree->available) {
+            if ((distance <= 250 && tree->available) && strength >= 10) {
 
+                strength -= 10;
+                TimeUI->StrengthValue->setScaleY(strength / 100.0 * 16.5f);
 
                 if (skill_tree->GetSkillLevels()[foraging_skill] >= 5) {
                     tree->removetimes -= 2;

@@ -32,6 +32,20 @@ bool Myhouse::init()
 
     _positionLabel->setPosition(130, 1200);
     
+    if (frombed) {
+        if (IsSleep) {
+            strength = 100.0f;
+        }
+        else {
+            GoldAmount -= 150;
+            if (GoldAmount <= 0) {
+                GoldAmount = 0;
+            }
+            strength = 70.0f;
+        }
+        frombed = false;
+        IsSleep = false;
+    }
     
 
     // 设置背景图片
@@ -90,21 +104,14 @@ bool Myhouse::init()
         }
     }
 
-   
-
     // 初始化角色并将其添加到场景
     if (player1->getParent() == NULL) {
         this->addChild(player1, 11);
         player1->setScale(2.7f);
         player1->speed = 7.0f;
         player1->setAnchorPoint(Vec2(0.5f, 0.2f));
-        if (frombed == false) {
-            player1->setPosition(580, 270);
-        }
-        else {
-            frombed = false;
-            player1->setPosition(1050, 550);
-        }
+        player1->setPosition(1050, 550);
+        
     }
 
     // 启动人物的定时器
@@ -298,8 +305,9 @@ void Myhouse::checkPlayerPosition()
             }
         }
 
-
-        remainingTime = 0;
+        IsSleep = false;
+        frombed = true;
+        remainingTime = 10800;
         player1->removeFromParent();
         auto nextday = Myhouse::create();
         Director::getInstance()->replaceScene(nextday);
@@ -389,8 +397,9 @@ void Myhouse::checkPlayerPosition()
                 }
             }
 
+            IsSleep = true;
             frombed = true;
-            remainingTime = 0;
+            remainingTime = 10800;
             player1->removeFromParent();
             auto nextday = Myhouse::create();
             Director::getInstance()->replaceScene(nextday);

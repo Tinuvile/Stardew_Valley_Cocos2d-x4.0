@@ -38,12 +38,9 @@
 #include "NpcRelationship.h"
 #include "intimacyUI.h"
 #include "TaskManagement.h"
-
 #include "StoreUI.h"
 #include "EconomicSystem.h"
-
 #include "SkillTree.h"
-
 #include <memory>
 
 #define Daytime 43200
@@ -67,9 +64,11 @@ class Timesystem;
 /******************************** 全局变量声明区 ***************************************/
 extern int remainingTime;  // 声明，不初始化
 extern int day;
+extern int strength;
 extern int GoldAmount;
 extern bool IsNextDay;
 extern bool frombed;
+extern bool IsSleep;
 extern std::string Season;
 extern std::string Weather;
 extern std::string Festival;

@@ -341,8 +341,9 @@ void Cave::checkPlayerPosition()
             }
         }
 
-
-        remainingTime = 0;
+        IsSleep = false;
+        frombed = true;
+        remainingTime = 10800;
         player1->removeFromParent();
         auto nextday = Myhouse::create();
         Director::getInstance()->replaceScene(nextday);
@@ -382,7 +383,11 @@ void Cave::checkPlayerPosition()
             auto ore = *it;  // 解引用迭代器以访问 Crop 对象
 
             float distance = ore->position.distance(playerPos);
-            if (distance <= 75 && ore->available) {
+
+            if (distance <= 75 && ore->available && strength >= 10) {
+
+                strength -= 10;
+                TimeUI->StrengthValue->setScaleY(strength / 100.0 * 16.5f);
 
                 ore->available = false;
 
