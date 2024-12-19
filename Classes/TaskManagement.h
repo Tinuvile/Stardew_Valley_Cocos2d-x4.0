@@ -55,7 +55,7 @@ public:
 	void DeleteAcceptTask ( const Task& task );
 
 	// 返回物品对应的任务
-	std::string findTaskByRequiredItems ( const Item& item );
+	std::string findTaskByRequiredItems ( const std::string& itemName );
 
 protected:
 

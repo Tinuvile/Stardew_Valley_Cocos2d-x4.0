@@ -27,7 +27,9 @@ void TaskManagement::completeTask ( const std::string& task_name ) {
         // 根据任务类型增加金币和/或物品
         if (task.type == NPC_TASK || task.type == SYSTEM_TASK) {
             GoldAmount += 400; // 假设GoldAmount是类的成员变量
-            // inventory->RemoveItem(); // 假设inventory是类的成员变量，需要移除物品
+            for (const auto& requiredItem : task.requiredItems) {
+                inventory->RemoveItem ( requiredItem , 1 ); // 移除物品
+            }
         }
 
         // 如果是NPC任务，增加对应NPC的好感度
@@ -67,13 +69,13 @@ void TaskManagement::DeleteAcceptTask ( const Task& task ) {
 }
 
 // 返回物品对应的任务
-std::string TaskManagement::findTaskByRequiredItems ( const Item& item ) {
+std::string TaskManagement::findTaskByRequiredItems ( const std::string& itemName ) {
     // 遍历acceptTasks寻找包含指定物品的任务
     for (const auto& task : acceptTasks) {
-        // 使用std::find来检查requiredItems中是否包含item
-        if (std::find ( task.requiredItems.begin () , task.requiredItems.end () , item ) != task.requiredItems.end ()) {
-            // 如果找到了，返回该任务
-            return task.name;
+        for (const auto& item : task.requiredItems) {
+            if (item.GetName() == itemName) {
+                return task.name; // 找到匹配的任务，返回任务名称
+            }
         }
     }
 

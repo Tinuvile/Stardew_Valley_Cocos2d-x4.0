@@ -14,7 +14,7 @@ Town::~Town() {}
 
 bool Town::init()
 {
-    inventory->AddItem ( amethyst );
+    inventory->AddItem ( Bean_Starter );
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -356,7 +356,7 @@ bool Town::init()
             Vec2 clickPos ( mouseEvent->getCursorX () , mouseEvent->getCursorY () );
             clickPos = this->convertToNodeSpace ( clickPos );
 
-            if (Box->getBoundingBox ().containsPoint ( clickPos )) {
+            if (Box->getBoundingBox ().containsPoint ( clickPos )) {              
                 // 获取玩家的位置  
                 Vec2 playerPos = player1->getPosition ();
 
@@ -368,11 +368,13 @@ bool Town::init()
                 // 检查距离是否在允许的范围内  
                 if (distance <= interactionRadius) {
                     if (miniBag->getSelectedSlot ()) {
-                        std::string taskName = taskManager->findTaskByRequiredItems ( *(inventory->GetItemAt ( miniBag->getSelectedSlot () )) );
+                        std::string taskName = taskManager->findTaskByRequiredItems ( inventory->GetItemAt ( miniBag->getSelectedSlot () )->GetName () );
+                        // CCLOG ( "%s" , inventory->GetItemAt ( miniBag->getSelectedSlot () )->GetName () );
                         if (taskName.empty ()) {
                             // 处理任务未找到的情况
                         }
                         else {
+                            // CCLOG ( "CLICK ON BOX" );
                             taskManager->completeTask ( taskName );
                         }
                     }
@@ -438,7 +440,7 @@ bool Town::init()
             }
             };
 
-        _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , button );
+        _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , this );
     }
 
     // 设置键盘监听器

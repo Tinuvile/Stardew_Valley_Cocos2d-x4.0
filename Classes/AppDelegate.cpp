@@ -268,7 +268,7 @@ void AppDelegate::Initialize () {
         "Summer"  // 截至日期  
     );
     task1.npcName = "Abigail"; // 发布任务的 NPC 名字  
-    task1.requiredItems.push_back ( amethyst ); // 需要的物品  
+    task1.requiredItems.push_back ( Bean_Starter ); // 需要的物品  
     task1.rewardCoins = 500; // 奖励金币  
     task1.relationshipPoints = 10; // NPC 好感度  
 
@@ -296,6 +296,8 @@ void AppDelegate::Initialize () {
     taskManager->createTask ( task1 );
     taskManager->createTask ( task2 );
     taskManager->createTask ( task3 );
+
+    taskManager->AddAcceptTask ( task1 );
 
     //初始化Barn内可放置家畜矩阵
     barn_space.push_back(std::make_pair(Rect(685.714294, 213.333328, 114.285713, 106.666664), false));
