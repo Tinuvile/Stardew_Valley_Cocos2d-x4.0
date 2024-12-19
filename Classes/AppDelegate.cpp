@@ -9,7 +9,7 @@
  ****************************************************************************/
 
 #include "AppDelegate.h"
-//#include "GameBeginUI.h"
+#include "GameBeginUI.h"
 #include "Player.h"
 //#include "Town.h"
 #include "Barn.h"
@@ -161,8 +161,8 @@ void AppDelegate::runScene(cocos2d::Director* director) {
     // director->runWithScene(test); 
 
     // 运行小镇的场景
-    auto test = Town::create ();
-    director->runWithScene(test);
+    // auto test = Town::create ();
+    // director->runWithScene(test);
 
     // 运行商店的场景
     //auto test = supermarket::create();
@@ -185,9 +185,9 @@ void AppDelegate::runScene(cocos2d::Director* director) {
       director->runWithScene(test);*/
 
     //开局UI运行
-    //director->runWithScene ( BeginScene::create () );
+    // director->runWithScene ( BeginScene::create () );
     //创建人物界面运行
-    //director->runWithScene ( CreateCharacter::create () );
+    // director->runWithScene ( CreateCharacter::create () );
 }
 
 void AppDelegate::Initialize () {

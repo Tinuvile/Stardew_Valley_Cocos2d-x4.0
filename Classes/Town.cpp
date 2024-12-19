@@ -14,7 +14,7 @@ Town::~Town() {}
 
 bool Town::init()
 {
-    inventory->AddItem ( Bean_Starter );
+    // inventory->AddItem ( Bean_Starter );
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
