@@ -82,7 +82,7 @@ public:
 	}
 
 	// 使用 Item 和数量移除物品  
-	int Inventory::RemoveItem ( const Item& item , const int& remove_num ) {
+	int Inventory::RemoveItem ( const Item& item , const int& remove_num = 1 ) {
 		for (auto it = package.begin (); it != package.end (); ++it) {
 			if (it->second.first->GetName () == item.GetName ()) {
 				// 如果移除数量超过现有数量  

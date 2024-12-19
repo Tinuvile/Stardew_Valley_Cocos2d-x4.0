@@ -19,3 +19,9 @@ std::shared_ptr<Food> Food::create (FoodType type) {
 	}
 	return nullptr;
 }
+
+
+std::shared_ptr<Item> Food::GetCopy () const {
+	auto copy = std::make_shared<Food> ( *this );  // 使用Food的复制构造函数
+	return copy;
+}

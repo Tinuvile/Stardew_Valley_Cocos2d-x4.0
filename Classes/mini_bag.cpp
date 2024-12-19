@@ -189,6 +189,26 @@ void mini_bag::updateDisplay () {
                 countLabel->removeFromParent (); // 移除数量标签  
             }
         }
+
+        auto keyboard_listener = EventListenerKeyboard::create ();
+		keyboard_listener->onKeyPressed = [this]( EventKeyboard::KeyCode keyCode , Event* event ) {
+			if (keyCode == EventKeyboard::KeyCode::KEY_E && !is_key_e_pressed) {
+                is_key_e_pressed = true;
+                auto selected_item = std::dynamic_pointer_cast<Food>(this->getSelectedItem ());
+                if (selected_item != nullptr) {
+                    CCLOG ( "EAT FOOD!" );
+                    strength = std::min ( 100 , strength + selected_item->GetEnergy () );
+                    inventory->RemoveItem ( *selected_item );
+                    inventory->DisplayPackageInCCLOG ();
+                }
+			}
+			};
+		keyboard_listener->onKeyReleased = [this]( EventKeyboard::KeyCode keyCode , Event* event ) {
+			if (keyCode == EventKeyboard::KeyCode::KEY_E) {
+				is_key_e_pressed = false;
+			}
+			};
+		_eventDispatcher->addEventListenerWithSceneGraphPriority ( keyboard_listener , this );
     }
 
     // 更新物品信息标签（用于调试）  
@@ -225,7 +245,6 @@ std::shared_ptr<Item> mini_bag::getSelectedItem() {
     if (itemPtr != nullptr) {
 
         auto temp = itemPtr->GetCopy();
-        _inventory->RemoveItem(*(itemPtr.get()), 1);
         return temp;
     }
     else {

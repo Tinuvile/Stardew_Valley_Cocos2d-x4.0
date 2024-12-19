@@ -32,6 +32,8 @@ private:
 
     bool isClick = false;  // 标志，表示是否被点击
 
+	bool is_key_e_pressed = false; // 标志，表示是否按下了 E 键
+
     cocos2d::Sprite* currentItemSprite = nullptr; // 标识当前选择的物品
 
 };
