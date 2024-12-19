@@ -130,7 +130,7 @@ void DailyRecordUI::taskDisplay ( TaskManagement& taskManager ) {
     // 计算总高度  
     float totalItemHeight = 0;
     const int itemCount = 5; // 任务数量  
-    const float itemHeight = 500; // 每个商品的高度  
+    const float itemHeight = 500; // 每个高度  
     totalItemHeight = itemCount * itemHeight; // 计算总高度  
 
     // 设置内部容器的大小  
@@ -153,7 +153,7 @@ void DailyRecordUI::taskDisplay ( TaskManagement& taskManager ) {
         float lowerLimit = scrollView->getContentSize ().height - innerContainer->getContentSize ().height;
         float upperLimit = -1400;
 
-        CCLOG ( "currentPosY: %f, newPosY: %f, lowerLimit: %f, upperLimit: %f" , currentPosY , newPosY , lowerLimit , upperLimit );
+        //CCLOG ( "currentPosY: %f, newPosY: %f, lowerLimit: %f, upperLimit: %f" , currentPosY , newPosY , lowerLimit , upperLimit );
 
         // 使用 std::max 和 std::min 确保 newPosY 在边界内  
         newPosY = std::max ( newPosY , lowerLimit );

@@ -138,7 +138,6 @@ bool Town::init()
         }
         }, 0.1f, "item_update_key");
 
-
     // 初始化角色并将其添加到场景
     if (player1->getParent() == NULL) {
         cocos2d::log("player1->get");
@@ -171,10 +170,8 @@ bool Town::init()
         }, 0.01f, "check_position_key");
 
 
-    if ((Season == "Summer" && day == 3) || (Season == "Winter" && day == 3)) {}
-    else {
-        // 允许的交互半径  
-        const float interactionRadius = 300.0f;
+    // 允许的交互半径  
+    const float interactionRadius = 300.0f;
 
 
         // 使用 getAlexAnimations() 获取 NPC 动画帧  
@@ -412,36 +409,40 @@ bool Town::init()
             };
 
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, button);
-    }
 
-
+        //箱子添加，用来卖东西
+        Box = Sprite::create ( "UIresource/xiangzi/xiangzi.png" );
+        Box->setPosition ( Vec2 ( -260 , 710 ) );
+        Box->setAnchorPoint ( Vec2 ( 0 , 0 ) );
+        Box->setScale ( 0.7f );
+        this->addChild ( Box , 10 );
 
     // 设置键盘监听器
     auto listenerWithPlayer = EventListenerKeyboard::create();
-    listenerWithPlayer->onKeyPressed = [this](EventKeyboard::KeyCode keyCode, Event* event)
+    listenerWithPlayer->onKeyPressed = [this]( EventKeyboard::KeyCode keyCode , Event* event )
         {
             // 记录 Enter 键被按下
             if (keyCode == EventKeyboard::KeyCode::KEY_ENTER || keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER) {
                 isEnterKeyPressed = true;
 
-                CCLOG("Enter key pressed. ");
+                CCLOG ( "Enter key pressed. " );
             }
             else if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
-                CCLOG("%d", GoldAmount);
+                CCLOG ( "%d" , GoldAmount );
                 static int isOpen = 0;
                 static InventoryUI* currentInventoryUI = nullptr;  // 保存当前显示的 InventoryUI  
                 // 如果当前没有打开 InventoryUI，则打开它  
                 if (currentInventoryUI == nullptr || isOpen == 0) {
                     isOpen = 1;
-                    CCLOG("Opening inventory.");
-                    currentInventoryUI = InventoryUI::create(inventory, "Town");
-                    this->addChild(currentInventoryUI, 20);  // 将 InventoryUI 添加到 Town 的上层  
+                    CCLOG ( "Opening inventory." );
+                    currentInventoryUI = InventoryUI::create ( inventory , "Town" );
+                    this->addChild ( currentInventoryUI , 20 );  // 将 InventoryUI 添加到 Town 的上层  
                 }
                 // 如果已经打开 InventoryUI，则关闭它  
                 else {
                     isOpen = 0;
-                    CCLOG("Closing inventory.");
-                    this->removeChild(currentInventoryUI, true);  // 从当前场景中移除 InventoryUI  
+                    CCLOG ( "Closing inventory." );
+                    this->removeChild ( currentInventoryUI , true );  // 从当前场景中移除 InventoryUI  
                     currentInventoryUI = nullptr;  // 重置指针  
                 }
             }
@@ -477,16 +478,26 @@ Town* Town::create()
 }
 
 // 检查玩家是否接近背景的轮廓点
-void Town::checkPlayerPosition()
+void Town::checkPlayerPosition ()
 {
     // 获取玩家的位置
-    Vec2 playerPos = player1->getPosition();
+    Vec2 playerPos = player1->getPosition ();
+
+    // 计算玩家与箱子之间的距离  
+    float distance = playerPos.distance ( Box->getPosition () );
+    // 检查距离是否在允许的范围内  
+    if (distance <= 200.0f) {
+        Box->setTexture ( "UIresource/xiangzi/Open.png" );
+    }
+    else {
+        Box->setTexture ( "UIresource/xiangzi/xiangzi.png" );
+    }
 
     // 更新位置标签的内容
     if (_positionLabel)
     {
-        _positionLabel->setString("Position: (" + std::to_string(static_cast<int>(playerPos.x)) + ", " + std::to_string(static_cast<int>(playerPos.y)) + ")");
-    
+        _positionLabel->setString ( "Position: (" + std::to_string ( static_cast<int>(playerPos.x) ) + ", " + std::to_string ( static_cast<int>(playerPos.y) ) + ")" );
+
     }
     // 更新计时器显示
     remainingTime++;
@@ -524,7 +535,7 @@ void Town::checkPlayerPosition()
         }
 
 
-        for (auto it = Crop_information.begin(); it != Crop_information.end();) {
+        for (auto it = Crop_information.begin (); it != Crop_information.end ();) {
 
             auto crop = *it;  // 解引用迭代器以访问 Crop 对象
 
@@ -533,22 +544,22 @@ void Town::checkPlayerPosition()
             }
 
             // 判断前一天是否浇水
-            if ((crop->watered == false) && (crop->GetPhase() != Phase::MATURE)) {
+            if ((crop->watered == false) && (crop->GetPhase () != Phase::MATURE)) {
                 // 判断是否已经进入枯萎状态
-                if (crop->GetPhase() != Phase::SAPLESS) {
-                    crop->ChangePhase(Phase::SAPLESS);
-                    crop->ChangMatureNeeded(2); // 延迟两天收获
+                if (crop->GetPhase () != Phase::SAPLESS) {
+                    crop->ChangePhase ( Phase::SAPLESS );
+                    crop->ChangMatureNeeded ( 2 ); // 延迟两天收获
                     it++;
                 }
                 else {
                     // 删除元素并更新迭代器
-                    it = Crop_information.erase(it);
+                    it = Crop_information.erase ( it );
                 }
 
             }
             else {
                 // 更新状态
-                crop->UpdateGrowth();
+                crop->UpdateGrowth ();
                 it++;
             }
 
@@ -563,14 +574,14 @@ void Town::checkPlayerPosition()
         IsSleep = false;
         frombed = true;
         remainingTime = 10800;
-        player1->removeFromParent();
-        auto nextday = Myhouse::create();
-        Director::getInstance()->replaceScene(nextday);
+        player1->removeFromParent ();
+        auto nextday = Myhouse::create ();
+        Director::getInstance ()->replaceScene ( nextday );
 
     }
 
     // 更新标签位置
-    float currentx = 0, currenty = 0;
+    float currentx = 0 , currenty = 0;
     if (playerPos.x <= -170) {
         currentx = -170;
     }
@@ -591,18 +602,18 @@ void Town::checkPlayerPosition()
         currenty = playerPos.y;
     }
 
-    TimeUI->setPosition(currentx, currenty);
-    _positionLabel->setPosition(currentx - 570, currenty + 490);
-    button->setPosition(currentx + 730, currenty - 590);
-    miniBag->setPosition (currentx, currenty);
-    emitter->setPositionY(currenty + 350);
-   
+    TimeUI->setPosition ( currentx , currenty );
+    _positionLabel->setPosition ( currentx - 570 , currenty + 490 );
+    button->setPosition ( currentx + 730 , currenty - 590 );
+    miniBag->setPosition ( currentx , currenty );
+    emitter->setPositionY ( currenty + 350 );
+
     // 检查玩家是否进入目标区域，并且按下 Enter 键
-    if (Region_supermarket.containsPoint(playerPos)) {
+    if (Region_supermarket.containsPoint ( playerPos )) {
         // 玩家进入目标区域
-        opendoor->setVisible(true);
-        opendoor->setPosition(playerPos.x + 110, playerPos.y + 30);
-        CCLOG("Player in target area");
+        opendoor->setVisible ( true );
+        opendoor->setPosition ( playerPos.x + 110 , playerPos.y + 30 );
+        CCLOG ( "Player in target area" );
 
         if (isEnterKeyPressed) {
             for (auto& pair : T_lastplace) {
@@ -611,36 +622,36 @@ void Town::checkPlayerPosition()
                 }
             }
             // 打印调试信息，检查 Enter 键的状态
-            CCLOG("Player in target area, isEnterKeyPressed: %d", isEnterKeyPressed);
+            CCLOG ( "Player in target area, isEnterKeyPressed: %d" , isEnterKeyPressed );
             // 调用场景切换逻辑
-            player1->removeFromParent();
-            
-            auto seedshop = supermarket::create();
+            player1->removeFromParent ();
+
+            auto seedshop = supermarket::create ();
             // miniBag->removeFromParent();
-            Director::getInstance()->replaceScene(seedshop);
+            Director::getInstance ()->replaceScene ( seedshop );
         }
 
     }
     else {
-        opendoor->setVisible(false);
-    }    
-    
-    if (Region_forest.containsPoint(playerPos)) {
+        opendoor->setVisible ( false );
+    }
+
+    if (Region_forest.containsPoint ( playerPos )) {
         if (isEnterKeyPressed) {
             for (auto& pair : T_lastplace) {
-                if (pair.first.first == "forest") {  
+                if (pair.first.first == "forest") {
                     pair.second = true;
                 }
             }
             // 调用场景切换逻辑
-            player1->removeFromParent();
-            auto nextscene = Forest::create();
-            Director::getInstance()->replaceScene(nextscene);
+            player1->removeFromParent ();
+            auto nextscene = Forest::create ();
+            Director::getInstance ()->replaceScene ( nextscene );
         }
 
     }
 
-    if (Region_beach.containsPoint(playerPos)) {
+    if (Region_beach.containsPoint ( playerPos )) {
         if (isEnterKeyPressed) {
             for (auto& pair : T_lastplace) {
                 if (pair.first.first == "beach") {
@@ -648,9 +659,9 @@ void Town::checkPlayerPosition()
                 }
             }
             // 调用场景切换逻辑
-            player1->removeFromParent();
-            auto nextscene = Beach::create();
-            Director::getInstance()->replaceScene(nextscene);
+            player1->removeFromParent ();
+            auto nextscene = Beach::create ();
+            Director::getInstance ()->replaceScene ( nextscene );
         }
     }
 
@@ -662,7 +673,7 @@ void Town::checkPlayerPosition()
         Vec2 temp;
         temp = playerPos;
         temp.x -= player1->speed;
-        distance = temp.distance(point);
+        distance = temp.distance ( point );
         if (distance <= 17) {
             player1->moveLeft = false;
         }
@@ -671,10 +682,10 @@ void Town::checkPlayerPosition()
                 player1->moveLeft = true;
             }
         }
-        
+
         temp = playerPos;
         temp.y -= 10;
-        distance = temp.distance(point);
+        distance = temp.distance ( point );
         if (distance <= 15) {
             player1->moveDown = false;
         }
@@ -686,7 +697,7 @@ void Town::checkPlayerPosition()
 
         temp = playerPos;
         temp.y += 10;
-        distance = temp.distance(point);
+        distance = temp.distance ( point );
         if (distance <= 15) {
             player1->moveUp = false;
         }
@@ -698,19 +709,17 @@ void Town::checkPlayerPosition()
 
         temp = playerPos;
         temp.x += 10;
-        distance = temp.distance(point);
+        distance = temp.distance ( point );
         if (distance <= 15) {
             player1->moveRight = false;
         }
-        else{
+        else {
             if (player1->rightpressed == false) {
                 player1->moveRight = true;
             }
         }
-       
-    }
-    
 
+    }
 }
 
 void Town::createRainEffect() {

@@ -2,6 +2,7 @@
 #include "intimacyUI.h"  
 #include "ui/CocosGUI.h"  
 #include "Item.h"  
+#include "quitUI.h"
 
 const int characternum = 5;
 
@@ -288,6 +289,7 @@ void intimacyUI::Buttons_switching () {
     auto bagkey = Sprite::create ( "UIresource/beibao/bagkey.png" );
     auto Skillkey = Sprite::create ( "UIresource/beibao/Skillkey.png" );
     auto intimacykey = Sprite::create ( "UIresource/beibao/intimacykey.png" );
+    auto quitkey = Sprite::create ( "UIresource/beibao/quit.png" );
     if (bagkey == nullptr)
     {
         problemLoading ( "'bagkey.png'" );
@@ -307,15 +309,18 @@ void intimacyUI::Buttons_switching () {
         Skillkey->setScale ( scale / 16.5 );
         Skillkey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.19 , currenty + visibleSize.height * 0.315 ) );//0.315是未选中时位置
         intimacykey->setScale ( scale / 16.5 );
-        intimacykey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.13 , currenty + visibleSize.height * 0.305 ) );//0.315是未选中时位置
+        intimacykey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.13 , currenty + visibleSize.height * 0.305 ) );
+        quitkey->setScale ( scale / 16.5 );
+        quitkey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.07 , currenty + visibleSize.height * 0.315 ) );
         this->addChild ( bagkey , 2 );
         this->addChild ( Skillkey , 2 );
         this->addChild ( intimacykey , 2 );
+        this->addChild ( quitkey , 2 );
     }
 
     //动画以及切换Layer
     auto listener = EventListenerMouse::create ();
-    listener->onMouseDown = [this , bagkey , Skillkey , intimacykey]( EventMouse* event ) {
+    listener->onMouseDown = [this , bagkey , Skillkey , intimacykey , quitkey]( EventMouse* event ) {
         Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
         mousePos = this->convertToNodeSpace ( mousePos );
         //CCLOG ( "X:%f,Y:%f" , event->getCursorX () , event->getCursorY () );
@@ -331,6 +336,11 @@ void intimacyUI::Buttons_switching () {
             Director::getInstance ()->getRunningScene ()->addChild ( SkillTreeUI::create ( nowScene ) , 20 );
         }
         else if (intimacykey->getBoundingBox ().containsPoint ( mousePos )) {
+        }
+        else if (quitkey->getBoundingBox ().containsPoint ( mousePos )) {
+            std::string nowScene = SceneName;
+            this->removeFromParent ();
+            Director::getInstance ()->getRunningScene ()->addChild ( quitUI::create ( nowScene ) , 20 );
         }
         };
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , this );

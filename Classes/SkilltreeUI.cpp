@@ -1,9 +1,7 @@
 // SkilltreeUI.cpp  
 #include "ui/CocosGUI.h"  
-#include "Item.h" 
 #include "SkillTreeUI.h"
-
-
+#include "quitUI.h"
 
 const int characternum = 5;
 
@@ -88,7 +86,7 @@ void SkillTreeUI::backgroundcreate () {
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     // 创建一个半透明的黑色遮罩
     auto darkLayer = cocos2d::LayerColor::create ( cocos2d::Color4B ( 0 , 0 , 0 , 120 ) , 10 * visibleSize.width , 5 * visibleSize.height );  // 黑色，透明度为120
-    darkLayer->setPosition ( Vec2 ( currentx , currenty ) - visibleSize / 2 );// 设置遮罩层的位置
+    darkLayer->setPosition ( Vec2 ( currentx , currenty ) - visibleSize  );// 设置遮罩层的位置
     this->addChild ( darkLayer , 0 );
     //大框架
     auto IntimacyFace = Sprite::create ( "UIresource/SkillTree/background1.png" );
@@ -177,6 +175,7 @@ void SkillTreeUI::Buttons_switching () {
     auto bagkey = Sprite::create ( "UIresource/beibao/bagkey.png" );
     auto Skillkey = Sprite::create ( "UIresource/beibao/Skillkey.png" );
     auto intimacykey = Sprite::create ( "UIresource/beibao/intimacykey.png" );
+    auto quitkey = Sprite::create ( "UIresource/beibao/quit.png" );
     if (bagkey == nullptr)
     {
         problemLoading ( "'bagkey.png'" );
@@ -197,14 +196,17 @@ void SkillTreeUI::Buttons_switching () {
         Skillkey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.19 , currenty + visibleSize.height * 0.305 ) );//0.315是未选中时位置
         intimacykey->setScale ( scale / 16.5 );
         intimacykey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.13 , currenty + visibleSize.height * 0.315 ) );
+        quitkey->setScale ( scale / 16.5 );
+        quitkey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.07 , currenty + visibleSize.height * 0.315 ) );
         this->addChild ( bagkey , 2 );
         this->addChild ( Skillkey , 2 );
         this->addChild ( intimacykey , 2 );
+        this->addChild ( quitkey , 2 );
     }
 
     //动画以及切换Layer
     auto listener = EventListenerMouse::create ();
-    listener->onMouseDown = [this , bagkey , Skillkey , intimacykey]( EventMouse* event ) {
+    listener->onMouseDown = [this , bagkey , Skillkey , intimacykey ,quitkey]( EventMouse* event ) {
         Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
         mousePos = this->convertToNodeSpace ( mousePos );
         //CCLOG ( "X:%f,Y:%f" , event->getCursorX () , event->getCursorY () );
@@ -221,6 +223,11 @@ void SkillTreeUI::Buttons_switching () {
             std::string nowScene = SceneName;
             this->removeFromParent ();
             Director::getInstance ()->getRunningScene ()->addChild ( intimacyUI::create ( nowScene ) , 20 );
+        }
+        else if (quitkey->getBoundingBox ().containsPoint ( mousePos )) {
+            std::string nowScene = SceneName;
+            this->removeFromParent ();
+            Director::getInstance ()->getRunningScene ()->addChild ( quitUI::create ( nowScene ) , 20 );
         }
         };
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , this );

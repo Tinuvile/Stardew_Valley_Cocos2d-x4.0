@@ -265,6 +265,7 @@ void NextScene::addLogo_sec ( const Size& visibleSize , const Vec2& origin )
         problemLoading ( "'title.png'" );
     }
 }
+
 void NextScene::cloudsAni ( float dt )
 {
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
@@ -310,6 +311,7 @@ void NextScene::cloudsAni ( float dt )
     cloud0->runAction ( cocos2d::RepeatForever::create ( moveTo_0 ) );
     clouds->runAction ( cocos2d::RepeatForever::create ( moveTo_s ) );
 }
+
 void NextScene::scenechangedown ()
 {
     auto visibleSize = Director::getInstance ()->getVisibleSize ();

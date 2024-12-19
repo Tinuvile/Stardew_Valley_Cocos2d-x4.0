@@ -84,7 +84,7 @@ private:
     // 判断收割G键是否按下
     bool isGKeyPressed = false;
 
-
+    Sprite* Box;
 
 };
 

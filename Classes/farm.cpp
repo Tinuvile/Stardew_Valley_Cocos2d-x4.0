@@ -142,10 +142,18 @@ bool farm::init ()
     //信箱添加，用来领取任务
     auto mailBox = Sprite::create ( "UIresource/xinxiang/xinxiang.png" );
     mailBox->setPosition ( Vec2 ( 260 , 1050 ) );
-    mailBox->setScale ( 0.8f );
+    mailBox->setScale ( 0.7f );
     this->addChild ( mailBox , 10 );
 
-    float interactionRadius = 250.0f;
+    //箱子添加，用来卖东西
+    Box = Sprite::create ( "UIresource/xiangzi/xiangzi.png" );
+    Box->setPosition ( Vec2 ( 260 , 1150 ) );
+    Box->setAnchorPoint ( Vec2 ( 0 , 0 ) );
+    Box->setScale ( 0.7f );
+    this->addChild ( Box , 10 );
+
+    //交互距离
+    float interactionRadius = 200.0f;
 
     auto listener = EventListenerMouse::create ();
     listener->onMouseDown = [this ,mailBox, interactionRadius]( Event* event ) {
@@ -319,6 +327,16 @@ void farm::checkPlayerPosition()
 
     // 获取玩家的位置
     Vec2 playerPos = player1->getPosition();
+
+    // 计算玩家与箱子之间的距离  
+    float distance = playerPos.distance ( Box->getPosition () );
+    // 检查距离是否在允许的范围内  
+    if (distance <= 200.0f) {
+        Box->setTexture ( "UIresource/xiangzi/Open.png" );
+    }
+    else {
+        Box->setTexture ( "UIresource/xiangzi/xiangzi.png" );
+    }
 
     // 更新位置标签的内容
     if (_positionLabel)

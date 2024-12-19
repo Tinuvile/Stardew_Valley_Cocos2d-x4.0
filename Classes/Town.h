@@ -60,6 +60,8 @@ private:
 
     bool isEnterKeyPressed = false;
 
+    Sprite* Box;
+
 };
 
 #endif // __BACKGROUND1_H__
