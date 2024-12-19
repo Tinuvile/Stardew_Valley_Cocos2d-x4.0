@@ -154,7 +154,7 @@ bool farm::init ()
         Vec2 clickPos ( mouseEvent->getCursorX () , mouseEvent->getCursorY () );
         clickPos = this->convertToNodeSpace ( clickPos );
 
-        // 判断点击位置是否在精灵范围内
+        // 判断点击位置是否在信箱附近范围内
         if (button != nullptr && button->getBoundingBox ().containsPoint ( clickPos )) {
             Director::getInstance ()->end ();
         }
@@ -162,7 +162,7 @@ bool farm::init ()
             // 获取玩家的位置  
             Vec2 playerPos = player1->getPosition ();
 
-            // 计算玩家与NPC之间的距离  
+            // 计算玩家与信箱之间的距离  
             float distance = playerPos.distance ( mailBox->getPosition () );
             // 检查距离是否在允许的范围内  
             if (distance <= interactionRadius) {
