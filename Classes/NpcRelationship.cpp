@@ -92,3 +92,14 @@ int NpcRelationship::NpcGiftTIme ( const std::string& npc ) {
     // 查找并返回礼物次数，未记录则返回 0  
     return GiftTime[npc];
 }
+
+void NpcRelationship::updateGiftTime () {
+    // 检查是否已经过了七天  
+    if ((day - lastUpdateDay) >= 7) {
+        // 重置所有NPC的GiftTime  
+        for (auto& entry : GiftTime) {
+            entry.second = 0; 
+        }
+        lastUpdateDay = day; // 更新最后一次更新的天数  
+    }
+}

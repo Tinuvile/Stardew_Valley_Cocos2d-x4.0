@@ -1,8 +1,11 @@
-#ifndef NPC_RELATIONSHIP_H  
-#define NPC_RELATIONSHIP_H  
+#pragma once
 
 #include <unordered_map>
 #include <string>
+// #include "AppDelegate.h"
+
+class AppDelegate;
+extern int day;
 
 using namespace std;
 
@@ -37,14 +40,16 @@ public:
 
 	int NpcGiftTIme ( const std::string& npc );
 
+	void NpcRelationship::updateGiftTime ();
+
 private:
 	unordered_map<string, unordered_map<string, double>> relationships;
 
 	unordered_map<string , int> GiftTime;
 
+	int lastUpdateDay = 0;
+
 	// 关系值上下限  
 	static const int MIN_RELATIONSHIP = -100;
 	static const int MAX_RELATIONSHIP = 100;
 };
-
-#endif  // NPC_RELATIONSHIP_H
