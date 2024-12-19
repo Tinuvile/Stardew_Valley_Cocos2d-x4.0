@@ -11,6 +11,9 @@
 
 USING_NS_CC;
 
+class EconomicSystem;
+
+
 class farm : public cocos2d::Scene
 {
 public:

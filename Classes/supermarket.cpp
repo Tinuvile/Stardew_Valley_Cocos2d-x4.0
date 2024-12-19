@@ -422,13 +422,13 @@ bool supermarket::init()
                 CCLOG("Enter key pressed.");
             }
             // 处理其他按键  
-            if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
+            if (keyCode == EventKeyboard::KeyCode::KEY_P) {
                 static StoreUI* currentStoreUI = nullptr;  // 保存当前显示的 StoreUI  
                 // 如果当前没有打开 StoreUI，则打开它  
                 if (currentStoreUI == nullptr) {
                     CCLOG ( "Opening inventory." );
                     currentStoreUI = StoreUI::create ( inventory , StoreItem );
-                    this->addChild ( currentStoreUI , 11 );
+                    this->addChild ( currentStoreUI , 20 );
                 } 
                 else {
                     CCLOG ( "Closing inventory." );
