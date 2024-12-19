@@ -42,4 +42,8 @@ public:
     virtual std::shared_ptr<Item> GetCopy() const;
 
     virtual void Use();  // 每个物品的使用方法
+
+    bool operator==( const Item& other ) const {
+        return false;
+    }
 };

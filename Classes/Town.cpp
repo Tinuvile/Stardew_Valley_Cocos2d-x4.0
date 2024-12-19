@@ -14,6 +14,7 @@ Town::~Town() {}
 
 bool Town::init()
 {
+    inventory->AddItem ( amethyst );
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -339,15 +340,44 @@ bool Town::init()
             CCLOG ( "Failed to create NPC Abigail." );
         }
 
+        //箱子添加，用来完成任务
+        Box = Sprite::create ( "UIresource/xiangzi/xiangzi.png" );
+        Box->setPosition ( Vec2 ( -260 , 710 ) );
+        Box->setAnchorPoint ( Vec2 ( 0 , 0 ) );
+        Box->setScale ( 0.7f );
+        this->addChild ( Box , 10 );
 
         // 鼠标事件监听器
         auto listener = EventListenerMouse::create ();
         listener->onMouseDown = [this , abigail , alex , caroline , elliott , emily , interactionRadius]( Event* event ) {
 
-            // 获取鼠标点击的位置  
+            // 获取鼠标点击的位置
             auto mouseEvent = static_cast<EventMouse*>(event);
             Vec2 clickPos ( mouseEvent->getCursorX () , mouseEvent->getCursorY () );
             clickPos = this->convertToNodeSpace ( clickPos );
+
+            if (Box->getBoundingBox ().containsPoint ( clickPos )) {
+                // 获取玩家的位置  
+                Vec2 playerPos = player1->getPosition ();
+
+                Vec2 BoxPos = Box->getPosition ();
+
+                // 计算玩家与NPC之间的距离  
+                float distance = playerPos.distance ( BoxPos );
+
+                // 检查距离是否在允许的范围内  
+                if (distance <= interactionRadius) {
+                    if (miniBag->getSelectedSlot ()) {
+                        std::string taskName = taskManager->findTaskByRequiredItems ( *(inventory->GetItemAt ( miniBag->getSelectedSlot () )) );
+                        if (taskName.empty ()) {
+                            // 处理任务未找到的情况
+                        }
+                        else {
+                            taskManager->completeTask ( taskName );
+                        }
+                    }
+                }
+            }
 
             // 检查是否点击了NPC并打开对话框  
             std::vector<std::pair<NPC* , std::string>> npcs = {
@@ -410,12 +440,6 @@ bool Town::init()
 
         _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , button );
     }
-        //箱子添加，用来卖东西
-        Box = Sprite::create ( "UIresource/xiangzi/xiangzi.png" );
-        Box->setPosition ( Vec2 ( -260 , 710 ) );
-        Box->setAnchorPoint ( Vec2 ( 0 , 0 ) );
-        Box->setScale ( 0.7f );
-        this->addChild ( Box , 10 );
 
     // 设置键盘监听器
     auto listenerWithPlayer = EventListenerKeyboard::create();

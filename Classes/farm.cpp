@@ -208,7 +208,6 @@ bool farm::init ()
     
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , this );
 
-
     // ÉèÖÃ¼üÅÌ¼àÌýÆ÷
     auto listenerWithPlayer = EventListenerKeyboard::create ();
     listenerWithPlayer->onKeyPressed = [this]( EventKeyboard::KeyCode keyCode , Event* event )

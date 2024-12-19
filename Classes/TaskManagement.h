@@ -49,10 +49,13 @@ public:
 	void AddAcceptTask ( const Task& task );
 
 	// 完成任务并处理奖励  
-	void completeTask ( const Task& task );
+	void completeTask ( const std::string& task_name );
 
 	//任务接受后从发布任务中删除
 	void DeleteAcceptTask ( const Task& task );
+
+	// 返回物品对应的任务
+	std::string findTaskByRequiredItems ( const Item& item );
 
 protected:
 
