@@ -162,10 +162,31 @@ bool farm::init ()
 
     auto listener = EventListenerMouse::create ();
     listener->onMouseDown = [this ,mailBox, interactionRadius]( Event* event ) {
+        
         // 获取鼠标点击的位置
         auto mouseEvent = static_cast<EventMouse*>(event);
         Vec2 clickPos ( mouseEvent->getCursorX () , mouseEvent->getCursorY () );
         clickPos = this->convertToNodeSpace ( clickPos );
+
+        if (Box->getBoundingBox ().containsPoint ( clickPos )) {
+            // 获取玩家的位置  
+            Vec2 playerPos = player1->getPosition ();
+
+            Vec2 BoxPos = Box->getPosition ();
+
+            // 计算玩家与NPC之间的距离  
+            float distance = playerPos.distance ( BoxPos );
+
+            // 检查距离是否在允许的范围内  
+            if (distance <= interactionRadius) {
+                if (miniBag->getSelectedSlot ()) {
+                    GoldAmount += inventory->GetItemAt ( miniBag->getSelectedSlot () )->GetValue ();
+                    inventory->RemoveItem ( miniBag->getSelectedSlot () );
+                    inventory->is_updated = true;
+                    miniBag->getSelectBack ();
+                }
+            }
+        }
 
         // 判断点击位置是否在信箱附近范围内
         if (button != nullptr && button->getBoundingBox ().containsPoint ( clickPos )) {
@@ -184,32 +205,8 @@ bool farm::init ()
             }
         }
         };
-
-    listener->onMouseDown = [this , interactionRadius] ( Event* event ) {
-        // 获取鼠标点击的位置       
-        auto mouseEvent = static_cast<EventMouse*>(event);
-        Vec2 clickPos ( mouseEvent->getCursorX () , mouseEvent->getCursorY () );
-        clickPos = this->convertToNodeSpace ( clickPos );
-
-        // 获取玩家的位置  
-        Vec2 playerPos = player1->getPosition ();
-        
-        Vec2 BoxPos = Box->getPosition ();
-
-        // 计算玩家与NPC之间的距离  
-        float distance = playerPos.distance ( BoxPos );
-
-        // 检查距离是否在允许的范围内  
-        if (distance <= interactionRadius) {
-            if (miniBag->getSelectedSlot ()) {
-                GoldAmount += inventory->GetItemAt ( miniBag->getSelectedSlot () )->GetValue ();
-                inventory->RemoveItem ( miniBag->getSelectedSlot () );
-                inventory->is_updated = true;
-                miniBag->getSelectBack ();
-            }
-        }
-    };
-    _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , button );
+    
+    _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , this );
 
 
     // 设置键盘监听器
