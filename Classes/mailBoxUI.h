@@ -11,6 +11,9 @@ public:
     static mailBoxUI* create ();
 
 private:
+
+    void displayAllTasks ( TaskManagement& taskManager );
+
     void close ();
 
     void backgroundcreate ();

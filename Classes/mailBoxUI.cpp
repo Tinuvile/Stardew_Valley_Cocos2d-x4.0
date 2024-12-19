@@ -67,6 +67,36 @@ void mailBoxUI::backgroundcreate () {
 
         this->addChild ( mail , 1 );
     }
+
+    // 获取所有任务  
+    std::vector<TaskManagement::Task> tasks = taskManager->returnTasks ();
+
+    // 创建一个字符串以存储所有任务的信息  
+    std::string allTasksInfo;
+
+    for (const auto& task : tasks) {
+        // 格式化任务信息  
+        std::string taskInfo = "Task Name: " + task.name + "\n";
+        taskInfo += "Task Type: " + std::to_string ( task.type ) + "\n";
+        if (task.type == TaskManagement::NPC_TASK) {
+            taskInfo += "NPC: " + task.npcName + "\n";
+        }
+        taskInfo += "Reward Coins: " + std::to_string ( task.rewardCoins ) + "\n";
+        taskInfo += "AddRelationship: " + std::to_string ( task.relationshipPoints ) + "\n";
+        taskInfo += "------------------------\n";
+
+        allTasksInfo += taskInfo; // 将每个任务信息添加到总字符串中  
+    }
+
+    // 创建标签来显示任务信息  
+    auto taskMessage = Label::createWithSystemFont ( allTasksInfo , "fonts/Comic Sans MS.ttf" , 35 );
+    taskMessage->setTextColor ( Color4B::BLACK );
+
+    taskMessage->setPosition ( Vec2 ( currentx , currenty ) );
+
+    // 将标签添加到场景中  
+    this->addChild ( taskMessage , 2 );
+
 }
 
 void mailBoxUI::close () {
@@ -111,6 +141,43 @@ void mailBoxUI::close () {
             };
         _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , closeIcon );
     }
+}
+
+void mailBoxUI::displayAllTasks ( TaskManagement& taskManager ) {
+    Vec2 position = player1->getPosition ();
+    float currentx = position.x , currenty = position.y;
+    updateCoordinate ( currentx , currenty );
+
+    // 获取所有任务  
+    std::vector<TaskManagement::Task> tasks = taskManager.returnTasks ();
+
+    // 创建一个字符串以存储所有任务的信息  
+    std::string allTasksInfo;
+
+    for (const auto& task : tasks) {
+        // 格式化任务信息  
+        std::string taskInfo = "任务名称: " + task.name + "\n";
+        taskInfo += "任务类型: " + std::to_string ( task.type ) + "\n";
+        if (task.type == TaskManagement::NPC_TASK) {
+            taskInfo += "发布NPC: " + task.npcName + "\n";
+        }
+        taskInfo += "奖励金币: " + std::to_string ( task.rewardCoins ) + "\n";
+        taskInfo += "好感度: " + std::to_string ( task.relationshipPoints ) + "\n";
+        taskInfo += "------------------------\n";
+
+        allTasksInfo += taskInfo; // 将每个任务信息添加到总字符串中  
+    }
+
+    // 创建标签来显示任务信息  
+    auto taskMessage = Label::createWithSystemFont ( allTasksInfo , "fonts/Comic Sans MS.ttf" , 40 );
+    taskMessage->setTextColor ( Color4B::BLACK );
+
+    // 设置标签的位置  
+    Vec2 visibleSize = Director::getInstance ()->getVisibleSize ();
+    taskMessage->setPosition ( Vec2 ( currentx , currenty ) );
+
+    // 将标签添加到场景中  
+    Director::getInstance ()->getRunningScene ()->addChild ( taskMessage , 2 );
 }
 
 bool mailBoxUI::init () {

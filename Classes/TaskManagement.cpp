@@ -7,6 +7,11 @@ void TaskManagement::createTask ( const Task& task ) {
 	tasks.push_back ( task );
 }
 
+// 添加已经接受的任务
+void TaskManagement::AddAcceptTask ( const Task& task ) {
+    acceptTasks.push_back ( task );
+}
+
 // 完成任务并获得奖励
 void TaskManagement::completeTask ( const Task& task ) {
 	auto it = std::find_if ( tasks.begin () , tasks.end () , [&task]( const Task& t ) {
@@ -36,4 +41,5 @@ void TaskManagement::completeTask ( const Task& task ) {
 
     // 从任务列表中移除任务  
     tasks.erase ( it );
+    acceptTasks.erase ( it );
 }
