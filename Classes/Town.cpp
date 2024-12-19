@@ -374,7 +374,7 @@ bool Town::init()
 
                     // 检查距离是否在允许的范围内  
                     if (distance <= interactionRadius) {
-                        if (!miniBag->getSelectedSlot ()) {
+                        if (!miniBag->getSelectedSlot () || npc_relationship->NpcGiftTIme ( npc->GetName () ) == 2) {
                             // 打开对话框，确保对话框每次都是新的实例  
                             NPCtalkUI* currentNPCtalkUI = NPCtalkUI::create ( npc , "Town" );
                             this->addChild ( currentNPCtalkUI , 12 ); // 将当前NPC对话框添加到场景中  
