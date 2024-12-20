@@ -59,9 +59,6 @@ std::string FarmName = "An ordinary farm";
 // 全局指针变量定义
 Player* player1 = nullptr;
 mini_bag* miniBag = nullptr;
-Town* town = nullptr;
-supermarket* seedshop = nullptr;
-farm* Farm = nullptr;
 Timesystem* TimeUI = nullptr;
 
 Inventory* inventory = new Inventory ();
@@ -137,7 +134,6 @@ bool AppDelegate::applicationDidFinishLaunching() {
 void AppDelegate::runScene(cocos2d::Director* director) {
 
     Initialize ();
-    player1 = Player::create();
 
     // 获取当前视图的可见大小和原点位置
     auto visibleSize = Director::getInstance()->getVisibleSize();  // 获取屏幕可视区域的大小
@@ -157,8 +153,8 @@ void AppDelegate::runScene(cocos2d::Director* director) {
     // director->runWithScene ( beach );
 
     // 运行家的场景
-    // auto test = Myhouse::create();
-    // director->runWithScene(test); 
+   /*  auto test = Myhouse::create();
+     director->runWithScene(test); */
 
     // 运行小镇的场景
     // auto test = Town::create ();
@@ -185,15 +181,14 @@ void AppDelegate::runScene(cocos2d::Director* director) {
       director->runWithScene(test);
 
     //开局UI运行
-    // director->runWithScene ( BeginScene::create () );
+     director->runWithScene ( BeginScene::create () );
     //创建人物界面运行
     // director->runWithScene ( CreateCharacter::create () );
 }
 
 void AppDelegate::Initialize () {
    
-    // 创建人物
-    player1 = Player::create ();
+   
     // 初始化存储作物信息的数组
     cropbasicinformation.insert({ "Wheat_Seeds", wheat });
     cropbasicinformation.insert({ "Corn_Seeds", corn });

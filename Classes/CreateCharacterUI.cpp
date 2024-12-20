@@ -1,6 +1,7 @@
 #include "CreateCharacterUI.h"
 #include "Town.h"
 #include "AppDelegate.h"
+#include "Myhouse.h"
 
 USING_NS_CC;
 
@@ -225,7 +226,10 @@ void CreateCharacter::optionFace () {
     OK->setEnabled ( false );  // 禁用点击事件
     //跳转位置待修改
     OK->addClickEventListener ( [this]( Ref* sender ) {
-        Director::getInstance ()->replaceScene ( TransitionFade::create ( 2.0f , Myhouse::create () ) );
+
+        player1 = Player::create();
+        auto nextscene = Myhouse::create();
+        Director::getInstance ()->replaceScene ( nextscene );
 } );
     Vec2 Pos = Vec2 ( visibleSize.width * 0.5 , visibleSize.height * 0.2 );
     OK->setPosition ( Pos );
