@@ -511,7 +511,7 @@ void farm::checkPlayerPosition ()
                             inventory->RemoveItem ( *temp );
 
                             strength -= 10;
-                            TimeUI->energy_bar->setScaleY ( strength / 100.0 * 16.5f );
+                            TimeUI->UpdateEnergy ();
 
                             Crop_information.push_back ( cropbasicinformation[TypeName].GetCropCopy () );
                             Crop_information.back ()->plant_day = season[Season] * 7 + day;
@@ -642,7 +642,7 @@ void farm::checkPlayerPosition ()
                         }
 
                         strength -= 10;
-                        TimeUI->energy_bar->setScaleY ( strength / 100.0 * 16.5f );
+                        TimeUI->UpdateEnergy ();
 
                         // ¸²¸Ç¾«Áé
                         auto test = Sprite::create ( "farm/tile.png" );

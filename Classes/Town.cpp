@@ -24,6 +24,7 @@ bool Town::init()
 
     // 设置计时器标签
     TimeUI = Timesystem::create("Town");
+    
     this->addChild(TimeUI, 13);
 
 

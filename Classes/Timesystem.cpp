@@ -51,7 +51,7 @@ bool Timesystem::init( std::string place ) {
     energy_frame->setPosition(435, 500);
 
     energy_bar = Sprite::create("Beach/green_bar.png");
-    energy_bar->setScaleY(strength / 100 * 16.5f);
+    energy_bar->setScaleY(strength / 100.0 * 16.5f);
     energy_bar->setScaleX(3.1f);
     energy_bar->setAnchorPoint(Vec2(0.5f, 0.0f));
     this->addChild(energy_bar, 3);
