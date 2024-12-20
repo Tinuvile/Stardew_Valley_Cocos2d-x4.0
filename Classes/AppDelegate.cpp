@@ -11,11 +11,10 @@
 #include "AppDelegate.h"
 #include "GameBeginUI.h"
 #include "Player.h"
-#include "Town.h"
-#include "supermarket.h"
+//#include "Town.h"
+#include "Barn.h"
+//#include "supermarket.h"
 #include "CreateCharacterUI.h"
-#include "NpcRelationship.h"
-#include "SkillTree.h"
 
  // #define USE_AUDIO_ENGINE 1   // 如果需要使用音频引擎，可以取消注释这一行
 
@@ -27,16 +26,51 @@ using namespace cocos2d::experimental;  // 使用音频引擎的命名空间
 USING_NS_CC;  // 使用cocos2d的命名空间
 
 /******************************** 全局变量声明区 ****************************************/
-int remainingTime = 60000;
-Player* player1 = nullptr;
-Town* town = NULL;
-supermarket* seedshop = NULL;
-std::map<std::pair<std::string, Vec2>, bool> T_lastplace;
-Inventory* inventory = new Inventory ();//人物背包
+// 在此文件中定义并初始化全局变量
+int remainingTime = 10800;
+int day = 1;
 int GoldAmount = 4000;
-NpcRelationship* npc_relationship = new NpcRelationship ();
-SkillTree* skillTree = new SkillTree ();
+int strength = 100;
+bool frombed = true;
+bool IsNextDay = false;
+bool IsSleep = true;
 
+Crop wheat ( "wheat" , "crop/wheat1.png" , "crop/wheat2.png" , "crop/wheat3.png" , "All" , Phase::SEED , 50 , 0 , false , 4 );
+Crop corn ( "corn" , "crop/corn1.png" , "crop/corn2.png" , "crop/corn3.png" , "Spring" , Phase::SEED , 50 , 0 , false , 6 );
+Crop potato ( "potato" , "crop/potato1.png" , "crop/potato2.png" , "crop/potato3.png" , "All" , Phase::SEED , 30 , 0 , false , 2 );
+Crop pumpkin ( "pumpkin" , "crop/pumpkin1.png" , "crop/pumpkin2.png" , "crop/pumpkin3.png" , "Autumn" , Phase::SEED , 70 , 0 , false , 6 );
+Crop blueberry ( "blueberry" , "crop/blueberry1.png" , "crop/blueberry2.png" , "crop/blueberry3.png" , "Summer" , Phase::SEED , 100 , 0 , false , 7 );
+
+std::string Season = "Spring";
+std::string Weather = "Rainy";
+std::string Festival = "Fishing Festival";
+std::map<std::string , int> season;
+std::vector<std::shared_ptr<Crop>> Crop_information;
+std::vector<std::shared_ptr<Ore>> Ore_information;
+std::vector<std::shared_ptr<Tree>> Tree_information;
+std::map<std::string , Crop> cropbasicinformation;
+std::map<std::pair<std::string , Vec2> , bool> T_lastplace;
+std::map<std::pair<std::string , Vec2> , bool> F_lastplace;
+std::map<std::pair<std::string , Vec2>, bool> W_lastplace;
+
+std::string protagonistName = "player";
+std::string FarmName = "An ordinary farm";
+
+// 全局指针变量定义
+Player* player1 = nullptr;
+mini_bag* miniBag = nullptr;
+Timesystem* TimeUI = nullptr;
+
+Inventory* inventory = new Inventory ();
+
+NpcRelationship* npc_relationship = new NpcRelationship();
+
+std::vector<std::pair<Rect , bool>> barn_space;
+std::vector<Livestock*> livestocks;
+SkillTree* skill_tree = new SkillTree ();
+
+// 创建任务管理器
+TaskManagement* taskManager = new TaskManagement();
 /****************************************************************************************/
 
 
@@ -89,8 +123,6 @@ bool AppDelegate::applicationDidFinishLaunching() {
     glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::NO_BORDER);
     director->setContentScaleFactor(1.0f);
 
-    std::srand ( static_cast<unsigned int>(std::time ( 0 )) );
-
     register_all_packages();  // 注册所有的包
 
     runScene(director);
@@ -101,24 +133,209 @@ bool AppDelegate::applicationDidFinishLaunching() {
 // 切换场景的函数
 void AppDelegate::runScene(cocos2d::Director* director) {
 
-    player1 = Player::create();
+    Initialize ();
 
     // 获取当前视图的可见大小和原点位置
     auto visibleSize = Director::getInstance()->getVisibleSize();  // 获取屏幕可视区域的大小
     Vec2 origin = Director::getInstance()->getVisibleOrigin();  // 获取屏幕原点的位置（左下角）
   
-    std::pair<std::string, Vec2> key = { "initiation",Vec2(350,350)};
+    std::pair<std::string , Vec2> key = { "initiation",Vec2 ( 350,350 ) };
     T_lastplace.insert(std::make_pair(key, true));
-    key = { "seedshop",Vec2(230,470) };
+    key = { "seedshop",Vec2 ( 230,470 ) };
     T_lastplace.insert(std::make_pair(key, false));
-    director->runWithScene ( Town::create () );
-    //director->runWithScene ( supermarket::create () );
+
+    // 运行农场
+    //auto farm = farm::create ();
+    //director->runWithScene ( farm );
+
+    //运行海滩场景
+    // auto beach = Beach::create ();
+    // director->runWithScene ( beach );
+
+    // 运行家的场景
+   /*  auto test = Myhouse::create();
+     director->runWithScene(test); */
+
+    // 运行小镇的场景
+    // auto test = Town::create ();
+    // director->runWithScene(test);
+
+    // 运行商店的场景
+    //auto test = supermarket::create();
+    //director->runWithScene(test);
+
+    // 运行Cave
+     //auto test = Cave::create();
+     //director->runWithScene(test);
+
+    // 运行Beach
+    // auto test = Beach::create();
+    // director->runWithScene(test);
+    
+    // 运行森林
+    /* auto test = Forest::create();
+     director->runWithScene(test);*/
+
+     // 运行畜棚
+     /* auto test = Barn::create();
+      director->runWithScene(test);*/
 
     //开局UI运行
-    //director->runWithScene ( BeginScene::create () );
+     director->runWithScene ( BeginScene::create () );
     //创建人物界面运行
-    //director->runWithScene ( CreateCharacter::create () );
+    // director->runWithScene ( CreateCharacter::create () );
 }
+
+void AppDelegate::Initialize () {
+   
+   
+    // 初始化存储作物信息的数组
+    cropbasicinformation.insert({ "Wheat_Seeds", wheat });
+    cropbasicinformation.insert({ "Corn_Seeds", corn });
+    cropbasicinformation.insert({ "Potato_Seeds", potato });
+    cropbasicinformation.insert({ "Pumpkin_Seeds", pumpkin });
+    cropbasicinformation.insert({ "Blueberry_Seeds", blueberry });
+
+    // 初始化宝石信息
+    Ore Ruby("Ruby", "Ore/Ruby1.png", "Ore/Ruby2.png", 3, 3, Vec2(350, 500));                   // 红宝石
+    Ore_information.push_back(Ruby.GetOreCopy());
+    Ruby.position = Vec2(950, 750);
+    Ore_information.push_back(Ruby.GetOreCopy());
+
+    Ore Amethyst("Amethyst", "Ore/Amethyst1.png", "Ore/Amethyst2.png", 5, 5, Vec2(800, 250));   // 紫宝石
+    Ore_information.push_back(Amethyst.GetOreCopy());
+    Amethyst.position = Vec2(750, 850);
+    Ore_information.push_back(Amethyst.GetOreCopy());
+
+    Ore Emerald("Emerald", "Ore/Emerald1.png", "Ore/Emerald2.png", 5, 5, Vec2(900, 150));       // 绿宝石
+    Ore_information.push_back(Emerald.GetOreCopy());
+    Emerald.position = Vec2(1250, 350);
+    Ore_information.push_back(Emerald.GetOreCopy());
+
+    // 初始化树木信息
+    Tree tree("tree", "Tree/tree1.png", "Tree/tree2.png", "Tree/tree3.png", 15, 5, Vec2(50, 950));
+    Tree_information.push_back(tree.GetTreeCopy());
+    tree.position = Vec2(-400, 700);
+    Tree_information.push_back(tree.GetTreeCopy());
+    tree.position = Vec2(800, 1250);
+    Tree_information.push_back(tree.GetTreeCopy());
+    tree.position = Vec2(900, 1650);
+    Tree_information.push_back(tree.GetTreeCopy());
+    tree.position = Vec2(1300, 1550);
+    Tree_information.push_back(tree.GetTreeCopy());
+
+    // 初始化小镇各地址坐标
+    std::pair<std::string , Vec2> key = { "initiation",Vec2 (-925,650) };
+    T_lastplace.insert ( std::make_pair ( key , true ) );
+    key = { "seedshop",Vec2 ( 230,470 ) };
+    T_lastplace.insert ( std::make_pair ( key , false ) );
+    key = { "forest",Vec2(-925,650) };
+    T_lastplace.insert(std::make_pair(key, false));
+
+    // 初始化农场各地址坐标
+    key = { "initiation",Vec2(70, 920) };
+    F_lastplace.insert(std::make_pair(key, true));
+    key = { "myhouse",Vec2(70, 920) };
+    F_lastplace.insert(std::make_pair(key, false));
+    key = { "barn",Vec2(20, 170) };
+    F_lastplace.insert(std::make_pair(key, false));
+    key = { "forest",Vec2(740,-30) };
+    F_lastplace.insert(std::make_pair(key, false));
+    key = { "cave",Vec2(635, 1185) };
+    F_lastplace.insert(std::make_pair(key, false));
+    key = { "beach",Vec2(500, -750) };
+    F_lastplace.insert(std::make_pair(key, false));
+
+    // 初始化森林各地址坐标
+    key = { "initiation",Vec2(1150,2650) };
+    W_lastplace.insert(std::make_pair(key, true));
+    key = { "town",Vec2(2600, 1900) };
+    W_lastplace.insert(std::make_pair(key, false));
+    key = { "farm",Vec2(1150, 2650) };
+    W_lastplace.insert(std::make_pair(key, false));
+
+    // 创建任务  
+    TaskManagement::Task task1 (
+        "Fetch the Amethyst" ,
+        TaskManagement::NPC_TASK ,
+        "Retrieve the Amethyst for Abigail." , // 详细说明  
+        "Spring" , // 初始日期  
+        "Summer"  // 截至日期  
+    );
+    task1.npcName = "Abigail"; // 发布任务的 NPC 名字  
+    task1.requiredItems.push_back ( Bean_Starter ); // 需要的物品  
+    task1.rewardCoins = 500; // 奖励金币  
+    task1.relationshipPoints = 10; // NPC 好感度  
+
+    TaskManagement::Task task2 (
+        "Collect Emerald" ,
+        TaskManagement::SYSTEM_TASK ,
+        "Collect an Emerald for system tasks." , // 详细说明  
+        "Summer" , // 初始日期  
+        "Autumn"  // 截至日期  
+    );
+    task2.requiredItems.push_back ( emerald ); // 需要的物品  
+    task2.rewardCoins = 30; // 奖励金币  
+
+    TaskManagement::Task task3 (
+        "Festival Gathering" ,
+        TaskManagement::FESTIVAL_TASK ,
+        "Join the festival and collect special items." , // 详细说明  
+        "Winter" , // 初始日期  
+        "Summer"  // 截至日期  
+    );
+    task3.specialRewards.push_back ( Gold_Hoe );   // 特殊奖励  
+    task3.relationshipPoints = 5; // 与所有人的好感度  
+
+    // 将任务添加到任务管理器  
+    taskManager->createTask ( task1 );
+    taskManager->createTask ( task2 );
+    taskManager->createTask ( task3 );
+
+    taskManager->AddAcceptTask ( task1 );
+
+    //初始化Barn内可放置家畜矩阵
+    barn_space.push_back(std::make_pair(Rect(685.714294, 213.333328, 114.285713, 106.666664), false));
+    barn_space.push_back(std::make_pair(Rect(800.000000, 213.333328, 114.285713, 106.666664), false));
+    barn_space.push_back(std::make_pair(Rect(914.285706, 213.333328, 114.285713, 106.666664), false));
+    barn_space.push_back(std::make_pair(Rect(1142.857178, 213.333328, 114.285713, 106.666664), false));
+    barn_space.push_back(std::make_pair(Rect(685.714294, 426.666656, 114.285713, 106.666664), false));
+    barn_space.push_back(std::make_pair(Rect(800.000000, 426.666656, 114.285713, 106.666664), false));
+    barn_space.push_back(std::make_pair(Rect(914.285706, 426.666656, 114.285713, 106.666664), false));
+    barn_space.push_back(std::make_pair(Rect(1142.857178, 426.666656, 114.285713, 106.666664), false));
+    barn_space.push_back(std::make_pair(Rect(685.714294, 640.000000, 114.285713, 106.666664), false));
+    barn_space.push_back(std::make_pair(Rect(800.000000, 640.000000, 114.285713, 106.666664), false));
+    barn_space.push_back(std::make_pair(Rect(914.285706, 640.000000, 114.285713, 106.666664), false));
+    barn_space.push_back(std::make_pair(Rect(1142.857178, 640.000000, 114.285713, 106.666664), false));
+
+    // 初始化季节
+    season.insert ( { "Spring", 1 } );
+    season.insert ( { "Summer", 2 } );
+    season.insert ( { "Autumn", 3 } );
+    season.insert ( { "Winter", 4 } );
+
+    // 创建任务  
+    //TaskManagement::Task task1 ( "Fetch the Amethyst" , TaskManagement::NPC_TASK );
+    //task1.npcName = "Abigail"; // 发布任务的 NPC 名字  
+    //task1.requiredItems.push_back ( amethyst ); // 需要的物品  
+    //task1.rewardCoins = 500; // 奖励金币  
+    //task1.relationshipPoints = 10; // NPC 好感度  
+
+    //TaskManagement::Task task2 ( "Collect Emerald" , TaskManagement::SYSTEM_TASK );
+    //task2.requiredItems.push_back ( emerald ); // 需要的物品  
+    //task2.rewardCoins = 30; // 奖励金币  
+
+    //TaskManagement::Task task3 ( "Festival Gathering" , TaskManagement::FESTIVAL_TASK );
+    //task3.specialRewards.push_back ( Gold_Hoe );   // 特殊奖励  
+    //task3.relationshipPoints = 5; // 与所有人的好感度  
+
+    //// 将任务添加到任务管理器  
+    //taskManager->createTask ( task1 );
+    //taskManager->createTask ( task2 );
+    //taskManager->createTask ( task3 );
+}
+
+
 
 // 当应用程序进入后台时调用
 void AppDelegate::applicationDidEnterBackground() {

@@ -5,9 +5,9 @@
 #include "AppDelegate.h"
 class mini_bag : public cocos2d::Layer {
 public:
-    virtual bool init ( Inventory* inventory,std::string& WhichScene );
+    virtual bool init ( Inventory* inventory);
 
-    static mini_bag* create ( Inventory* inventory,std::string& WhichScene );
+    static mini_bag* create ( Inventory* inventory);
 
     void backgroundcreate ();
 
@@ -15,7 +15,11 @@ public:
 
     void updateDisplay (); // 更新显示内容  
 
-    void updateCoordinate ( float& x , float& y);
+    int getSelectedSlot () { return _selectedSlot; }
+
+    void getSelectBack ();
+
+    std::shared_ptr<Item> getSelectedItem();
 
 private:
     Inventory* _inventory; // 指向 Inventory 实例的指针  
@@ -24,14 +28,12 @@ private:
 
     cocos2d::Vector<cocos2d::Sprite*> _itemSlots; // 存储物品槽的 Sprite  
 
-    int _selectedSlot; // 当前选中的槽位 
-
-    void onItemSlotClicked ( cocos2d::Ref* sender ); // 物品槽的点击事件处理  
+    int _selectedSlot = 0; // 当前选中的槽位 
 
     bool isClick = false;  // 标志，表示是否被点击
 
+	bool is_key_e_pressed = false; // 标志，表示是否按下了 E 键
+
     cocos2d::Sprite* currentItemSprite = nullptr; // 标识当前选择的物品
 
-    std::string whichScene;
 };
-#pragma once

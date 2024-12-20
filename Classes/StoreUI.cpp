@@ -4,8 +4,6 @@
 #include "Item.h"  
 #include "AppDelegate.h"
 
-extern Player* player1;
-extern int GoldAmount;
 
 USING_NS_CC;
 static void problemLoading ( const char* filename )
@@ -13,6 +11,7 @@ static void problemLoading ( const char* filename )
     printf ( "Error while loading: %s\n" , filename );
     printf ( "Depending on how you compiled you might have to add 'Resources/' in front of filenames in CreateCharacterScene.cpp\n" );
 }
+
 void StoreUI::updateCoordinate ( float& x , float& y ) {
     Vec2 position = player1->getPosition ();
     if (x <= 725) {
@@ -73,12 +72,52 @@ void StoreUI::backgroundcreate () {
                     //economicSystem->buyItem ( chosen_Item->GetName () );
                     int goldAmount = economicSystem->getGoldAmount ();
                     CCLOG ( "goldAmount: %d , Value: %d" , goldAmount , chosen_Item->GetValue () );
+                    std::string chosen_item_name = chosen_Item->GetName ();
                     if (goldAmount >= chosen_Item->GetValue ()) {
-                        economicSystem->subtractGold ( chosen_Item->GetValue () );
-                        _mybag->AddItem ( *chosen_Item );
-                        _mybag->isupdated = true;
-                        updateDisplay ();
-                        CCLOG ( "Purchased item: %s" , chosen_Item->GetName().c_str ());
+                        //若所选物品为动物
+                        if (chosen_item_name.find ( "Animal" )!=std::string::npos) {
+                            std::pair<Rect , bool>* space = nullptr;
+                            for (auto& pair : barn_space) {
+                                //畜棚仍有空间
+                                if (!pair.second) {
+                                    space = &pair;
+                                    break;
+                                }
+                            }
+                            //若有空间
+                            if (space != nullptr) {
+                                Livestock* livestock = nullptr;
+                                //检查品种
+                                if (chosen_item_name == "AnimalChicken") {
+                                    livestock = Chicken::create ( space->first );
+                                }
+                                else if (chosen_item_name == "AnimalSheep") {
+                                    livestock = Sheep::create ( space->first );
+                                }
+                                else if (chosen_item_name == "AnimalCow") {
+                                    livestock = Cow::create ( space->first );
+                                }
+                                if (livestock != nullptr) {
+                                    space->second = true;
+                                    livestocks.push_back ( livestock );
+                                    livestock->retain ();
+                                    economicSystem->subtractGold ( chosen_Item->GetValue () );
+                                    updateDisplay ();
+                                    CCLOG ( "Purchased item: %s" , chosen_Item->GetName ().c_str () );
+                                }
+                            }
+                            else {
+                                CCLOG ( "fail to place %s in your barn" , chosen_item_name.c_str () );
+                            }
+                            
+                        }
+                        else {
+                            economicSystem->subtractGold ( chosen_Item->GetValue () );
+                            _mybag->AddItem ( *chosen_Item );
+                            _mybag->is_updated = true;
+                            updateDisplay ();
+                            CCLOG ( "Purchased item: %s" , chosen_Item->GetName ().c_str () );
+                        }
                     }
                     else {
                         CCLOG ( "Not enough gold to buy %s." , chosen_Item->GetName ().c_str () );
@@ -477,6 +516,7 @@ void StoreUI::Itemblock ( Inventory* mybag , Inventory* goods ) {
     updateCoordinate ( currentx , currenty );
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     Vec2 origin = Director::getInstance ()->getVisibleOrigin ();
+    _selectedSlot = 1; // 默认选中第一个槽位  
 
 
     // 初始化物品槽 Sprite 
@@ -597,4 +637,16 @@ void StoreUI::updateDisplay () {
     else {
         CCLOG ( "Warning: _itemLabel is nullptr" );
     }
+}
+
+void StoreUI::onItemSlotClicked ( cocos2d::Ref* sender ) {
+    auto slot = static_cast<Sprite*>(sender);
+    int position = slot->getTag (); // 获取槽位位置  
+
+    // 设置为选中状态并更新 Inventory 数据  
+    _mybag->SetSelectedItem ( position );
+    _selectedSlot = position;
+
+    // 更新显示  
+    updateDisplay ();
 }

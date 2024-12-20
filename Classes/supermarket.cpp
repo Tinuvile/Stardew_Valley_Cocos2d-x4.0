@@ -30,25 +30,25 @@ bool supermarket::init()
     StoreItem = new Inventory ();
 
     // 动物  
-    StoreItem->AddItem ( Golden_Chicken );
+    StoreItem->AddItem ( AnimalChicken );
     StoreItem->SetSelectedItem ( 1 );
 
-    StoreItem->AddItem ( Duck );
+    StoreItem->AddItem ( AnimalDuck );
     StoreItem->SetSelectedItem ( 2 );
 
-    StoreItem->AddItem ( Goat );
+    StoreItem->AddItem ( AnimalGoat );
     StoreItem->SetSelectedItem ( 3 );
 
-    StoreItem->AddItem ( Pig );
+    StoreItem->AddItem ( AnimalPig );
     StoreItem->SetSelectedItem ( 4 );
 
-    StoreItem->AddItem ( Rabbit );
+    StoreItem->AddItem ( AnimalRabbit );
     StoreItem->SetSelectedItem ( 5 );
 
-    StoreItem->AddItem ( Sheep );
+    StoreItem->AddItem ( AnimalSheep );
     StoreItem->SetSelectedItem ( 6 );
 
-    StoreItem->AddItem ( White_Chicken );
+    StoreItem->AddItem ( AnimalCow );
     StoreItem->SetSelectedItem ( 7 );
 
     // 春季种子物品列表  
@@ -63,6 +63,9 @@ bool supermarket::init()
 
     StoreItem->AddItem ( Coffee_Bean );
     StoreItem->SetSelectedItem ( 11 );
+
+    StoreItem->AddItem(Corn_Seeds);
+    StoreItem->SetSelectedItem(27);
 
     StoreItem->AddItem ( Garlic_Seeds );
     StoreItem->SetSelectedItem ( 12 );
@@ -109,9 +112,6 @@ bool supermarket::init()
 
     StoreItem->AddItem ( Broccoli_Seeds );
     StoreItem->SetSelectedItem ( 26 );
-
-    StoreItem->AddItem ( Corn_Seeds );
-    StoreItem->SetSelectedItem ( 27 );
 
     StoreItem->AddItem ( Cranberry_Seeds );
     StoreItem->SetSelectedItem ( 28 );
@@ -287,10 +287,8 @@ bool supermarket::init()
 
 
     // 设置计时器标签
-    _timerLabel = Label::createWithTTF("Timer: 60", "fonts/Marker Felt.ttf", 24);
-    this->addChild(_timerLabel, 10);
-    _timerLabel->setPosition(Vec2(0, Director::getInstance()->getVisibleSize().height));
-    _timerLabel->setScale(2.3f);
+    TimeUI = Timesystem::create ( "supermarket" );
+    this->addChild(TimeUI, 13);
 
     // 创建并初始化 Label 来显示角色的位置
     _positionLabel = Label::createWithTTF("Position: (0, 0)", "fonts/Marker Felt.ttf", 24);
@@ -375,7 +373,7 @@ bool supermarket::init()
     player1->setPosition(Vec2(visibleSize.width / 2 + 43, visibleSize.height / 2 - 101));  // 设置玩家初始位置
     player1->setScale(3.1f);
     player1->setAnchorPoint(Vec2(0.5f, 0.2f));
-    player1->speed = 2.5f;
+    player1->speed = 4.7f;
 
     // 计算背景精灵的缩放后范围
     float scaledWidth = background->getContentSize().width * background->getScaleX();
@@ -419,18 +417,18 @@ bool supermarket::init()
     listenerWithPlayer->onKeyPressed = [this](EventKeyboard::KeyCode keyCode, Event* event)
         {
             // 记录 Enter 键被按下
-            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER) {
+            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER || keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER) {
                 isEnterKeyPressed = true;
                 CCLOG("Enter key pressed.");
             }
             // 处理其他按键  
-            if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
+            if (keyCode == EventKeyboard::KeyCode::KEY_P) {
                 static StoreUI* currentStoreUI = nullptr;  // 保存当前显示的 StoreUI  
                 // 如果当前没有打开 StoreUI，则打开它  
                 if (currentStoreUI == nullptr) {
                     CCLOG ( "Opening inventory." );
                     currentStoreUI = StoreUI::create ( inventory , StoreItem );
-                    this->addChild ( currentStoreUI , 11 );
+                    this->addChild ( currentStoreUI , 20 );
                 } 
                 else {
                     CCLOG ( "Closing inventory." );
@@ -443,7 +441,7 @@ bool supermarket::init()
     listenerWithPlayer->onKeyReleased = [this](EventKeyboard::KeyCode keyCode, Event* event)
         {
             // 释放 Enter 键时，设置为 false
-            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER) {
+            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER || keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER) {
                 isEnterKeyPressed = false;
                 CCLOG("Enter key released.");
             }
@@ -483,12 +481,87 @@ void supermarket::checkPlayerPosition()
     }
 
 
-    // 减少剩余时间
-    remainingTime--;
 
     // 更新计时器显示
-    remainingTime--;
-    _timerLabel->setString("Timer: " + std::to_string(remainingTime / 600));
+    remainingTime++;
+    if (remainingTime == 43200) {
+
+        day++;
+
+        IsNextDay = true;
+
+        if (day == 8) {
+            if (Season == "Spring") {
+                Season = "Summer";
+            }
+            else if (Season == "Summer") {
+                Season = "Autumn";
+            }
+            else {
+                Season = "Winter";
+            }
+            day = 1;
+        }
+
+        if (day % 3 == 1) {
+            Weather = "Rainy";
+        }
+        else {
+            Weather = "Sunny";
+        }
+
+        if ((Season == "Spring") && (day == 1)) {
+            Festival = "Fishing Day";
+        }
+        else {
+            Festival = "Noraml Day";
+        }
+
+
+        for (auto it = Crop_information.begin(); it != Crop_information.end();) {
+
+            auto crop = *it;  // 解引用迭代器以访问 Crop 对象
+
+            if (Weather == "Rainy") {
+                crop->watered = true;
+            }
+
+            // 判断前一天是否浇水
+            if ((crop->watered == false) && (crop->GetPhase() != Phase::MATURE)) {
+                // 判断是否已经进入枯萎状态
+                if (crop->GetPhase() != Phase::SAPLESS) {
+                    crop->ChangePhase(Phase::SAPLESS);
+                    crop->ChangMatureNeeded(2); // 延迟两天收获
+                    it++;
+                }
+                else {
+                    // 删除元素并更新迭代器
+                    it = Crop_information.erase(it);
+                }
+
+            }
+            else {
+                // 更新状态
+                crop->UpdateGrowth();
+                it++;
+            }
+
+        }
+
+        for (auto& pair : F_lastplace) {
+            if (pair.first.first == "myhouse") {  // 检查 bool 值是否为 true
+                pair.second = true;
+            }
+        }
+
+        IsSleep = false;
+        frombed = true;
+        remainingTime = 10800;
+        player1->removeFromParent();
+        auto nextday = Myhouse::create();
+        Director::getInstance()->replaceScene(nextday);
+
+    }
 
 
     // 更新标签位置
@@ -511,7 +584,7 @@ void supermarket::checkPlayerPosition()
     }
 
 
-    _timerLabel->setPosition(currentx - 590, currenty + 570);
+    TimeUI->setPosition(currentx, currenty);
     _positionLabel->setPosition(currentx - 530, currenty + 490);
     button->setPosition(currentx + 690, currenty - 590);
    
@@ -527,8 +600,8 @@ void supermarket::checkPlayerPosition()
             CCLOG("Player in target area, isEnterKeyPressed: %d", isEnterKeyPressed);
             // 调用场景切换逻辑
             player1->removeFromParent();
-            town = Town::create();
-            Director::getInstance()->replaceScene(town);
+            auto nextscene = Town::create();
+            Director::getInstance()->replaceScene(nextscene);
           
         }
 
@@ -595,6 +668,9 @@ void supermarket::checkPlayerPosition()
         }
 
     }
+
+
+
 }
 
 

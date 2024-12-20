@@ -458,6 +458,7 @@ void NextScene::updateMenuItem(MenuItemImage* item, const Vec2& mousePos, const 
 // 跳转到新场景  
 void NextScene::menuNewCallback(Ref* pSender)
 {
+    //Director::getInstance()->replaceScene(Town::create()); // 进入到主地图  
     Director::getInstance ()->replaceScene ( TransitionFade::create ( 3.0f , CreateCharacter::create () ) ); // 进入到人物创建界面 
 }
 

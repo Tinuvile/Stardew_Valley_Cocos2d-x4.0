@@ -6,13 +6,13 @@
 // 动物设定为购买后直接加入牧场，在背包中不可见  
 
 // 动物  
-extern Item Golden_Chicken;
-extern Item Duck;
-extern Item Goat;
-extern Item Pig;
-extern Item Rabbit;
-extern Item Sheep;
-extern Item White_Chicken;
+extern Item AnimalChicken;
+extern Item AnimalDuck;
+extern Item AnimalGoat;
+extern Item AnimalPig;
+extern Item AnimalRabbit;
+extern Item AnimalSheep;
+extern Item AnimalCow;
 
 // 春季种子物品列表  
 extern Item Bean_Starter;
@@ -99,5 +99,18 @@ extern Item Mango_Sapling;
 extern Item Orange_Sapling;
 extern Item Peach_Sapling;
 extern Item Pomegranate_Sapling;
+
+// 宝石类
+extern Item amethyst;
+extern Item emerald;
+extern Item ruby;
+
+// 成熟作物
+extern Item Wheat;
+extern Item Corn;
+extern Item Potato;
+extern Item Pumpkin;
+extern Item Blueberry;
+extern Item Wood;
 
 #endif // GENERALITEM_H

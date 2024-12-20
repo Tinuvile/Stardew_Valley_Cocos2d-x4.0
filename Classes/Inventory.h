@@ -2,7 +2,6 @@
 #include<algorithm>
 #include<memory>
 #include<map>
-
 #include"Item.h"
 
 const int kRowSize = 12;
@@ -28,7 +27,7 @@ public:
 
 	~Inventory ();
 
-	bool isupdated = false;//检测背包是否更新过
+	bool is_updated = false;//检测背包是否更新过
 
 	//成功添加时返回true,添加失败时返回false
 	bool AddItem ( const Item& item );
@@ -83,17 +82,20 @@ public:
 	}
 
 	// 使用 Item 和数量移除物品  
-	int Inventory::RemoveItem ( const Item& item , const int& remove_num ) {
+	int Inventory::RemoveItem ( const Item& item , const int& remove_num = 1 ) {
 		for (auto it = package.begin (); it != package.end (); ++it) {
 			if (it->second.first->GetName () == item.GetName ()) {
 				// 如果移除数量超过现有数量  
+				is_updated = true;
 				if (remove_num >= it->second.second) {
+					
 					package.erase ( it ); // 清空该格子  
 					return 1; // 清空格子  
 				}
 				else {
 					it->second.second -= remove_num; // 减少数量  
 					return 0; // 正常移除  
+
 				}
 			}
 		}

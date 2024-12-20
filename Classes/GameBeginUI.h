@@ -1,10 +1,9 @@
 //该头文件及其cpp用来实现初始动画和初始界面
 
-#include "cocos2d.h"
-
 #ifndef _SCENE_SEC_H__
 #define _SCENE_SEC_H__
 
+#include "cocos2d.h"
 
 class BeginScene : public cocos2d::Scene
 {

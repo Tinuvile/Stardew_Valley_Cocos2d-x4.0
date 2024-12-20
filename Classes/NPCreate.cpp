@@ -1,10 +1,12 @@
+#include "cocos2d.h"
 #include "NPCreate.h"  
+#include "NPC.h"   
 
 NPC* NPCreate::CreateNPC ( const std::string& name , const cocos2d::Vec2& position ,
-                          const std::vector<std::vector<std::string>>& animationFrames ,
-                          const std::vector<cocos2d::Vec2>& validPositions ) {
-    NPC* npc = new NPC ( name , position , animationFrames , validPositions ); // 修改为传递 validPositions  
-    return npc;
+                         const std::vector<std::vector<std::string>>& animationFrames ,
+                         const std::vector<cocos2d::Vec2>& validPositions ) {
+    NPC* npc = new NPC ( name , position , animationFrames , validPositions );
+    return npc; // 记得检查 npc 是否正确创建并返回  
 }
 
 // 更新 CreateMultipleNPCs 方法  

@@ -10,7 +10,7 @@ NpcRelationship::~NpcRelationship() {}
 // 添加 NPC  
 void NpcRelationship::add_npc(const std::string& npcName) {
     if (relationships.find(npcName) == relationships.end()) {
-        relationships[npcName] = std::unordered_map<std::string, int>();
+        relationships[npcName] = std::unordered_map<std::string, double>();
     }
 }
 
@@ -23,7 +23,7 @@ void NpcRelationship::remove_npc(const std::string& npcName) {
 }
 
 // 设置 NPC 之间的关系  
-void NpcRelationship::setRelationship(const std::string& npcA, const std::string& npcB, int value) {
+void NpcRelationship::setRelationship(const std::string& npcA, const std::string& npcB, double value) {
     add_npc(npcA);
     add_npc(npcB);
     relationships[npcA][npcB] = value;
@@ -31,19 +31,19 @@ void NpcRelationship::setRelationship(const std::string& npcA, const std::string
 }
 
 // 增加 NPC 之间的关系  
-void NpcRelationship::increaseRelationship(const std::string& npcA, const std::string& npcB, int amount) {
-    int newValue = getRelationship(npcA, npcB) + amount;
+void NpcRelationship::increaseRelationship(const std::string& npcA, const std::string& npcB, double amount) {
+    double newValue = getRelationship(npcA, npcB) + amount;
     setRelationship(npcA, npcB, newValue);
 }
 
 // 减少 NPC 之间的关系  
-void NpcRelationship::decreaseRelationship(const std::string& npcA, const std::string& npcB, int amount) {
-    int newValue = getRelationship(npcA, npcB) - amount;
+void NpcRelationship::decreaseRelationship(const std::string& npcA, const std::string& npcB, double amount) {
+    double newValue = getRelationship(npcA, npcB) - amount;
     setRelationship(npcA, npcB, newValue);
 }
 
 // 获取 NPC 之间的关系  
-int NpcRelationship::getRelationship(const std::string& npcA, const std::string& npcB) const {
+double NpcRelationship::getRelationship(const std::string& npcA, const std::string& npcB) const {
     auto itA = relationships.find(npcA);
     if (itA != relationships.end()) {
         auto itB = itA->second.find(npcB);
@@ -77,5 +77,29 @@ void NpcRelationship::printRelationships() const {
         for (const auto& npcB : npcA.second) {
             std::cout << npcA.first << " <-> " << npcB.first << ": " << npcB.second << std::endl;
         }
+    }
+}
+
+// 增加礼物接受次数  
+void NpcRelationship::AddGiftTime ( const std::string& npc ) {
+    add_npc ( npc );
+    // 找到该 NPC，并增加接受礼物的次数  
+    GiftTime[npc]++;
+}
+
+// 获取该 NPC 接受的礼物次数  
+int NpcRelationship::NpcGiftTIme ( const std::string& npc ) {
+    // 查找并返回礼物次数，未记录则返回 0  
+    return GiftTime[npc];
+}
+
+void NpcRelationship::updateGiftTime () {
+    // 检查是否已经过了七天  
+    if ((day - lastUpdateDay) >= 7) {
+        // 重置所有NPC的GiftTime  
+        for (auto& entry : GiftTime) {
+            entry.second = 0; 
+        }
+        lastUpdateDay = day; // 更新最后一次更新的天数  
     }
 }

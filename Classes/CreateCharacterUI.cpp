@@ -1,20 +1,21 @@
 #include "CreateCharacterUI.h"
 #include "Town.h"
+#include "AppDelegate.h"
+#include "Myhouse.h"
 
 USING_NS_CC;
 
-extern std::map <std::pair<std::string , Vec2> , bool> T_lastplace;
 
-Scene* CreateCharacter::createScene()
+Scene* CreateCharacter::createScene ()
 {
-    return CreateCharacter::create();
+    return CreateCharacter::create ();
 }
 
 // Print useful error message instead of segfaulting when files are not there.
-static void problemLoading(const char* filename)
+static void problemLoading ( const char* filename )
 {
-    printf("Error while loading: %s\n", filename);
-    printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in CreateCharacterScene.cpp\n");
+    printf ( "Error while loading: %s\n" , filename );
+    printf ( "Depending on how you compiled you might have to add 'Resources/' in front of filenames in CreateCharacterScene.cpp\n" );
 }
 
 void CreateCharacter::cloudAni ( float dt )
@@ -41,13 +42,12 @@ void CreateCharacter::cloudAni ( float dt )
     clouds->runAction ( cocos2d::RepeatForever::create ( moveTo_s ) );
 }
 
-// on "init" you need to initialize your instance
 void CreateCharacter::BackgroundAdd () {
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     Vec2 origin = Director::getInstance ()->getVisibleOrigin ();
 
     // add "CreateCharacter" splash screen"
-    auto background = Sprite::create ( "UIresource/background2-half.png");
+    auto background = Sprite::create ( "UIresource/background2-half.png" );
     if (background == nullptr)
     {
         problemLoading ( "'background2-half.png'" );
@@ -212,15 +212,24 @@ void CreateCharacter::optionFace () {
     float scale = std::min ( scaleX , scaleY );
     OK->setScale ( scale / 8 );
     OK->setOpacity ( 128 );
+    auto listener = EventListenerMouse::create ();
+    listener->onMouseMove = [this , OK , scale]( EventMouse* event ) {
+        Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
+        mousePos = this->convertToNodeSpace ( mousePos );
+        if (OK->getBoundingBox ().containsPoint ( mousePos )) {
+            OK->setScale ( scale / 8 * 1.2f );
+        }
+        else
+            OK->setScale ( scale / 8 );
+        };
+    _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , OK );
     OK->setEnabled ( false );  // 禁用点击事件
+    //跳转位置待修改
     OK->addClickEventListener ( [this]( Ref* sender ) {
-        // 按钮点击跳转
-        //player1 = Player::create ();
-        //std::pair<std::string , Vec2> key = { "initiation",Vec2 ( 350,350 ) };
-        //T_lastplace.insert ( std::make_pair ( key , false ) );
-        //key = { "seedshop",Vec2 ( 230,470 ) };
-        //T_lastplace.insert ( std::make_pair ( key , false ) );
-        Director::getInstance ()->replaceScene ( TransitionFade::create ( 2.0f , Town::create () ) );
+
+        player1 = Player::create();
+        auto nextscene = Myhouse::create();
+        Director::getInstance ()->replaceScene ( nextscene );
 } );
     Vec2 Pos = Vec2 ( visibleSize.width * 0.5 , visibleSize.height * 0.2 );
     OK->setPosition ( Pos );
@@ -234,9 +243,9 @@ void CreateCharacter::optionFace () {
 
 }
 
-cocos2d::Sprite* CreateCharacter::directions (const std::string& normalImage, const Vec2& origin , const Vec2& position)
+cocos2d::Sprite* CreateCharacter::directions ( const std::string& normalImage , const Vec2& origin , const Vec2& position )
 {
-    auto item = Sprite::create (normalImage);
+    auto item = Sprite::create ( normalImage );
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     if (item) {
         Size itemSize = item->getContentSize ();
@@ -260,7 +269,7 @@ cocos2d::Sprite* CreateCharacter::directions (const std::string& normalImage, co
     return item;
 }
 
-void CreateCharacter::mouseListen ( cocos2d::Sprite* leftarrow , cocos2d::Sprite* rightarrow , cocos2d::Sprite* male , cocos2d::Sprite* female , cocos2d::Sprite* xuanzhong, cocos2d::Sprite* displaycharacter ){
+void CreateCharacter::mouseListen ( cocos2d::Sprite* leftarrow , cocos2d::Sprite* rightarrow , cocos2d::Sprite* male , cocos2d::Sprite* female , cocos2d::Sprite* xuanzhong , cocos2d::Sprite* displaycharacter ) {
     auto listener = EventListenerMouse::create ();
     listener->onMouseMove = [this , leftarrow , rightarrow , male , female]( EventMouse* event ) {
         updateItems ( leftarrow , "UIresource/create/left.png" , event , 18 );
@@ -274,10 +283,10 @@ void CreateCharacter::mouseListen ( cocos2d::Sprite* leftarrow , cocos2d::Sprite
     listener->onMouseDown = [this , leftarrow , rightarrow , male , female , xuanzhong , anchor1 , anchor2 , anchor3 , displaycharacter]( EventMouse* event ) {
         Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
         if (leftarrow->getBoundingBox ().containsPoint ( mousePos )) {
-            mousedowncallback ( leftarrow , leftarrow );  
+            mousedowncallback ( leftarrow , leftarrow );
         }
         else if (rightarrow->getBoundingBox ().containsPoint ( mousePos )) {
-            mousedowncallback ( rightarrow , rightarrow ); 
+            mousedowncallback ( rightarrow , rightarrow );
         }
         else if (male->getBoundingBox ().containsPoint ( mousePos )) {
             if (anchor2.x == anchor3.x && anchor2.y == anchor3.y) {
@@ -285,7 +294,7 @@ void CreateCharacter::mouseListen ( cocos2d::Sprite* leftarrow , cocos2d::Sprite
                 auto move = MoveTo::create ( 0.0f , Vec2 ( displaycharacterPos.x - displaycharacter->getContentSize ().width / 2 , displaycharacterPos.y - displaycharacter->getContentSize ().height ) );
                 xuanzhong->runAction ( move );
             }
-            mousedowncallback ( male , male );  
+            mousedowncallback ( male , male );
         }
         else if (female->getBoundingBox ().containsPoint ( mousePos )) {
             if (anchor1.x == anchor3.x && anchor1.y == anchor3.y) {
@@ -293,7 +302,7 @@ void CreateCharacter::mouseListen ( cocos2d::Sprite* leftarrow , cocos2d::Sprite
                 auto move = MoveTo::create ( 0.0f , Vec2 ( displaycharacterPos.x + displaycharacter->getContentSize ().width / 2 , displaycharacterPos.y - displaycharacter->getContentSize ().height ) );
                 xuanzhong->runAction ( move );
             }
-            mousedowncallback ( female , female );  
+            mousedowncallback ( female , female );
         }
         };
     listener->onMouseUp = [this , leftarrow , rightarrow , male , female]( EventMouse* event ) {
@@ -384,11 +393,11 @@ void CreateCharacter::textIn () {
     }
 }
 
-ui::TextField* CreateCharacter::createTextIn ( float sizex , float sizey, const Vec2& Pos ) {
+ui::TextField* CreateCharacter::createTextIn ( float sizex , float sizey , const Vec2& Pos ) {
     // 创建一个 TextField
     auto textField = ui::TextField::create ( "Please enter" , "Arial" , 24 );
     textField->setPosition ( Pos );
-    textField->setContentSize ( Size (sizex , sizey ) );
+    textField->setContentSize ( Size ( sizex , sizey ) );
     textField->setMaxLength ( 20 );
     textField->setCursorEnabled ( true );
     textField->setTouchSize ( Size ( sizex , sizey ) );
@@ -410,13 +419,17 @@ ui::TextField* CreateCharacter::createTextIn ( float sizex , float sizey, const 
     return textField;
 }
 
-void CreateCharacter::checkTextFields ( ui::TextField* textfield1 , ui::TextField* textfield2, ui::TextField* textfield3 ) {
+void CreateCharacter::checkTextFields ( ui::TextField* textfield1 , ui::TextField* textfield2 , ui::TextField* textfield3 ) {
     auto OK = dynamic_cast<cocos2d::ui::Button*>(this->getChildByTag ( 202 ));
     std::string text1 = textfield1->getString ();
+    protagonistName = text1;
+    CCLOG ( "%s" , protagonistName );
     std::string text2 = textfield2->getString ();
+    FarmName = text2;
+    CCLOG ( "%s" , FarmName );
     std::string text3 = textfield3->getString ();
     auto namelable = getChildByTag ( 10 );
-    auto farmname= getChildByTag ( 20 );
+    auto farmname = getChildByTag ( 20 );
     auto favanimal = getChildByTag ( 30 );
     if (!text1.empty ()) {
         namelable->setColor ( cocos2d::Color3B::BLACK );
@@ -435,8 +448,8 @@ void CreateCharacter::checkTextFields ( ui::TextField* textfield1 , ui::TextFiel
     }
     else
     {
-        OK->setOpacity ( 128 );    
-        OK->setEnabled ( false ); 
+        OK->setOpacity ( 128 );
+        OK->setEnabled ( false );
         // 如果任一文本框为空，恢复
     }
 }
@@ -447,8 +460,8 @@ void CreateCharacter::favoranimal () {
 
     //文字添加
     auto favanimal = cocos2d::Label::createWithSystemFont ( "Favorite animal" , "fonts/Comic Sans MS.ttf" , 25 );
-    favanimal->setTextColor ( cocos2d::Color4B::BLACK);  // 初始颜色是黑色
-    Vec2 Pos = Vec2 ( visibleSize.width / 2.0  , visibleSize.height / 2.05 );
+    favanimal->setTextColor ( cocos2d::Color4B::BLACK );  // 初始颜色是黑色
+    Vec2 Pos = Vec2 ( visibleSize.width / 2.0 , visibleSize.height / 2.05 );
     favanimal->setPosition ( Pos );
     this->addChild ( favanimal , 2 );
 
@@ -483,7 +496,7 @@ void CreateCharacter::favoranimal () {
         };
     cocos2d::Vec2 anchor1 = leftarrow->getAnchorPoint ();
     cocos2d::Vec2 anchor2 = rightarrow->getAnchorPoint ();
-    listener->onMouseDown = [this , leftarrow , rightarrow, anchor1 , anchor2,animal]( EventMouse* event ) {
+    listener->onMouseDown = [this , leftarrow , rightarrow , anchor1 , anchor2 , animal]( EventMouse* event ) {
         static int count = 1;
         Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
         if (leftarrow->getBoundingBox ().containsPoint ( mousePos )) {
@@ -503,7 +516,7 @@ void CreateCharacter::favoranimal () {
             mousedowncallback ( rightarrow , rightarrow );
         }
         };
-    listener->onMouseUp = [this , leftarrow , rightarrow ]( EventMouse* event ) {
+    listener->onMouseUp = [this , leftarrow , rightarrow]( EventMouse* event ) {
         Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
         if (leftarrow->getBoundingBox ().containsPoint ( mousePos )) {
             mouseupcallback ( leftarrow , leftarrow );
@@ -515,7 +528,7 @@ void CreateCharacter::favoranimal () {
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , this );
 }
 
-void CreateCharacter::updateItems( cocos2d::Sprite* item , const std::string& normalImage , cocos2d::Event* event ,const int Magnification )
+void CreateCharacter::updateItems ( cocos2d::Sprite* item , const std::string& normalImage , cocos2d::Event* event , const int Magnification )
 {
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     EventMouse* e = (EventMouse*)event;
@@ -561,9 +574,9 @@ void CreateCharacter::mouseupcallback ( Ref* pSender , Sprite* item ) {
     item->setScale ( newScale );
 }
 
-bool CreateCharacter::init()
+bool CreateCharacter::init ()
 {
-    if (!Scene::init())
+    if (!Scene::init ())
     {
         return false;
     }

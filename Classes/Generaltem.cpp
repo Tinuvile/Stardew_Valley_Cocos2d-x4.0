@@ -3,13 +3,13 @@
 // 动物设定为购买后直接加入牧场，在背包中不可见
 
 // 动物  
-Item Golden_Chicken ( "Golden_Chicken" , "Item/Surpermarket/Animal/Golden_Chicken.png" , 4000 , 99 );
-Item Duck ( "Duck" , "Item/Surpermarket/Animal/Duck.png" , 1200 , 99 );
-Item Goat ( "Goat" , "Item/Surpermarket/Animal/Goat.png" , 4000 , 99 );
-Item Pig ( "Pig" , "Item/Surpermarket/Animal/Pig.png" , 16000 , 99 );
-Item Rabbit ( "Rabbit" , "Item/Surpermarket/Animal/Rabbit.png" , 800 , 99 );
-Item Sheep ( "Sheep" , "Item/Surpermarket/Animal/Sheep.png" , 8000 , 99 );
-Item White_Chicken ( "White_Chicken" , "Item/Surpermarket/Animal/White_Chicken.png" , 800 , 99 );
+Item AnimalChicken("AnimalChicken", "Item/Surpermarket/Animal/Brown_Chicken.png", 4000, 99);
+Item AnimalDuck("AnimalDuck", "Item/Surpermarket/Animal/Duck.png", 1200, 99);
+Item AnimalGoat("AnimalGoat", "Item/Surpermarket/Animal/Goat.png", 4000, 99);
+Item AnimalPig("AnimalPig", "Item/Surpermarket/Animal/Pig.png", 16000, 99);
+Item AnimalRabbit("AnimalRabbit", "Item/Surpermarket/Animal/Rabbit.png", 800, 99);
+Item AnimalSheep("AnimalSheep", "Item/Surpermarket/Animal/Sheep.png", 8000, 99);
+Item AnimalCow("AnimalCow", "Item/Surpermarket/Animal/White_Cow.png", 800, 99);
 
 // 春季种子物品列表  
 Item Bean_Starter ( "Bean_Starter" , "Item/Surpermarket/Spring/Bean_Starter.png" , 60 , 99 );
@@ -96,4 +96,18 @@ Item Mango_Sapling ( "Mango_Sapling" , "Item/Surpermarket/Tree/Mango_Sapling.png
 Item Orange_Sapling ( "Orange_Sapling" , "Item/Surpermarket/Tree/Orange_Sapling.png" , 2000 , 99 );
 Item Peach_Sapling ( "Peach_Sapling" , "Item/Surpermarket/Tree/Peach_Sapling.png" , 3000 , 99 );
 Item Pomegranate_Sapling ( "Pomegranate_Sapling" , "Item/Surpermarket/Tree/Pomegranate_Sapling.png" , 3000 , 99 );
+
+// 宝石
+Item amethyst("Amethyst", "Ore/Amethyst3.png", 1000, 99);
+Item emerald("Emerald", "Ore/Emerald3.png", 1000, 99);
+Item ruby("Ruby", "Ore/Ruby3.png", 1000, 99);
+
+// 成熟作物
+Item Wheat("wheat", "crop/wheat4.png", 1000, 99);
+Item Corn("corn", "crop/corn4.png", 1000, 99);
+Item Potato("potato", "crop/Potato4.png", 1000, 99);
+Item Pumpkin("pumpkin", "crop/Pumpkin4.png", 1000, 99);
+Item Blueberry("blueberry", "crop/blueberry4.png", 1000, 99);
+Item Wood("wood", "tree/wood.png", 1000, 99);
+
 

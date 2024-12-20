@@ -3,11 +3,10 @@
 #include "ui/CocosGUI.h"  
 #include "Item.h"  
 #include "AppDelegate.h"
-
-
-extern Player* player1;
+#include "quitUI.h"
 
 USING_NS_CC;
+
 
 static void problemLoading ( const char* filename )
 {
@@ -17,25 +16,69 @@ static void problemLoading ( const char* filename )
 
 void InventoryUI::updateCoordinate ( float &x , float &y ) {
     Vec2 position = player1->getPosition ();
-    if (x <= -170) {
-        x = -170;
+    float  Leftboundary = -10000.0f , rightboundary = 10000.0f , upperboundary = 10000.0f , lowerboundary = 10000.0f;
+    if (SceneName == "Town") {
+        Leftboundary = -170.0f;
+        rightboundary = 1773.0f;
+        upperboundary = 1498.0f;
+        lowerboundary = -222.0f;
     }
-    else if (x >= 1773) {
-        x = 1773;
+    else if (SceneName == "Cave") {
+        Leftboundary = 786.0f;
+        rightboundary = 817.0f;
+        upperboundary = 808.0f;
+        lowerboundary = 460.0f;
+    }
+    else if (SceneName == "Beach") {
+        Leftboundary = -315.0f;
+        rightboundary = 20000.0f;
+        upperboundary = 920.0f;
+        lowerboundary = 360.0f;
+    }
+    else if (SceneName == "Forest") {
+        Leftboundary = -600.0f;
+        rightboundary = 2197.0f;
+        upperboundary = 2200.0f;
+        lowerboundary = -850.0f;
+    }
+    else if (SceneName == "farm") {
+        Leftboundary = 637.0f;
+        rightboundary = 960.0f;
+        upperboundary = 777.0f;
+        lowerboundary = 500.0f;
+    }
+    else if (SceneName == "Barn") {
+        Leftboundary = 805.0f;
+        rightboundary = 805.0f;
+        upperboundary = 569.0f;
+        lowerboundary = 569.0f;
+    }
+    else if (SceneName == "Myhouse") {
+        Leftboundary = 800.0f;
+        rightboundary = 800.0f;
+        upperboundary = 580.0f;
+        lowerboundary = 580.0f;
+    }
+    if (x <= Leftboundary) {
+        x = Leftboundary;
+    }
+    else if (x >= rightboundary) {
+        x = rightboundary;
     }
     else {
         x = position.x;
     }
 
-    if (y >= 1498) {
-        y = 1498;
+    if (y >= upperboundary) {
+        y = upperboundary;
     }
-    else if (y <= -222) {
-        y = -222;
+    else if (y <= lowerboundary) {
+        y = lowerboundary;
     }
     else {
         y = position.y;
     }
+    CCLOG ( "%f  %f" , x , y );
 }
 
 void InventoryUI::backgroundcreate(){
@@ -45,7 +88,7 @@ void InventoryUI::backgroundcreate(){
     // 创建一个半透明的黑色遮罩
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     auto darkLayer = cocos2d::LayerColor::create ( cocos2d::Color4B ( 0 , 0 , 0 , 120 ) , 5 * visibleSize.width , 5 * visibleSize.height );  // 黑色，透明度为120
-    darkLayer->setPosition ( Vec2 ( currentx , currenty ) - visibleSize / 2 );// 设置遮罩层的位置
+    darkLayer->setPosition ( Vec2 ( currentx , currenty ) - visibleSize );// 设置遮罩层的位置
     this->addChild ( darkLayer , 0 );
     auto bag = Sprite::create ( "UIresource/beibao/newbag2.png" );
     bag->setTag ( 101 );
@@ -67,6 +110,33 @@ void InventoryUI::backgroundcreate(){
         bag->setPosition ( Vec2 ( currentx , currenty ) );
         this->addChild ( bag , 0 );
     }
+
+    //人物形象
+    auto CharacterDisplay = Sprite::create ( "character1/player_down3.png" );
+    if (CharacterDisplay == nullptr)
+    {
+        problemLoading ( "'character1/player_down3.png'" );
+    }
+    else
+    {
+        float originalWidth = CharacterDisplay->getContentSize ().width;
+        float originalHeight = CharacterDisplay->getContentSize ().height;
+        float scaleX = visibleSize.width / originalWidth;
+        float scaleY = visibleSize.height / originalHeight;
+        float scale = std::min ( scaleX , scaleY );
+        CharacterDisplay->setScale ( scale / 7.5 );
+        CharacterDisplay->setPosition ( Vec2 ( currentx - visibleSize.width * 0.2 , currenty - visibleSize.height * 0.12 ) );
+        this->addChild ( CharacterDisplay , 0 );
+    }
+    auto NameDisplay = Label::createWithTTF ( protagonistName , "fonts/Marker Felt.ttf" , 45 );
+    NameDisplay->setTextColor ( Color4B::BLACK );
+    NameDisplay->setPosition ( Vec2 ( currentx + visibleSize.width * 0.1 , currenty - visibleSize.height * 0.07 ) );
+    this->addChild ( NameDisplay , 4 );
+
+    auto FarmNameDisplay = Label::createWithTTF ( FarmName , "fonts/Marker Felt.ttf" , 45 );
+    FarmNameDisplay->setTextColor ( Color4B::BLACK );
+    FarmNameDisplay->setPosition ( Vec2 ( currentx + visibleSize.width * 0.1 , currenty - visibleSize.height * 0.15 ) );
+    this->addChild ( FarmNameDisplay , 4 );
 }
 
 void InventoryUI::Itemblock ( Inventory* inventory ) {
@@ -106,10 +176,13 @@ void InventoryUI::Itemblock ( Inventory* inventory ) {
     }
 }
 
-bool InventoryUI::init ( Inventory* inventory ) {
+bool InventoryUI::init ( Inventory* inventory , std::string sceneName ) {
     if (!Layer::init ()) {
         return false;
     }
+
+    SceneName = sceneName;
+
     backgroundcreate ();
 
     Buttons_switching ();
@@ -117,16 +190,6 @@ bool InventoryUI::init ( Inventory* inventory ) {
     Itemblock ( inventory );
 
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
-
-    // 初始化物品信息标签（用于调试）  
-    _itemLabel = Label::createWithSystemFont ( "Selected: None" , "Arial" , 24 );
-    if (_itemLabel) {
-        _itemLabel->setPosition ( visibleSize.width / 2 , visibleSize.height / 4 );
-        this->addChild ( _itemLabel , 10 ); // 添加到层级中  
-    }
-    else {
-        CCLOG ( "Failed to create _itemLabel" );
-    }
 
     updateDisplay (); // 更新显示内容  
 
@@ -142,6 +205,7 @@ void InventoryUI::Buttons_switching () {
     auto bagkey = Sprite::create ( "UIresource/beibao/bagkey.png" );
     auto Skillkey = Sprite::create ( "UIresource/beibao/Skillkey.png" );
     auto intimacykey = Sprite::create ( "UIresource/beibao/intimacykey.png" );
+    auto quitkey = Sprite::create ( "UIresource/beibao/quit.png" );
     if (bagkey == nullptr)
     {
         problemLoading ( "'bagkey.png'" );
@@ -161,37 +225,46 @@ void InventoryUI::Buttons_switching () {
         Skillkey->setScale ( scale / 16.5 );
         Skillkey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.19 , currenty + visibleSize.height * 0.315 ) );//0.315是未选中时位置
         intimacykey->setScale ( scale / 16.5 );
-        intimacykey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.13 , currenty + visibleSize.height * 0.315 ) );//0.315是未选中时位置
-        this->addChild ( bagkey , 1 );
-        this->addChild ( Skillkey , 1 );
-        this->addChild ( intimacykey , 1 );
+        intimacykey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.13 , currenty + visibleSize.height * 0.315 ) );
+        quitkey->setScale ( scale / 16.5 );
+        quitkey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.07 , currenty + visibleSize.height * 0.315 ) );
+        this->addChild ( bagkey , 2 );
+        this->addChild ( Skillkey , 2 );
+        this->addChild ( intimacykey , 2 );
+        this->addChild ( quitkey , 2 );
     }
 
     //动画以及切换Layer
     auto listener = EventListenerMouse::create ();
-    listener->onMouseDown = [this, bagkey, Skillkey,intimacykey]( EventMouse* event ) {
+    listener->onMouseDown = [this, bagkey, Skillkey,intimacykey , quitkey]( EventMouse* event ) {
         Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
         mousePos = this->convertToNodeSpace ( mousePos );
         //CCLOG ( "X:%f,Y:%f" , event->getCursorX () , event->getCursorY () );
         if (bagkey->getBoundingBox ().containsPoint ( mousePos )) {
         }
         else if (Skillkey->getBoundingBox ().containsPoint ( mousePos )) {
+            std::string nowScene = SceneName;
             this->removeFromParent ();
-            Director::getInstance ()->getRunningScene ()->addChild ( SkillTreeUI::create () , 10 );
+            Director::getInstance ()->getRunningScene ()->addChild ( SkillTreeUI::create ( nowScene ) , 20 );
         }
         else if (intimacykey->getBoundingBox ().containsPoint ( mousePos )) {
-            CCLOG ( "Clicked on intimacykey" );
             // 移除当前的Layer
+            std::string nowScene = SceneName;
             this->removeFromParent ();
-            Director::getInstance ()->getRunningScene ()->addChild ( intimacyUI::create () , 10 );
+            Director::getInstance ()->getRunningScene ()->addChild ( intimacyUI::create ( nowScene ) , 20 );
+        }
+        else if (quitkey->getBoundingBox ().containsPoint ( mousePos )) {
+            std::string nowScene = SceneName;
+            this->removeFromParent ();
+            Director::getInstance ()->getRunningScene ()->addChild ( quitUI::create ( nowScene ) , 20 );
         }
         };
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , this );
 }
 
-InventoryUI* InventoryUI::create ( Inventory* inventory ) {
+InventoryUI* InventoryUI::create ( Inventory* inventory , std::string sceneName ) {
     InventoryUI* ret = new InventoryUI ();
-    if (ret && ret->init ( inventory )) {
+    if (ret && ret->init ( inventory , sceneName )) {
         ret->autorelease ();
         return ret;
     }
@@ -323,16 +396,4 @@ void InventoryUI::updateDisplay () {
     else {
         CCLOG ( "Warning: _itemLabel is nullptr" );
     }
-}
-
-void InventoryUI::onItemSlotClicked ( cocos2d::Ref* sender ) {
-    auto slot = static_cast<Sprite*>(sender);
-    int position = slot->getTag (); // 获取槽位位置  
-
-    // 设置为选中状态并更新 Inventory 数据  
-    _inventory->SetSelectedItem ( position );
-    _selectedSlot = position;
-
-    // 更新显示  
-    updateDisplay ();
 }

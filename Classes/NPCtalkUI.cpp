@@ -18,21 +18,64 @@ static void problemLoading ( const char* filename )
 
 void NPCtalkUI::updateCoordinate ( float& x , float& y ) {
     Vec2 position = player1->getPosition ();
-    if (x <= -117) {
-        x = -117;
+    float  Leftboundary = -10000.0f , rightboundary = 10000.0f , upperboundary = 10000.0f , lowerboundary = 10000.0f;
+    if (SceneName  == "Town") {
+        Leftboundary = -170.0f;
+        rightboundary = 1773.0f;
+        upperboundary = 1498.0f;
+        lowerboundary = -222.0f;
     }
-    else if (x >= 1773) {
-        x = 1773;
+    else if (SceneName == "Cave") {
+        Leftboundary = 786.0f;
+        rightboundary = 817.0f;
+        upperboundary = 808.0f;
+        lowerboundary = 460.0f;
+    }
+    else if (SceneName == "Beach") {
+        Leftboundary = -315.0f;
+        rightboundary = 20000.0f;
+        upperboundary = 920.0f;
+        lowerboundary = 360.0f;
+    }
+    else if (SceneName == "Forest") {
+        Leftboundary = -600.0f;
+        rightboundary = 2197.0f;
+        upperboundary = 2200.0f;
+        lowerboundary = -850.0f;
+    }
+    else if (SceneName == "farm") {
+        Leftboundary = 637.0f;
+        rightboundary = 960.0f;
+        upperboundary = 777.0f;
+        lowerboundary = 500.0f;
+    }
+    else if (SceneName == "Barn") {
+        Leftboundary = 805.0f;
+        rightboundary = 805.0f;
+        upperboundary = 569.0f;
+        lowerboundary = 569.0f;
+    }
+    else if (SceneName == "Myhouse") {
+        Leftboundary = 800.0f;
+        rightboundary = 800.0f;
+        upperboundary = 580.0f;
+        lowerboundary = 580.0f;
+    }
+    if (x <= Leftboundary) {
+        x = Leftboundary;
+    }
+    else if (x >= rightboundary) {
+        x = rightboundary;
     }
     else {
         x = position.x;
     }
 
-    if (y >= 1498) {
-        y = 1498;
+    if (y >= upperboundary) {
+        y = upperboundary;
     }
-    else if (y <= -222) {
-        y = -222;
+    else if (y <= lowerboundary) {
+        y = lowerboundary;
     }
     else {
         y = position.y;
@@ -67,7 +110,13 @@ void NPCtalkUI::backgroundcreate () {
         this->addChild ( dialogBox , 1 );
     }
     //头像
-    std::string photo = getNPCportraits ( npc->GetName () , "Normal" );
+    std::string photo;
+    if (Season == "Spring" || Season == "Autumn") {
+        photo = getNPCportraits ( npc->GetName () , "Normal" );
+    }
+    else {
+        photo = getNPCportraits ( npc->GetName () , Season + "Normal" );
+    }
     auto characterPhoto = Sprite::create ( photo );
 
     float originalWidth = characterPhoto->getContentSize ().width;
@@ -194,18 +243,26 @@ void NPCtalkUI::SelectedBox () {
 
             // 检查每个 Selectedbox  
             if (Selectedbox1 && Selectedbox1->getBoundingBox ().containsPoint ( mousePosition )) {
+                if (npc_relationship->getRelationship ( "player" , npc->GetName () ) < 60) {
+                    npc_relationship->increaseRelationship ( "player" , npc->GetName () , 10.2 );
+                }
                 this->removeFromParent ();
                 return; // 提前返回，避免执行后续选择框检查  
             }
             if (Selectedbox2 && Selectedbox2->getBoundingBox ().containsPoint ( mousePosition )) {
+                if (npc_relationship->getRelationship ( "player" , npc->GetName () ) < 60) {
+                    npc_relationship->increaseRelationship ( "player" , npc->GetName () , 5.0001 );
+                }
                 this->removeFromParent ();
                 return; // 提前返回  
             }
             if (Selectedbox3 && Selectedbox3->getBoundingBox ().containsPoint ( mousePosition )) {
+                npc_relationship->decreaseRelationship ( "player" , npc->GetName () , 0.001 );
                 this->removeFromParent ();
                 return; // 提前返回  
             }
             if (Selectedbox4 && Selectedbox4->getBoundingBox ().containsPoint ( mousePosition )) {
+                npc_relationship->decreaseRelationship ( "player" , npc->GetName () , 5.01 );
                 this->removeFromParent ();
                 return; // 提前返回  
             }
@@ -232,7 +289,7 @@ void NPCtalkUI::close () {
         float scaleX = visibleSize.width / originalWidth;
         float scaleY = visibleSize.height / originalHeight;
         float scale = std::min ( scaleX , scaleY );
-        closeIcon->setScale ( scale / 40 );
+        closeIcon->setScale ( scale / 20.5 );
         closeIcon->setPosition ( Vec2 ( currentx + visibleSize.width * 0.40 , currenty - visibleSize.height * 0.13 ) );
 
         this->addChild ( closeIcon , 1 );
@@ -259,21 +316,23 @@ void NPCtalkUI::close () {
     }
 }
 
-bool NPCtalkUI::init ( NPC* npc_name ) {
+bool NPCtalkUI::init ( NPC* npc_name , std::string sceneName ) {
     if (!Layer::init ()) {
         return false;
     }
+    SceneName = sceneName;
     npc = npc_name;
     NPC_RELATIONSHIP = npc_relationship;
+
     backgroundcreate ();
     SelectedBox ();
     close ();
     return true;
 }
 
-NPCtalkUI* NPCtalkUI::create ( NPC* npc_name ) {
+NPCtalkUI* NPCtalkUI::create ( NPC* npc_name , std::string sceneName ) {
     NPCtalkUI* ret = new NPCtalkUI ();
-    if (ret && ret->init ( npc_name )) {
+    if (ret && ret->init ( npc_name , sceneName )) {
         ret->autorelease ();
         return ret;
     }

@@ -11,12 +11,14 @@ bool Inventory::AddItem ( const Item& item ) {
 		if (pair.second.first->CanBeDepositTogether(item)
 			&& pair.second.second < item.max_count_in_one_grid) {
 			++pair.second.second;
+			is_updated = true;
 			return true;
 		}
 	}
 	int size = package.size ();
 	if (size < capacity) {
 		package[++size] = std::make_pair ( item.GetCopy() , 1);
+		is_updated = true;
 		return true;
 	}
 	return false;
@@ -32,6 +34,7 @@ bool Inventory::AddItem ( const Item& item , const int& add_num ) {
 			pair.second.second += to_add;
 			remaining -= to_add;
 			if (remaining <= 0) {
+				is_updated = true;
 				return true;
 			}
 		}
@@ -42,12 +45,14 @@ bool Inventory::AddItem ( const Item& item , const int& add_num ) {
 		remaining -= to_add;
 		package[++size] = std::make_pair ( item.GetCopy() , (to_add));
 	}
+	is_updated = remaining < add_num ? true : false;
 	return remaining <= 0;
 }
 
 int Inventory::RemoveItem ( const int& position , const int& remove_num ) {
 	auto it = package.find ( position );
 	if (it != package.end ()) {
+		is_updated = true;
 		if (it->second.second > remove_num) {
 			it->second.second -= remove_num;
 			return 0;
@@ -62,6 +67,7 @@ bool Inventory::ClearGrid ( const int& position ) {
 	auto it = package.find ( position );
 	if (it != package.end ()) {
 		package.erase ( it );
+		is_updated = true;
 		return true;
 	}
 	return false;
@@ -119,6 +125,6 @@ void Inventory::DisplayPackageInCCLOG () {
 		std::string name = it.second.first->GetName ();
 		int num = it.second.second;
 		int value = it.second.first->GetValue ();
-		CCLOG ( "pos: %d  name: %s num: %d value: %d\n" , position , name , num ,value);
+		CCLOG ( "pos: %d  name: %s num: %d value: %d\n" , position , name.c_str () , num , value );
 	}
 }

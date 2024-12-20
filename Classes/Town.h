@@ -4,14 +4,11 @@
 #include "cocos2d.h"
 #include "Player.h"
 #include "AppDelegate.h"
+#include "mini_bag.h"
 #include "physics/CCPhysicsWorld.h"
 #include "ui/CocosGUI.h"
-#include "Inventory.h"
-#include "mini_bag.h"
 
 USING_NS_CC;
-
-extern Player* player1;
 
 class Town : public cocos2d::Scene
 {
@@ -26,20 +23,25 @@ public:
 
     // 判断角色的位置
     void checkPlayerPosition();
+
+    // 下雨效果
+    void createRainEffect();
+
+    // 更改雨滴生命周期
+    void updaterain(float deltaTime);
     
     // 创建一个列表，用于保存所有非透明像素的坐标
     std::vector<cocos2d::Vec2> nonTransparentPixels;
 
     // 创建房子的区域
     cocos2d::Rect Region_supermarket = Rect(163, 518, 130, 60);
-  
+    cocos2d::Rect Region_forest = Rect(-940, -400, 200, 110);
+    cocos2d::Rect Region_beach = Rect(490, -750, 50, 100);
+
+    cocos2d::ParticleRain* emitter;
 
 private:
-
   
-    // 用于显示计时的标签
-    cocos2d::Label* _timerLabel;  
-
     // 用于显示玩家位置的 Label
     cocos2d::Label* _positionLabel;
 
@@ -58,7 +60,8 @@ private:
 
     bool isEnterKeyPressed = false;
 
-    mini_bag* miniBag;
+    Sprite* Box;
+
 };
 
 #endif // __BACKGROUND1_H__
