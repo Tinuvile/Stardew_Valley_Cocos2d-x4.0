@@ -102,6 +102,7 @@ void DetailedtaskUI::close () {
             else
                 closeIcon->setScale ( scale / 20.5 );
             };
+
         listener->onMouseDown = [this , closeIcon]( EventMouse* event ) {
             Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
             mousePos = this->convertToNodeSpace ( mousePos );
@@ -156,6 +157,7 @@ void DetailedtaskUI::displayTask ( TaskManagement::Task task ) {
     float scaleY = visibleSize.y / originalHeight;
     float scale = std::min ( scaleX , scaleY );
     OK->setScale ( scale / 8 );
+
     auto listener = EventListenerMouse::create ();
     listener->onMouseMove = [this , OK , scale]( EventMouse* event ) {
         Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
@@ -166,14 +168,17 @@ void DetailedtaskUI::displayTask ( TaskManagement::Task task ) {
         else
             OK->setScale ( scale / 8 );
         };
+
     listener->onMouseDown = [this , OK , task]( EventMouse* event ) {
         Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
         mousePos = this->convertToNodeSpace ( mousePos );
-        taskManager->AddAcceptTask ( task );
-        taskManager->DeleteAcceptTask ( task );
-        this->removeFromParent ();
-        Scene* currentScene = Director::getInstance ()->getRunningScene ();
-        currentScene->addChild ( mailBoxUI::create () , 20 );
+        if (OK->getBoundingBox ().containsPoint ( mousePos )) {
+            taskManager->AddAcceptTask ( task );
+            taskManager->DeleteAcceptTask ( task );
+            this->removeFromParent ();
+            Scene* currentScene = Director::getInstance ()->getRunningScene ();
+            currentScene->addChild ( mailBoxUI::create () , 20 );
+        }
         };
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , OK );
 
