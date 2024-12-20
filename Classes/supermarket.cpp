@@ -32,180 +32,196 @@ bool supermarket::init()
     // 动物  
     StoreItem->AddItem ( AnimalChicken );
 
-    StoreItem->AddItem ( AnimalDuck );
-
-    StoreItem->AddItem ( AnimalGoat );
-
-    StoreItem->AddItem ( AnimalPig );
-
-    StoreItem->AddItem ( AnimalRabbit );
-
     StoreItem->AddItem ( AnimalSheep );
 
     StoreItem->AddItem ( AnimalCow );
 
+    StoreItem->AddItem ( Blueberry_Seeds );
+
+    StoreItem->AddItem ( Corn_Seeds );
+
+    StoreItem->AddItem ( Pumpkin_Seeds );
+
+    StoreItem->AddItem ( Wheat_Seeds );
+
+    StoreItem->AddItem ( Apple_Sapling );
+
+    StoreItem->AddItem ( Apricot_Sapling );
+
+    StoreItem->AddItem ( Banana_Sapling );
+
+    StoreItem->AddItem ( Cherry_Sapling );
+
+    StoreItem->AddItem ( Mango_Sapling );
+
+    StoreItem->AddItem ( Orange_Sapling );
+
+    StoreItem->AddItem ( Peach_Sapling );
+
+    StoreItem->AddItem ( Pomegranate_Sapling );
+
+    /*
     // 春季种子物品列表  
     StoreItem->AddItem ( Bean_Starter );
 
     StoreItem->AddItem ( Carrot_Seeds );
 
-    StoreItem->AddItem ( Cauliflower_Seeds );;
+    StoreItem->AddItem ( Cauliflower_Seeds );
 
-    StoreItem->AddItem ( Coffee_Bean );;
+    StoreItem->AddItem ( Coffee_Bean );
 
-    StoreItem->AddItem ( Garlic_Seeds );;
+    StoreItem->AddItem ( Garlic_Seeds );
 
-    StoreItem->AddItem ( Jazz_Seeds );;
+    StoreItem->AddItem ( Jazz_Seeds );
 
-    StoreItem->AddItem ( Kale_Seeds );;
+    StoreItem->AddItem ( Kale_Seeds );
 
-    StoreItem->AddItem ( Parsnip_Seeds );;
+    StoreItem->AddItem ( Parsnip_Seeds );
 
-    StoreItem->AddItem ( Potato_Seeds );;
+    StoreItem->AddItem ( Potato_Seeds );
 
-    StoreItem->AddItem ( Rhubarb_Seeds );;
+    StoreItem->AddItem ( Rhubarb_Seeds );
 
-    StoreItem->AddItem ( Rice_Shoot );;
+    StoreItem->AddItem ( Rice_Shoot );
 
-    StoreItem->AddItem ( Strawberry_Seeds );;
+    StoreItem->AddItem ( Strawberry_Seeds );
 
-    StoreItem->AddItem ( Tulip_Bulb );;
+    StoreItem->AddItem ( Tulip_Bulb );
 
     // 夏季种子物品列表  
-    StoreItem->AddItem ( Amaranth_Seeds );;
+    StoreItem->AddItem ( Amaranth_Seeds );
 
-    StoreItem->AddItem ( Artichoke_Seeds );;
+    StoreItem->AddItem ( Artichoke_Seeds );
 
-    StoreItem->AddItem ( Beet_Seeds );;
+    StoreItem->AddItem ( Beet_Seeds );
 
-    StoreItem->AddItem ( Blueberry_Seeds );;
+    StoreItem->AddItem ( Blueberry_Seeds );
 
-    StoreItem->AddItem ( Bok_Choy_Seeds );;
+    StoreItem->AddItem ( Bok_Choy_Seeds );
 
-    StoreItem->AddItem ( Broccoli_Seeds );;
+    StoreItem->AddItem ( Broccoli_Seeds );
 
-    StoreItem->AddItem ( Corn_Seeds );;
+    StoreItem->AddItem ( Corn_Seeds );
 
-    StoreItem->AddItem ( Cranberry_Seeds );;
+    StoreItem->AddItem ( Cranberry_Seeds );
 
-    StoreItem->AddItem ( Eggplant_Seeds );;
+    StoreItem->AddItem ( Eggplant_Seeds );
 
-    StoreItem->AddItem ( Fairy_Seeds );;
+    StoreItem->AddItem ( Fairy_Seeds );
 
-    StoreItem->AddItem ( Grape_Starter );;
+    StoreItem->AddItem ( Grape_Starter );
 
-    StoreItem->AddItem ( Hops_Starter );;
+    StoreItem->AddItem ( Hops_Starter );
 
-    StoreItem->AddItem ( Melon_Seeds );;
+    StoreItem->AddItem ( Melon_Seeds );
 
-    StoreItem->AddItem ( Pepper_Seeds );;
+    StoreItem->AddItem ( Pepper_Seeds );
 
-    StoreItem->AddItem ( Poppy_Seeds );;
+    StoreItem->AddItem ( Poppy_Seeds );
 
-    StoreItem->AddItem ( Pumpkin_Seeds );;
+    StoreItem->AddItem ( Pumpkin_Seeds );
 
-    StoreItem->AddItem ( Radish_Seeds );;
+    StoreItem->AddItem ( Radish_Seeds );
 
-    StoreItem->AddItem ( Red_Cabbage_Seeds );;
+    StoreItem->AddItem ( Red_Cabbage_Seeds );
 
-    StoreItem->AddItem ( Spangle_Seeds );;
+    StoreItem->AddItem ( Spangle_Seeds );
 
-    StoreItem->AddItem ( Starfruit_Seeds );;
+    StoreItem->AddItem ( Starfruit_Seeds );
 
-    StoreItem->AddItem ( Summer_Squash_Seeds );;
+    StoreItem->AddItem ( Summer_Squash_Seeds );
 
-    StoreItem->AddItem ( Sunflower_Seeds );;
+    StoreItem->AddItem ( Sunflower_Seeds );
 
-    StoreItem->AddItem ( Tomato_Seeds );;
+    StoreItem->AddItem ( Tomato_Seeds );
 
-    StoreItem->AddItem ( Wheat_Seeds );;
+    StoreItem->AddItem ( Wheat_Seeds );
 
-    StoreItem->AddItem ( Yam_Seeds );;
+    StoreItem->AddItem ( Yam_Seeds );
 
     // 冬季种子物品列表  
-    StoreItem->AddItem ( Powdermelon_Seeds );;
+    StoreItem->AddItem ( Powdermelon_Seeds );
+    */
 
     // 工具列表  
-    StoreItem->AddItem ( Backpack_36 );;
+    StoreItem->AddItem ( Backpack_36 );
 
-    StoreItem->AddItem ( Backpack );;
+    StoreItem->AddItem ( Backpack );
 
-    StoreItem->AddItem ( Advanced_Iridium_Rod );;
+    StoreItem->AddItem ( Advanced_Iridium_Rod );
 
-    StoreItem->AddItem ( Axe );;
+    StoreItem->AddItem ( Axe );
 
-    StoreItem->AddItem ( Bamboo_Pole );;
+    StoreItem->AddItem ( Bamboo_Pole );
 
-    StoreItem->AddItem ( Copper_Axe );;
+    StoreItem->AddItem ( Copper_Axe );
 
-    StoreItem->AddItem ( Copper_Hoe );;
+    StoreItem->AddItem ( Copper_Hoe );
 
-    StoreItem->AddItem ( Copper_Pan );;
+    StoreItem->AddItem ( Copper_Pan );
 
-    StoreItem->AddItem ( Copper_Pickaxe );;
+    StoreItem->AddItem ( Copper_Pickaxe );
 
-    StoreItem->AddItem ( Copper_Watering );;
+    StoreItem->AddItem ( Copper_Watering );
 
-    StoreItem->AddItem ( Fiberglass_Rod );;
+    StoreItem->AddItem ( Fiberglass_Rod );
 
-    StoreItem->AddItem ( Gold_Axe );;
+    StoreItem->AddItem ( Gold_Axe );
 
-    StoreItem->AddItem ( Gold_Hoe );;
+    StoreItem->AddItem ( Gold_Hoe );
 
-    StoreItem->AddItem ( Gold_Pan );;
+    StoreItem->AddItem ( Gold_Pan );
 
-    StoreItem->AddItem ( Gold_Pickaxe );;
+    StoreItem->AddItem ( Gold_Pickaxe );
 
-    StoreItem->AddItem ( Gold_Watering_Can );;
+    StoreItem->AddItem ( Gold_Watering_Can );
 
-    StoreItem->AddItem ( Golden_Scythe );;
+    StoreItem->AddItem ( Golden_Scythe );
 
-    StoreItem->AddItem ( Hoe );;
+    StoreItem->AddItem ( Hoe );
 
-    StoreItem->AddItem ( Pickaxe );;
+    StoreItem->AddItem ( Pickaxe );
 
-    StoreItem->AddItem ( Milk_Pail );;
+    StoreItem->AddItem ( Milk_Pail );
 
-    StoreItem->AddItem ( Scythe );;
+    StoreItem->AddItem ( Scythe );
 
-    StoreItem->AddItem ( Steel_Axe );;
+    StoreItem->AddItem ( Steel_Axe );
 
-    StoreItem->AddItem ( Steel_Hoe );;
+    StoreItem->AddItem ( Steel_Hoe );
 
-    StoreItem->AddItem ( Steel_Pan );;
+    StoreItem->AddItem ( Steel_Pan );
 
-    StoreItem->AddItem ( Steel_Pickaxe );;
+    StoreItem->AddItem ( Steel_Pickaxe );
 
-    StoreItem->AddItem ( Steel_Watering );;
+    StoreItem->AddItem ( Steel_Watering );
 
-    StoreItem->AddItem ( Trash_Can_Copper );;
+    StoreItem->AddItem ( Trash_Can_Copper );
 
-    StoreItem->AddItem ( Watering_Can );;
+    StoreItem->AddItem ( Watering_Can );
 
-    StoreItem->AddItem ( Trash_Can_Steel );;
+    StoreItem->AddItem ( Trash_Can_Steel );
 
     // 树苗列表  
-    StoreItem->AddItem ( Apple_Sapling );;
+    StoreItem->AddItem ( Apple_Sapling );
 
-    StoreItem->AddItem ( Apricot_Sapling );;
+    StoreItem->AddItem ( Apricot_Sapling );
 
-    StoreItem->AddItem ( Banana_Sapling );;
+    StoreItem->AddItem ( Banana_Sapling );
 
-    StoreItem->AddItem ( Cherry_Sapling );;
+    StoreItem->AddItem ( Cherry_Sapling );
 
-    StoreItem->AddItem ( Mango_Sapling );;
+    StoreItem->AddItem ( Mango_Sapling );
 
-    StoreItem->AddItem ( Orange_Sapling );;
+    StoreItem->AddItem ( Orange_Sapling );
 
-    StoreItem->AddItem ( Peach_Sapling );;
+    StoreItem->AddItem ( Peach_Sapling );
 
-    StoreItem->AddItem ( Pomegranate_Sapling );;
-
-
+    StoreItem->AddItem ( Pomegranate_Sapling );
 
     // 设置计时器标签
     TimeUI = Timesystem::create ( "supermarket" );
-    this->addChild(TimeUI, 13);
+    this->addChild ( TimeUI , 13 );
 
     // 创建并初始化 Label 来显示角色的位置
     _positionLabel = Label::createWithTTF("Position: (0, 0)", "fonts/Marker Felt.ttf", 24);
@@ -469,6 +485,11 @@ void supermarket::checkPlayerPosition()
             if (pair.first.first == "myhouse") {  // 检查 bool 值是否为 true
                 pair.second = true;
             }
+        }
+
+        //恢复为能够生产产品
+        for (auto livestock : livestocks) {
+            livestock->SetCanProduce ( true );
         }
 
         IsSleep = false;
