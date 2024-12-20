@@ -227,7 +227,7 @@ void CreateCharacter::optionFace () {
     //Ìø×ªÎ»ÖÃ´ýÐÞ¸Ä
     OK->addClickEventListener ( [this]( Ref* sender ) {
 
-        // player1 = Player::create();
+        player1 = Player::create();
         auto nextscene = Myhouse::create();
         Director::getInstance ()->replaceScene ( nextscene );
 } );

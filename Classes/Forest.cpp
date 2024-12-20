@@ -108,7 +108,7 @@ bool Forest::init()
         }
        /* player1->speed = 6.1f;*/
         //½öÎª·½±ã²âÊÔ
-        player1->speed = 30.0f;
+        player1->speed = 15.0f;
         player1->setScale(2.3f);
         player1->setAnchorPoint(Vec2(0.5f, 0.2f));
     }    

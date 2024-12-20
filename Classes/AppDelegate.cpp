@@ -35,11 +35,11 @@ bool frombed = true;
 bool IsNextDay = false;
 bool IsSleep = true;
 
-Crop wheat ( "wheat" , "crop/wheat1.png" , "crop/wheat2.png" , "crop/wheat3.png" , "All" , Phase::SEED , 50 , 0 , false , 4 );
-Crop corn ( "corn" , "crop/corn1.png" , "crop/corn2.png" , "crop/corn3.png" , "Spring" , Phase::SEED , 50 , 0 , false , 6 );
-Crop potato ( "potato" , "crop/potato1.png" , "crop/potato2.png" , "crop/potato3.png" , "All" , Phase::SEED , 30 , 0 , false , 2 );
-Crop pumpkin ( "pumpkin" , "crop/pumpkin1.png" , "crop/pumpkin2.png" , "crop/pumpkin3.png" , "Autumn" , Phase::SEED , 70 , 0 , false , 6 );
-Crop blueberry ( "blueberry" , "crop/blueberry1.png" , "crop/blueberry2.png" , "crop/blueberry3.png" , "Summer" , Phase::SEED , 100 , 0 , false , 7 );
+Crop wheat ( "wheat" , "Crops/wheat1.png" , "Crops/wheat2.png" , "Crops/wheat3.png" , "All" , Phase::SEED , 50 , 0 , false , 4 );
+Crop corn ( "corn" , "Crops/corn1.png" , "Crops/corn2.png" , "Crops/corn3.png" , "Spring" , Phase::SEED , 50 , 0 , false , 6 );
+Crop potato ( "potato" , "Crops/potato1.png" , "Crops/potato2.png" , "Crops/potato3.png" , "All" , Phase::SEED , 30 , 0 , false , 2 );
+Crop pumpkin ( "pumpkin" , "Crops/pumpkin1.png" , "Crops/pumpkin2.png" , "Crops/pumpkin3.png" , "Autumn" , Phase::SEED , 70 , 0 , false , 6 );
+Crop blueberry ( "blueberry" , "Crops/blueberry1.png" , "Crops/blueberry2.png" , "Crops/blueberry3.png" , "Summer" , Phase::SEED , 100 , 0 , false , 7 );
 
 std::string Season = "Summer";
 std::string Weather = "Rainy";
@@ -134,7 +134,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 void AppDelegate::runScene(cocos2d::Director* director) {
 
     Initialize ();
-    player1 = Player::create ();
+    // player1 = Player::create ();
 
     // 获取当前视图的可见大小和原点位置
     auto visibleSize = Director::getInstance()->getVisibleSize();  // 获取屏幕可视区域的大小
@@ -158,8 +158,8 @@ void AppDelegate::runScene(cocos2d::Director* director) {
      director->runWithScene(test); */
 
     // 运行小镇的场景
-     auto test = Town::create ();
-     director->runWithScene(test);
+     //auto test = Town::create ();
+     //director->runWithScene(test);
 
     // 运行商店的场景
     //auto test = supermarket::create();
@@ -182,7 +182,7 @@ void AppDelegate::runScene(cocos2d::Director* director) {
      // director->runWithScene(test);
 
     //开局UI运行
-    // director->runWithScene ( BeginScene::create () );
+    director->runWithScene ( BeginScene::create () );
     //创建人物界面运行
     // director->runWithScene ( CreateCharacter::create () );
 }
