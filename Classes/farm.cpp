@@ -20,10 +20,6 @@ farm::~farm () {}
 bool farm::init ()
 {
 
-    auto test_milk = Food::create ( FoodType::Milk );
-    inventory->AddItem ( *test_milk , 3 );
-    inventory->DisplayPackageInCCLOG ();
-
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     Vec2 origin = Director::getInstance ()->getVisibleOrigin ();
 

@@ -8,25 +8,34 @@ Inventory::~Inventory () {}
 
 bool Inventory::AddItem ( const Item& item ) {
 	for (auto& pair : package) {
-		if (pair.second.first->CanBeDepositTogether(item)
+		if (pair.second.first->CanBeDepositTogether ( item )
 			&& pair.second.second < item.max_count_in_one_grid) {
 			++pair.second.second;
 			is_updated = true;
 			return true;
 		}
 	}
+
 	int size = package.size ();
 	if (size < capacity) {
-		package[++size] = std::make_pair ( item.GetCopy() , 1);
+		int index = 0;
+		for (int i = 1;; i++) {
+			if (package.find ( i ) == package.end ()) {
+				index = i;
+				break;
+			}
+		}
+		package[index] = std::make_pair ( item.GetCopy () , 1 );
 		is_updated = true;
 		return true;
 	}
+
 	return false;
 }
 
 bool Inventory::AddItem ( const Item& item , const int& add_num ) {
 	int remaining = add_num;
-	for (auto & pair : package) {
+	for (auto& pair : package) {
 		if (pair.second.first->CanBeDepositTogether ( item )
 			&& pair.second.second < item.max_count_in_one_grid) {
 			int space_left = item.max_count_in_one_grid - pair.second.second;
@@ -41,9 +50,16 @@ bool Inventory::AddItem ( const Item& item , const int& add_num ) {
 	}
 	int size = package.size ();
 	while (remaining > 0 && size < capacity) {
+		int index = 0;
+		for (int i = 1;; i++) {
+			if (package.find ( i ) == package.end ()) {
+				index = i;
+				break;
+			}
+		}
 		int to_add = std::min ( remaining , item.max_count_in_one_grid );
-		remaining -= to_add;
-		package[++size] = std::make_pair ( item.GetCopy() , (to_add));
+		package[index] = std::make_pair ( item.GetCopy () , to_add );
+		++size;
 	}
 	is_updated = remaining < add_num ? true : false;
 	return remaining <= 0;
