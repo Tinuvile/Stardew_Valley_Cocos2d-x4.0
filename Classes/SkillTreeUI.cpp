@@ -1,12 +1,7 @@
-// InventoryUI.cpp  
-#include "SkillTreeUI.h"  
+// SkilltreeUI.cpp  
 #include "ui/CocosGUI.h"  
-#include "Item.h"  
-
-extern Player* player1;
-extern Inventory* inventory;
-extern SkillTree* skillTree;
-
+#include "SkillTreeUI.h"
+#include "quitUI.h"
 
 const int characternum = 5;
 
@@ -20,21 +15,64 @@ static void problemLoading ( const char* filename )
 
 void SkillTreeUI::updateCoordinate ( float& x , float& y ) {
     Vec2 position = player1->getPosition ();
-    if (x <= -170) {
-        x = -170;
+    float  Leftboundary = -10000.0f , rightboundary = 10000.0f , upperboundary = 10000.0f , lowerboundary = 10000.0f;
+    if (SceneName == "Town") {
+        Leftboundary = -170.0f;
+        rightboundary = 1773.0f;
+        upperboundary = 1498.0f;
+        lowerboundary = -222.0f;
     }
-    else if (x >= 1773) {
-        x = 1773;
+    else if (SceneName == "Cave") {
+        Leftboundary = 786.0f;
+        rightboundary = 817.0f;
+        upperboundary = 808.0f;
+        lowerboundary = 460.0f;
+    }
+    else if (SceneName == "Beach") {
+        Leftboundary = -315.0f;
+        rightboundary = 20000.0f;
+        upperboundary = 920.0f;
+        lowerboundary = 360.0f;
+    }
+    else if (SceneName == "Forest") {
+        Leftboundary = -600.0f;
+        rightboundary = 2197.0f;
+        upperboundary = 2200.0f;
+        lowerboundary = -850.0f;
+    }
+    else if (SceneName == "farm") {
+        Leftboundary = 637.0f;
+        rightboundary = 960.0f;
+        upperboundary = 777.0f;
+        lowerboundary = 500.0f;
+    }
+    else if (SceneName == "Barn") {
+        Leftboundary = 805.0f;
+        rightboundary = 805.0f;
+        upperboundary = 569.0f;
+        lowerboundary = 569.0f;
+    }
+    else if (SceneName == "Myhouse") {
+        Leftboundary = 800.0f;
+        rightboundary = 800.0f;
+        upperboundary = 580.0f;
+        lowerboundary = 580.0f;
+    }
+    if (x <= Leftboundary) {
+        x = Leftboundary;
+    }
+    else if (x >= rightboundary) {
+        x = rightboundary;
     }
     else {
         x = position.x;
     }
 
-    if (y >= 1498) {
-        y = 1498;
+    if (y >= upperboundary) {
+        y = upperboundary;
     }
-    else if (y <= -222) {
-        y = -222;
+    else if (y <= lowerboundary) {
+        y = lowerboundary;
     }
     else {
         y = position.y;
@@ -48,7 +86,7 @@ void SkillTreeUI::backgroundcreate () {
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     // 创建一个半透明的黑色遮罩
     auto darkLayer = cocos2d::LayerColor::create ( cocos2d::Color4B ( 0 , 0 , 0 , 120 ) , 10 * visibleSize.width , 5 * visibleSize.height );  // 黑色，透明度为120
-    darkLayer->setPosition ( Vec2 ( currentx , currenty ) - visibleSize / 2 );// 设置遮罩层的位置
+    darkLayer->setPosition ( Vec2 ( currentx , currenty ) - visibleSize  );// 设置遮罩层的位置
     this->addChild ( darkLayer , 0 );
     //大框架
     auto IntimacyFace = Sprite::create ( "UIresource/SkillTree/background1.png" );
@@ -68,7 +106,7 @@ void SkillTreeUI::backgroundcreate () {
         // 选择最小的缩放比例，以保证图片完全显示在屏幕上且不变形
         float scale = std::min ( scaleX , scaleY );
         IntimacyFace->setScale ( scale / 1.5 );
-        IntimacyFace->setPosition ( Vec2 ( currentx, currenty ) );
+        IntimacyFace->setPosition ( Vec2 ( currentx , currenty ) );
 
         this->addChild ( IntimacyFace , 1 );
     }
@@ -79,12 +117,12 @@ void SkillTreeUI::backgroundcreate () {
     SkillDisplay ( 5 , Vec2 ( currentx - visibleSize.width * 0.18 , currenty - visibleSize.height * 0.18 ) , 60 );
 }
 
-void SkillTreeUI::SkillDisplay (int whichSkill , Vec2 Pos ,float gap) {
-    int fullSkill_num = (*skillTree)(whichSkill);
+void SkillTreeUI::SkillDisplay ( int whichSkill , Vec2 Pos , float gap ) {
+    int fullSkill_num = (*skill_tree)(whichSkill);
     int emptyheart_num = 10 - fullSkill_num;
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     for (int i = 0; i < 10; i++) {
-        if (i == 4 || i == 9 || i == 5 ) {
+        if (i == 4 || i == 9 || i == 5) {
             gap += 85.0f;
         }
         else
@@ -101,7 +139,7 @@ void SkillTreeUI::SkillDisplay (int whichSkill , Vec2 Pos ,float gap) {
             else
             {
                 fullHeart->setScale ( 1.5f );
-                fullHeart->setPosition ( Vec2 ( Pos.x + gap, Pos.y ) );
+                fullHeart->setPosition ( Vec2 ( Pos.x + gap , Pos.y ) );
                 this->addChild ( fullHeart , 3 );
             }
             fullSkill_num--;
@@ -119,7 +157,7 @@ void SkillTreeUI::SkillDisplay (int whichSkill , Vec2 Pos ,float gap) {
             else
             {
                 emptySkill->setScale ( 1.5f );
-                emptySkill->setPosition ( Vec2 ( Pos.x + gap, Pos.y ) );
+                emptySkill->setPosition ( Vec2 ( Pos.x + gap , Pos.y ) );
                 this->addChild ( emptySkill , 3 );
             }
             emptyheart_num--;
@@ -137,6 +175,7 @@ void SkillTreeUI::Buttons_switching () {
     auto bagkey = Sprite::create ( "UIresource/beibao/bagkey.png" );
     auto Skillkey = Sprite::create ( "UIresource/beibao/Skillkey.png" );
     auto intimacykey = Sprite::create ( "UIresource/beibao/intimacykey.png" );
+    auto quitkey = Sprite::create ( "UIresource/beibao/quit.png" );
     if (bagkey == nullptr)
     {
         problemLoading ( "'bagkey.png'" );
@@ -157,28 +196,38 @@ void SkillTreeUI::Buttons_switching () {
         Skillkey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.19 , currenty + visibleSize.height * 0.305 ) );//0.315是未选中时位置
         intimacykey->setScale ( scale / 16.5 );
         intimacykey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.13 , currenty + visibleSize.height * 0.315 ) );
+        quitkey->setScale ( scale / 16.5 );
+        quitkey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.07 , currenty + visibleSize.height * 0.315 ) );
         this->addChild ( bagkey , 2 );
         this->addChild ( Skillkey , 2 );
         this->addChild ( intimacykey , 2 );
+        this->addChild ( quitkey , 2 );
     }
 
     //动画以及切换Layer
     auto listener = EventListenerMouse::create ();
-    listener->onMouseDown = [this , bagkey , Skillkey , intimacykey]( EventMouse* event ) {
+    listener->onMouseDown = [this , bagkey , Skillkey , intimacykey ,quitkey]( EventMouse* event ) {
         Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
         mousePos = this->convertToNodeSpace ( mousePos );
         //CCLOG ( "X:%f,Y:%f" , event->getCursorX () , event->getCursorY () );
         if (bagkey->getBoundingBox ().containsPoint ( mousePos )) {
             // 移除当前的Layer
+            std::string nowScene = SceneName;
             this->removeFromParent ();
-            Director::getInstance ()->getRunningScene ()->addChild ( InventoryUI::create ( inventory ) , 10 );
+            Director::getInstance ()->getRunningScene ()->addChild ( InventoryUI::create ( inventory , nowScene ) , 20 );
         }
         else if (Skillkey->getBoundingBox ().containsPoint ( mousePos )) {
 
         }
         else if (intimacykey->getBoundingBox ().containsPoint ( mousePos )) {
+            std::string nowScene = SceneName;
             this->removeFromParent ();
-            Director::getInstance ()->getRunningScene ()->addChild ( intimacyUI::create () , 10 );
+            Director::getInstance ()->getRunningScene ()->addChild ( intimacyUI::create ( nowScene ) , 20 );
+        }
+        else if (quitkey->getBoundingBox ().containsPoint ( mousePos )) {
+            std::string nowScene = SceneName;
+            this->removeFromParent ();
+            Director::getInstance ()->getRunningScene ()->addChild ( quitUI::create ( nowScene ) , 20 );
         }
         };
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , this );
@@ -196,10 +245,11 @@ void SkillTreeUI::close () {
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listenerClose , this );
 }
 
-bool SkillTreeUI::init () {
+bool SkillTreeUI::init ( std::string sceneName ) {
     if (!Layer::init ()) {
         return false;
     }
+    SceneName = sceneName;
     backgroundcreate ();
 
     Buttons_switching ();
@@ -207,9 +257,9 @@ bool SkillTreeUI::init () {
     return true;
 }
 
-SkillTreeUI* SkillTreeUI::create () {
+SkillTreeUI* SkillTreeUI::create ( std::string sceneName ) {
     SkillTreeUI* ret = new SkillTreeUI ();
-    if (ret && ret->init ()) {
+    if (ret && ret->init ( sceneName )) {
         ret->autorelease ();
         return ret;
     }
