@@ -31,7 +31,7 @@ public:
 
 
 	//¸üĞÂÍ¼Ïñ
-	void UpdateTexture (float deltaTime);
+	virtual  void UpdateTexture ( float deltaTime );
 
 
 };

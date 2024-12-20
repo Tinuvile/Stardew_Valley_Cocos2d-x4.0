@@ -88,11 +88,6 @@ bool Livestock::init () {
         cocos2d::RandomHelper::random_real ( move_area.getMinY () , move_area.getMaxY () )
     ) );
 
-    // 每隔一段时间随机移动
-    schedule ( [this]( float deltaTime ) {
-        this->RandomMove ();
-    } , 15.0f , "livestock_random_move_key" );
-
     return true;
 }
 

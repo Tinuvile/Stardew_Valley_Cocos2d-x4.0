@@ -50,6 +50,8 @@ public:
     }
 
     void SetMoving ( bool is_moving ) { moving = is_moving; }
+
+    virtual void UpdateTexture ( float delta_time ) {};
     
 
 };

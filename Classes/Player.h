@@ -6,6 +6,8 @@
 #include "Crop.h"
 #include "AppDelegate.h"
 
+const int kDefaultEnergy = 100;
+
 USING_NS_CC;
 
 class Player : public cocos2d::Sprite
@@ -42,7 +44,8 @@ public:
 
     std::string pic_path;
 
-
+    //int energy_limit = kDefaultEnergy;
+    //int current_energy = kDefaultEnergy;
 
 };
 

@@ -14,8 +14,6 @@ Cave::~Cave() {}
 
 bool Cave::init()
 {
-    auto test_milk = Food::create ( FoodType::Milk );
-    inventory->AddItem ( *test_milk , 3 );
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -344,6 +342,11 @@ void Cave::checkPlayerPosition()
             }
         }
 
+        //恢复为能够生产产品
+        for (auto livestock : livestocks) {
+            livestock->SetCanProduce ( true );
+        }
+
         IsSleep = false;
         frombed = true;
         remainingTime = 10800;
@@ -390,7 +393,7 @@ void Cave::checkPlayerPosition()
             if (distance <= 75 && ore->available && strength >= 10) {
 
                 strength -= 10;
-                TimeUI->StrengthValue->setScaleY(strength / 100.0 * 16.5f);
+                TimeUI->UpdateEnergy();
 
                 ore->available = false;
 

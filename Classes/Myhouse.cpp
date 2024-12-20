@@ -305,6 +305,11 @@ void Myhouse::checkPlayerPosition()
             }
         }
 
+        //恢复为能够生产产品
+        for (auto livestock : livestocks) {
+            livestock->SetCanProduce ( true );
+        }
+
         IsSleep = false;
         frombed = true;
         remainingTime = 10800;
@@ -395,6 +400,11 @@ void Myhouse::checkPlayerPosition()
                 if (pair.first.first == "myhouse") {  // 检查 bool 值是否为 true
                     pair.second = true;
                 }
+            }
+
+            //恢复为能够生产产品
+            for (auto livestock : livestocks) {
+                livestock->SetCanProduce ( true );
             }
 
             IsSleep = true;

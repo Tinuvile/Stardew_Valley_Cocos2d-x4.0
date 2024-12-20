@@ -368,6 +368,11 @@ void  Forest::checkPlayerPosition()
             }
         }
 
+        //恢复为能够生产产品
+        for (auto livestock : livestocks) {
+            livestock->SetCanProduce ( true );
+        }
+
         IsSleep = false;
         frombed = true;
         remainingTime = 10800;
@@ -417,7 +422,7 @@ void  Forest::checkPlayerPosition()
             if ((distance <= 250 && tree->available) && strength >= 10) {
 
                 strength -= 10;
-                TimeUI->StrengthValue->setScaleY(strength / 100.0 * 16.5f);
+                TimeUI->UpdateEnergy();
 
                 if (skill_tree->GetSkillLevels()[foraging_skill] >= 5) {
                     tree->removetimes -= 2;
