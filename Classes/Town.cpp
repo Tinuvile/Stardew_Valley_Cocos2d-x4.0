@@ -14,7 +14,6 @@ Town::~Town() {}
 
 bool Town::init()
 {
-    // inventory->AddItem ( Bean_Starter );
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -595,6 +594,11 @@ void Town::checkPlayerPosition ()
             if (pair.first.first == "myhouse") {  // 检查 bool 值是否为 true
                 pair.second = true;
             }
+        }
+
+        //恢复为能够生产产品
+        for (auto livestock : livestocks) {
+            livestock->SetCanProduce ( true );
         }
 
         IsSleep = false;

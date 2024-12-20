@@ -31,6 +31,6 @@ public:
 	virtual std::shared_ptr<Item> ProduceProduct ();
 
 	//移动时更新图像
-	void UpdateTexture ( float deltaTime );
+	virtual void UpdateTexture ( float deltaTime );
 
 };

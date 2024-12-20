@@ -20,10 +20,6 @@ farm::~farm() {}
 bool farm::init ()
 {
 
-    auto test_milk = Food::create ( FoodType::Milk );
-    inventory->AddItem ( *test_milk , 3 );
-    inventory->DisplayPackageInCCLOG ();
-
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     Vec2 origin = Director::getInstance ()->getVisibleOrigin ();
 
@@ -444,6 +440,11 @@ void farm::checkPlayerPosition()
             }
         }
 
+        //恢复为能够生产产品
+        for (auto livestock : livestocks) {
+            livestock->SetCanProduce ( true );
+        }
+
         IsSleep = false;
         frombed = true;
         remainingTime = 10800;
@@ -515,7 +516,7 @@ void farm::checkPlayerPosition()
                             inventory->RemoveItem ( *temp );
 
                             strength -= 10;
-                            TimeUI->StrengthValue->setScaleY(strength / 100.0 * 16.5f);
+                            TimeUI->UpdateEnergy();
 
                             Crop_information.push_back(cropbasicinformation[TypeName].GetCropCopy());
                             Crop_information.back()->plant_day = season[Season] * 7 + day;
@@ -646,7 +647,7 @@ void farm::checkPlayerPosition()
                         }
 
                         strength -= 10;
-                        TimeUI->StrengthValue->setScaleY(strength / 100.0 * 16.5f);
+                        TimeUI->UpdateEnergy();
 
                         // 覆盖精灵
                         auto test = Sprite::create("farm/tile.png");

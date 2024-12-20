@@ -200,6 +200,7 @@ void mini_bag::updateDisplay () {
                     strength = std::min ( 100 , strength + selected_item->GetEnergy () );
                     inventory->RemoveItem ( *selected_item );
                     inventory->DisplayPackageInCCLOG ();
+                    TimeUI->UpdateEnergy ();
                 }
 			}
 			};

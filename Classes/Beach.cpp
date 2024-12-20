@@ -155,7 +155,7 @@ bool Beach::init ()
         else if (key_code == EventKeyboard::KeyCode::KEY_H) {
             if (!this->getChildByName ( "FishingGameLayer" ) && strength >= 10) {
                 strength -= 10;
-                TimeUI->StrengthValue->setScaleY(strength / 100.0 * 16.5f);
+                TimeUI->UpdateEnergy();
                 //将钓鱼游戏界面加入场景中
                 auto fishing_game = FishingGame::create ( player1->getPosition () );
                 this->addChild ( fishing_game , 10 , "FishingGameLayer" );
@@ -557,6 +557,11 @@ void Beach::CheckPlayerPosition ()
             }
         }
 
+        //恢复为能够生产产品
+        for (auto livestock : livestocks) {
+            livestock->SetCanProduce ( true );
+        }
+
         IsSleep = false;
         frombed = true;
         remainingTime = 10800;
@@ -612,7 +617,7 @@ void Beach::CheckPlayerPosition ()
         temp = playerPos;
         temp.x -= player1->speed;
         distance = temp.distance ( point );
-        if (distance <= 17) {
+        if (distance <= 15) {
             player1->moveLeft = false;
         }
         else {

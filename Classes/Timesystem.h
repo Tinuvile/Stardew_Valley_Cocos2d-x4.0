@@ -9,20 +9,22 @@ public:
 
     static Timesystem* create ( std::string place );
 
+    void UpdateEnergy();
+
     // 其他成员变量和方法
-    cocos2d::Label* _timerLabelD;
-    cocos2d::Label* _timerLabelH;
-    cocos2d::Label* _timerLabelS;
-    cocos2d::Label* _timerLabelW;
-    cocos2d::Label* _timerLabelF;
-    cocos2d::Sprite* TimePic;
-    cocos2d::Sprite* Strength;
-    cocos2d::Sprite* StrengthValue;
+    cocos2d::Label* timer_label_day;
+    cocos2d::Label* timer_label_hour;
+    cocos2d::Label* timer_label_season;
+    cocos2d::Label* timer_label_weather;
+    cocos2d::Label* timer_label_festival;
+    cocos2d::Sprite* time_pic;
+    cocos2d::Sprite* energy_frame;
+    cocos2d::Sprite* energy_bar;
 
-    cocos2d::Sprite* moneyDisplay;
-    cocos2d::Label* GoldAmountDisplay;
+    cocos2d::Sprite* currency_frame;
+    cocos2d::Label* currency_num;
 
-    cocos2d::Sprite* DailyRecord;
+    cocos2d::Sprite* daily_record;
 
     // 所处的场景
     std::string Place;

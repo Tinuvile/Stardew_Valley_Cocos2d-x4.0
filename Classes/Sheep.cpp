@@ -34,7 +34,6 @@ bool Sheep::init () {
 		this->UpdateTexture ( deltaTime );
 	} , 0.2f , "sheep_texture_update_key" );
 
-
 	return true;
 }
 

@@ -32,11 +32,11 @@ public:
 	// init初始化
 	virtual bool init ();
 
-	// 产出牛奶
+	// 产出羊毛
 	// 要获取Wool在基类Item以外的独有成员（如energy_provided)
 	// 需要使用std::xxx_pointer_cast(如std::dynamic_pointer_cast<Wool>()将指针基类型转换为Wool
 	virtual std::shared_ptr<Item> ProduceProduct ();
 
 	//移动时更新图像
-	void UpdateTexture ( float deltaTime );
+	virtual void UpdateTexture ( float deltaTime );
 };

@@ -92,25 +92,25 @@ void DailyRecordUI::backgroundcreate () {
     darkLayer->setPosition ( Vec2 ( currentx , currenty ) - visibleSize  );// 设置遮罩层的位置
     this->addChild ( darkLayer , 0 );
     //大框架
-    auto DailyRecord = Sprite::create ( "UIresource/rizhi/DailyRecord.png" );
-    if (DailyRecord == nullptr)
+    auto daily_record = Sprite::create ( "UIresource/rizhi/DailyRecord.png" );
+    if (daily_record == nullptr)
     {
         problemLoading ( "'DailyRecord.png'" );
     }
     else
     {
         // 获取原始图片的宽高
-        float originalWidth = DailyRecord->getContentSize ().width;
-        float originalHeight = DailyRecord->getContentSize ().height;
+        float originalWidth = daily_record->getContentSize ().width;
+        float originalHeight = daily_record->getContentSize ().height;
         // 根据屏幕宽度和图片原始宽高计算比例
         float scaleX = visibleSize.width / originalWidth;
         float scaleY = visibleSize.height / originalHeight;
         // 选择最小的缩放比例，以保证图片完全显示在屏幕上且不变形
         float scale = std::min ( scaleX , scaleY );
-        DailyRecord->setScale ( scale * 0.8 );
-        DailyRecord->setPosition ( Vec2 ( currentx , currenty ) );
+        daily_record->setScale ( scale * 0.8 );
+        daily_record->setPosition ( Vec2 ( currentx , currenty ) );
 
-        this->addChild ( DailyRecord , 1 );
+        this->addChild ( daily_record , 1 );
     }
 }
 

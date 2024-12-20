@@ -554,6 +554,11 @@ void supermarket::checkPlayerPosition()
             }
         }
 
+        //恢复为能够生产产品
+        for (auto livestock : livestocks) {
+            livestock->SetCanProduce ( true );
+        }
+
         IsSleep = false;
         frombed = true;
         remainingTime = 10800;
