@@ -191,8 +191,8 @@ void mini_bag::updateDisplay () {
         }
 
         auto keyboard_listener = EventListenerKeyboard::create ();
-		keyboard_listener->onKeyPressed = [this]( EventKeyboard::KeyCode keyCode , Event* event ) {
-			if (keyCode == EventKeyboard::KeyCode::KEY_E && !is_key_e_pressed) {
+        keyboard_listener->onKeyPressed = [this]( EventKeyboard::KeyCode keyCode , Event* event ) {
+            if (keyCode == EventKeyboard::KeyCode::KEY_E && !is_key_e_pressed) {
                 is_key_e_pressed = true;
                 auto selected_item = std::dynamic_pointer_cast<Food>(this->getSelectedItem ());
                 if (selected_item != nullptr) {
@@ -200,16 +200,15 @@ void mini_bag::updateDisplay () {
                     strength = std::min ( 100 , strength + selected_item->GetEnergy () );
                     inventory->RemoveItem ( *selected_item );
                     inventory->DisplayPackageInCCLOG ();
-                    TimeUI->UpdateEnergy ();
                 }
-			}
-			};
-		keyboard_listener->onKeyReleased = [this]( EventKeyboard::KeyCode keyCode , Event* event ) {
-			if (keyCode == EventKeyboard::KeyCode::KEY_E) {
-				is_key_e_pressed = false;
-			}
-			};
-		_eventDispatcher->addEventListenerWithSceneGraphPriority ( keyboard_listener , this );
+            }
+            };
+        keyboard_listener->onKeyReleased = [this]( EventKeyboard::KeyCode keyCode , Event* event ) {
+            if (keyCode == EventKeyboard::KeyCode::KEY_E) {
+                is_key_e_pressed = false;
+            }
+            };
+        _eventDispatcher->addEventListenerWithSceneGraphPriority ( keyboard_listener , this );
     }
 
     // 更新物品信息标签（用于调试）  
@@ -231,7 +230,7 @@ void mini_bag::getSelectBack () {
 
 
 // 复制并返回当前选中的物品（Item）
-std::shared_ptr<Item> mini_bag::getSelectedItem() {
+std::shared_ptr<Item> mini_bag::getSelectedItem () {
     // 确保选中了槽位
     if (_selectedSlot == 0) {
         return nullptr;  // 如果没有选中任何槽位，返回空
@@ -241,15 +240,15 @@ std::shared_ptr<Item> mini_bag::getSelectedItem() {
     int serial_number = _selectedSlot - 1;  // 假设槽位从1开始，索引从0开始
 
     // 从库存中获取物品实例
-    std::shared_ptr<Item> itemPtr = _inventory->GetItemAt(serial_number + 1);  // 获取 shared_ptr
+    std::shared_ptr<Item> itemPtr = _inventory->GetItemAt ( serial_number + 1 );  // 获取 shared_ptr
 
     if (itemPtr != nullptr) {
 
-        auto temp = itemPtr->GetCopy();
+        auto temp = itemPtr->GetCopy ();
         return temp;
     }
     else {
         return nullptr;
     }
- 
+
 }

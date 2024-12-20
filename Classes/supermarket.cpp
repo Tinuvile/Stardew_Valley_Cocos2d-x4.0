@@ -40,6 +40,8 @@ bool supermarket::init()
 
     StoreItem->AddItem ( Corn_Seeds );
 
+    StoreItem->AddItem ( Potato_Seeds );
+
     StoreItem->AddItem ( Pumpkin_Seeds );
 
     StoreItem->AddItem ( Wheat_Seeds );
@@ -47,6 +49,7 @@ bool supermarket::init()
     StoreItem->AddItem ( Apple_Sapling );
 
     StoreItem->AddItem ( Apricot_Sapling );
+
 
     StoreItem->AddItem ( Banana_Sapling );
 

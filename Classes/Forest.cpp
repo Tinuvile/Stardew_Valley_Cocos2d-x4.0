@@ -408,8 +408,9 @@ void  Forest::checkPlayerPosition()
     _positionLabel->setPosition(currentx - 570, currenty + 490);
     button->setPosition(currentx + 730, currenty - 590);
     miniBag->setPosition ( currentx , currenty );
-    emitter->setPositionY(currenty + 350);
-
+    if (Weather == "Rainy") {
+        emitter->setPositionY ( currenty + 350 );
+    }
     if (isLKeyPressed) {
 
         isLKeyPressed = false;

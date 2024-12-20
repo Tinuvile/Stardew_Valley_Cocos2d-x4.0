@@ -28,7 +28,7 @@ USING_NS_CC;  // 使用cocos2d的命名空间
 /******************************** 全局变量声明区 ****************************************/
 // 在此文件中定义并初始化全局变量
 int remainingTime = 10800;
-int day = 1;
+int day = 3;
 int GoldAmount = 4000;
 int strength = 100;
 bool frombed = true;
@@ -41,7 +41,7 @@ Crop potato ( "potato" , "crop/potato1.png" , "crop/potato2.png" , "crop/potato3
 Crop pumpkin ( "pumpkin" , "crop/pumpkin1.png" , "crop/pumpkin2.png" , "crop/pumpkin3.png" , "Autumn" , Phase::SEED , 70 , 0 , false , 6 );
 Crop blueberry ( "blueberry" , "crop/blueberry1.png" , "crop/blueberry2.png" , "crop/blueberry3.png" , "Summer" , Phase::SEED , 100 , 0 , false , 7 );
 
-std::string Season = "Spring";
+std::string Season = "Summer";
 std::string Weather = "Rainy";
 std::string Festival = "Fishing Festival";
 std::map<std::string , int> season;
@@ -134,6 +134,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 void AppDelegate::runScene(cocos2d::Director* director) {
 
     Initialize ();
+    player1 = Player::create ();
 
     // 获取当前视图的可见大小和原点位置
     auto visibleSize = Director::getInstance()->getVisibleSize();  // 获取屏幕可视区域的大小
@@ -157,8 +158,8 @@ void AppDelegate::runScene(cocos2d::Director* director) {
      director->runWithScene(test); */
 
     // 运行小镇的场景
-    // auto test = Town::create ();
-    // director->runWithScene(test);
+     auto test = Town::create ();
+     director->runWithScene(test);
 
     // 运行商店的场景
     //auto test = supermarket::create();
@@ -169,25 +170,24 @@ void AppDelegate::runScene(cocos2d::Director* director) {
      //director->runWithScene(test);
 
     // 运行Beach
-     //auto test = Beach::create();
-     //director->runWithScene(test);
+    //auto test = Beach::create();
+    // director->runWithScene(test);
     
     // 运行森林
     /* auto test = Forest::create();
      director->runWithScene(test);*/
 
      // 运行畜棚
-      auto test = Barn::create();
-      director->runWithScene(test);
+     // auto test = Barn::create();
+     // director->runWithScene(test);
 
     //开局UI运行
-     director->runWithScene ( BeginScene::create () );
+    // director->runWithScene ( BeginScene::create () );
     //创建人物界面运行
     // director->runWithScene ( CreateCharacter::create () );
 }
 
 void AppDelegate::Initialize () {
-   
    
     // 初始化存储作物信息的数组
     cropbasicinformation.insert({ "Wheat_Seeds", wheat });
@@ -239,7 +239,7 @@ void AppDelegate::Initialize () {
     F_lastplace.insert(std::make_pair(key, false));
     key = { "barn",Vec2(20, 170) };
     F_lastplace.insert(std::make_pair(key, false));
-    key = { "forest",Vec2(-740,-330) };
+    key = { "forest",Vec2(740,-30) };
     F_lastplace.insert(std::make_pair(key, false));
     key = { "cave",Vec2(635, 1185) };
     F_lastplace.insert(std::make_pair(key, false));

@@ -443,22 +443,22 @@ void StoreUI::moneyDisplay () {
     updateCoordinate ( currentx , currenty );
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     //½ð±Ò¸üÐÂ
-    static Label* GoldAmount = nullptr;
+    static Label* Gold_Amount = nullptr;
     int goldAmount = economicSystem->getGoldAmount ();
-    if (GoldAmount == nullptr) {
-        GoldAmount = Label::createWithSystemFont ( std::to_string ( goldAmount ) , "fonts/Comic Sans MS.ttf" , 45 );
-        GoldAmount->setTextColor ( Color4B::BLACK );
-        GoldAmount->setPosition ( Vec2 ( currentx - visibleSize.width * 0.1 , currenty - visibleSize.height * 0.0425 ) );
-        this->addChild ( GoldAmount , 4 );
+    if (Gold_Amount == nullptr) {
+        Gold_Amount = Label::createWithSystemFont ( std::to_string ( goldAmount ) , "fonts/Comic Sans MS.ttf" , 45 );
+        Gold_Amount->setTextColor ( Color4B::BLACK );
+        Gold_Amount->setPosition ( Vec2 ( currentx - visibleSize.width * 0.1 , currenty - visibleSize.height * 0.0425 ) );
+        this->addChild ( Gold_Amount , 4 );
     }
     else {
-        GoldAmount->setString ( std::to_string ( goldAmount ) );
+        Gold_Amount->setString ( std::to_string ( goldAmount ) );
     }
     auto listenerWithPlayer = EventListenerKeyboard::create ();
     listenerWithPlayer->onKeyPressed = [this, goldAmount]( EventKeyboard::KeyCode keyCode , Event* event )
         {
-            if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
-                GoldAmount = nullptr;
+            if (keyCode == EventKeyboard::KeyCode::KEY_P) {
+                Gold_Amount = nullptr;
             }
         };
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listenerWithPlayer , this );

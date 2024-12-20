@@ -346,6 +346,19 @@ bool Town::init()
         Box->setScale ( 0.7f );
         this->addChild ( Box , 10 );
 
+        // 获取玩家的位置
+        Vec2 playerPos = player1->getPosition ();
+
+        // 计算玩家与箱子之间的距离  
+        float distance = playerPos.distance ( Box->getPosition () );
+        // 检查距离是否在允许的范围内  
+        if (distance <= 200.0f) {
+            Box->setTexture ( "UIresource/xiangzi/Open.png" );
+        }
+        else {
+            Box->setTexture ( "UIresource/xiangzi/xiangzi.png" );
+        }
+
         // 鼠标事件监听器
         auto listener = EventListenerMouse::create ();
         listener->onMouseDown = [this , abigail , alex , caroline , elliott , emily , interactionRadius]( Event* event ) {
@@ -508,16 +521,6 @@ void Town::checkPlayerPosition ()
     // 获取玩家的位置
     Vec2 playerPos = player1->getPosition ();
 
-    // 计算玩家与箱子之间的距离  
-    float distance = playerPos.distance ( Box->getPosition () );
-    // 检查距离是否在允许的范围内  
-    if (distance <= 200.0f) {
-        Box->setTexture ( "UIresource/xiangzi/Open.png" );
-    }
-    else {
-        Box->setTexture ( "UIresource/xiangzi/xiangzi.png" );
-    }
-
     // 更新位置标签的内容
     if (_positionLabel)
     {
@@ -636,8 +639,9 @@ void Town::checkPlayerPosition ()
     _positionLabel->setPosition ( currentx - 570 , currenty + 490 );
     button->setPosition ( currentx + 730 , currenty - 590 );
     miniBag->setPosition ( currentx , currenty );
-    emitter->setPositionY ( currenty + 350 );
-
+    if (Weather == "Rainy") {
+        emitter->setPositionY ( currenty + 350 );
+    }
     // 检查玩家是否进入目标区域，并且按下 Enter 键
     if (Region_supermarket.containsPoint ( playerPos )) {
         // 玩家进入目标区域
