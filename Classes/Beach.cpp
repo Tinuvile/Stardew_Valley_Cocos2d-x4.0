@@ -218,7 +218,7 @@ bool Beach::init ()
         }
         } , 0.1f , "item_update_key" );
 
-    if ((Season == "Summer" && day == 3) || (Season == "Winter" && day == 3)) {
+    if (Festival == "Fishing Festival") {
         string cloth = Season;
         if (Season == "Summer") {
             cloth = "Beach";
@@ -487,7 +487,7 @@ void Beach::CheckPlayerPosition ()
 
     // 更新计时器显示
     remainingTime++;
-    if (remainingTime == 43200) {
+    if (remainingTime == 43200 || strength == 0) {
 
         day++;
 
@@ -525,7 +525,10 @@ void Beach::CheckPlayerPosition ()
 
             auto crop = *it;  // 解引用迭代器以访问 Crop 对象
 
-            if (Weather == "Rainy") {
+            if (day == 1) {
+                crop->watered = true;
+            }
+            if ((day - 1) % 3 == 1) {
                 crop->watered = true;
             }
 
@@ -551,8 +554,30 @@ void Beach::CheckPlayerPosition ()
 
         }
 
+       
         for (auto& pair : F_lastplace) {
+            if (pair.second) {
+                pair.second = false;
+            }
             if (pair.first.first == "myhouse") {  // 检查 bool 值是否为 true
+                pair.second = true;
+            }
+        }
+
+        for (auto& pair : T_lastplace) {
+            if (pair.second) {
+                pair.second = false;
+            }
+            if (pair.first.first == "forest") {
+                pair.second = true;
+            }
+        }
+
+        for (auto& pair : W_lastplace) {
+            if (pair.second) {
+                pair.second = false;
+            }
+            if (pair.first.first == "farm") {  // 检查 bool 值是否为 true
                 pair.second = true;
             }
         }

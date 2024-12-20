@@ -169,7 +169,7 @@ bool Town::init()
         this->checkPlayerPosition();  // 检查玩家是否接近轮廓点
         }, 0.01f, "check_position_key");
 
-    if ((Season == "Summer" && day == 3) || (Season == "Winter" && day == 3)) {}
+    if (Festival == "Fishing Festival") {}
     else {
         // 允许的交互半径  
         const float interactionRadius = 300.0f;
@@ -568,7 +568,10 @@ void Town::checkPlayerPosition ()
 
             auto crop = *it;  // 解引用迭代器以访问 Crop 对象
 
-            if (Weather == "Rainy") {
+            if (day == 1) {
+                crop->watered = true;
+            }
+            if ((day - 1) % 3 == 1) {
                 crop->watered = true;
             }
 
@@ -595,7 +598,28 @@ void Town::checkPlayerPosition ()
         }
 
         for (auto& pair : F_lastplace) {
+            if (pair.second) {
+                pair.second = false;
+            }
             if (pair.first.first == "myhouse") {  // 检查 bool 值是否为 true
+                pair.second = true;
+            }
+        }
+
+        for (auto& pair : T_lastplace) {
+            if (pair.second) {
+                pair.second = false;
+            }
+            if (pair.first.first == "forest") {
+                pair.second = true;
+            }
+        }
+
+        for (auto& pair : W_lastplace) {
+            if (pair.second) {
+                pair.second = false;
+            }
+            if (pair.first.first == "farm") {
                 pair.second = true;
             }
         }

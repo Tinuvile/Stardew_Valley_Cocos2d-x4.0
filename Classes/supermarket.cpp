@@ -458,7 +458,10 @@ void supermarket::checkPlayerPosition()
 
             auto crop = *it;  // 解引用迭代器以访问 Crop 对象
 
-            if (Weather == "Rainy") {
+            if (day == 1) {
+                crop->watered = true;
+            }
+            if ((day - 1) % 3 == 1) {
                 crop->watered = true;
             }
 
@@ -485,10 +488,32 @@ void supermarket::checkPlayerPosition()
         }
 
         for (auto& pair : F_lastplace) {
+            if (pair.second) {
+                pair.second = false;
+            }
             if (pair.first.first == "myhouse") {  // 检查 bool 值是否为 true
                 pair.second = true;
             }
         }
+
+        for (auto& pair : T_lastplace) {
+            if (pair.second) {
+                pair.second = false;
+            }
+            if (pair.first.first == "forest") {
+                pair.second = true;
+            }
+        }
+
+        for (auto& pair : W_lastplace) {
+            if (pair.second) {
+                pair.second = false;
+            }
+            if (pair.first.first == "farm") {
+                pair.second = true;
+            }
+        }
+
 
         //恢复为能够生产产品
         for (auto livestock : livestocks) {

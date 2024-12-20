@@ -298,7 +298,7 @@ void  Forest::checkPlayerPosition()
     
     // 更新计时器显示
     remainingTime++;
-    if (remainingTime == 43200) {
+    if (remainingTime == 43200 || strength == 0) {
 
         day++;
 
@@ -336,7 +336,10 @@ void  Forest::checkPlayerPosition()
 
             auto crop = *it;  // 解引用迭代器以访问 Crop 对象
 
-            if (Weather == "Rainy") {
+            if (day == 1) {
+                crop->watered = true;
+            }
+            if ((day - 1) % 3 == 1) {
                 crop->watered = true;
             }
 
@@ -363,7 +366,19 @@ void  Forest::checkPlayerPosition()
         }
 
         for (auto& pair : F_lastplace) {
+            if (pair.second) {
+                pair.second = false;
+            }
             if (pair.first.first == "myhouse") {  // 检查 bool 值是否为 true
+                pair.second = true;
+            }
+        }
+
+        for (auto& pair : W_lastplace) {
+            if (pair.second) {
+                pair.second = false;
+            }
+            if (pair.first.first == "farm") {
                 pair.second = true;
             }
         }
@@ -487,6 +502,7 @@ void  Forest::checkPlayerPosition()
                             temp->setScale(3.1f);
                             }, 0.35f, "change_image2_key");
                     }
+
                 }
                 else {
                     if (player1->pic_path == "character1/player_right3.png") {

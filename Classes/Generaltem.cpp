@@ -3,9 +3,9 @@
 // 动物设定为购买后直接加入牧场，在背包中不可见
 
 // 动物  
-Item AnimalChicken("AnimalChicken", "Item/Surpermarket/Animal/Brown_Chicken.png", 4000, 99);
+Item AnimalChicken("AnimalChicken", "Item/Surpermarket/Animal/Brown_Chicken.png", 500, 99);
 Item AnimalDuck("AnimalDuck", "Item/Surpermarket/Animal/Duck.png", 1200, 99);
-Item AnimalGoat("AnimalGoat", "Item/Surpermarket/Animal/Goat.png", 4000, 99);
+Item AnimalGoat("AnimalGoat", "Item/Surpermarket/Animal/Goat.png", 1000, 99);
 Item AnimalPig("AnimalPig", "Item/Surpermarket/Animal/Pig.png", 16000, 99);
 Item AnimalRabbit("AnimalRabbit", "Item/Surpermarket/Animal/Rabbit.png", 800, 99);
 Item AnimalSheep("AnimalSheep", "Item/Surpermarket/Animal/Sheep.png", 8000, 99);
@@ -109,5 +109,9 @@ Item Potato("potato", "crop/Potato4.png", 1000, 99);
 Item Pumpkin("pumpkin", "crop/Pumpkin4.png", 1000, 99);
 Item Blueberry("blueberry", "crop/blueberry4.png", 1000, 99);
 Item Wood("wood", "tree/wood.png", 1000, 99);
+
+
+Item GoldMask("GoldMask","Item/Object/goldmask.png",10000,99);
+Item RainBow("RainBow","Item/Object/rainbow.png",10000,99);
 
 

@@ -273,7 +273,10 @@ void Myhouse::checkPlayerPosition()
 
             auto crop = *it;  // 解引用迭代器以访问 Crop 对象
 
-            if (Weather == "Rainy") {
+            if (day == 1) {
+                crop->watered = true;
+            }
+            if ((day - 1) % 3 == 1) {
                 crop->watered = true;
             }
 
@@ -370,7 +373,10 @@ void Myhouse::checkPlayerPosition()
 
                 auto crop = *it;  // 解引用迭代器以访问 Crop 对象
 
-                if (Weather == "Rainy") {
+                if (day == 1) {
+                    crop->watered = true;
+                }
+                if ((day - 1) % 3 == 1) {
                     crop->watered = true;
                 }
 

@@ -370,7 +370,7 @@ void farm::checkPlayerPosition ()
 
     // 更新计时器显示
     remainingTime++;
-    if (remainingTime == 43200) {
+    if (remainingTime == 43200 || strength == 0) {
 
         day++;
 
@@ -408,7 +408,10 @@ void farm::checkPlayerPosition ()
 
             auto crop = *it;  // 解引用迭代器以访问 Crop 对象
 
-            if (Weather == "Rainy") {
+            if (day == 1) {
+                crop->watered = true;
+            }
+            if ((day - 1) % 3 == 1) {
                 crop->watered = true;
             }
 
@@ -510,6 +513,11 @@ void farm::checkPlayerPosition ()
                         if (((cropbasicinformation[TypeName].GetSeason () == Season) || (cropbasicinformation[TypeName].GetSeason () == "All")) && strength >= 10) {
                             inventory->RemoveItem ( *temp );
 
+                            if (nums == 13 && RainBowfirst) {
+                                inventory->AddItem(RainBow);
+                                RainBowfirst = false;
+                            }
+
                             strength -= 10;
                             TimeUI->UpdateEnergy ();
 
@@ -559,6 +567,8 @@ void farm::checkPlayerPosition ()
                                     temp->setScale ( 2.1f );
                                     } , 0.35f , "change_image2_key" );
                             }
+
+                            
 
                         }
                     }

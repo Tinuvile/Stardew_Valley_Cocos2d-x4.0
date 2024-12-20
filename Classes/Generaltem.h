@@ -113,4 +113,7 @@ extern Item Pumpkin;
 extern Item Blueberry;
 extern Item Wood;
 
+extern Item GoldMask;
+extern Item RainBow;
+
 #endif // GENERALITEM_H

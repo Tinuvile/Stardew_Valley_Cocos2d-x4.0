@@ -69,6 +69,8 @@ extern int GoldAmount;
 extern bool IsNextDay;
 extern bool frombed;
 extern bool IsSleep;
+extern bool GoldMaskfirst;
+extern bool RainBowfirst;
 extern std::string Season;
 extern std::string Weather;
 extern std::string Festival;

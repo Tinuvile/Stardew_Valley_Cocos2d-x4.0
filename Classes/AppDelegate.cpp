@@ -28,12 +28,14 @@ USING_NS_CC;  // 使用cocos2d的命名空间
 /******************************** 全局变量声明区 ****************************************/
 // 在此文件中定义并初始化全局变量
 int remainingTime = 10800;
-int day = 3;
+int day = 1;
 int GoldAmount = 4000;
 int strength = 100;
 bool frombed = true;
 bool IsNextDay = false;
 bool IsSleep = true;
+bool GoldMaskfirst = true;
+bool RainBowfirst = true;
 
 Crop wheat ( "wheat" , "Crops/wheat1.png" , "Crops/wheat2.png" , "Crops/wheat3.png" , "All" , Phase::SEED , 50 , 0 , false , 4 );
 Crop corn ( "corn" , "Crops/corn1.png" , "Crops/corn2.png" , "Crops/corn3.png" , "Spring" , Phase::SEED , 50 , 0 , false , 6 );
@@ -41,7 +43,7 @@ Crop potato ( "potato" , "Crops/potato1.png" , "Crops/potato2.png" , "Crops/pota
 Crop pumpkin ( "pumpkin" , "Crops/pumpkin1.png" , "Crops/pumpkin2.png" , "Crops/pumpkin3.png" , "Autumn" , Phase::SEED , 70 , 0 , false , 6 );
 Crop blueberry ( "blueberry" , "Crops/blueberry1.png" , "Crops/blueberry2.png" , "Crops/blueberry3.png" , "Summer" , Phase::SEED , 100 , 0 , false , 7 );
 
-std::string Season = "Summer";
+std::string Season = "Spring";
 std::string Weather = "Rainy";
 std::string Festival = "Fishing Festival";
 std::map<std::string , int> season;
@@ -225,11 +227,13 @@ void AppDelegate::Initialize () {
     Tree_information.push_back(tree.GetTreeCopy());
 
     // 初始化小镇各地址坐标
-    std::pair<std::string , Vec2> key = { "initiation",Vec2 (-925,650) };
+    std::pair<std::string , Vec2> key = { "initiation",Vec2 (-840,-340) };
     T_lastplace.insert ( std::make_pair ( key , true ) );
     key = { "seedshop",Vec2 ( 230,470 ) };
     T_lastplace.insert ( std::make_pair ( key , false ) );
-    key = { "forest",Vec2(-925,650) };
+    key = { "forest",Vec2(-840,-340) };
+    T_lastplace.insert(std::make_pair(key, false));
+    key = { "beach",Vec2(500, -750) };
     T_lastplace.insert(std::make_pair(key, false));
 
     // 初始化农场各地址坐标
@@ -242,8 +246,6 @@ void AppDelegate::Initialize () {
     key = { "forest",Vec2(740,-30) };
     F_lastplace.insert(std::make_pair(key, false));
     key = { "cave",Vec2(635, 1185) };
-    F_lastplace.insert(std::make_pair(key, false));
-    key = { "beach",Vec2(500, -750) };
     F_lastplace.insert(std::make_pair(key, false));
 
     // 初始化森林各地址坐标
