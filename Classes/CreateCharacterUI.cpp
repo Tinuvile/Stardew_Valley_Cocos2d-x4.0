@@ -202,6 +202,25 @@ void CreateCharacter::optionFace () {
         this->addChild ( xuanzhong , 2 );
     }
 
+    //人物形象
+    auto CharacterDisplay = Sprite::create ( "UIresource/zhujue/1.png" );
+    CharacterDisplay->setTag ( 666 );
+    if (CharacterDisplay == nullptr)
+    {
+        problemLoading ( "'1.png'" );
+    }
+    else
+    {
+        float originalWidth = CharacterDisplay->getContentSize ().width;
+        float originalHeight = CharacterDisplay->getContentSize ().height;
+        float scaleX = visibleSize.width / originalWidth;
+        float scaleY = visibleSize.height / originalHeight;
+        float scale = std::min ( scaleX , scaleY );
+        CharacterDisplay->setScale ( scale / 7.5 );
+        CharacterDisplay->setPosition ( Vec2 ( visibleSize.width / 2 - optionface->getContentSize ().width * 0.2 , visibleSize.height / 2 + optionface->getContentSize ().height * 0.2 ) );
+        this->addChild ( CharacterDisplay , 4 );
+    }
+
     auto OK = ui::Button::create ( "UIresource/create/OK.png" , "UIresource/create/OK.png" );
     OK->setTag ( 202 );
 
@@ -224,12 +243,11 @@ void CreateCharacter::optionFace () {
         };
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , OK );
     OK->setEnabled ( false );  // 禁用点击事件
-    //跳转位置待修改
+
     OK->addClickEventListener ( [this]( Ref* sender ) {
 
         player1 = Player::create();
-        auto nextscene = Myhouse::create();
-        Director::getInstance ()->replaceScene ( nextscene );
+        Director::getInstance ()->replaceScene ( TransitionFade::create ( 3.0f , Myhouse::create () ));
 } );
     Vec2 Pos = Vec2 ( visibleSize.width * 0.5 , visibleSize.height * 0.2 );
     OK->setPosition ( Pos );
@@ -240,7 +258,6 @@ void CreateCharacter::optionFace () {
     Vec2 rightPos = Vec2 ( displaycharacterPos.x + displaycharacter->getContentSize ().width / 1.5 , displaycharacterPos.y - displaycharacter->getContentSize ().height / 1.7 );
     auto rightarrow = directions ( "UIresource/create/right.png" , origin , rightPos );
     mouseListen ( leftarrow , rightarrow , male , female , xuanzhong , displaycharacter );
-
 }
 
 cocos2d::Sprite* CreateCharacter::directions ( const std::string& normalImage , const Vec2& origin , const Vec2& position )
@@ -280,13 +297,28 @@ void CreateCharacter::mouseListen ( cocos2d::Sprite* leftarrow , cocos2d::Sprite
     cocos2d::Vec2 anchor1 = leftarrow->getAnchorPoint ();
     cocos2d::Vec2 anchor2 = rightarrow->getAnchorPoint ();
     cocos2d::Vec2 anchor3 = xuanzhong->getAnchorPoint ();
-    listener->onMouseDown = [this , leftarrow , rightarrow , male , female , xuanzhong , anchor1 , anchor2 , anchor3 , displaycharacter]( EventMouse* event ) {
+    auto node = getChildByTag ( 666 );
+    Sprite* CharacterDisplay = dynamic_cast<cocos2d::Sprite*>(node);
+    static int which = 1;
+    listener->onMouseDown = [this , leftarrow , rightarrow , male , female , xuanzhong , anchor1 , anchor2 , anchor3 , displaycharacter , CharacterDisplay]( EventMouse* event ) {
         Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
         if (leftarrow->getBoundingBox ().containsPoint ( mousePos )) {
             mousedowncallback ( leftarrow , leftarrow );
+            which++;
+            if (which >= 4) {
+                which = 0;
+            }
+            string photoAddress = "UIresource/zhujue/" + std::to_string ( which ) + ".png";
+            CharacterDisplay->setTexture ( photoAddress );
         }
         else if (rightarrow->getBoundingBox ().containsPoint ( mousePos )) {
             mousedowncallback ( rightarrow , rightarrow );
+            which--;
+            if (which < 0) {
+                which = 3;
+            }
+            string photoAddress = "UIresource/zhujue/" + std::to_string ( which ) + ".png";
+            CharacterDisplay->setTexture ( photoAddress );
         }
         else if (male->getBoundingBox ().containsPoint ( mousePos )) {
             if (anchor2.x == anchor3.x && anchor2.y == anchor3.y) {

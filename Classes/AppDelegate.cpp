@@ -186,7 +186,7 @@ void AppDelegate::runScene(cocos2d::Director* director) {
     //开局UI运行
     director->runWithScene ( BeginScene::create () );
     //创建人物界面运行
-    // director->runWithScene ( CreateCharacter::create () );
+    //director->runWithScene ( CreateCharacter::create () );
 }
 
 void AppDelegate::Initialize () {
