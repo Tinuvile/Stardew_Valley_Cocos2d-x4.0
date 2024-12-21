@@ -165,6 +165,14 @@ bool Town::init()
     auto followAction = Follow::create(player1, followRect);
     this->runAction(followAction);
 
+    //箱子添加，用来完成任务
+    Box = Sprite::create ( "UIresource/xiangzi/xiangzi.png" );
+    CCLOG ( "boxhavecreate" );
+    Box->setPosition ( Vec2 ( -260 , 710 ) );
+    Box->setAnchorPoint ( Vec2 ( 0 , 0 ) );
+    Box->setScale ( 0.7f );
+    this->addChild ( Box , 11 );
+
     // 定期更新玩家状态
     this->schedule([this](float dt) {
         this->checkPlayerPosition();  // 检查玩家是否接近轮廓点
@@ -341,31 +349,11 @@ bool Town::init()
             CCLOG ( "Failed to create NPC Abigail." );
         }
 
-        //箱子添加，用来完成任务
-        Box = Sprite::create ( "UIresource/xiangzi/xiangzi.png" );
-        Box->setPosition ( Vec2 ( -260 , 710 ) );
-        Box->setAnchorPoint ( Vec2 ( 0 , 0 ) );
-        Box->setScale ( 0.7f );
-        this->addChild ( Box , 10 );
-
-        // 获取玩家的位置
-        Vec2 playerPos = player1->getPosition ();
-
-        // 计算玩家与箱子之间的距离  
-        float distance = playerPos.distance ( Box->getPosition () );
-        // 检查距离是否在允许的范围内  
-        if (distance <= 200.0f) {
-            Box->setTexture ( "UIresource/xiangzi/Open.png" );
-        }
-        else {
-            Box->setTexture ( "UIresource/xiangzi/xiangzi.png" );
-        }
-
         // 鼠标事件监听器
         auto listener = EventListenerMouse::create ();
         listener->onMouseDown = [this , abigail , alex , caroline , elliott , emily , interactionRadius]( Event* event ) {
 
-            // 获取鼠标点击的位置
+            // 获取鼠标点击的位置Box
             auto mouseEvent = static_cast<EventMouse*>(event);
             Vec2 clickPos ( mouseEvent->getCursorX () , mouseEvent->getCursorY () );
             clickPos = this->convertToNodeSpace ( clickPos );
@@ -520,8 +508,20 @@ Town* Town::create()
 // 检查玩家是否接近背景的轮廓点
 void Town::checkPlayerPosition ()
 {
+
+
     // 获取玩家的位置
     Vec2 playerPos = player1->getPosition ();
+
+    // 计算玩家与箱子之间的距离  
+    float distance = playerPos.distance ( Box->getPosition () );
+    // 检查距离是否在允许的范围内  
+    if (distance <= 200.0f) {
+        Box->setTexture ( "UIresource/xiangzi/Open.png" );
+    }
+    else {
+        Box->setTexture ( "UIresource/xiangzi/xiangzi.png" );
+    }
 
     // 更新位置标签的内容
     if (_positionLabel)

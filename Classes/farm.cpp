@@ -273,7 +273,6 @@ bool farm::init ()
         this->addChild ( miniBag , 10 , "mini_bag" );
     }
 
-
     // 更新物品栏
     schedule ( [=]( float deltaTime ) {
         if (inventory->is_updated == true) {
@@ -350,6 +349,14 @@ void farm::checkPlayerPosition ()
 
     // 获取玩家的位置
     Vec2 playerPos = player1->getPosition ();
+
+        if (playerPos.y < 0) {
+            miniBag->setLocalZOrder ( 0 );  // 半透明的透明度值
+        }
+        else {
+            // 如果没有重叠，恢复透明度
+            miniBag->setLocalZOrder ( 11 );  // 完全不透明
+        }
 
     // 计算玩家与箱子之间的距离  
     float distance = playerPos.distance ( Box->getPosition () );

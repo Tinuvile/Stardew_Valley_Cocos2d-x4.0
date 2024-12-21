@@ -58,7 +58,7 @@ void DailyRecordUI::updateCoordinate ( float& x , float& y ) {
     else if (SceneName == "supermarket") {
         Leftboundary = 743.0f;
         rightboundary = 1773.0f;
-        upperboundary = -82.0f;
+        lowerboundary = -82.0f;
     }
     if (x <= Leftboundary) {
         x = Leftboundary;
