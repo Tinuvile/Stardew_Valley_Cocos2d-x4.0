@@ -294,7 +294,7 @@ void AppDelegate::Initialize () {
     taskManager->createTask ( task2 );
     taskManager->createTask ( task3 );
 
-    taskManager->AddAcceptTask ( task1 );
+    // taskManager->AddAcceptTask ( task1 );
 
     //初始化Barn内可放置家畜矩阵
     barn_space.push_back(std::make_pair(Rect(685.714294, 213.333328, 114.285713, 106.666664), false));
