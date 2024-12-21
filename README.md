@@ -20,6 +20,110 @@
 - 角色技能树，包括农业、采矿、钓鱼和料理等。
 - 随着技能提升，解锁新的作物种类、工具升级和烹饪食谱。
 
+## 成员分工
+| 姓名 | 学号 | 分工 | 工作量 |
+| :---: | :---: | :---: | :---: |
+| 杨子龙（组长） | 2353257 | 场景系统<br> 天气系统<br> 技能树系统<br> 养殖系统<br> 时间系统 | 25% |
+| 钱宝强 | 2353018 | 背包系统<br> 钓鱼系统<br> 主角操作系统<br> 家畜系统 | 25% |
+| 谭鹏翀 | 2351588 | 交互系统<br> UI界面<br> 开场动画制作<br> 商店系统 | 25% |
+| 张竹和 | 2352495 | NPC系统<br> 亲密度系统<br> 人物经济系统<br> 任务系统 | 25% |
+
+## 项目结构
+* **/Classes**  
+  - 类定义与实现  
+
+  - **UI类**  
+    - `GameBeginUI.h`, `GameBeginUI.cpp`    开始游戏界面  
+    - `CreateCharacterUI.h`, `CreateCharacterUI.cpp` 人物创建界面  
+    - `DailyRecordUI.h`, `DailyRecordUI.cpp` 任务显示界面  
+    - `DetailedtaskUI.h`, `DetailedtaskUI.cpp` 任务详情界面  
+    - `IntimacyUI.h`, `IntimacyUI.cpp` 人物亲密度界面  
+    - `InventoryUI.h`, `InventoryUI.cpp` 背包主界面  
+    - `MailBoxUI.h`, `MailBoxUI.cpp` 信箱界面  
+    - `MiniBag.h`, `MiniBag.cpp` 物品栏界面  
+    - `SkillTreeUI.h`, `SkillTreeUI.cpp` 技能树界面  
+    - `StoreUI.h`, `StoreUI.cpp` 商店界面  
+    - `QuitUI.h`, `QuitUI.cpp` 退出游戏界面
+
+  - **场景类**  
+      - `Barn.h`, `Barn.cpp`     畜棚场景  
+      - `Beach.h`, `Beach.cpp`   沙滩场景  
+      - `Cave.h`, `Cave.cpp`     洞穴场景  
+      - `farm.h`, `farm.cpp`     农场场景  
+      - `Forest.h`, `Forest.cpp` 森林场景  
+      - `Myhouse.h`, `Myhouse.cpp` 家场景  
+      - `surpermarket.h`, `surpermarket.cpp` 超市场景  
+      - `Town.h`, `Town.cpp` 小镇场景  
+
+  - **NPC类**  
+    - `NPC.h`, `NPC.cpp`    人物信息类  
+    - `NPCreate.h`, `NPCreate.cpp` 人物创建类  
+    - `NpcRelationship.h`, `NpcRelationship.cpp` 人物亲密度类 
+    - `NPCtalkUI.h`, `NPCtalkUI.cpp` NPC对话类
+
+  - **人物及相关操作类**  
+    - `Player.h`, `Player.cpp` 玩家类
+    - `Chicken.h`, `Chicken.cpp`,`Cow.h`, `Cow.cpp`,`Sheep.h`, `Sheep.cpp`  农场动物类  
+    - `Crop.h`, `Crop.cpp` 农作物类 
+    - `EconomicSystem.h`, `EconomicSystem.cpp` 人物经济系统类 
+    - `Fish.h`, `Fish.cpp` 鱼类  
+    - `FishingGame.h`, `FishingGame.cpp` 钓鱼游戏类  
+    - `Food.h`, `Food.cpp` 食品类  
+    - `Inventory.h`, `Inventory.cpp` 背包类  
+    - `Item.h`, `Item.cpp` 物品类  
+    - `Livestock.h`, `Livestock.cpp` 家畜养殖类  
+    - `Ore.h`, `Ore.cpp`   作物收获类
+    - `Skill.h`, `Skill.cpp`, `SkillTree.h`, `SkillTree.cpp` 技能与技能树类
+    - `TaskManagement.h`, `TaskManagement.cpp` 任务系统类
+    - `tree.h`, `tree.cpp` 树类
+
+  - **其他** 
+    - `AppDelegate.h`, `AppDelegate.cpp` 程序入口
+    - `surpermarket.h`, `surpermarket.cpp` 商店售卖类
+    - `BasicInformation.h` 作物生长类
+    - `GeneralItem.h`, `GeneralItem.cpp` 物品信息类
+
+* **/Resources**  
+  - 资源文件
+
+* **/cocos2d**  
+  - Cocos2d依赖文件
+ 
+* **/proj.win32**  
+  - 游戏程序
+
+## 操作介绍
+ `ESC` 触发主UI，包含背包、技能数、亲密度、退出界面；
+ `Enter` 在特定路径转换场景；
+ `点击NPC` 触发与任务对话；
+ `点击物品栏物品再点击NPC` 给NPC送礼物；
+
+ ### 小镇
+ `点击物品栏物品再点击箱子` 提交任务物品完成任务；
+
+ ### 农场
+ `选择物品栏种子再按P` 种植；
+ `W` 浇水；
+ `G` 收获；
+
+ ### 家
+ `Enter` 睡觉；
+
+ ### 畜棚
+ `鼠标右键` 收家畜产品；
+
+ ### 矿洞
+ `M` 挖矿；
+
+ ### 森林
+ `L` 砍树；
+
+ ### 沙滩
+ `H` 钓鱼；
+
+ ### 商店
+ `P` 购买；
+    
 ## 开发日志
 
 ### 2024/11/26
@@ -58,3 +162,52 @@
 * 功能对接
 * 实现小镇、牧场、森林、矿场、海滩以及家、畜棚、商店
 * 实现NPC随机对话、人物购买、砍树、种植、畜牧、睡觉等操作
+
+## 功能实现
+
+### 场景展示
+游戏共包含农场、小镇、森林、沙滩、矿洞、家、畜棚、商店八个场景，
+
+### 农场场景
+```cpp
+// 相关文件
+Barn.cpp
+Chicken.cpp
+Cow.cpp
+Crop.cpp
+farm.cpp
+Myhouse.cpp
+Ore.cpp
+Sheep.cpp
+```
+- 农场操作
+  我们实现的农场部分包括主角的小屋、畜棚和田地，这部分涉及的功能有睡觉、
+- 养殖操作
+
+### 社区交互
+- NPC创建
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
