@@ -126,7 +126,7 @@ void InventoryUI::backgroundcreate(){
         float scale = std::min ( scaleX , scaleY );
         CharacterDisplay->setScale ( scale / 7.5 );
         CharacterDisplay->setPosition ( Vec2 ( currentx - visibleSize.width * 0.2 , currenty - visibleSize.height * 0.12 ) );
-        this->addChild ( CharacterDisplay , 2 );
+        this->addChild ( CharacterDisplay , 0 );
     }
     auto NameDisplay = Label::createWithTTF ( protagonistName , "fonts/Marker Felt.ttf" , 45 );
     NameDisplay->setTextColor ( Color4B::BLACK );

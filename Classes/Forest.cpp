@@ -32,14 +32,6 @@ bool Forest::init()
         createRainEffect();
     }
 
-    // 创建并初始化 Label 来显示角色的位置
-    _positionLabel = Label::createWithTTF("Position: (0, 0)", "fonts/Marker Felt.ttf", 24);
-    if (_positionLabel)
-    {
-        this->addChild(_positionLabel, 10);
-        _positionLabel->setScale(2.3f);
-    }
-
     // 设置背景图片
     auto background_real = Sprite::create("forest/forest.png");
     background_real->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
@@ -106,9 +98,9 @@ bool Forest::init()
                 pair.second = false;
             }
         }
-       /* player1->speed = 6.1f;*/
+        player1->speed = 6.1f;
         //仅为方便测试
-        player1->speed = 15.0f;
+       /* player1->speed = 15.0f;*/
         player1->setScale(2.3f);
         player1->setAnchorPoint(Vec2(0.5f, 0.2f));
     }    
@@ -288,13 +280,6 @@ void  Forest::checkPlayerPosition()
 
     // 获取玩家的位置
     Vec2 playerPos = player1->getPosition();
-
-    // 更新位置标签的内容
-    if (_positionLabel)
-    {
-        _positionLabel->setString("Position: (" + std::to_string(static_cast<int>(playerPos.x)) + ", " + std::to_string(static_cast<int>(playerPos.y)) + ")");
-    
-    }
     
     // 更新计时器显示
     remainingTime++;
@@ -420,7 +405,6 @@ void  Forest::checkPlayerPosition()
     }
 
     TimeUI->setPosition(currentx, currenty);
-    _positionLabel->setPosition(currentx - 570, currenty + 490);
     button->setPosition(currentx + 730, currenty - 590);
     miniBag->setPosition ( currentx , currenty );
     if (Weather == "Rainy") {

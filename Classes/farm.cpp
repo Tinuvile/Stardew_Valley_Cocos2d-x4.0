@@ -38,13 +38,6 @@ bool farm::init ()
         createRainEffect ();
     }
 
-    // 创建并初始化 Label 来显示角色的位置
-    _positionLabel = Label::createWithTTF ( "Position: (0, 0)" , "fonts/Marker Felt.ttf" , 24 );
-    if (_positionLabel)
-    {
-        this->addChild ( _positionLabel , 10 );
-        _positionLabel->setScale ( 2.3f );
-    }
 
     // 设置背景图片
     auto background_real = Sprite::create ( "farm/farm.png" );
@@ -107,9 +100,9 @@ bool farm::init ()
                 pair.second = false;
             }
         }
-        /* player1->speed = 3.5f;*/
+         player1->speed = 5.9f;
          //仅为方便测试
-        player1->speed = 20.0f;
+       /* player1->speed = 20.0f;*/
         player1->setScale ( 1.5f );
         player1->setAnchorPoint ( Vec2 ( 0.5f , 0.2f ) );
     }
@@ -273,6 +266,7 @@ bool farm::init ()
         this->addChild ( miniBag , 10 , "mini_bag" );
     }
 
+
     // 更新物品栏
     schedule ( [=]( float deltaTime ) {
         if (inventory->is_updated == true) {
@@ -350,14 +344,6 @@ void farm::checkPlayerPosition ()
     // 获取玩家的位置
     Vec2 playerPos = player1->getPosition ();
 
-        if (playerPos.y < 0) {
-            miniBag->setLocalZOrder ( 0 );  // 半透明的透明度值
-        }
-        else {
-            // 如果没有重叠，恢复透明度
-            miniBag->setLocalZOrder ( 11 );  // 完全不透明
-        }
-
     // 计算玩家与箱子之间的距离  
     float distance = playerPos.distance ( Box->getPosition () );
     // 检查距离是否在允许的范围内  
@@ -368,11 +354,12 @@ void farm::checkPlayerPosition ()
         Box->setTexture ( "UIresource/xiangzi/xiangzi.png" );
     }
 
-    // 更新位置标签的内容
-    if (_positionLabel)
-    {
-        _positionLabel->setString ( "Position: (" + std::to_string ( static_cast<int>(playerPos.x) ) + ", " + std::to_string ( static_cast<int>(playerPos.y) ) + ")" );
-
+    if (playerPos.y < 0) {
+        miniBag->setLocalZOrder(0);  // 半透明的透明度值
+    }
+    else {
+        // 如果没有重叠，恢复透明度
+        miniBag->setLocalZOrder(11);  // 完全不透明
     }
 
     // 更新计时器显示
@@ -481,7 +468,6 @@ void farm::checkPlayerPosition ()
     }
 
     TimeUI->setPosition ( currentx , currenty );
-    _positionLabel->setPosition ( currentx - 570 , currenty + 490 );
     button->setPosition ( currentx + 730 , currenty - 590 );
     miniBag->setPosition ( currentx , currenty );
 

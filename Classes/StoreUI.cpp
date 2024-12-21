@@ -485,8 +485,7 @@ bool StoreUI::init ( Inventory* mybag , Inventory* goods ) {
 
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
 
-    // 初始化物品信息标签（用于调试）  
-    _itemLabel = Label::createWithSystemFont ( "Selected: None" , "Arial" , 24 );
+  
     if (_itemLabel) {
         _itemLabel->setPosition ( visibleSize.width / 2 , visibleSize.height / 4 );
         this->addChild ( _itemLabel , 10 ); // 添加到层级中  
@@ -625,18 +624,8 @@ void StoreUI::updateDisplay () {
         }
     }
 
-    // 更新物品信息标签（用于调试）  
-    if (_itemLabel) { // 检查 _itemLabel 是否为 nullptr  
-        if (auto selectedItem = _mybag->GetSelectedItem ()) {
-            _itemLabel->setString ( "Selected: " + selectedItem->GetName () );
-        }
-        else {
-            _itemLabel->setString ( "No item selected." );
-        }
-    }
-    else {
-        CCLOG ( "Warning: _itemLabel is nullptr" );
-    }
+   
+    
 }
 
 void StoreUI::onItemSlotClicked ( cocos2d::Ref* sender ) {

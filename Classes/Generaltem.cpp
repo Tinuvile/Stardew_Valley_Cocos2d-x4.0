@@ -8,7 +8,7 @@ Item AnimalDuck("AnimalDuck", "Item/Surpermarket/Animal/Duck.png", 1200, 99);
 Item AnimalGoat("AnimalGoat", "Item/Surpermarket/Animal/Goat.png", 1000, 99);
 Item AnimalPig("AnimalPig", "Item/Surpermarket/Animal/Pig.png", 16000, 99);
 Item AnimalRabbit("AnimalRabbit", "Item/Surpermarket/Animal/Rabbit.png", 800, 99);
-Item AnimalSheep("AnimalSheep", "Item/Surpermarket/Animal/Sheep.png", 8000, 99);
+Item AnimalSheep("AnimalSheep", "Item/Surpermarket/Animal/Sheep.png", 1000, 99);
 Item AnimalCow("AnimalCow", "Item/Surpermarket/Animal/White_Cow.png", 800, 99);
 
 // 春季种子物品列表  

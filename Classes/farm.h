@@ -67,9 +67,6 @@ public:
 
 private:
 
-    // 用于显示玩家位置的 Label
-    cocos2d::Label* _positionLabel;
-
     /* 退出按钮 */
     Sprite* button;
 

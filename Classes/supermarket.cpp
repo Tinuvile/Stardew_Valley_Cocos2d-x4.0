@@ -226,14 +226,6 @@ bool supermarket::init()
     TimeUI = Timesystem::create ( "supermarket" );
     this->addChild ( TimeUI , 13 );
 
-    // 创建并初始化 Label 来显示角色的位置
-    _positionLabel = Label::createWithTTF("Position: (0, 0)", "fonts/Marker Felt.ttf", 24);
-    if (_positionLabel)
-    {
-        this->addChild(_positionLabel, 10);
-        _positionLabel->setScale(2.3f);
-    }
-
     // 初始化开门键
     opendoor = Sprite::create("opendoor.png");
     this->addChild(opendoor, 11);
@@ -309,7 +301,7 @@ bool supermarket::init()
     player1->setPosition(Vec2(visibleSize.width / 2 + 43, visibleSize.height / 2 - 101));  // 设置玩家初始位置
     player1->setScale(3.1f);
     player1->setAnchorPoint(Vec2(0.5f, 0.2f));
-    player1->speed = 4.7f;
+    player1->speed = 5.3f;
 
     // 计算背景精灵的缩放后范围
     float scaledWidth = background->getContentSize().width * background->getScaleX();
@@ -408,15 +400,6 @@ void supermarket::checkPlayerPosition()
 {
     // 获取玩家的位置
     Vec2 playerPos = player1->getPosition();
-
-    // 更新位置标签的内容
-    if (_positionLabel)
-    {
-        _positionLabel->setString("Position: (" + std::to_string(static_cast<int>(playerPos.x)) + ", " + std::to_string(static_cast<int>(playerPos.y)) + ")");
-    
-    }
-
-
 
     // 更新计时器显示
     remainingTime++;
@@ -551,7 +534,6 @@ void supermarket::checkPlayerPosition()
 
 
     TimeUI->setPosition(currentx, currenty);
-    _positionLabel->setPosition(currentx - 530, currenty + 490);
     button->setPosition(currentx + 690, currenty - 590);
    
     // 检查玩家是否进入目标区域，并且按下 Enter 键

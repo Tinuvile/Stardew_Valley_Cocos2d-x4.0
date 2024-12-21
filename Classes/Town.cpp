@@ -14,7 +14,6 @@ Town::~Town() {}
 
 bool Town::init()
 {
-    inventory->AddItem ( Bean_Starter );
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -32,15 +31,6 @@ bool Town::init()
     if (Weather == "Rainy") {
         // 下雨
         createRainEffect();
-    }
-
-
-    // 创建并初始化 Label 来显示角色的位置
-    _positionLabel = Label::createWithTTF("Position: (0, 0)", "fonts/Marker Felt.ttf", 24);
-    if (_positionLabel)
-    {
-        this->addChild(_positionLabel, 10);
-        _positionLabel->setScale(2.3f);
     }
 
     // 设置背景图片
@@ -114,9 +104,9 @@ bool Town::init()
                 pair.second = false;
             }
         }
-        /*player1->speed = 3.7f;*/
+        player1->speed = 3.7f;
         //仅为方便测试
-        player1->speed = 20.0f;
+       /* player1->speed = 20.0f;*/
     }
 
     //界面下的背包显示
@@ -166,12 +156,12 @@ bool Town::init()
     this->runAction(followAction);
 
     //箱子添加，用来完成任务
-    Box = Sprite::create ( "UIresource/xiangzi/xiangzi.png" );
-    CCLOG ( "boxhavecreate" );
-    Box->setPosition ( Vec2 ( -260 , 710 ) );
-    Box->setAnchorPoint ( Vec2 ( 0 , 0 ) );
-    Box->setScale ( 0.7f );
-    this->addChild ( Box , 11 );
+    Box = Sprite::create("UIresource/xiangzi/xiangzi.png");
+    CCLOG("boxhavecreate");
+    Box->setPosition(Vec2(-260, 710));
+    Box->setAnchorPoint(Vec2(0, 0));
+    Box->setScale(0.7f);
+    this->addChild(Box, 11);
 
     // 定期更新玩家状态
     this->schedule([this](float dt) {
@@ -353,7 +343,7 @@ bool Town::init()
         auto listener = EventListenerMouse::create ();
         listener->onMouseDown = [this , abigail , alex , caroline , elliott , emily , interactionRadius]( Event* event ) {
 
-            // 获取鼠标点击的位置Box
+            // 获取鼠标点击的位置
             auto mouseEvent = static_cast<EventMouse*>(event);
             Vec2 clickPos ( mouseEvent->getCursorX () , mouseEvent->getCursorY () );
             clickPos = this->convertToNodeSpace ( clickPos );
@@ -509,26 +499,20 @@ Town* Town::create()
 void Town::checkPlayerPosition ()
 {
 
-
     // 获取玩家的位置
     Vec2 playerPos = player1->getPosition ();
 
+
     // 计算玩家与箱子之间的距离  
-    float distance = playerPos.distance ( Box->getPosition () );
+    float distance = playerPos.distance(Box->getPosition());
     // 检查距离是否在允许的范围内  
     if (distance <= 200.0f) {
-        Box->setTexture ( "UIresource/xiangzi/Open.png" );
+        Box->setTexture("UIresource/xiangzi/Open.png");
     }
     else {
-        Box->setTexture ( "UIresource/xiangzi/xiangzi.png" );
+        Box->setTexture("UIresource/xiangzi/xiangzi.png");
     }
 
-    // 更新位置标签的内容
-    if (_positionLabel)
-    {
-        _positionLabel->setString ( "Position: (" + std::to_string ( static_cast<int>(playerPos.x) ) + ", " + std::to_string ( static_cast<int>(playerPos.y) ) + ")" );
-
-    }
     // 更新计时器显示
     remainingTime++;
     if (remainingTime == 43200) {
@@ -662,7 +646,6 @@ void Town::checkPlayerPosition ()
     }
 
     TimeUI->setPosition ( currentx , currenty );
-    _positionLabel->setPosition ( currentx - 570 , currenty + 490 );
     button->setPosition ( currentx + 730 , currenty - 590 );
     miniBag->setPosition ( currentx , currenty );
     if (Weather == "Rainy") {
