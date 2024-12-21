@@ -3,7 +3,7 @@
 
 const int kFishTypes = 3;
 const int kFishBasicValue = 100;
-const int kFishBasicEnergy = 55;
+const int kFishBasicEnergy = 15;
 
 //记录不同种类鱼的名字
 const std::string fish_name[] = {
@@ -27,6 +27,8 @@ public:
 
 	//析构函数
 	virtual ~Fish () {};
+
+	virtual std::shared_ptr<Item> GetCopy () const;
 
 	int GetCatchingDiffuculty () const;
 

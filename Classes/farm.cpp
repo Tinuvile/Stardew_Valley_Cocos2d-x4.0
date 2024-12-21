@@ -4,6 +4,7 @@
 #include "farm.h"
 #include "Cave.h"
 #include "Crop.h"
+#include "CookingPot.h"
 #include "Player.h"
 #include "BasicInformation.h" 
 #include "physics/CCPhysicsWorld.h"
@@ -146,11 +147,19 @@ bool farm::init ()
     Box->setScale ( 0.7f );
     this->addChild ( Box , 10 );
 
+    //大锅添加 用来做饭
+    auto cooking_pot = CookingPot::create ();
+    cooking_pot->setPosition ( -50 , 1000 );
+    cooking_pot->setAnchorPoint ( Vec2 ( 0 , 0 ) );
+    cooking_pot->setScale ( 2.7f );
+    this->addChild ( cooking_pot , 10 );
+    
+
     //交互距离
     float interactionRadius = 200.0f;
 
     auto listener = EventListenerMouse::create ();
-    listener->onMouseDown = [this , mailBox , interactionRadius]( Event* event ) {
+    listener->onMouseDown = [this , mailBox , interactionRadius, cooking_pot]( Event* event ) {
 
         // 获取鼠标点击的位置
         auto mouseEvent = static_cast<EventMouse*>(event);
@@ -158,6 +167,7 @@ bool farm::init ()
         clickPos = this->convertToNodeSpace ( clickPos );
 
         if (Box->getBoundingBox ().containsPoint ( clickPos )) {
+
             // 获取玩家的位置  
             Vec2 playerPos = player1->getPosition ();
 
@@ -175,6 +185,34 @@ bool farm::init ()
                     miniBag->getSelectBack ();
                 }
             }
+        }
+
+        //判断鼠标点击的位置
+        if (cooking_pot->getBoundingBox ().containsPoint ( clickPos )) {
+            auto selected_item = miniBag->getSelectedItem ();
+            if (selected_item != nullptr && std::dynamic_pointer_cast<Food>(selected_item) != nullptr) {
+                cooking_pot->AddIngredient ( *selected_item );
+            }
+            else if (selected_item == nullptr) {
+                auto id = cooking_pot->GetDishesId ();
+                auto dishes = cooking_pot->GetDishes ( id );
+                if (dishes != nullptr) {
+                    auto size = cooking_pot->GetPotSize ();
+                    bool can_get_dishes = true;
+                    for (int i = 0; i < size; i++) {
+                        auto ingredient = cooking_pot->GetPotBack ();
+                        if (inventory->RemoveItem ( *ingredient ) == -1) {
+                            can_get_dishes = false;
+                            break;
+                        }
+                    }
+                    if (can_get_dishes) {
+                        inventory->AddItem ( *dishes );
+                    }
+                }
+                cooking_pot->ClearPot ();
+            }
+            cooking_pot->DisplayPotInCCLOG ();
         }
 
         // 判断点击位置是否在信箱附近范围内

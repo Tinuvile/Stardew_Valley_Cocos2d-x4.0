@@ -24,3 +24,8 @@ Fish::Fish(int fish_index)
 int Fish::GetCatchingDiffuculty () const {
 	return catching_difficulty;
 }
+
+std::shared_ptr<Item> Fish::GetCopy () const {
+	auto copy = std::make_shared<Fish> ( *this );
+	return copy;
+}

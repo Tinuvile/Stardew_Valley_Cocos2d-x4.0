@@ -60,6 +60,11 @@ bool Inventory::AddItem ( const Item& item , const int& add_num ) {
 		int to_add = std::min ( remaining , item.max_count_in_one_grid );
 		package[index] = std::make_pair ( item.GetCopy () , to_add );
 		++size;
+		remaining -= to_add;
+		if (remaining <= 0) {
+			is_updated = true;
+			return true;
+		}
 	}
 	is_updated = remaining < add_num ? true : false;
 	return remaining <= 0;

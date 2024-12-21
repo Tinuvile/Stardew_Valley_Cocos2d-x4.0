@@ -134,14 +134,13 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
 // 切换场景的函数
 void AppDelegate::runScene(cocos2d::Director* director) {
-
     Initialize ();
-    // player1 = Player::create ();
 
     // 获取当前视图的可见大小和原点位置
     auto visibleSize = Director::getInstance()->getVisibleSize();  // 获取屏幕可视区域的大小
     Vec2 origin = Director::getInstance()->getVisibleOrigin();  // 获取屏幕原点的位置（左下角）
   
+
     std::pair<std::string , Vec2> key = { "initiation",Vec2 ( 350,350 ) };
     T_lastplace.insert(std::make_pair(key, true));
     key = { "seedshop",Vec2 ( 230,470 ) };
@@ -190,7 +189,7 @@ void AppDelegate::runScene(cocos2d::Director* director) {
 }
 
 void AppDelegate::Initialize () {
-   
+
     // 初始化存储作物信息的数组
     cropbasicinformation.insert({ "Wheat_Seeds", wheat });
     cropbasicinformation.insert({ "Corn_Seeds", corn });
@@ -294,7 +293,7 @@ void AppDelegate::Initialize () {
     taskManager->createTask ( task2 );
     taskManager->createTask ( task3 );
 
-    // taskManager->AddAcceptTask ( task1 );
+    taskManager->AddAcceptTask ( task1 );
 
     //初始化Barn内可放置家畜矩阵
     barn_space.push_back(std::make_pair(Rect(685.714294, 213.333328, 114.285713, 106.666664), false));

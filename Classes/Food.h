@@ -5,7 +5,10 @@
 //食物类型枚举，新增类型时在此添加
 enum class FoodType {
 	Milk,
-	Egg
+	Egg,
+	FriedEgg,
+	GrilledFish,
+	Omelet
 };
 
 //不同食物的价格
