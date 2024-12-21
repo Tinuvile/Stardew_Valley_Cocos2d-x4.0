@@ -241,9 +241,9 @@ void CreateCharacter::optionFace () {
         };
     _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , OK );
     OK->setEnabled ( false );  // 禁用点击事件
-    //跳转位置待修改
     OK->addClickEventListener ( [this]( Ref* sender ) {
-
+        AudioEngine::pauseAll ( );
+        // auto backgroundAudioID = AudioEngine::play2d ( "mymusic.mp3" , true );
         player1 = Player::create();
         auto nextscene = Myhouse::create();
         Director::getInstance ()->replaceScene ( TransitionFade::create ( 3.0f , nextscene ) );

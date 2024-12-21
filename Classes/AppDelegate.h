@@ -3,6 +3,7 @@
 
 #include "Timesystem.h"
 #include "cocos2d.h"  
+#include "audio/include/AudioEngine.h" 
 //#include "GameBeginUI.h"
 #include "Barn.h"
 #include "Beach.h"

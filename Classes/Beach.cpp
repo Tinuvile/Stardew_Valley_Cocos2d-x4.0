@@ -13,6 +13,12 @@ Beach::~Beach () {}
 
 bool Beach::init ()
 {
+    inventory->AddItem ( Fiberglass_Rod );
+    inventory->AddItem ( Fiberglass_Rod );
+
+    AudioEngine::pauseAll ();
+    auto backgroundAudioID = AudioEngine::play2d ( "MUSIC/Mayten.mp3" , true );
+
     //获取屏幕范围和坐标
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     Vec2 origin = Director::getInstance ()->getVisibleOrigin ();

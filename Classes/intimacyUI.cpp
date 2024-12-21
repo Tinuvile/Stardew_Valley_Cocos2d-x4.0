@@ -3,6 +3,7 @@
 #include "ui/CocosGUI.h"  
 #include "Item.h"  
 #include "quitUI.h"
+#include <Marry.h>
 
 const int characternum = 5;
 
@@ -127,8 +128,20 @@ void intimacyUI::backgroundcreate () {
                 else
                     oneframe->setTexture ( "UIresource/qinmidu/weixuanzhong.png" );
                 };
+            listener->onMouseDown = [this , oneframe ,i]( EventMouse* event ) {
+                std::vector<std::string> npcsName = { "Abigail" ,"Alex" ,"Caroline" ,"Elliott","Emily" };
+                std::string nowName = npcsName[i];
+                
+                Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
+                mousePos = this->convertToNodeSpace ( mousePos );
+                if (oneframe->getBoundingBox ().containsPoint ( mousePos ) && NPC_RELATIONSHIP->getRelationship ( "player" , nowName ) >= 70) {
+                    std::string nowScene = SceneName;
+                    this->removeFromParent ();
+                    Scene* currentScene = Director::getInstance ()->getRunningScene ();
+                    currentScene->addChild ( Marry::create ( nowScene , nowName ) , 20 );
+                }     
+                };
             _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , oneframe );
-
         }
     }
     if (Season == "Spring" || Season == "Autumn") {

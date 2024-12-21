@@ -14,6 +14,8 @@ Town::~Town() {}
 
 bool Town::init()
 {
+    AudioEngine::pauseAll ();
+    // auto backgroundAudioID = AudioEngine::play2d ( "MUSIC/Mayten.mp3" , true );
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -482,7 +484,6 @@ bool Town::init()
     return true;
 }
 
-
 Town* Town::create()
 {
     Town* scene = new Town();
@@ -668,7 +669,8 @@ void Town::checkPlayerPosition ()
             CCLOG ( "Player in target area, isEnterKeyPressed: %d" , isEnterKeyPressed );
             // 调用场景切换逻辑
             player1->removeFromParent ();
-
+            AudioEngine::pauseAll ();
+            auto backgroundAudioID = AudioEngine::play2d ( "MUSIC/MayYouBeHappyAndProsperous.mp3" , true );
             auto seedshop = supermarket::create ();
             // miniBag->removeFromParent();
             Director::getInstance ()->replaceScene ( seedshop );
@@ -782,8 +784,6 @@ void Town::createRainEffect() {
 
 }
 
-
-
 void Town::updaterain(float deltaTime) {
     if (emitter) {
         // 随机生成一个生命周期（范围 1 到 1.5 秒之间）
@@ -795,5 +795,3 @@ void Town::updaterain(float deltaTime) {
         emitter->setEmissionRate(emitter->getTotalParticles() / emitter->getLife() * 1.3);
     }
 }
-
-

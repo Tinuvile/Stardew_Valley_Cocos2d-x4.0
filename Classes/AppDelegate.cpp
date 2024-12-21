@@ -16,11 +16,11 @@
 //#include "supermarket.h"
 #include "CreateCharacterUI.h"
 
- // #define USE_AUDIO_ENGINE 1   // 如果需要使用音频引擎，可以取消注释这一行
+// #define USE_AUDIO_ENGINE 1   // 如果需要使用音频引擎，可以取消注释这一行
 
 #if USE_AUDIO_ENGINE
 #include "audio/include/AudioEngine.h"  // 如果启用了音频引擎，则引入音频引擎的头文件
-using namespace cocos2d::experimental;  // 使用音频引擎的命名空间
+// using namespace cocos2d::experimental;  // 使用音频引擎的命名空间
 #endif
 
 USING_NS_CC;  // 使用cocos2d的命名空间
@@ -129,13 +129,16 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     runScene(director);
 
+    // set the background music and continuously play it.
+    auto backgroundAudioID = AudioEngine::play2d ( "MUSIC/01 - Stardew Valley Overture.mp3" , true );
+
     return true;  // 返回成功
 }
 
 // 切换场景的函数
 void AppDelegate::runScene(cocos2d::Director* director) {
     Initialize ();
-
+    
     // 获取当前视图的可见大小和原点位置
     auto visibleSize = Director::getInstance()->getVisibleSize();  // 获取屏幕可视区域的大小
     Vec2 origin = Director::getInstance()->getVisibleOrigin();  // 获取屏幕原点的位置（左下角）
@@ -171,7 +174,7 @@ void AppDelegate::runScene(cocos2d::Director* director) {
      //director->runWithScene(test);
 
     // 运行Beach
-    //auto test = Beach::create();
+    // auto test = Beach::create();
     // director->runWithScene(test);
     
     // 运行森林
@@ -293,7 +296,7 @@ void AppDelegate::Initialize () {
     taskManager->createTask ( task2 );
     taskManager->createTask ( task3 );
 
-    taskManager->AddAcceptTask ( task1 );
+    // taskManager->AddAcceptTask ( task1 );
 
     //初始化Barn内可放置家畜矩阵
     barn_space.push_back(std::make_pair(Rect(685.714294, 213.333328, 114.285713, 106.666664), false));

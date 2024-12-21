@@ -20,6 +20,9 @@ farm::~farm () {}
 
 bool farm::init ()
 {
+    AudioEngine::pauseAll ();
+    auto backgroundAudioID = AudioEngine::play2d ( "MUSIC/TheShire.mp3" , true );
+
     auto food = Food::create ( FoodType::Egg );
     inventory->AddItem ( *food , 4 );
     food = Food::create ( FoodType::Milk );
