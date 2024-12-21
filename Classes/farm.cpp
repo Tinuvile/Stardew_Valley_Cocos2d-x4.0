@@ -20,6 +20,12 @@ farm::~farm () {}
 
 bool farm::init ()
 {
+    auto food = Food::create ( FoodType::Egg );
+    inventory->AddItem ( *food , 4 );
+    food = Food::create ( FoodType::Milk );
+    inventory->AddItem ( *food , 4 );
+    food = std::make_shared<Fish> ( 1 );
+    inventory->AddItem ( *food , 4 );
 
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     Vec2 origin = Director::getInstance ()->getVisibleOrigin ();
@@ -38,7 +44,6 @@ bool farm::init ()
         // 下雨
         createRainEffect ();
     }
-
 
     // 设置背景图片
     auto background_real = Sprite::create ( "farm/farm.png" );
@@ -101,9 +106,9 @@ bool farm::init ()
                 pair.second = false;
             }
         }
-         player1->speed = 5.9f;
+        /* player1->speed = 3.5f;*/
          //仅为方便测试
-       /* player1->speed = 20.0f;*/
+        player1->speed = 20.0f;
         player1->setScale ( 1.5f );
         player1->setAnchorPoint ( Vec2 ( 0.5f , 0.2f ) );
     }
@@ -392,13 +397,7 @@ void farm::checkPlayerPosition ()
         Box->setTexture ( "UIresource/xiangzi/xiangzi.png" );
     }
 
-    if (playerPos.y < 0) {
-        miniBag->setLocalZOrder(0);  // 半透明的透明度值
-    }
-    else {
-        // 如果没有重叠，恢复透明度
-        miniBag->setLocalZOrder(11);  // 完全不透明
-    }
+
 
     // 更新计时器显示
     remainingTime++;
