@@ -129,6 +129,14 @@ bool Town::init()
         }
         }, 0.1f, "item_update_key");
 
+    //箱子添加，用来完成任务
+    Box = Sprite::create ( "UIresource/xiangzi/xiangzi.png" );
+    CCLOG ( "boxhavecreate" );
+    Box->setPosition ( Vec2 ( -260 , 710 ) );
+    Box->setAnchorPoint ( Vec2 ( 0 , 0 ) );
+    Box->setScale ( 0.7f );
+    this->addChild ( Box , 11 );
+
     // 初始化角色并将其添加到场景
     if (player1->getParent() == NULL) {
         cocos2d::log("player1->get");
@@ -154,14 +162,6 @@ bool Town::init()
     // 创建 Follow 动作并限制玩家在背景范围内移动
     auto followAction = Follow::create(player1, followRect);
     this->runAction(followAction);
-
-    //箱子添加，用来完成任务
-    Box = Sprite::create("UIresource/xiangzi/xiangzi.png");
-    CCLOG("boxhavecreate");
-    Box->setPosition(Vec2(-260, 710));
-    Box->setAnchorPoint(Vec2(0, 0));
-    Box->setScale(0.7f);
-    this->addChild(Box, 11);
 
     // 定期更新玩家状态
     this->schedule([this](float dt) {

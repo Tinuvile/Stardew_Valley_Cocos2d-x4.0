@@ -86,10 +86,11 @@ void NPCtalkUI::backgroundcreate () {
     Vec2 position = player1->getPosition ();
     float currentx = position.x , currenty = position.y;
     updateCoordinate ( currentx , currenty );
+    CCLOG ( "%f %f" , currentx , currenty );
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     // 创建一个半透明的黑色遮罩
     auto darkLayer = cocos2d::LayerColor::create ( cocos2d::Color4B ( 0 , 0 , 0 , 120 ) , 5 * visibleSize.width , 5 * visibleSize.height );  // 黑色，透明度为120
-    darkLayer->setPosition ( position - visibleSize / 2 );// 设置遮罩层的位置
+    darkLayer->setPosition ( position - visibleSize );// 设置遮罩层的位置
     this->addChild ( darkLayer , 0 );
     //对话框
     auto dialogBox = Sprite::create ( "npc/kuang.png" );

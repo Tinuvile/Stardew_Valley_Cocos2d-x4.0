@@ -396,7 +396,7 @@ bool Beach::init ()
                         if (distance <= interactionRadius) {
                             if (!miniBag->getSelectedSlot() || npc_relationship->NpcGiftTIme(npc->GetName()) == 2) {
                                 // 打开对话框，确保对话框每次都是新的实例  
-                                NPCtalkUI* currentNPCtalkUI = NPCtalkUI::create(npc, "Town");
+                                NPCtalkUI* currentNPCtalkUI = NPCtalkUI::create(npc, "Beach");
                                 this->addChild(currentNPCtalkUI, 12); // 将当前NPC对话框添加到场景中  
                                 return; // 处理完一个NPC后直接返回  
                             }
@@ -409,7 +409,7 @@ bool Beach::init ()
                                 // 这里改成礼物的图
                                 auto ItemClickByminiBag = Sprite::create("npc/gift.png");
                                 ItemClickByminiBag->setPosition(playerPos);
-                                this->addChild(ItemClickByminiBag, 6);
+                                this->addChild(ItemClickByminiBag, 20);
                                 // 一个延迟，2秒后移除 ItemClickByminiBag  
                                 this->runAction(Sequence::create(
                                     DelayTime::create(1.5f), // 等待2秒  

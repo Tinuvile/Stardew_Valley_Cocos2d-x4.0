@@ -386,6 +386,14 @@ void farm::checkPlayerPosition ()
 
     // 获取玩家的位置
     Vec2 playerPos = player1->getPosition ();
+    //特殊位置箱子消失
+    if (playerPos.y < 0) {
+        miniBag->setLocalZOrder ( 0 );
+    }
+    else {
+        miniBag->setLocalZOrder ( 11 );  
+    }
+
 
     // 计算玩家与箱子之间的距离  
     float distance = playerPos.distance ( Box->getPosition () );
@@ -396,8 +404,6 @@ void farm::checkPlayerPosition ()
     else {
         Box->setTexture ( "UIresource/xiangzi/xiangzi.png" );
     }
-
-
 
     // 更新计时器显示
     remainingTime++;
