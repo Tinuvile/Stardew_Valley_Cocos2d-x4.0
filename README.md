@@ -413,7 +413,15 @@ for (auto& pair : T_lastplace)
 
 ### Lambda表达式
 ```cpp
-
+this->schedule ( [elliott]( float dt ) {
+    elliott->RandomMove ();
+    auto elliottSprite = elliott->GetSprite (); 
+    if (elliottSprite) {
+        Vec2 position = elliottSprite->getPosition ();
+        Size size = elliottSprite->getContentSize ();
+        // CCLOG ( "Elliott's current position: (%f, %f)" , position.x , position.y );  
+    }
+    } , 1.0f , "random_move_key_elliott" );
 ```
 
 ### nullptr
@@ -423,7 +431,7 @@ return nullptr;
 ```
 
 ### 抛出异常
-异常处理机制允许程序在发生错误时进行处理而非直接崩溃。抛出异常使得错误信息更明显，我们在调试过程中使用抛出异常和异常捕获，来传递更清晰的错误信息，提升代码的可读性和可维护性。
+异常处理机制允许程序在发生错误时进行处理而非直接崩溃。抛出异常使得错误信息更明显，我们在调试任务系统时使用抛出异常和异常捕获，来查找错误信息与错误位置。
 ```cpp
 throw std::runtime_error ( "No task found with the required item." );
 ```
