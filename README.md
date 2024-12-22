@@ -255,7 +255,7 @@
       }
   };
   ```
-在`Item`类中，使用`std::shared_ptr<Item>`智能指针来返回物品的副本，使得在不需要手动管理内存的情况下，也能自动管理内存的生命周期，确保对象的有效性和可用性，避免内存泄漏。另外，利用多态，声明`Use`函数为纯虚函数，任何继承自`Item`的类必须实现此函数，使得不同物品可以有不同的使用效果。类中还重载比较运算符来比较物品的名称和价值。
+在`Item`类中，使用`std::shared_ptr<Item>`智能指针来返回物品的副本，使得在不需要手动管理内存的情况下，也能自动管理内存的生命周期，确保对象的有效性和可用性，避免内存泄漏。另外，利用多态，声明`Use`函数为纯虚函数，任何继承自`Item`的类必须实现此函数，使得不同物品可以有不同的使用效果。
 
 `Inventory`类实现了游戏中物品的背包管理功能，使用`std::map`和`std::shared_ptr`来储存物品及其数量，支持物品的添加、移除、选择等操作。
 ```cpp
@@ -451,41 +451,6 @@ TEST ( NpcRelationshipTests , AddNpcTest ) {
     ASSERT_EQ ( 0 , npcRel.getRelationship ( "NPC_1" , "NPC_2" ) );
 }
 
-TEST ( NpcRelationshipTests , SetRelationshipTest ) {
-    NpcRelationship npcRel;
-    npcRel.setRelationship ( "NPC_1" , "NPC_2" , 30 );
-
-    // 验证关系设置是否正常  
-    ASSERT_EQ ( 30 , npcRel.getRelationship ( "NPC_1" , "NPC_2" ) );
-}
-
-TEST ( NpcRelationshipTests , IncreaseRelationshipTest ) {
-    NpcRelationship npcRel;
-    npcRel.setRelationship ( "NPC_1" , "NPC_2" , 50 );
-    npcRel.increaseRelationship ( "NPC_1" , "NPC_2" , 10 );
-
-    // 验证关系增加  
-    ASSERT_EQ ( 60 , npcRel.getRelationship ( "NPC_1" , "NPC_2" ) );
-}
-
-TEST ( NpcRelationshipTests , DecreaseRelationshipTest ) {
-    NpcRelationship npcRel;
-    npcRel.setRelationship ( "NPC_1" , "NPC_2" , 50 );
-    npcRel.decreaseRelationship ( "NPC_1" , "NPC_2" , 20 );
-
-    // 验证关系减少  
-    ASSERT_EQ ( 30 , npcRel.getRelationship ( "NPC_1" , "NPC_2" ) );
-}
-
-TEST ( NpcRelationshipTests , GetRelationshipLevelTest ) {
-    NpcRelationship npcRel;
-    npcRel.setRelationship ( "NPC_1" , "NPC_2" , 70 );
-
-    // 验证关系等级  
-    ASSERT_STREQ ( "亲密" , npcRel.getRelationshipLevel ( "NPC_1" , "NPC_2" ).c_str () );
-}
-
-// 主函数  
 int main ( int argc , char** argv ) {
     ::testing::InitGoogleTest ( &argc , argv );
     return RUN_ALL_TESTS ();
