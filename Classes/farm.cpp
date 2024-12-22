@@ -23,13 +23,6 @@ bool farm::init ()
     AudioEngine::pauseAll ();
     auto backgroundAudioID = AudioEngine::play2d ( "MUSIC/TheShire.mp3" , true );
 
-    auto food = Food::create ( FoodType::Egg );
-    inventory->AddItem ( *food , 4 );
-    food = Food::create ( FoodType::Milk );
-    inventory->AddItem ( *food , 4 );
-    food = std::make_shared<Fish> ( 1 );
-    inventory->AddItem ( *food , 4 );
-
     auto visibleSize = Director::getInstance ()->getVisibleSize ();
     Vec2 origin = Director::getInstance ()->getVisibleOrigin ();
 
@@ -109,9 +102,9 @@ bool farm::init ()
                 pair.second = false;
             }
         }
-        /* player1->speed = 3.5f;*/
+         player1->speed = 4.7f;
          //½öÎª·½±ã²âÊÔ
-        player1->speed = 20.0f;
+       /* player1->speed = 20.0f;*/
         player1->setScale ( 1.5f );
         player1->setAnchorPoint ( Vec2 ( 0.5f , 0.2f ) );
     }
