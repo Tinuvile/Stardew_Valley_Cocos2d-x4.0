@@ -53,7 +53,7 @@ auto backgroundAudioID = AudioEngine::play2d ( "MUSIC/MayYouBeHappyAndProsperous
 auto backgroundAudioID = AudioEngine::play2d ( "MUSIC/AthousandYears.mp3" , true );
 ```
 
-## 多人协作
+## 项目协作
 在本次项目中，我们进行了合理的任务分工，将整体任务划分为四个主要部分：地图与场景、主角与操作、社区NPC与任务以及UI界面。根据小组成员的特点，我们为每个部分分配了具体任务。在各部分独立实现的同时，
 我们也为其他成员提供了必要的接口和函数调用，以便于各模块之间的协作。
 
