@@ -110,11 +110,11 @@ void SkillTreeUI::backgroundcreate () {
 
         this->addChild ( IntimacyFace , 1 );
     }
-    SkillDisplay ( 1 , Vec2 ( currentx - visibleSize.width * 0.18 , currenty + visibleSize.height * 0.18 ) , 60 );
-    SkillDisplay ( 2 , Vec2 ( currentx - visibleSize.width * 0.18 , currenty + visibleSize.height * 0.09 ) , 60 );
-    SkillDisplay ( 3 , Vec2 ( currentx - visibleSize.width * 0.18 , currenty + visibleSize.height * 0.00 ) , 60 );
-    SkillDisplay ( 4 , Vec2 ( currentx - visibleSize.width * 0.18 , currenty - visibleSize.height * 0.09 ) , 60 );
-    SkillDisplay ( 5 , Vec2 ( currentx - visibleSize.width * 0.18 , currenty - visibleSize.height * 0.18 ) , 60 );
+    SkillDisplay ( 0 , Vec2 ( currentx - visibleSize.width * 0.18 , currenty + visibleSize.height * 0.18 ) , 60 );
+    SkillDisplay ( 1 , Vec2 ( currentx - visibleSize.width * 0.18 , currenty + visibleSize.height * 0.09 ) , 60 );
+    SkillDisplay ( 2 , Vec2 ( currentx - visibleSize.width * 0.18 , currenty + visibleSize.height * 0.00 ) , 60 );
+    SkillDisplay ( 3 , Vec2 ( currentx - visibleSize.width * 0.18 , currenty - visibleSize.height * 0.09 ) , 60 );
+    SkillDisplay ( 4 , Vec2 ( currentx - visibleSize.width * 0.18 , currenty - visibleSize.height * 0.18 ) , 60 );
 }
 
 void SkillTreeUI::SkillDisplay ( int whichSkill , Vec2 Pos , float gap ) {

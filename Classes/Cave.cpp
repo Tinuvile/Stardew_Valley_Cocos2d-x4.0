@@ -385,6 +385,8 @@ void Cave::checkPlayerPosition()
                 strength -= 10;
                 TimeUI->UpdateEnergy();
 
+                skill_tree->AddExperience ( mining_skill , 10 );
+
                 ore->available = false;
 
                 ore->mining_day = season[Season] * 7 + day;

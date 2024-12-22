@@ -677,6 +677,8 @@ void farm::checkPlayerPosition ()
                 if ((*it)->nums == nums) {  // 使用 *it 解引用迭代器
                     if ((*it)->GetPhase () == Phase::MATURE && strength >= 10) {
 
+                        skill_tree->AddExperience ( farming_skill , 10 );
+
                         auto find_temp = (*it);
 
                         if (find_temp->GetName () == "potato") {

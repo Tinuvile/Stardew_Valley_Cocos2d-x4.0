@@ -14,6 +14,7 @@ Forest::~Forest() {}
 
 bool Forest::init()
 {
+
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
@@ -240,6 +241,7 @@ void  Forest::AllInitialize_ore() {
         if (!tree->available) {
             if (season[Season] * 7 + day - tree->mining_day >= tree->recover_time) {
                 tree->available = true;
+                tree->removetimes = 2;
             }
         }
         
