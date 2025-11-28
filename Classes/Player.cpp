@@ -19,18 +19,6 @@ bool Player::init()
     // 加载角色的图片（玩家朝下的站立图片）
     this->initWithFile("character1/player_down3.png");
 
-    // 创建键盘事件监听器
-    auto keyboardListener = EventListenerKeyboard::create();
-
-    // 按下键盘时更新方向
-    keyboardListener->onKeyPressed = CC_CALLBACK_2(Player::onKeyPressed, this);
-
-    // 按键释放时停止移动
-    keyboardListener->onKeyReleased = CC_CALLBACK_2(Player::onKeyReleased, this);
-
-    // 将监听器添加到事件派发器中，监听事件
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener, this);
-
     // 每 0.05 秒调用一次 player1_move() 函数，控制玩家移动
     this->schedule([this](float dt) {
         this->player1_move();
@@ -57,62 +45,85 @@ Player* Player::create()
     return nullptr;  // 返回空指针
 }
 
-// 按键按下时的回调函数
-void Player::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
-{
-    float X = this->getPositionX();  // 获取当前玩家的 X 坐标
-    float Y = this->getPositionY();  // 获取当前玩家的 Y 坐标
-
-    // 判断按下的方向键，并更新角色的移动状态
-    if (keyCode == EventKeyboard::KeyCode::KEY_UP_ARROW && !uppressed)  // 上箭头
-    {
-        uppressed = true;  // 标记上键已按下
-    }
-    else if (keyCode == EventKeyboard::KeyCode::KEY_DOWN_ARROW && !downpressed)  // 下箭头
-    {
-        downpressed = true;  // 标记下键已按下
-    }
-    else if (keyCode == EventKeyboard::KeyCode::KEY_LEFT_ARROW && !leftpressed)  // 左箭头
-    {
-        leftpressed = true;  // 标记左键已按下
-    }
-    else if (keyCode == EventKeyboard::KeyCode::KEY_RIGHT_ARROW && !rightpressed)  // 右箭头
-    {
-        rightpressed = true;  // 标记右键已按下
+// 设置移动状态（由输入处理器调用）
+void Player::setMovementState(int direction, bool isPressed) {
+    switch (direction) {
+        case DIRECTION_UP:
+            if (!uppressed && isPressed) {
+                uppressed = true;
+                this->look_state = 0;  // 重置动画状态
+            } else if (uppressed && !isPressed) {
+                uppressed = false;
+                updateTexture(DIRECTION_UP);
+            }
+            break;
+        case DIRECTION_DOWN:
+            if (!downpressed && isPressed) {
+                downpressed = true;
+                this->look_state = 0;
+            } else if (downpressed && !isPressed) {
+                downpressed = false;
+                updateTexture(DIRECTION_DOWN);
+            }
+            break;
+        case DIRECTION_LEFT:
+            if (!leftpressed && isPressed) {
+                leftpressed = true;
+                this->look_state = 0;
+            } else if (leftpressed && !isPressed) {
+                leftpressed = false;
+                updateTexture(DIRECTION_LEFT);
+            }
+            break;
+        case DIRECTION_RIGHT:
+            if (!rightpressed && isPressed) {
+                rightpressed = true;
+                this->look_state = 0;
+            } else if (rightpressed && !isPressed) {
+                rightpressed = false;
+                updateTexture(DIRECTION_RIGHT);
+            }
+            break;
     }
 }
 
-// 按键释放时的回调函数
-void Player::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
-{
-    // 判断松开的方向键，并更新角色的移动状态
-    if (keyCode == EventKeyboard::KeyCode::KEY_UP_ARROW)  // 上箭头
-    {
-        this->look_state = 0;  // 复位 look_state 状态
-        this->setTexture("character1/player_up3.png");  // 设置玩家朝上的图片
-        this->pic_path = "character1/player_up3.png";
-        uppressed = false;  // 标记上键已松开
+// 获取移动状态
+bool Player::getMovementState(int direction) const {
+    switch (direction) {
+        case DIRECTION_UP:
+            return uppressed;
+        case DIRECTION_DOWN:
+            return downpressed;
+        case DIRECTION_LEFT:
+            return leftpressed;
+        case DIRECTION_RIGHT:
+            return rightpressed;
+        default:
+            return false;
     }
-    else if (keyCode == EventKeyboard::KeyCode::KEY_DOWN_ARROW)  // 下箭头
-    {
-        this->look_state = 0;  // 复位 look_state 状态
-        this->setTexture("character1/player_down3.png");  // 设置玩家朝下的图片
-        this->pic_path = "character1/player_down3.png";
-        downpressed = false;  // 标记下键已松开
-    }
-    else if (keyCode == EventKeyboard::KeyCode::KEY_LEFT_ARROW)  // 左箭头
-    {
-        this->look_state = 0;  // 复位 look_state 状态
-        this->setTexture("character1/player_left3.png");  // 设置玩家朝左的图片
-        this->pic_path = "character1/player_left3.png";
-        leftpressed = false;  // 标记左键已松开
-    }
-    else if (keyCode == EventKeyboard::KeyCode::KEY_RIGHT_ARROW)  // 右箭头
-    {
-        this->look_state = 0;  // 复位 look_state 状态
-        this->setTexture("character1/player_right3.png");  // 设置玩家朝右的图片
-        this->pic_path = "character1/player_right3.png";
-        rightpressed = false;  // 标记右键已松开
+}
+
+// 更新玩家贴图
+void Player::updateTexture(int direction) {
+    this->look_state = 0;  // 复位 look_state 状态
+    
+    switch (direction) {
+        case DIRECTION_UP:
+            this->setTexture("character1/player_up3.png");
+            this->pic_path = "character1/player_up3.png";
+            break;
+        case DIRECTION_DOWN:
+            this->setTexture("character1/player_down3.png");
+            this->pic_path = "character1/player_down3.png";
+            break;
+        case DIRECTION_LEFT:
+            this->setTexture("character1/player_left3.png");
+            this->pic_path = "character1/player_left3.png";
+            break;
+        case DIRECTION_RIGHT:
+            this->setTexture("character1/player_right3.png");
+            this->pic_path = "character1/player_right3.png";
+            break;
     }
 }
 

@@ -22,15 +22,28 @@ public:
     // 初始化角色
     bool init();
 
-    // 按键按下时触发的回调函数
-    void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
+    // 设置移动状态（由输入处理器调用）
+    void setMovementState(int direction, bool isPressed);
+    
+    // 获取移动状态
+    bool getMovementState(int direction) const;
 
-    // 按键释放时触发的回调函数
-    void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
-
+    // 移动逻辑（每帧调用）
     void player1_move();
 
+    // 动画切换逻辑（定时调用）
     void player_change();
+    
+    // 更新玩家贴图
+    void updateTexture(int direction);
+    
+    // 移动方向枚举
+    enum MovementDirection {
+        DIRECTION_UP = 0,
+        DIRECTION_DOWN = 1,
+        DIRECTION_LEFT = 2,
+        DIRECTION_RIGHT = 3
+    };
 
 
     bool moveLeft, moveDown, moveUp, moveRight;

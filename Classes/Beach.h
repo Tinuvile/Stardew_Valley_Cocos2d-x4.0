@@ -9,6 +9,7 @@
 #include "AppDelegate.h"
 #include "physics/CCPhysicsWorld.h"
 #include "ui/CocosGUI.h"
+#include "InputManager.h"
 
 
 USING_NS_CC;

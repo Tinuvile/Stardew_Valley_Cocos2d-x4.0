@@ -2,7 +2,8 @@
 #define  _APP_DELEGATE_H_
 
 #include "Timesystem.h"
-#include "cocos2d.h"  
+#include "cocos2d.h"
+#include "InputManager.h"  
 #include "audio/include/AudioEngine.h" 
 //#include "GameBeginUI.h"
 #include "Barn.h"

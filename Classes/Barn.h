@@ -9,6 +9,7 @@
 #include "Sheep.h"
 #include "physics/CCPhysicsWorld.h"
 #include "ui/CocosGUI.h"
+#include "InputManager.h"
 
 
 

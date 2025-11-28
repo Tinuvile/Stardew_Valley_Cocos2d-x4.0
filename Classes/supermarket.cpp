@@ -340,43 +340,10 @@ bool supermarket::init()
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, button);
 
-    // 设置键盘监听器
-    auto listenerWithPlayer = EventListenerKeyboard::create();
-    listenerWithPlayer->onKeyPressed = [this](EventKeyboard::KeyCode keyCode, Event* event)
-        {
-            // 记录 Enter 键被按下
-            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER || keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER) {
-                isEnterKeyPressed = true;
-                CCLOG("Enter key pressed.");
-            }
-            // 处理其他按键  
-            if (keyCode == EventKeyboard::KeyCode::KEY_P) {
-                static StoreUI* currentStoreUI = nullptr;  // 保存当前显示的 StoreUI  
-                // 如果当前没有打开 StoreUI，则打开它  
-                if (currentStoreUI == nullptr) {
-                    CCLOG ( "Opening inventory." );
-                    currentStoreUI = StoreUI::create ( inventory , StoreItem );
-                    this->addChild ( currentStoreUI , 20 );
-                } 
-                else {
-                    CCLOG ( "Closing inventory." );
-                    this->removeChild ( currentStoreUI , true );
-                    currentStoreUI = nullptr;  // 重置指针  
-                }
-            }
-        };
-
-    listenerWithPlayer->onKeyReleased = [this](EventKeyboard::KeyCode keyCode, Event* event)
-        {
-            // 释放 Enter 键时，设置为 false
-            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER || keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER) {
-                isEnterKeyPressed = false;
-                CCLOG("Enter key released.");
-            }
-        };
-
-    // 将监听器添加到事件分发器中
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listenerWithPlayer, this);
+    // 使用InputManager来处理输入
+    auto inputManager = InputManager::getInstance();
+    inputManager->updateGameContext("supermarket", this);
+    inputManager->registerWithScene(this);
 
 
     return true;

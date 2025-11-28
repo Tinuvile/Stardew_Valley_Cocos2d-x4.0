@@ -86,6 +86,9 @@ AppDelegate::~AppDelegate() {
 #if USE_AUDIO_ENGINE
     AudioEngine::end();  // 如果使用了音频引擎，停止音频引擎
 #endif
+    
+    // 清理输入管理器
+    InputManager::destroyInstance();
 }
 
 // 初始化 OpenGL 上下文属性
@@ -127,6 +130,14 @@ bool AppDelegate::applicationDidFinishLaunching() {
     director->setContentScaleFactor(1.0f);
 
     register_all_packages();  // 注册所有的包
+
+    // 初始化输入管理器
+    InputManager::getInstance()->initialize();
+    
+    // 设置玩家对象引用（如果已创建）
+    if (player1 != nullptr) {
+        InputManager::getInstance()->setPlayer(player1);
+    }
 
     runScene(director);
 

@@ -138,44 +138,10 @@ bool Barn::init ()
 
     //_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, button);
 
-    // 设置键盘监听器
-    auto listenerWithPlayer = EventListenerKeyboard::create();
-    listenerWithPlayer->onKeyPressed = [this](EventKeyboard::KeyCode keyCode, Event* event)
-        {
-            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER || keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER) {
-                isEnterKeyPressed = true;
-                CCLOG("Enter key pressed. ");
-            }
-            else if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
-                static int isOpen = 0;
-                static InventoryUI* currentInventoryUI = nullptr;  // 保存当前显示的 InventoryUI  
-                // 如果当前没有打开 InventoryUI，则打开它  
-                if (currentInventoryUI == nullptr || isOpen == 0) {
-                    isOpen = 1;
-                    CCLOG ( "Opening inventory." );
-                    currentInventoryUI = InventoryUI::create ( inventory , "Barn" );
-                    this->addChild ( currentInventoryUI , 20 );  // 将 InventoryUI 添加到上层  
-                }
-                // 如果已经打开 InventoryUI，则关闭它  
-                else {
-                    isOpen = 0;
-                    CCLOG ( "Closing inventory." );
-                    this->removeChild ( currentInventoryUI , true );  // 从当前场景中移除 InventoryUI  
-                    currentInventoryUI = nullptr;  // 重置指针  
-                }
-            }
-        };
-
-    listenerWithPlayer->onKeyReleased = [this](EventKeyboard::KeyCode keyCode, Event* event)
-        {
-            // 释放 Enter 键时，设置为 false
-            if (keyCode == EventKeyboard::KeyCode::KEY_ENTER || keyCode == EventKeyboard::KeyCode::KEY_KP_ENTER) {
-                isEnterKeyPressed = false;
-            }
-        };
-
-    // 将监听器添加到事件分发器中
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listenerWithPlayer, this);
+    // 使用InputManager来处理输入
+    auto inputManager = InputManager::getInstance();
+    inputManager->updateGameContext("Barn", this);
+    inputManager->registerWithScene(this);
 
     // 设置鼠标监听器
     auto mouse_listener = cocos2d::EventListenerMouse::create ();

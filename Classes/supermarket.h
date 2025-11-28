@@ -6,6 +6,7 @@
 #include "AppDelegate.h"
 #include "physics/CCPhysicsWorld.h"
 #include "ui/CocosGUI.h"
+#include "InputManager.h"
 #include "Inventory.h"
 #include "Generaltem.h"
 
