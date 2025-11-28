@@ -153,7 +153,7 @@ bool Myhouse::init()
     // 使用InputManager来处理输入
     auto inputManager = InputManager::getInstance();
     inputManager->updateGameContext("Myhouse", this);
-    inputManager->registerWithScene(this);
+    // 全局键盘监听器已在InputManager初始化时注册，不需要场景注册
 
     return true;
 }

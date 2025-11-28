@@ -245,6 +245,10 @@ void CreateCharacter::optionFace () {
         AudioEngine::pauseAll ( );
         // auto backgroundAudioID = AudioEngine::play2d ( "mymusic.mp3" , true );
         player1 = Player::create();
+        
+        // 创建player1后立即设置到InputManager
+        InputManager::getInstance()->setPlayer(player1);
+        
         auto nextscene = Myhouse::create();
         Director::getInstance ()->replaceScene ( TransitionFade::create ( 3.0f , nextscene ) );
 } );

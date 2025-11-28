@@ -6,7 +6,7 @@
 
 USING_NS_CC;
 
-// 前向声明
+// 前向声明 - 避免循环包含
 class Player;
 
 /**
@@ -35,10 +35,11 @@ struct GameContext {
     {}
     
     // 更新玩家位置（通常每帧调用）
-    void updatePlayerPosition() {
-        if (player != nullptr) {
-            playerPos = player->getPosition();
-        }
+    void updatePlayerPosition();
+    
+    // 设置玩家引用
+    void setPlayer(Player* playerPtr) {
+        player = playerPtr;
     }
     
     // 设置UI状态

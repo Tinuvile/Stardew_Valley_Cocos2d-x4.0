@@ -13,11 +13,14 @@ UIHandler::UIHandler() : isEKeyPressed(false) {
 }
 
 bool UIHandler::handleKeyPressed(EventKeyboard::KeyCode keyCode, Event* event, const GameContext& context) {
+    CCLOG("[UIHandler] Key pressed: %d", static_cast<int>(keyCode));
     switch (keyCode) {
         case EventKeyboard::KeyCode::KEY_ESCAPE:
+            CCLOG("[UIHandler] Handling ESC key");
             return handleEscapeKey(context);
             
         case EventKeyboard::KeyCode::KEY_E:
+            CCLOG("[UIHandler] Handling E key");
             if (!isEKeyPressed) {
                 isEKeyPressed = true;
                 return handleEatFood(context);
@@ -25,6 +28,7 @@ bool UIHandler::handleKeyPressed(EventKeyboard::KeyCode keyCode, Event* event, c
             return true; // 已经处理过了，防止重复触发
             
         default:
+            CCLOG("[UIHandler] Not handling key %d, passing to next", static_cast<int>(keyCode));
             return passToNext(keyCode, event, context);
     }
 }
@@ -66,8 +70,8 @@ bool UIHandler::handleEscapeKey(const GameContext& context) {
 }
 
 bool UIHandler::handleEatFood(const GameContext& context) {
-    // 检查是否有UI打开或游戏不可操作
-    if (!context.canPerformGameAction()) {
+    // 检查是否有UI打开或游戏不可操作，或者玩家不存在
+    if (!context.canPerformGameAction() || !context.player) {
         return passToNext(EventKeyboard::KeyCode::KEY_E, nullptr, context);
     }
     

@@ -1,7 +1,8 @@
 #include "InputManager.h"
-#include "Player.h"
+#include "Player.h" 
 #include "InventoryUI.h"
 #include "AppDelegate.h"
+#include "GameContext.h"
 
 // 包含所有处理器类
 #include "PlayerMovementHandler.h"
@@ -14,7 +15,7 @@ InputManager* InputManager::instance = nullptr;
 InputManager::InputManager() 
     : keyboardListener(nullptr)
     , isInitialized(false)
-    , currentRegisteredScene(nullptr)
+    // , currentRegisteredScene(nullptr)  // 不再需要跟踪场景
     , totalKeyPressedCount(0)
     , handledKeyCount(0)
 {
@@ -23,8 +24,10 @@ InputManager::InputManager()
 
 InputManager::~InputManager() {
     if (keyboardListener) {
-        if (currentRegisteredScene) {
-            currentRegisteredScene->_eventDispatcher->removeEventListener(keyboardListener);
+        // 从全局事件分发器中移除监听器
+        auto director = cocos2d::Director::getInstance();
+        if (director) {
+            director->getEventDispatcher()->removeEventListener(keyboardListener);
         }
         keyboardListener = nullptr;
     }
@@ -72,7 +75,11 @@ void InputManager::setupKeyboardListener() {
         this->onKeyReleased(keyCode, event);
     };
     
-    CCLOG("[InputManager] Keyboard listener created");
+    // 直接注册为全局监听器，避免重复注册问题
+    auto director = cocos2d::Director::getInstance();
+    director->getEventDispatcher()->addEventListenerWithFixedPriority(keyboardListener, 1);
+    
+    CCLOG("[InputManager] Global keyboard listener created and registered");
 }
 
 void InputManager::setupHandlerChain() {
@@ -99,7 +106,9 @@ void InputManager::setupHandlerChain() {
 
 void InputManager::updateGameContext(const std::string& sceneName, cocos2d::Scene* scene) {
     gameContext.setSceneInfo(sceneName, scene);
-    gameContext.updatePlayerPosition();
+    if (gameContext.player) {
+        gameContext.updatePlayerPosition();
+    }
     
     CCLOG("[InputManager] Game context updated - Scene: %s", sceneName.c_str());
 }
@@ -118,38 +127,17 @@ void InputManager::setGamePaused(bool paused) {
     CCLOG("[InputManager] Game paused state changed: %s", paused ? "true" : "false");
 }
 
-void InputManager::registerWithScene(cocos2d::Scene* scene) {
-    if (!scene || !keyboardListener) {
-        CCLOG("[InputManager] Cannot register - scene or listener is null");
-        return;
-    }
-    
-    // 如果已经注册了其他场景，先取消注册
-    if (currentRegisteredScene && currentRegisteredScene != scene) {
-        unregisterFromScene(currentRegisteredScene);
-    }
-    
-    scene->_eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener, scene);
-    currentRegisteredScene = scene;
-    
-    CCLOG("[InputManager] Registered keyboard listener with scene");
-}
+// 不再需要场景相关的注册方法，因为使用了全局监听器
+// void InputManager::registerWithScene(cocos2d::Scene* scene) {
+//     // 已改用全局监听器，不需要场景注册
+// }
 
-void InputManager::unregisterFromScene(cocos2d::Scene* scene) {
-    if (!scene || !keyboardListener) {
-        return;
-    }
-    
-    scene->_eventDispatcher->removeEventListener(keyboardListener);
-    if (currentRegisteredScene == scene) {
-        currentRegisteredScene = nullptr;
-    }
-    
-    CCLOG("[InputManager] Unregistered keyboard listener from scene");
-}
+// void InputManager::unregisterFromScene(cocos2d::Scene* scene) {
+//     // 已改用全局监听器，不需要场景注册
+// }
 
 void InputManager::setPlayer(Player* player) {
-    gameContext.player = player;
+    gameContext.setPlayer(player);
     if (player) {
         gameContext.updatePlayerPosition();
         CCLOG("[InputManager] Player reference updated");
@@ -159,14 +147,21 @@ void InputManager::setPlayer(Player* player) {
 void InputManager::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
     totalKeyPressedCount++;
     
-    // 更新玩家位置
-    gameContext.updatePlayerPosition();
+    // 更新玩家位置（如果玩家对象存在）
+    if (gameContext.player) {
+        gameContext.updatePlayerPosition();
+    }
     
     bool handled = false;
     
+    CCLOG("[InputManager] onKeyPressed called with keyCode: %d", static_cast<int>(keyCode));
+    CCLOG("[InputManager] handlerChain exists: %s", handlerChain ? "Yes" : "No");
+    
     // 临时处理逻辑，等责任链实现后会替换
     if (handlerChain) {
+        CCLOG("[InputManager] Calling handlerChain->handleKeyPressed");
         handled = handlerChain->handleKeyPressed(keyCode, event, gameContext);
+        CCLOG("[InputManager] handlerChain->handleKeyPressed returned: %s", handled ? "true" : "false");
     } else {
         // 临时的基础处理逻辑
         switch (keyCode) {
@@ -197,8 +192,10 @@ void InputManager::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event) {
 }
 
 void InputManager::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event) {
-    // 更新玩家位置
-    gameContext.updatePlayerPosition();
+    // 更新玩家位置（如果玩家对象存在）
+    if (gameContext.player) {
+        gameContext.updatePlayerPosition();
+    }
     
     bool handled = false;
     

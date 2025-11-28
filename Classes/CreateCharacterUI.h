@@ -2,6 +2,7 @@
 #define __CreateCharacter_UI__
 
 #include "cocos2d.h"
+#include "InputManager.h"
 #include "ui/CocosGUI.h"
 USING_NS_CC;
 class CreateCharacter : public cocos2d::Scene

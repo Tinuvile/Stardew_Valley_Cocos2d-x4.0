@@ -72,24 +72,24 @@ bool GlobalActionHandler::showHelp() {
     
     // 创建帮助信息字符串
     std::string helpText = 
-        "=== 游戏控制帮助 ===\n"
-        "移动: 方向键 ↑↓←→\n"
-        "背包: ESC键\n"
-        "吃食物: E键\n"
-        "\n=== 农场操作 ===\n"
-        "种植: P键\n"
-        "浇水: W键\n"
-        "收割: G键\n"
-        "\n=== 其他操作 ===\n"
-        "钓鱼: H键 (海滩)\n"
-        "挖矿: M键 (洞穴)\n"
-        "交互: ENTER键\n"
-        "\n=== 全局快捷键 ===\n"
-        "帮助: F1\n"
-        "统计: F2\n"
-        "调试: F3\n"
-        "暂停: 空格键\n"
-        "截图: F12\n";
+        "=== Game Controls Help ===\n"
+        "Move: Arrow Keys\n"
+        "Inventory: ESC\n"
+        "Eat Food: E\n"
+        "\n=== Farm Operations ===\n"
+        "Plant: P\n"
+        "Water: W\n"
+        "Harvest: G\n"
+        "\n=== Other Actions ===\n"
+        "Fishing: H (Beach)\n"
+        "Mining: M (Cave)\n"
+        "Interact: ENTER\n"
+        "\n=== Global Shortcuts ===\n"
+        "Help: F1\n"
+        "Statistics: F2\n"
+        "Debug: F3\n"
+        "Pause: SPACE\n"
+        "Screenshot: F12\n";
     
     CCLOG("%s", helpText.c_str());
     
@@ -99,21 +99,18 @@ bool GlobalActionHandler::showHelp() {
 bool GlobalActionHandler::takeScreenshot() {
     logDebug("Taking screenshot");
     
-    // 获取当前时间作为文件名
+    // Get current time for filename
     time_t now = time(0);
     tm* ltm = localtime(&now);
     
-    std::ostringstream filename;
-    filename << "screenshot_" 
-             << (1900 + ltm->tm_year) 
-             << std::setfill('0') << std::setw(2) << (1 + ltm->tm_mon)
-             << std::setfill('0') << std::setw(2) << ltm->tm_mday << "_"
-             << std::setfill('0') << std::setw(2) << ltm->tm_hour
-             << std::setfill('0') << std::setw(2) << ltm->tm_min
-             << std::setfill('0') << std::setw(2) << ltm->tm_sec
-             << ".png";
+    char buffer[64];
+    sprintf(buffer, "screenshot_%04d%02d%02d_%02d%02d%02d.png",
+            1900 + ltm->tm_year, 1 + ltm->tm_mon, ltm->tm_mday,
+            ltm->tm_hour, ltm->tm_min, ltm->tm_sec);
     
-    // 使用Cocos2d-x的截图功能
+    std::string filename(buffer);
+    
+    // Use Cocos2d-x screenshot function
     auto director = cocos2d::Director::getInstance();
     if (director) {
         cocos2d::utils::captureScreen([filename](bool succeed, const std::string& outputFile) {
@@ -122,7 +119,7 @@ bool GlobalActionHandler::takeScreenshot() {
             } else {
                 CCLOG("Screenshot failed");
             }
-        }, filename.str());
+        }, filename);
         
         return true;
     }
@@ -137,13 +134,13 @@ bool GlobalActionHandler::showDebugInfo() {
     const auto& context = inputManager->getGameContext();
     
     std::string debugInfo = 
-        "=== 调试信息 ===\n"
-        "当前场景: " + context.currentScene + "\n"
-        "玩家位置: (" + std::to_string(context.playerPos.x) + ", " + std::to_string(context.playerPos.y) + ")\n"
-        "UI状态: " + (context.isUIOpen ? ("打开 - " + context.activeUI) : "关闭") + "\n"
-        "可移动: " + std::string(context.canMove ? "是" : "否") + "\n"
-        "游戏暂停: " + std::string(context.isGamePaused ? "是" : "否") + "\n"
-        "未处理按键数: " + std::to_string(unhandledKeyCount) + "\n";
+        "=== Debug Info ===\n"
+        "Current Scene: " + context.currentScene + "\n"
+        "Player Position: (" + std::to_string(context.playerPos.x) + ", " + std::to_string(context.playerPos.y) + ")\n"
+        "UI Status: " + (context.isUIOpen ? ("Open - " + context.activeUI) : "Closed") + "\n"
+        "Can Move: " + std::string(context.canMove ? "Yes" : "No") + "\n"
+        "Game Paused: " + std::string(context.isGamePaused ? "Yes" : "No") + "\n"
+        "Unhandled Keys: " + std::to_string(unhandledKeyCount) + "\n";
     
     CCLOG("%s", debugInfo.c_str());
     
@@ -195,13 +192,13 @@ bool GlobalActionHandler::showGameStats() {
     logDebug("Showing game statistics");
     
     std::string statsInfo = 
-        "=== 游戏统计 ===\n"
-        "当前天数: " + std::to_string(day) + "\n"
-        "剩余时间: " + std::to_string(remainingTime) + "\n"
-        "金币: " + std::to_string(GoldAmount) + "\n"
-        "体力: " + std::to_string(strength) + "/100\n"
-        "季节: " + Season + "\n"
-        "天气: " + Weather + "\n";
+        "=== Game Statistics ===\n"
+        "Day: " + std::to_string(day) + "\n"
+        "Time Left: " + std::to_string(remainingTime) + "\n"
+        "Gold: " + std::to_string(GoldAmount) + "\n"
+        "Energy: " + std::to_string(strength) + "/100\n"
+        "Season: " + Season + "\n"
+        "Weather: " + Weather + "\n";
     
     CCLOG("%s", statsInfo.c_str());
     
@@ -211,8 +208,8 @@ bool GlobalActionHandler::showGameStats() {
 bool GlobalActionHandler::quickSave() {
     logDebug("Quick save requested");
     
-    // 这里应该实现快速保存逻辑
-    CCLOG("Quick save: 功能待实现");
+    // TODO: Implement quick save logic
+    CCLOG("Quick save: Feature not implemented yet");
     
     return true;
 }
@@ -220,8 +217,8 @@ bool GlobalActionHandler::quickSave() {
 bool GlobalActionHandler::quickLoad() {
     logDebug("Quick load requested");
     
-    // 这里应该实现快速加载逻辑
-    CCLOG("Quick load: 功能待实现");
+    // TODO: Implement quick load logic
+    CCLOG("Quick load: Feature not implemented yet");
     
     return true;
 }
@@ -242,12 +239,11 @@ void GlobalActionHandler::printDebugStats() {
         return;
     }
     
-    std::ostringstream oss;
-    oss << "Recent unhandled keys: ";
+    std::string output = "Recent unhandled keys: ";
     for (size_t i = 0; i < recentUnhandledKeys.size(); ++i) {
-        if (i > 0) oss << ", ";
-        oss << static_cast<int>(recentUnhandledKeys[i]);
+        if (i > 0) output += ", ";
+        output += std::to_string(static_cast<int>(recentUnhandledKeys[i]));
     }
     
-    CCLOG("%s", oss.str().c_str());
+    CCLOG("%s", output.c_str());
 }

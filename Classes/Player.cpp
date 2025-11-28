@@ -3,7 +3,11 @@
 USING_NS_CC;  // 使用 Cocos2d-x 命名空间
 
 // Player 类的构造函数
-Player::Player() : speed(10.0f),pic_path("character1 / player_down3.png") {}
+Player::Player() : speed(10.0f), pic_path("character1 / player_down3.png"), 
+    moveLeft(true), moveDown(true), moveUp(true), moveRight(true),
+    leftpressed(false), downpressed(false), uppressed(false), rightpressed(false) {
+    // 构造函数体
+}
 
 // Player 类的析构函数
 Player::~Player() {}
@@ -46,42 +50,60 @@ Player* Player::create()
 }
 
 // 设置移动状态（由输入处理器调用）
-void Player::setMovementState(int direction, bool isPressed) {
+void Player::setMovementState(MovementDirection direction, bool isPressed) {
+    CCLOG("[Player] setMovementState called: direction=%d, isPressed=%s", 
+          static_cast<int>(direction), isPressed ? "true" : "false");
     switch (direction) {
         case DIRECTION_UP:
             if (!uppressed && isPressed) {
                 uppressed = true;
+                moveUp = true;  // 允许向上移动
                 this->look_state = 0;  // 重置动画状态
+                CCLOG("[Player] UP key pressed - uppressed=true, moveUp=true");
             } else if (uppressed && !isPressed) {
                 uppressed = false;
+                moveUp = true;  // 保持允许移动
                 updateTexture(DIRECTION_UP);
+                CCLOG("[Player] UP key released - uppressed=false, moveUp=true");
             }
             break;
         case DIRECTION_DOWN:
             if (!downpressed && isPressed) {
                 downpressed = true;
+                moveDown = true;  // 允许向下移动
                 this->look_state = 0;
+                CCLOG("[Player] DOWN key pressed - downpressed=true, moveDown=true");
             } else if (downpressed && !isPressed) {
                 downpressed = false;
+                moveDown = true;  // 保持允许移动
                 updateTexture(DIRECTION_DOWN);
+                CCLOG("[Player] DOWN key released - downpressed=false, moveDown=true");
             }
             break;
         case DIRECTION_LEFT:
             if (!leftpressed && isPressed) {
                 leftpressed = true;
+                moveLeft = true;  // 允许向左移动
                 this->look_state = 0;
+                CCLOG("[Player] LEFT key pressed - leftpressed=true, moveLeft=true");
             } else if (leftpressed && !isPressed) {
                 leftpressed = false;
+                moveLeft = true;  // 保持允许移动
                 updateTexture(DIRECTION_LEFT);
+                CCLOG("[Player] LEFT key released - leftpressed=false, moveLeft=true");
             }
             break;
         case DIRECTION_RIGHT:
             if (!rightpressed && isPressed) {
                 rightpressed = true;
+                moveRight = true;  // 允许向右移动
                 this->look_state = 0;
+                CCLOG("[Player] RIGHT key pressed - rightpressed=true, moveRight=true");
             } else if (rightpressed && !isPressed) {
                 rightpressed = false;
+                moveRight = true;  // 保持允许移动
                 updateTexture(DIRECTION_RIGHT);
+                CCLOG("[Player] RIGHT key released - rightpressed=false, moveRight=true");
             }
             break;
     }
@@ -129,6 +151,16 @@ void Player::updateTexture(int direction) {
 
 // 玩家移动的逻辑
 void Player::player1_move() {
+    // 调试移动状态
+    static int debugCounter = 0;
+    if (debugCounter % 60 == 0) { // 每秒输出一次（假设60FPS）
+        CCLOG("[Player] Movement flags: leftPressed=%s moveLeft=%s downPressed=%s moveDown=%s upPressed=%s moveUp=%s rightPressed=%s moveRight=%s",
+              leftpressed ? "T" : "F", moveLeft ? "T" : "F",
+              downpressed ? "T" : "F", moveDown ? "T" : "F", 
+              uppressed ? "T" : "F", moveUp ? "T" : "F",
+              rightpressed ? "T" : "F", moveRight ? "T" : "F");
+    }
+    debugCounter++;
 
     // 如果按下左箭头并且允许向左移动
     if (this->leftpressed && this->moveLeft) {

@@ -50,17 +50,9 @@ public:
      */
     void setGamePaused(bool paused);
     
-    /**
-     * 为场景注册键盘监听器
-     * @param scene 要注册监听器的场景
-     */
-    void registerWithScene(cocos2d::Scene* scene);
-    
-    /**
-     * 从场景移除键盘监听器
-     * @param scene 要移除监听器的场景
-     */
-    void unregisterFromScene(cocos2d::Scene* scene);
+    // 不再需要场景相关的注册方法，已改用全局监听器
+    // void registerWithScene(cocos2d::Scene* scene);
+    // void unregisterFromScene(cocos2d::Scene* scene);
     
     /**
      * 获取当前游戏上下文（只读）
@@ -125,7 +117,7 @@ private:
     cocos2d::EventListenerKeyboard* keyboardListener;
     
     bool isInitialized;
-    cocos2d::Scene* currentRegisteredScene;
+    // cocos2d::Scene* currentRegisteredScene;  // 不再需要跟踪当前场景
     
     // 用于调试的统计信息
     int totalKeyPressedCount;

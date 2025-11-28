@@ -16,8 +16,9 @@ SceneActionHandler::SceneActionHandler() {
 }
 
 bool SceneActionHandler::handleKeyPressed(EventKeyboard::KeyCode keyCode, Event* event, const GameContext& context) {
-    // 如果有UI打开，不处理场景动作
-    if (context.isUIOpen) {
+    CCLOG("[SceneActionHandler] Key pressed: %d", static_cast<int>(keyCode));
+    // 如果有UI打开或玩家不存在，不处理场景动作
+    if (context.isUIOpen || !context.player) {
         return passToNext(keyCode, event, context);
     }
     

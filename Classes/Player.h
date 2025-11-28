@@ -22,8 +22,16 @@ public:
     // 初始化角色
     bool init();
 
+    // 移动方向枚举
+    enum MovementDirection {
+        DIRECTION_UP = 0,
+        DIRECTION_DOWN = 1,
+        DIRECTION_LEFT = 2,
+        DIRECTION_RIGHT = 3
+    };
+    
     // 设置移动状态（由输入处理器调用）
-    void setMovementState(int direction, bool isPressed);
+    void setMovementState(MovementDirection direction, bool isPressed);
     
     // 获取移动状态
     bool getMovementState(int direction) const;
@@ -36,14 +44,6 @@ public:
     
     // 更新玩家贴图
     void updateTexture(int direction);
-    
-    // 移动方向枚举
-    enum MovementDirection {
-        DIRECTION_UP = 0,
-        DIRECTION_DOWN = 1,
-        DIRECTION_LEFT = 2,
-        DIRECTION_RIGHT = 3
-    };
 
 
     bool moveLeft, moveDown, moveUp, moveRight;

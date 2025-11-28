@@ -2,6 +2,7 @@
 #define __PLAYER_MOVEMENT_HANDLER_H__
 
 #include "InputHandler.h"
+#include "Player.h"
 
 /**
  * 玩家移动输入处理器
@@ -41,15 +42,9 @@ private:
     /**
      * 将按键转换为方向
      * @param keyCode 按键代码
-     * @return 方向值 (0:上, 1:下, 2:左, 3:右, -1:无效)
+     * @return Player的MovementDirection枚举值
      */
-    int getDirectionFromKey(EventKeyboard::KeyCode keyCode);
-    
-    // 使用Player类的方向常量
-    static const int UP = Player::DIRECTION_UP;
-    static const int DOWN = Player::DIRECTION_DOWN;
-    static const int LEFT = Player::DIRECTION_LEFT;
-    static const int RIGHT = Player::DIRECTION_RIGHT;
+    Player::MovementDirection getDirectionFromKey(EventKeyboard::KeyCode keyCode);
 };
 
 #endif // __PLAYER_MOVEMENT_HANDLER_H__
