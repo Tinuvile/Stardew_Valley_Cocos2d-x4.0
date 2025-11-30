@@ -1,4 +1,4 @@
-//¸ÃÍ·ÎÄ¼ş¼°ÆäcppÓÃÀ´ÊµÏÖ³õÊ¼¶¯»­ºÍ³õÊ¼½çÃæ
+//è¯¥å¤´æ–‡ä»¶åŠå…¶cppç”¨æ¥å®ç°åˆå§‹åŠ¨ç”»å’Œåˆå§‹ç•Œé¢
 
 #ifndef _SCENE_SEC_H__
 #define _SCENE_SEC_H__
@@ -9,30 +9,30 @@ class BeginScene : public cocos2d::Scene
 {
 public:
     // implement the "static create()" method manually  
-    CREATE_FUNC(BeginScene);
+    CREATE_FUNC ( BeginScene );
 
     // Initializes the scene  
-    virtual bool init();
+    virtual bool init ();
 private:
     // Plays the splash screen animation  
-    void playSplashAnimation();
+    void playSplashAnimation ();
 
     // Called when the animation completes  
-    void onAnimationComplete();
+    void onAnimationComplete ();
 };
 
 class NextScene : public cocos2d::Scene
 {
 public:
-    CREATE_FUNC(NextScene);
-    virtual bool init();
+    CREATE_FUNC ( NextScene );
+    virtual bool init ();
 
     void menuNewCallback ( cocos2d::Ref* pSender );
     void menuCloseCallback ( cocos2d::Ref* pSender );
 
 private:
-    void addfirstscene (const cocos2d::Size& visibleSize, const cocos2d::Vec2& origin);//µÚÒ»¸öÍ¼²ã¶¯»­Ğ§¹û
-    void birdfly();
+    void addfirstscene ( const cocos2d::Size& visibleSize , const cocos2d::Vec2& origin );//ç¬¬ä¸€ä¸ªå›¾å±‚åŠ¨ç”»æ•ˆæœ
+    void birdfly ();
     void scenechangedown ();
     void addLogo_sec ( const cocos2d::Size& visibleSize , const cocos2d::Vec2& origin );
     void cloudsAni ( float dt );
@@ -43,7 +43,6 @@ private:
 };
 
 #endif // _SCENE_SEC_H__
-
 
 
 

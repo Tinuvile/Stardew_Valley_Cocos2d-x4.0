@@ -1,342 +1,279 @@
-// InventoryUI.cpp  
-#include "NPCtalkUI.h"  
-#include "ui/CocosGUI.h"  
-#include "Item.h"  
-#include "AppDelegate.h"
-#include "NPC.h"
+// NPCtalkUI.cpp - NPCå¯¹è¯ç•Œé¢å®ç°ï¼ˆä½¿ç”¨å»ºé€ è€…æ¨¡å¼é‡æ„ï¼‰
+#include "NPCtalkUI.h"
+#include "ui/CocosGUI.h"
+#include "UI/Core/UITheme.h"
+#include "UI/Core/UIConfig.h"
+#include "UI/Builders/SpriteBuilder.h"
+#include "UI/Builders/LabelBuilder.h"
+#include "UI/Components/DarkOverlay.h"
 
 extern Player* player1;
 extern NpcRelationship* npc_relationship;
+extern std::string Season;
 
 USING_NS_CC;
 
-static void problemLoading ( const char* filename )
-{
-    printf ( "Error while loading: %s\n" , filename );
-    printf ( "Depending on how you compiled you might have to add 'Resources/' in front of filenames in CreateCharacterScene.cpp\n" );
+NPCtalkUI* NPCtalkUI::create(NPC* npc_name, std::string sceneName) {
+    NPCtalkUI* ret = new NPCtalkUI();
+    if (ret && ret->init(npc_name, sceneName)) {
+        ret->autorelease();
+        return ret;
+    }
+    CC_SAFE_DELETE(ret);
+    return nullptr;
 }
 
-void NPCtalkUI::updateCoordinate ( float& x , float& y ) {
-    Vec2 position = player1->getPosition ();
-    float  Leftboundary = -10000.0f , rightboundary = 10000.0f , upperboundary = 10000.0f , lowerboundary = 10000.0f;
-    if (SceneName  == "Town") {
-        Leftboundary = -170.0f;
-        rightboundary = 1773.0f;
-        upperboundary = 1498.0f;
-        lowerboundary = -222.0f;
-    }
-    else if (SceneName == "Cave") {
-        Leftboundary = 786.0f;
-        rightboundary = 817.0f;
-        upperboundary = 808.0f;
-        lowerboundary = 460.0f;
-    }
-    else if (SceneName == "Beach") {
-        Leftboundary = -315.0f;
-        rightboundary = 20000.0f;
-        upperboundary = 920.0f;
-        lowerboundary = 360.0f;
-    }
-    else if (SceneName == "Forest") {
-        Leftboundary = -600.0f;
-        rightboundary = 2197.0f;
-        upperboundary = 2200.0f;
-        lowerboundary = -850.0f;
-    }
-    else if (SceneName == "farm") {
-        Leftboundary = 637.0f;
-        rightboundary = 960.0f;
-        upperboundary = 777.0f;
-        lowerboundary = 500.0f;
-    }
-    else if (SceneName == "Barn") {
-        Leftboundary = 805.0f;
-        rightboundary = 805.0f;
-        upperboundary = 569.0f;
-        lowerboundary = 569.0f;
-    }
-    else if (SceneName == "Myhouse") {
-        Leftboundary = 800.0f;
-        rightboundary = 800.0f;
-        upperboundary = 580.0f;
-        lowerboundary = 580.0f;
-    }
-    if (x <= Leftboundary) {
-        x = Leftboundary;
-    }
-    else if (x >= rightboundary) {
-        x = rightboundary;
-    }
-    else {
-        x = position.x;
-    }
-
-    if (y >= upperboundary) {
-        y = upperboundary;
-    }
-    else if (y <= lowerboundary) {
-        y = lowerboundary;
-    }
-    else {
-        y = position.y;
-    }
-}
-
-void NPCtalkUI::backgroundcreate () {
-    Vec2 position = player1->getPosition ();
-    float currentx = position.x , currenty = position.y;
-    updateCoordinate ( currentx , currenty );
-    CCLOG ( "%f %f" , currentx , currenty );
-    auto visibleSize = Director::getInstance ()->getVisibleSize ();
-    // ´´½¨Ò»¸ö°ëÍ¸Ã÷µÄºÚÉ«ÕÚÕÖ
-    auto darkLayer = cocos2d::LayerColor::create ( cocos2d::Color4B ( 0 , 0 , 0 , 120 ) , 5 * visibleSize.width , 5 * visibleSize.height );  // ºÚÉ«£¬Í¸Ã÷¶ÈÎª120
-    darkLayer->setPosition ( position - visibleSize );// ÉèÖÃÕÚÕÖ²ãµÄÎ»ÖÃ
-    this->addChild ( darkLayer , 0 );
-    //¶Ô»°¿ò
-    auto dialogBox = Sprite::create ( "npc/kuang.png" );
-    if (dialogBox == nullptr)
-    {
-        problemLoading ( "'npc/kuang.png'" );
-    }
-    else
-    {
-        float originalWidth = dialogBox->getContentSize ().width;
-        float originalHeight = dialogBox->getContentSize ().height;
-        float scaleX = visibleSize.width / originalWidth;
-        float scaleY = visibleSize.height / originalHeight;
-        float scale = std::min ( scaleX , scaleY );
-        dialogBox->setScale ( scale * 0.9 );
-        dialogBox->setPosition ( Vec2 ( currentx , currenty - visibleSize.height * 0.27 ) );
-
-        this->addChild ( dialogBox , 1 );
-    }
-    //Í·Ïñ
-    std::string photo;
-    if (Season == "Spring" || Season == "Autumn") {
-        photo = getNPCportraits ( npc->GetName () , "Normal" );
-    }
-    else {
-        photo = getNPCportraits ( npc->GetName () , Season + "Normal" );
-    }
-    auto characterPhoto = Sprite::create ( photo );
-
-    float originalWidth = characterPhoto->getContentSize ().width;
-    float originalHeight = characterPhoto->getContentSize ().height;
-    float scaleX = visibleSize.width / originalWidth;
-    float scaleY = visibleSize.height / originalHeight;
-    float scale = std::min ( scaleX , scaleY );
-    characterPhoto->setScale ( scale * 0.25 );
-    characterPhoto->setPosition ( Vec2 ( currentx + visibleSize.width * 0.27 , currenty - visibleSize.height * 0.233 ) );
-
-    this->addChild ( characterPhoto , 2 );
-
-    //ĞÕÃû
-    std::string name = npc->GetName ();
-    auto NameLabel =Label::createWithSystemFont ( name , "fonts/Comic Sans MS.ttf" , 40 );
-    NameLabel->setTextColor ( cocos2d::Color4B::BLACK );
-    NameLabel->setPosition ( Vec2 ( currentx + visibleSize.width * 0.26 , currenty - visibleSize.height * 0.4 ) );
-    this->addChild ( NameLabel , 2 );
-}
-
-//¶Ô»°Ñ¡ÖĞ¿òÌí¼Ó
-void NPCtalkUI::SelectedBox () {
-    Vec2 position = player1->getPosition ();
-    float currentx = position.x , currenty = position.y;
-    updateCoordinate ( currentx , currenty );
-    auto visibleSize = Director::getInstance ()->getVisibleSize ();
-    auto Selectedbox1 = Sprite::create ( "npc/xuanzhongkuang.png" );
-    auto Selectedbox2 = Sprite::create ( "npc/xuanzhongkuang.png" );
-    auto Selectedbox3 = Sprite::create ( "npc/xuanzhongkuang.png" );
-    auto Selectedbox4 = Sprite::create ( "npc/xuanzhongkuang.png" );
-    if (Selectedbox1 == nullptr)
-    {
-        problemLoading ( "'npc/xuanzhongkuang.png'" );
-    }
-    else
-    {
-        float originalWidth = Selectedbox1->getContentSize ().width;
-        float originalHeight = Selectedbox1->getContentSize ().height;
-        float scaleX = visibleSize.width / originalWidth;
-        float scaleY = visibleSize.height / originalHeight;
-        float scale = std::min ( scaleX , scaleY );
-        Selectedbox1->setScale ( scale * 0.5 );
-        //²îÊÇ0.064£¬µÚÒ»¸öÎ»ÖÃÔÚSelectedbox1µÄY»ù´¡ÉÏ¼Ó0.064
-        Selectedbox1->setPosition ( Vec2 ( currentx - visibleSize.width * 0.17 , currenty - visibleSize.height * 0.21 ) );
-        Selectedbox2->setScale ( scale * 0.5 );
-        Selectedbox2->setPosition ( Vec2 ( currentx - visibleSize.width * 0.17 , currenty - visibleSize.height * 0.274 ) );
-        Selectedbox3->setScale ( scale * 0.5 );
-        Selectedbox3->setPosition ( Vec2 ( currentx - visibleSize.width * 0.17 , currenty - visibleSize.height * 0.338 ) );
-        Selectedbox4->setScale ( scale * 0.5 );
-        Selectedbox4->setPosition ( Vec2 ( currentx - visibleSize.width * 0.17 , currenty - visibleSize.height * 0.402 ) );
-
-        this->addChild ( Selectedbox1 , 0 );
-        this->addChild ( Selectedbox2 , 0 );
-        this->addChild ( Selectedbox3 , 0 );
-        this->addChild ( Selectedbox4 , 0 );
-
-        // NPC ¶Ô»°Ìí¼Ó
-        std::vector<std::vector<std::string>> npc_Dialog = getDialog(npc->GetName() , 
-            NPC_RELATIONSHIP->getRelationshipLevel ("player" , npc->GetName ()));
-        
-        int choose = rand() % npc_Dialog.size();
-        // NPC ¶Ô»°
-        auto NPC_talk_Label = Label::createWithSystemFont ( npc_Dialog[choose][0] , "fonts/Comic Sans MS.ttf" , 40);
-        NPC_talk_Label->setTextColor ( cocos2d::Color4B::BLACK );
-        NPC_talk_Label->setPosition ( Vec2 ( currentx - visibleSize.width * 0.17 , currenty - visibleSize.height * 0.14 ) );
-        this->addChild ( NPC_talk_Label , 2 );
-        // ËÄ¸ö»Ø´ğ
-        auto Player_talk_Label1 = Label::createWithSystemFont ( npc_Dialog[choose][1] , "fonts/Comic Sans MS.ttf" , 30 );
-        Player_talk_Label1->setTextColor ( cocos2d::Color4B::BLACK );
-        Player_talk_Label1->setPosition ( Vec2 ( currentx - visibleSize.width * 0.17 , currenty - visibleSize.height * 0.21 ) );
-        this->addChild ( Player_talk_Label1 , 2 );
-
-        auto Player_talk_Label2 = Label::createWithSystemFont ( npc_Dialog[choose][2] , "fonts/Comic Sans MS.ttf" , 30 );
-        Player_talk_Label2->setTextColor ( cocos2d::Color4B::BLACK );
-        Player_talk_Label2->setPosition ( Vec2 ( currentx - visibleSize.width * 0.17 , currenty - visibleSize.height * 0.274 ) );
-        this->addChild ( Player_talk_Label2 , 2 );
-
-        auto Player_talk_Label3 = Label::createWithSystemFont ( npc_Dialog[choose][3] , "fonts/Comic Sans MS.ttf" , 30 );
-        Player_talk_Label3->setTextColor ( cocos2d::Color4B::BLACK );
-        Player_talk_Label3->setPosition ( Vec2 ( currentx - visibleSize.width * 0.17 , currenty - visibleSize.height * 0.338 ) );
-        this->addChild ( Player_talk_Label3 , 2 );
-
-        auto Player_talk_Label4 = Label::createWithSystemFont ( npc_Dialog[choose][4] , "fonts/Comic Sans MS.ttf" , 30 );
-        Player_talk_Label4->setTextColor ( cocos2d::Color4B::BLACK );
-        Player_talk_Label4->setPosition ( Vec2 ( currentx - visibleSize.width * 0.17 , currenty - visibleSize.height * 0.402 ) );
-        this->addChild ( Player_talk_Label4 , 2 );
-
-
-        // Êó±êÒÆ¶¯ÊÂ¼ş  
-        auto listener = EventListenerMouse::create ();
-        listener->onMouseMove = [=]( EventMouse* event ) {
-            Vec2 mousePosition = Vec2 ( event->getCursorX () , event->getCursorY () );
-            mousePosition = this->convertToNodeSpace ( mousePosition );
-            // ¼ì²éÃ¿¸ö Selectedbox  
-            if (Selectedbox1->getBoundingBox ().containsPoint ( mousePosition )) {
-                Selectedbox1->setLocalZOrder ( 2 ); // ÏÔÊ¾ÔÚÉÏ²ã  
-            }
-            else {
-                Selectedbox1->setLocalZOrder ( 0 ); // Òş²ØÔÚÏÂ²ã  
-            }
-            if (Selectedbox2->getBoundingBox ().containsPoint ( mousePosition )) {
-                Selectedbox2->setLocalZOrder ( 2 );
-            }
-            else {
-                Selectedbox2->setLocalZOrder ( 0 );
-            }
-            if (Selectedbox3->getBoundingBox ().containsPoint ( mousePosition )) {
-                Selectedbox3->setLocalZOrder ( 2 );
-            }
-            else {
-                Selectedbox3->setLocalZOrder ( 0 );
-            }
-            if (Selectedbox4->getBoundingBox ().containsPoint ( mousePosition )) {
-                Selectedbox4->setLocalZOrder ( 2 );
-            }
-            else {
-                Selectedbox4->setLocalZOrder ( 0 );
-            }
-            };
-
-        listener->onMouseDown = [this, Selectedbox1 , Selectedbox2 , Selectedbox3 , Selectedbox4]( EventMouse* event ) {
-            Vec2 mousePosition = Vec2 ( event->getCursorX () , event->getCursorY () );
-            mousePosition = this->convertToNodeSpace ( mousePosition );
-
-            // ¼ì²éÃ¿¸ö Selectedbox  
-            if (Selectedbox1 && Selectedbox1->getBoundingBox ().containsPoint ( mousePosition )) {
-                if (npc_relationship->getRelationship ( "player" , npc->GetName () ) < 60) {
-                    npc_relationship->increaseRelationship ( "player" , npc->GetName () , 10.2 );
-                }
-                this->removeFromParent ();
-                return; // ÌáÇ°·µ»Ø£¬±ÜÃâÖ´ĞĞºóĞøÑ¡Ôñ¿ò¼ì²é  
-            }
-            if (Selectedbox2 && Selectedbox2->getBoundingBox ().containsPoint ( mousePosition )) {
-                if (npc_relationship->getRelationship ( "player" , npc->GetName () ) < 60) {
-                    npc_relationship->increaseRelationship ( "player" , npc->GetName () , 5.0001 );
-                }
-                this->removeFromParent ();
-                return; // ÌáÇ°·µ»Ø  
-            }
-            if (Selectedbox3 && Selectedbox3->getBoundingBox ().containsPoint ( mousePosition )) {
-                npc_relationship->decreaseRelationship ( "player" , npc->GetName () , 0.001 );
-                this->removeFromParent ();
-                return; // ÌáÇ°·µ»Ø  
-            }
-            if (Selectedbox4 && Selectedbox4->getBoundingBox ().containsPoint ( mousePosition )) {
-                npc_relationship->decreaseRelationship ( "player" , npc->GetName () , 5.01 );
-                this->removeFromParent ();
-                return; // ÌáÇ°·µ»Ø  
-            }
-            };
-
-        _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , this );
-    }
-}
-
-void NPCtalkUI::close () {
-    Vec2 position = player1->getPosition ();
-    float currentx = position.x , currenty = position.y;
-    updateCoordinate ( currentx , currenty );
-    auto visibleSize = Director::getInstance ()->getVisibleSize ();
-    auto closeIcon = Sprite::create ( "npc/bacha.png" );
-    if (closeIcon == nullptr)
-    {
-        problemLoading ( "'npc/bacha.png'" );
-    }
-    else
-    {
-        float originalWidth = closeIcon->getContentSize ().width;
-        float originalHeight = closeIcon->getContentSize ().height;
-        float scaleX = visibleSize.width / originalWidth;
-        float scaleY = visibleSize.height / originalHeight;
-        float scale = std::min ( scaleX , scaleY );
-        closeIcon->setScale ( scale / 20.5 );
-        closeIcon->setPosition ( Vec2 ( currentx + visibleSize.width * 0.40 , currenty - visibleSize.height * 0.13 ) );
-
-        this->addChild ( closeIcon , 1 );
-        auto listener = EventListenerMouse::create ();
-        listener->onMouseMove = [this , closeIcon , scale]( EventMouse* event ) {
-            Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
-            mousePos = this->convertToNodeSpace ( mousePos );
-            if (closeIcon->getBoundingBox ().containsPoint ( mousePos ))
-            {
-                closeIcon->setScale ( scale / 20.5 * 1.2 );
-            }
-            else
-                closeIcon->setScale ( scale / 20.5 );
-            };
-        listener->onMouseDown = [this , closeIcon]( EventMouse* event ) {
-            Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
-            mousePos = this->convertToNodeSpace ( mousePos );
-            CCLOG ( "%f %f" , mousePos.x , mousePos.y );
-            if (closeIcon->getBoundingBox ().containsPoint ( mousePos )) {
-                this->removeFromParent ();
-            }
-        };
-        _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , closeIcon );
-    }
-}
-
-bool NPCtalkUI::init ( NPC* npc_name , std::string sceneName ) {
-    if (!Layer::init ()) {
+bool NPCtalkUI::init(NPC* npc_name, std::string sceneName) {
+    if (!ClosableUI::init()) {
         return false;
     }
-    SceneName = sceneName;
-    npc = npc_name;
-    NPC_RELATIONSHIP = npc_relationship;
 
-    backgroundcreate ();
-    SelectedBox ();
-    close ();
+    m_npc = npc_name;
+    m_sceneName = sceneName;
+    m_npcRelationship = npc_relationship;
+
+    // åˆå§‹åŒ–å±å¹•å’Œä½ç½®ä¿¡æ¯
+    auto theme = UITheme::getInstance();
+    auto config = UIConfig::getInstance();
+    m_visibleSize = theme->getVisibleSize();
+
+    Vec2 playerPos = player1->getPosition();
+    m_adjustedPosition = config->adjustCoordinate(m_sceneName, playerPos);
+
+    setupUI();
+
     return true;
 }
 
-NPCtalkUI* NPCtalkUI::create ( NPC* npc_name , std::string sceneName ) {
-    NPCtalkUI* ret = new NPCtalkUI ();
-    if (ret && ret->init ( npc_name , sceneName )) {
-        ret->autorelease ();
-        return ret;
+void NPCtalkUI::setupUI() {
+    // 1. åˆ›å»ºåŠé€æ˜é®ç½©
+    auto darkOverlay = DarkOverlay::create(m_sceneName);
+    this->addChild(darkOverlay, 0);
+
+    // 2. åˆ›å»ºä¸»è¦UIç»„ä»¶
+    createDialogBox();
+    createCharacterPhoto();
+    createCharacterName();
+    createSelectionBoxes();
+    createCloseButton();
+
+    // 3. è®¾ç½®äº‹ä»¶ç›‘å¬å™¨
+    setupEventListeners();
+}
+
+void NPCtalkUI::createDialogBox() {
+    m_dialogBox = SpriteBuilder()
+        .setTexture("npc/kuang.png")
+        .setAutoScale(1.1f)  // æ›¿ä»£åŸæ¥çš„ scale * 0.9
+        .setPosition(m_adjustedPosition.x, m_adjustedPosition.y - m_visibleSize.height * 0.27f)
+        .setZOrder(1)
+        .setTag(101)
+        .addToParent(this)
+        .build();
+}
+
+void NPCtalkUI::createCharacterPhoto() {
+    // æ ¹æ®å­£èŠ‚é€‰æ‹©åˆé€‚çš„å¤´åƒ
+    std::string photo;
+    if (Season == "Spring" || Season == "Autumn") {
+        photo = getNPCportraits(m_npc->GetName(), "Normal");
+    } else {
+        photo = getNPCportraits(m_npc->GetName(), Season + "Normal");
     }
-    CC_SAFE_DELETE ( ret );
-    return nullptr;
+
+    m_characterPhoto = SpriteBuilder()
+        .setTexture(photo)
+        .setAutoScale(4.0f)  // æ›¿ä»£åŸæ¥çš„ scale * 0.25
+        .setPosition(m_adjustedPosition.x + m_visibleSize.width * 0.27f,
+                     m_adjustedPosition.y - m_visibleSize.height * 0.233f)
+        .setZOrder(2)
+        .setTag(102)
+        .addToParent(this)
+        .build();
+}
+
+void NPCtalkUI::createCharacterName() {
+    std::string name = m_npc->GetName();
+
+    LabelBuilder()
+        .setText(name)
+        .setFont("fonts/Comic Sans MS.ttf", 40)
+        .setColor(Color3B::BLACK)
+        .setPosition(m_adjustedPosition.x + m_visibleSize.width * 0.26f,
+                     m_adjustedPosition.y - m_visibleSize.height * 0.40f)
+        .setZOrder(2)
+        .setTag(103)
+        .addToParent(this)
+        .build();
+}
+
+void NPCtalkUI::createSelectionBoxes() {
+    // æ¸…ç©ºç°æœ‰æ•°æ®
+    m_selectionBoxes.clear();
+    m_dialogLabels.clear();
+
+    // è·å–NPCå¯¹è¯
+    std::vector<std::vector<std::string>> npc_Dialog = getDialog(
+        m_npc->GetName(),
+        m_npcRelationship->getRelationshipLevel("player", m_npc->GetName())
+    );
+
+    int choose = rand() % npc_Dialog.size();
+    m_currentDialog = npc_Dialog[choose];
+
+    // åˆ›å»ºNPCå¯¹è¯æ ‡ç­¾
+    auto npcTalkLabel = LabelBuilder()
+        .setText(m_currentDialog[0])
+        .setFont("fonts/Comic Sans MS.ttf", 40)
+        .setColor(Color3B::BLACK)
+        .setPosition(m_adjustedPosition.x - m_visibleSize.width * 0.17f,
+                     m_adjustedPosition.y - m_visibleSize.height * 0.14f)
+        .setZOrder(2)
+        .setTag(104)
+        .addToParent(this)
+        .build();
+    m_dialogLabels.push_back(npcTalkLabel);
+
+    // åˆ›å»º4ä¸ªé€‰æ‹©æ¡†å’Œå¯¹åº”çš„æ ‡ç­¾
+    std::vector<Vec2> positions = {
+        Vec2(m_adjustedPosition.x - m_visibleSize.width * 0.17f,
+              m_adjustedPosition.y - m_visibleSize.height * 0.21f),
+        Vec2(m_adjustedPosition.x - m_visibleSize.width * 0.17f,
+              m_adjustedPosition.y - m_visibleSize.height * 0.274f),
+        Vec2(m_adjustedPosition.x - m_visibleSize.width * 0.17f,
+              m_adjustedPosition.y - m_visibleSize.height * 0.338f),
+        Vec2(m_adjustedPosition.x - m_visibleSize.width * 0.17f,
+              m_adjustedPosition.y - m_visibleSize.height * 0.402f)
+    };
+
+    for (int i = 1; i <= 4 && i < m_currentDialog.size(); i++) {
+        // åˆ›å»ºé€‰æ‹©æ¡†
+        auto selectionBox = SpriteBuilder()
+            .setTexture("npc/xuanzhongkuang.png")
+            .setAutoScale(2.0f)  // æ›¿ä»£åŸæ¥çš„ scale * 0.5
+            .setPosition(positions[i-1])
+            .setZOrder(0)
+            .setTag(105 + i)
+            .addToParent(this)
+            .build();
+
+        m_selectionBoxes.push_back(selectionBox);
+
+        // åˆ›å»ºå¯¹è¯é€‰é¡¹æ ‡ç­¾
+        auto dialogLabel = LabelBuilder()
+            .setText(m_currentDialog[i])
+            .setFont("fonts/Comic Sans MS.ttf", 30)
+            .setColor(Color3B::BLACK)
+            .setPosition(positions[i-1])
+            .setZOrder(2)
+            .setTag(200 + i)
+            .addToParent(this)
+            .build();
+
+        m_dialogLabels.push_back(dialogLabel);
+    }
+}
+
+void NPCtalkUI::createCloseButton() {
+    m_closeButton = SpriteBuilder()
+        .setTexture("npc/bacha.png")
+        .setAutoScale(20.5f)
+        .setPosition(m_adjustedPosition.x + m_visibleSize.width * 0.40f,
+                    m_adjustedPosition.y - m_visibleSize.height * 0.13f)
+        .setZOrder(1)
+        .setTag(109)
+        .addToParent(this)
+        .build();
+}
+
+void NPCtalkUI::setupEventListeners() {
+    auto mouseListener = EventListenerMouse::create();
+
+    mouseListener->onMouseMove = CC_CALLBACK_1(NPCtalkUI::onMouseMove, this);
+    mouseListener->onMouseDown = CC_CALLBACK_1(NPCtalkUI::onMouseDown, this);
+
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
+
+    // ä½¿ç”¨åŸºç±»çš„ESCå…³é—­åŠŸèƒ½
+    setupEscCloseListener();
+}
+
+void NPCtalkUI::onMouseMove(EventMouse* event) {
+    Vec2 mousePosition = Vec2(event->getCursorX(), event->getCursorY());
+    mousePosition = this->convertToNodeSpace(mousePosition);
+
+    // æ£€æŸ¥é€‰æ‹©æ¡†æ‚¬åœæ•ˆæœ
+    for (size_t i = 0; i < m_selectionBoxes.size(); i++) {
+        if (m_selectionBoxes[i] && m_selectionBoxes[i]->getBoundingBox().containsPoint(mousePosition)) {
+            m_selectionBoxes[i]->setLocalZOrder(2);  // æ˜¾ç¤ºåœ¨ä¸Šå±‚
+        } else {
+            m_selectionBoxes[i]->setLocalZOrder(0);  // éšè—åœ¨ä¸‹å±‚
+        }
+    }
+
+    // æ£€æŸ¥å…³é—­æŒ‰é’®æ‚¬åœæ•ˆæœ
+    if (m_closeButton && m_closeButton->getBoundingBox().containsPoint(mousePosition)) {
+        auto theme = UITheme::getInstance();
+        float scale = theme->getVisibleSize().width / m_closeButton->getContentSize().width / 20.5f;
+        m_closeButton->setScale(scale * 1.2f);  // æ”¾å¤§æ•ˆæœ
+    } else if (m_closeButton) {
+        auto theme = UITheme::getInstance();
+        float scale = theme->getVisibleSize().width / m_closeButton->getContentSize().width / 20.5f;
+        m_closeButton->setScale(scale);  // æ¢å¤åŸå§‹å¤§å°
+    }
+}
+
+void NPCtalkUI::onMouseDown(EventMouse* event) {
+    Vec2 mousePosition = Vec2(event->getCursorX(), event->getCursorY());
+    mousePosition = this->convertToNodeSpace(mousePosition);
+
+    // æ£€æŸ¥å…³é—­æŒ‰é’®ç‚¹å‡»
+    if (m_closeButton && m_closeButton->getBoundingBox().containsPoint(mousePosition)) {
+        onCloseClicked();
+        return;
+    }
+
+    // æ£€æŸ¥é€‰æ‹©æ¡†ç‚¹å‡»
+    for (size_t i = 0; i < m_selectionBoxes.size(); i++) {
+        if (m_selectionBoxes[i] && m_selectionBoxes[i]->getBoundingBox().containsPoint(mousePosition)) {
+            onSelectionClicked(static_cast<int>(i));
+            return;  // æå‰è¿”å›ï¼Œé¿å…æ‰§è¡Œåç»­æ£€æŸ¥
+        }
+    }
+}
+
+void NPCtalkUI::onCloseClicked() {
+    this->removeFromParent();
+}
+
+void NPCtalkUI::onSelectionClicked(int selectionIndex) {
+    // æ ¹æ®é€‰æ‹©å½±å“äº²å¯†åº¦å…³ç³»
+    float relationshipChange = 0.0f;
+
+    switch (selectionIndex) {
+        case 0:  // ç¬¬ä¸€ä¸ªé€‰é¡¹ï¼Œå¢åŠ è¾ƒå¤šäº²å¯†åº¦
+            if (m_npcRelationship->getRelationship("player", m_npc->GetName()) < 60) {
+                relationshipChange = 10.2f;
+            }
+            break;
+        case 1:  // ç¬¬äºŒä¸ªé€‰é¡¹ï¼Œå¢åŠ å°‘é‡äº²å¯†åº¦
+            if (m_npcRelationship->getRelationship("player", m_npc->GetName()) < 60) {
+                relationshipChange = 5.0001f;
+            }
+            break;
+        case 2:  // ç¬¬ä¸‰ä¸ªé€‰é¡¹ï¼Œç•¥å¾®å‡å°‘äº²å¯†åº¦
+            relationshipChange = -0.001f;
+            break;
+        case 3:  // ç¬¬å››ä¸ªé€‰é¡¹ï¼Œå‡å°‘è¾ƒå¤šäº²å¯†åº¦
+            relationshipChange = -5.01f;
+            break;
+    }
+
+    if (relationshipChange > 0) {
+        m_npcRelationship->increaseRelationship("player", m_npc->GetName(), relationshipChange);
+    } else if (relationshipChange < 0) {
+        m_npcRelationship->decreaseRelationship("player", m_npc->GetName(), -relationshipChange);
+    }
+
+    this->removeFromParent();
 }

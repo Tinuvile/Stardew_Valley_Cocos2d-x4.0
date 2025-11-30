@@ -6,93 +6,92 @@
 #include <iostream>
 #include <memory>
 #include <string>
-
-enum Phase {
-    SEED,    //ÖÖ×Ó
-    GROWING, //Éú³¤ÖĞ
-    MATURE,  //³ÉÊì
-    SAPLESS, // ¿İÎ®×´Ì¬ 
-    DEAD     //¿İËÀ ÔÚ¼¾½Ú¸ü»»ºó×÷ÎïĞèÉèÎª¿İËÀ×´Ì¬ 
-};
+#include <Flyweight/CropFlyweight.h>
+#include <Flyweight/CropExtrinsicState.h>
 
 class Crop :public Item {
 private:
-    const std::string season; //×÷ÎïÉú³¤µÄ¼¾½Ú
-    int mature_needed;  //´ïµ½³ÉÊìËùĞèÌìÊı
-    Phase phase;      //µ±Ç°½×¶Î£¬¶ÔÓ¦`SEED` `GROWING` `MATURE`Èı¸ö½×¶Î 
-    bool harvestable;         //ÊÇ·ñ¿ÉÊÕ»ñ
+    const std::string season; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
+    int mature_needed;  //ï¿½ïµ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    Phase phase;      //ï¿½ï¿½Ç°ï¿½×¶Î£ï¿½ï¿½ï¿½Ó¦`SEED` `GROWING` `MATURE`ï¿½ï¿½ï¿½ï¿½ï¿½×¶ï¿½ 
+    bool harvestable;         //ï¿½Ç·ï¿½ï¿½ï¿½Õ»ï¿½
 public:
-    //´æ·Å×÷Îï²»Í¬Ê±ÆÚ¶ÔÓ¦µÄÍ¼Æ¬Â·¾¶
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï²»Í¬Ê±ï¿½Ú¶ï¿½Ó¦ï¿½ï¿½Í¼Æ¬Â·ï¿½ï¿½
     const std::string growing_pic;
     const std::string mature_pic;
-    // ÖÖÖ²µØ¿é±àºÅ
+    // ï¿½ï¿½Ö²ï¿½Ø¿ï¿½ï¿½ï¿½
     int nums;
-    //µ±ÌìÊÇ·ñ½½¹ıË® Ã¿Ìì¸üĞÂÎªfalse
+    //ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ñ½½¹ï¿½Ë® Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½Îªfalse
     bool watered;            
-    // ÖÖÖ²µÄÈÕÆÚ
+    // ï¿½ï¿½Ö²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     int plant_day;     
-    //×÷ÎïÀà
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ - Ô­ï¿½Ğ¹ï¿½ï¿½ìº¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     Crop(const std::string& crop_name, const std::string& initial_pic,
         const std::string& growing_pic, const std::string& mature_pic, const std::string& season,
         const Phase& current_phase = SEED, const int value = 1, const int plant_day = 0,
         const bool is_harvestable = false, const int mature_limit = 4);
     Crop(const Crop& other);
-    // Ä¬ÈÏ³õÊ¼»¯º¯Êı
+
+    // ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½ÔªÄ£Ê½ï¿½Ä¹ï¿½ï¿½ìº¯ï¿½ï¿½
+    Crop(CropFlyweight* flyweight, CropExtrinsicState* extrinsicState);
+
+    // Ä¬ï¿½Ï³ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     Crop():Item("Unkown", "Unkown", 0), growing_pic("Unkown"), mature_pic("Unkown"),
         season("Unkown"), mature_needed(0), phase(Phase::SEED),
-        plant_day(0), harvestable(false), watered(false), nums(500) {}
+        plant_day(0), harvestable(false), watered(false), nums(500),
+        m_flyweight(nullptr), m_extrinsicState(nullptr), m_useFlyweight(false) {}
 
 
     virtual ~Crop() {};
 
 
     const std::string& GetSeason() const { return season; }
-    //ÅĞ¶ÏÊÇ·ñÎªÖÖ×Ó×´Ì¬
+    //ï¿½Ğ¶ï¿½ï¿½Ç·ï¿½Îªï¿½ï¿½ï¿½ï¿½×´Ì¬
     bool IsSeed() const { return phase == SEED; }
-    //ÅĞ¶ÏÊÇ·ñÎª³ÉÊì×´Ì¬
+    //ï¿½Ğ¶ï¿½ï¿½Ç·ï¿½Îªï¿½ï¿½ï¿½ï¿½×´Ì¬
     bool IsMature() const { return phase == MATURE; }
-    //»ñÈ¡×÷ÎïÖÖÖ²µÄÌìÊı
+    //ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     int GetGrowthProgress() const { return plant_day; }
-    //»ñÈ¡µ±Ç°µÄ`phase`
+    //ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½ï¿½`phase`
     Phase GetPhase() const { return phase; }
-    //»ñÈ¡×÷Îïµ±Ç°ÊÇ·ñ¿ÉÒÔÊÕ»ñ
+    //ï¿½ï¿½È¡ï¿½ï¿½ï¿½ïµ±Ç°ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½Õ»ï¿½
     bool IsHarvestable() const { return harvestable; }
-    // ½½Ë®
+    // ï¿½ï¿½Ë®
     void Water();
-    // ¸üĞÂ×÷Îï×´Ì¬ Ã¿½øÈëĞÂµÄÒ»ÌìÊ±Ğèµ÷ÓÃ
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½Âµï¿½Ò»ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½
     void UpdateGrowth();
-    //ÉèÖÃ×´Ì¬ÎªDEAD growth_progressÉèÎª-1 harvestableÎªflase
+    //ï¿½ï¿½ï¿½ï¿½×´Ì¬ÎªDEAD growth_progressï¿½ï¿½Îª-1 harvestableÎªflase
     void SetDead();
-    //ÖØĞÂÉèÖÃÎïÆ·¼ÛÖµ ³ÉÊì×÷ÎïĞè¸üĞÂÆä¼ÛÖµ
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ·ï¿½ï¿½Öµ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
     void SetValue(const int update_value);
 
-    //ÓÃÓÚÅĞ¶Ïµ±Ç°¶ÔÏóÓëother¶ÔÏóÄÜ·ñÔÚ±³°üÖĞ¹«ÓÃ´æ´¢±³°ü¸ñÎ»
+    //ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¶Ïµï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½otherï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½ï¿½Ú±ï¿½ï¿½ï¿½ï¿½Ğ¹ï¿½ï¿½Ã´æ´¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»
     virtual bool CanBeDepositTogether(const Item& other) const;
 
-    //»ñÈ¡shared_ptr<Crop>ÀàĞÍµÄµÄ¸±±¾ 
-    //ÖÖÖ²Ê±Ê¹ÓÃ¸Ã·½·¨
-    //ÒÔ±ãºóĞø²ù³ı»òÊÕ»ñºó¼°Ê±Í¨¹ıresetÏú»Ù¶ÔÏó
-    //±ÜÃâÊÖ¶¯µ÷ÓÃnewºÍdelete¿ÉÄÜ³öÏÖµÄÎÊÌâ
+    //ï¿½ï¿½È¡shared_ptr<Crop>ï¿½ï¿½ï¿½ÍµÄµÄ¸ï¿½ï¿½ï¿½ 
+    //ï¿½ï¿½Ö²Ê±Ê¹ï¿½Ã¸Ã·ï¿½ï¿½ï¿½
+    //ï¿½Ô±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ»ï¿½ï¿½Ê±Í¨ï¿½ï¿½resetï¿½ï¿½ï¿½Ù¶ï¿½ï¿½ï¿½
+    //ï¿½ï¿½ï¿½ï¿½ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½newï¿½ï¿½deleteï¿½ï¿½ï¿½Ü³ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½
     virtual std::shared_ptr<Item> GetCopy() const;
 
     std::shared_ptr<Crop> GetCropCopy() const;
 
-    //ÊÕ»ñ
-    //´Ë´¦½öÌá¹©ÄÜ·ñÊÕ»ñµÄÌõ¼şÅĞ¶ÏºÍÏú»Ù¶ÔÓ¦Crop¶ÔÏóµÄ²Ù×÷
+    //ï¿½Õ»ï¿½
+    //ï¿½Ë´ï¿½ï¿½ï¿½ï¿½á¹©ï¿½Ü·ï¿½ï¿½Õ»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¶Ïºï¿½ï¿½ï¿½ï¿½Ù¶ï¿½Ó¦Cropï¿½ï¿½ï¿½ï¿½Ä²ï¿½ï¿½ï¿½
 
 
-    //»ñÈ¡ÎïÆ·²Ù×÷Ğè½øÒ»²½½áºÏÍæ¼ÒÀà
-    //¶ÔÓ¦ÊµÀı²»¿ÉÊÕ»ñ»ò´«ÈëµÄshared_ptr<Crop>Îª¿Õ¾ù·µ»Øfalse
-    //¶ÔÓ¦ÊµÀı¿ÉÊÕ»ñÔòÏú»Ù¶ÔÓ¦¶ÔÏó·µ»Øtrue
+    //ï¿½ï¿½È¡ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    //ï¿½ï¿½Ó¦Êµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ»ï¿½ï¿½ï¿½ï¿½ï¿½shared_ptr<Crop>Îªï¿½Õ¾ï¿½ï¿½ï¿½ï¿½ï¿½false
+    //ï¿½ï¿½Ó¦Êµï¿½ï¿½ï¿½ï¿½ï¿½Õ»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶ï¿½Ó¦ï¿½ï¿½ï¿½ó·µ»ï¿½true
     static bool Harvest(std::shared_ptr<Crop> to_harvest);
 
 
-    //²ù³ı
-    //Ìá¹©Ïú»Ù¶ÔÓ¦Crop¶ÔÏóµÄ²Ù×÷
+    //ï¿½ï¿½ï¿½ï¿½
+    //ï¿½á¹©ï¿½ï¿½ï¿½Ù¶ï¿½Ó¦Cropï¿½ï¿½ï¿½ï¿½Ä²ï¿½ï¿½ï¿½
 
 
-    //Èô´«ÈëµÄshared_ptr<Crop>Îª¿Õ·µ»Øfalse
-    //·ñÔòÏú»Ù¶ÔÓ¦¶ÔÏó²¢·µ»Øtrue
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½shared_ptr<Crop>Îªï¿½Õ·ï¿½ï¿½ï¿½false
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶ï¿½Ó¦ï¿½ï¿½ï¿½ó²¢·ï¿½ï¿½ï¿½true
     static bool Remove(std::shared_ptr<Crop> to_remove);
 
 
@@ -103,5 +102,31 @@ public:
     void ChangMatureNeeded(int Time) {
         this->mature_needed += Time;
     }
+
+    // ==================== äº«å…ƒæ¨¡å¼ç›¸å…³æ–¹æ³• ====================
+
+    /**
+     * @brief è·å–äº«å…ƒå¯¹è±¡
+     * @return äº«å…ƒå¯¹è±¡æŒ‡é’ˆï¼Œå¦‚æœä¸ä½¿ç”¨äº«å…ƒæ¨¡å¼è¿”å›nullptr
+     */
+    CropFlyweight* getFlyweight() const { return m_flyweight; }
+
+    /**
+     * @brief è·å–å¤–éƒ¨çŠ¶æ€å¯¹è±¡
+     * @return å¤–éƒ¨çŠ¶æ€å¯¹è±¡æŒ‡é’ˆï¼Œå¦‚æœä¸ä½¿ç”¨äº«å…ƒæ¨¡å¼è¿”å›nullptr
+     */
+    CropExtrinsicState* getExtrinsicState() const { return m_extrinsicState; }
+
+    /**
+     * @brief åˆ¤æ–­æ˜¯å¦ä½¿ç”¨äº«å…ƒæ¨¡å¼
+     * @return trueè¡¨ç¤ºä½¿ç”¨äº«å…ƒæ¨¡å¼ï¼Œfalseè¡¨ç¤ºä½¿ç”¨ä¼ ç»Ÿæ¨¡å¼
+     */
+    bool isUsingFlyweight() const { return m_useFlyweight; }
+
+private:
+    // äº«å…ƒæ¨¡å¼ç›¸å…³æˆå‘˜
+    CropFlyweight* m_flyweight;           // å…±äº«çš„å†…éƒ¨çŠ¶æ€
+    CropExtrinsicState* m_extrinsicState; // ç‹¬ç«‹çš„å¤–éƒ¨çŠ¶æ€
+    bool m_useFlyweight;                  // æ ‡è®°æ˜¯å¦ä½¿ç”¨äº«å…ƒæ¨¡å¼
 
 };

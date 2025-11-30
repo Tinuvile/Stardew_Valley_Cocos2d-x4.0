@@ -4,27 +4,27 @@
 #include "Inventory.h"  
 #include "AppDelegate.h"
 #include "GameStateObserver.h"
-class mini_bag : public cocos2d::Layer, public GameStateObserver {
+class mini_bag : public cocos2d::Layer , public GameStateObserver {
 public:
-    virtual bool init ( Inventory* inventory);
-    virtual ~mini_bag();
+    virtual bool init ( Inventory* inventory );
+    virtual ~mini_bag ();
 
-    static mini_bag* create ( Inventory* inventory);
+    static mini_bag* create ( Inventory* inventory );
 
     void backgroundcreate ();
 
     void Itemblock ( Inventory* inventory );
 
     void updateDisplay (); // 更新显示内容  
-    
+
     // Observer接口实现
-    virtual void onInventoryStateChanged() override;
+    virtual void onInventoryStateChanged () override;
 
     int getSelectedSlot () { return _selectedSlot; }
 
     void getSelectBack ();
 
-    std::shared_ptr<Item> getSelectedItem();
+    std::shared_ptr<Item> getSelectedItem ();
 
 private:
     Inventory* _inventory; // 指向 Inventory 实例的指针  
@@ -37,7 +37,7 @@ private:
 
     bool isClick = false;  // 标志，表示是否被点击
 
-	bool is_key_e_pressed = false; // 标志，表示是否按下了 E 键
+    bool is_key_e_pressed = false; // 标志，表示是否按下了 E 键
 
     cocos2d::Sprite* currentItemSprite = nullptr; // 标识当前选择的物品
 

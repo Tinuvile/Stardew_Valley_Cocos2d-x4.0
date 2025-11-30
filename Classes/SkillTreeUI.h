@@ -1,31 +1,20 @@
 #pragma once
-//SkillTreeUI.h
-//人物技能树界面
-#include "cocos2d.h"  
+// SkillTreeUI.h - 鎶�鑳芥爲鐣岄潰锛堜娇鐢ㄥ缓閫犺�呮ā寮忛噸鏋勶級
+#include "cocos2d.h"
 #include "AppDelegate.h"
 #include "SkillTree.h"
+#include "UI/ClosableUI.h"
 
-class SkillTreeUI : public cocos2d::Layer {
+class SkillTreeUI : public ClosableUI {
 public:
-    virtual bool init ( std::string sceneName );
-
-    static SkillTreeUI* create ( std::string sceneName );
-
-
+    virtual bool init(std::string sceneName);
+    static SkillTreeUI* create(std::string sceneName);
 
 private:
+    void setupUI();
+    void setupSkillDisplay();
+    void displaySkillRow(int whichSkill, const cocos2d::Vec2& position, float gap);
 
-    NpcRelationship* NPC_RELATIONSHIP;
-
-    void close ();
-
-    void SkillDisplay ( int whichSkill , Vec2 Pos , float gap );
-
-    void backgroundcreate ();
-
-    void Buttons_switching ();
-
-    void updateCoordinate ( float& x , float& y );
-
-    std::string SceneName;
+    std::string m_sceneName;
+    NpcRelationship* m_npcRelationship;
 };

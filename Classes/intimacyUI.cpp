@@ -1,395 +1,257 @@
-// InventoryUI.cpp  
-#include "intimacyUI.h"  
-#include "ui/CocosGUI.h"  
-#include "Item.h"  
+// intimacyUI.cpp - äº²å¯†åº¦ç•Œé¢å®ç°ï¼ˆä½¿ç”¨å»ºé€ è€…æ¨¡å¼é‡æ„ï¼‰
+#include "intimacyUI.h"
+#include "ui/CocosGUI.h"
+#include "UI/Core/UITheme.h"
+#include "UI/Core/UIConfig.h"
+#include "UI/Builders/SpriteBuilder.h"
+#include "UI/Builders/LabelBuilder.h"
+#include "UI/Components/DarkOverlay.h"
+#include "UI/Components/TabSwitcher.h"
 #include "quitUI.h"
-#include <Marry.h>
+#include "Marry.h"
 
 const int characternum = 5;
 
 USING_NS_CC;
 
-static void problemLoading ( const char* filename )
-{
-    printf ( "Error while loading: %s\n" , filename );
-    printf ( "Depending on how you compiled you might have to add 'Resources/' in front of filenames in CreateCharacterScene.cpp\n" );
+intimacyUI* intimacyUI::create(std::string sceneName) {
+    intimacyUI* ret = new intimacyUI();
+    if (ret && ret->init(sceneName)) {
+        ret->autorelease();
+        return ret;
+    }
+    CC_SAFE_DELETE(ret);
+    return nullptr;
 }
 
-void intimacyUI::updateCoordinate ( float& x , float& y ) {
-    Vec2 position = player1->getPosition ();
-    float  Leftboundary = -10000.0f , rightboundary = 10000.0f , upperboundary = 10000.0f , lowerboundary = 10000.0f;
-    if (SceneName == "Town") {
-        Leftboundary = -170.0f;
-        rightboundary = 1773.0f;
-        upperboundary = 1498.0f;
-        lowerboundary = -222.0f;
-    }
-    else if (SceneName == "Cave") {
-        Leftboundary =  786.0f;
-        rightboundary = 817.0f;
-        upperboundary = 808.0f;
-        lowerboundary = 460.0f;
-    }
-    else if (SceneName == "Beach") {
-        Leftboundary = -315.0f;
-        rightboundary = 20000.0f;
-        upperboundary = 920.0f;
-        lowerboundary = 360.0f;
-    }
-    else if (SceneName == "Forest") {
-        Leftboundary = -600.0f;
-        rightboundary = 2197.0f;
-        upperboundary = 2200.0f;
-        lowerboundary = -850.0f;
-    }
-    else if (SceneName == "farm") {
-        Leftboundary = 637.0f;
-        rightboundary = 960.0f;
-        upperboundary = 777.0f;
-        lowerboundary = 500.0f;
-    }
-    else if (SceneName == "Barn") {
-        Leftboundary = 805.0f;
-        rightboundary = 805.0f;
-        upperboundary = 569.0f;
-        lowerboundary = 569.0f;
-    }
-    else if (SceneName == "Myhouse") {
-        Leftboundary = 800.0f;
-        rightboundary = 800.0f;
-        upperboundary = 580.0f;
-        lowerboundary = 580.0f;
-    }
-    if (x <= Leftboundary) {
-        x = Leftboundary;
-    }
-    else if (x >= rightboundary){
-        x = rightboundary;
-    }
-    else {
-        x = position.x;
-    }
-
-    if (y >= upperboundary) {
-        y = upperboundary;
-    }
-    else if (y <= lowerboundary) {
-        y = lowerboundary;
-    }
-    else {
-        y = position.y;
-    }
-}
-
-void intimacyUI::backgroundcreate () {
-    Vec2 position = player1->getPosition ();
-    float currentx = position.x , currenty = position.y;
-    updateCoordinate ( currentx , currenty );
-    auto visibleSize = Director::getInstance ()->getVisibleSize ();
-    // ´´½¨Ò»¸ö°ëÍ¸Ã÷µÄºÚÉ«ÕÚÕÖ
-    auto darkLayer = cocos2d::LayerColor::create ( cocos2d::Color4B ( 0 , 0 , 0 , 120 ) , 5 * visibleSize.width , 5 * visibleSize.height );  // ºÚÉ«£¬Í¸Ã÷¶ÈÎª120
-    darkLayer->setPosition ( Vec2 ( currentx , currenty ) - visibleSize / 2 );// ÉèÖÃÕÚÕÖ²ãµÄÎ»ÖÃ
-    this->addChild ( darkLayer , 0 );
-    //´ó¿ò¼Ü
-    auto IntimacyFace = Sprite::create ( "UIresource/qinmidu/intimacyDisplay.png" );
-    IntimacyFace->setTag ( 101 );
-    if (IntimacyFace == nullptr)
-    {
-        problemLoading ( "'intimacyDisplay.png'" );
-    }
-    else
-    {
-        // »ñÈ¡Ô­Ê¼Í¼Æ¬µÄ¿í¸ß
-        float originalWidth = IntimacyFace->getContentSize ().width;
-        float originalHeight = IntimacyFace->getContentSize ().height;
-        // ¸ù¾İÆÁÄ»¿í¶ÈºÍÍ¼Æ¬Ô­Ê¼¿í¸ß¼ÆËã±ÈÀı
-        float scaleX = visibleSize.width / originalWidth;
-        float scaleY = visibleSize.height / originalHeight;
-        // Ñ¡Ôñ×îĞ¡µÄËõ·Å±ÈÀı£¬ÒÔ±£Ö¤Í¼Æ¬ÍêÈ«ÏÔÊ¾ÔÚÆÁÄ»ÉÏÇÒ²»±äĞÎ
-        float scale = std::min ( scaleX , scaleY );
-        IntimacyFace->setScale ( scale / 1.5 );
-        IntimacyFace->setPosition ( Vec2 ( currentx , currenty + 13 ) );
-       
-        this->addChild ( IntimacyFace , 1 );
-        for (int i = 0; i < characternum; i++) {
-            auto oneframe = Sprite::create ( "UIresource/qinmidu/weixuanzhong.png" );
-            oneframe->setTag ( i + 1 );
-            float originalframeHeight = oneframe->getContentSize ().height;
-            oneframe->setScale ( scale / 1.5 );
-            oneframe->setPosition ( currentx - 2 , currenty + 280 - i * (originalframeHeight * scale / 1.5 + 12) );
-            oneframe->setTag ( i + 1 );
-            this->addChild ( oneframe , 2 );
-            auto listener = EventListenerMouse::create ();
-            listener->onMouseMove = [this , oneframe]( EventMouse* event ) {
-                Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
-                mousePos = this->convertToNodeSpace ( mousePos );
-                if (oneframe->getBoundingBox ().containsPoint ( mousePos ))
-                    oneframe->setTexture ( "UIresource/qinmidu/xuanzhong.png" );
-                else
-                    oneframe->setTexture ( "UIresource/qinmidu/weixuanzhong.png" );
-                };
-            listener->onMouseDown = [this , oneframe ,i]( EventMouse* event ) {
-                std::vector<std::string> npcsName = { "Abigail" ,"Alex" ,"Caroline" ,"Elliott","Emily" };
-                std::string nowName = npcsName[i];
-                
-                Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
-                mousePos = this->convertToNodeSpace ( mousePos );
-                if (oneframe->getBoundingBox ().containsPoint ( mousePos ) && NPC_RELATIONSHIP->getRelationship ( "player" , nowName ) >= 70) {
-                    std::string nowScene = SceneName;
-                    this->removeFromParent ();
-                    Scene* currentScene = Director::getInstance ()->getRunningScene ();
-                    currentScene->addChild ( Marry::create ( nowScene , nowName ) , 20 );
-                }     
-                };
-            _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , oneframe );
-        }
-    }
-    if (Season == "Spring" || Season == "Autumn") {
-        characterInfo ( "Abigail" , "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty + visibleSize.height * 0.2215 ) );
-        characterInfo ( "Alex" , "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty + visibleSize.height * 0.1165 ) );
-        characterInfo ( "Caroline" , "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty + visibleSize.height * 0.0115 ) );
-        characterInfo ( "Elliott" , "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty - visibleSize.height * 0.0935 ) );
-        characterInfo ( "Emily" , "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty - visibleSize.height * 0.1985 ) );
-    }
-    else {
-        characterInfo ( "Abigail" , Season + "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty + visibleSize.height * 0.2215 ) );
-        characterInfo ( "Alex" , Season + "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty + visibleSize.height * 0.1165 ) );
-        characterInfo ( "Caroline" , Season + "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty + visibleSize.height * 0.0115 ) );
-        characterInfo ( "Elliott" , Season + "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty - visibleSize.height * 0.0935 ) );
-        characterInfo ( "Emily" , Season + "Normal" , Vec2 ( currentx - visibleSize.width * 0.27 , currenty - visibleSize.height * 0.1985 ) );
-    }
-
-    intimacyDisplay ( "Abigail" , Vec2 ( currentx - visibleSize.width * 0.09 , currenty + visibleSize.height * 0.217 ) );
-    intimacyDisplay ( "Alex" , Vec2 ( currentx - visibleSize.width * 0.09 , currenty + visibleSize.height * 0.112 ) );
-    intimacyDisplay ( "Caroline" , Vec2 ( currentx - visibleSize.width * 0.09 , currenty + visibleSize.height * 0.007 ) );
-    intimacyDisplay ( "Elliott" , Vec2 ( currentx - visibleSize.width * 0.09 , currenty - visibleSize.height * 0.098 ) );
-    intimacyDisplay ( "Emily" , Vec2 ( currentx - visibleSize.width * 0.09 , currenty - visibleSize.height * 0.203 ) );
-}
-
-void intimacyUI::characterInfo ( const string& name , const string& status , Vec2 Pos_photo) {
-    Vec2 position = player1->getPosition ();
-    float currentx = position.x , currenty = position.y;
-    updateCoordinate ( currentx , currenty );
-    auto visibleSize = Director::getInstance ()->getVisibleSize ();
-    //ÈËÎïÍ·Ïñ
-    std::string photo = getNPCportraits ( name , status );
-    auto characterPhoto = Sprite::create ( photo );
-    cocos2d::log("%s", photo.c_str());
-    if (characterPhoto == NULL) {
-        cocos2d::log("failed");
-    }
-    else {
-        float originalWidth = characterPhoto->getContentSize().width;
-        float originalHeight = characterPhoto->getContentSize().height;
-        float scaleX = visibleSize.width / originalWidth;
-        float scaleY = visibleSize.height / originalHeight;
-        float scale = std::min(scaleX, scaleY);
-        characterPhoto->setScale(scale * 0.1);
-        characterPhoto->setPosition(Pos_photo);
-        this->addChild(characterPhoto, 2);
-    }
-    //ĞÕÃû
-    auto NameLabel = Label::createWithSystemFont ( name , "fonts/Comic Sans MS.ttf" , 35 );
-    NameLabel->setTextColor ( cocos2d::Color4B::BLACK );
-    NameLabel->setPosition ( Vec2 ( Pos_photo.x + visibleSize.width * 0.1 , Pos_photo.y ) );
-    this->addChild ( NameLabel , 2 );
-}
-
-void intimacyUI::intimacyDisplay ( const string& name , Vec2 Pos ) {
-    int fullheart_num = NPC_RELATIONSHIP->getRelationship ( "player" , name ) / 10;
-    int emptyheart_num = 10 - fullheart_num;
-    auto visibleSize = Director::getInstance ()->getVisibleSize ();
-
-    //°®ĞÄÏÔÊ¾
-    for (int i = 0; i < 10; i++) {
-        if (fullheart_num > 0)
-        {
-            auto fullHeart = Sprite::create ( "UIresource/qinmidu/fullheart.png" );
-            if (fullHeart == nullptr)
-            {
-                problemLoading ( "'fullheart.png'" );
-            }
-            else
-            {
-                fullHeart->setScale ( 1.2f );
-                fullHeart->setPosition ( Vec2 ( Pos.x + 32 * 1600 / 884 / 1.5 * i , Pos.y ) );
-                this->addChild ( fullHeart , 3 );
-            }
-            fullheart_num--;
-            continue;
-        }
-        if (emptyheart_num > 0)
-        {
-            auto emptyheart = Sprite::create ( "UIresource/qinmidu/emptyheart.png" );
-            if (emptyheart == nullptr)
-            {
-                problemLoading ( "'emptyheart.png'" );
-            }
-            else
-            {
-                emptyheart->setScale ( 1.2f );
-                emptyheart->setPosition ( Vec2 ( Pos.x + 32 * 1600 / 884 / 1.5 * i , Pos.y ) );
-                this->addChild ( emptyheart , 3 );
-            }
-            emptyheart_num--;
-            continue;
-        }
-    }
-
-    //ÊÇ·ñËµ¹ı»°ÏÔÊ¾
-    if (NPC_RELATIONSHIP->getRelationship ( "player" , name ) != 0)
-    {
-        auto IsTalked = Sprite::create ( "UIresource/qinmidu/is.png" );
-        if (IsTalked == nullptr)
-        {
-            problemLoading ( "'is.png'" );
-        }
-        else
-        {
-            float originalWidth = IsTalked->getContentSize ().width;
-            float originalHeight = IsTalked->getContentSize ().height;
-            float scaleX = visibleSize.width / originalWidth;
-            float scaleY = visibleSize.height / originalHeight;
-            // Ñ¡Ôñ×îĞ¡µÄËõ·Å±ÈÀı£¬ÒÔ±£Ö¤Í¼Æ¬ÍêÈ«ÏÔÊ¾ÔÚÆÁÄ»ÉÏÇÒ²»±äĞÎ
-            float scale = std::min ( scaleX , scaleY );
-            IsTalked->setScale ( scale * 0.026 );
-            IsTalked->setPosition ( Vec2 ( Pos.x + visibleSize.width * 0.374 , Pos.y - 27 ) );
-
-            this->addChild ( IsTalked , 3 );
-        }
-    }
-
-    //ËÍÀñÏÔÊ¾
-    int GiftTime = 0;
-    CCLOG ( "%d" , NPC_RELATIONSHIP->NpcGiftTIme ( name ) );
-    if (NPC_RELATIONSHIP->NpcGiftTIme ( name ) > 0)
-    {
-        if (NPC_RELATIONSHIP->NpcGiftTIme ( name ) >= 2) {
-            GiftTime = 2;
-        }
-        else
-            GiftTime = 1;
-        for (int i = 0; i < GiftTime; i++)
-        {
-            auto IsGifted = Sprite::create ( "UIresource/qinmidu/is.png" );
-            if (IsGifted == nullptr)
-            {
-                problemLoading ( "'is.png'" );
-            }
-            else
-            {
-                float originalWidth = IsGifted->getContentSize ().width;
-                float originalHeight = IsGifted->getContentSize ().height;
-                float scaleX = visibleSize.width / originalWidth;
-                float scaleY = visibleSize.height / originalHeight;
-                // Ñ¡Ôñ×îĞ¡µÄËõ·Å±ÈÀı£¬ÒÔ±£Ö¤Í¼Æ¬ÍêÈ«ÏÔÊ¾ÔÚÆÁÄ»ÉÏÇÒ²»±äĞÎ
-                float scale = std::min ( scaleX , scaleY );
-                IsGifted->setScale ( scale * 0.026 );
-                IsGifted->setPosition ( Vec2 ( Pos.x + visibleSize.width * 0.271 + i * 50.0f , Pos.y - 27 ) );
-
-                this->addChild ( IsGifted , 3 );
-            }
-        }
-    }
-}
-
-void intimacyUI::Buttons_switching () {
-    Vec2 position = player1->getPosition ();
-    float currentx = position.x , currenty = position.y;
-    updateCoordinate ( currentx , currenty );
-    auto visibleSize = Director::getInstance ()->getVisibleSize ();
-    //Í¼±êÏÔÊ¾
-    auto bagkey = Sprite::create ( "UIresource/beibao/bagkey.png" );
-    auto Skillkey = Sprite::create ( "UIresource/beibao/Skillkey.png" );
-    auto intimacykey = Sprite::create ( "UIresource/beibao/intimacykey.png" );
-    auto quitkey = Sprite::create ( "UIresource/beibao/quit.png" );
-    if (bagkey == nullptr)
-    {
-        problemLoading ( "'bagkey.png'" );
-    }
-    else
-    {
-        // »ñÈ¡Ô­Ê¼Í¼Æ¬µÄ¿í¸ß
-        float originalWidth = bagkey->getContentSize ().width;
-        float originalHeight = bagkey->getContentSize ().height;
-        // ¸ù¾İÆÁÄ»¿í¶ÈºÍÍ¼Æ¬Ô­Ê¼¿í¸ß¼ÆËã±ÈÀı
-        float scaleX = visibleSize.width / originalWidth;
-        float scaleY = visibleSize.height / originalHeight;
-        // Ñ¡Ôñ×îĞ¡µÄËõ·Å±ÈÀı£¬ÒÔ±£Ö¤Í¼Æ¬ÍêÈ«ÏÔÊ¾ÔÚÆÁÄ»ÉÏÇÒ²»±äĞÎ
-        float scale = std::min ( scaleX , scaleY );
-        bagkey->setScale ( scale / 16.5 );
-        bagkey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.25 , currenty + visibleSize.height * 0.315 ) );//0.305ÊÇÑ¡ÖĞÊ±Î»ÖÃ
-        Skillkey->setScale ( scale / 16.5 );
-        Skillkey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.19 , currenty + visibleSize.height * 0.315 ) );//0.315ÊÇÎ´Ñ¡ÖĞÊ±Î»ÖÃ
-        intimacykey->setScale ( scale / 16.5 );
-        intimacykey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.13 , currenty + visibleSize.height * 0.305 ) );
-        quitkey->setScale ( scale / 16.5 );
-        quitkey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.07 , currenty + visibleSize.height * 0.315 ) );
-        this->addChild ( bagkey , 2 );
-        this->addChild ( Skillkey , 2 );
-        this->addChild ( intimacykey , 2 );
-        this->addChild ( quitkey , 2 );
-    }
-
-    //¶¯»­ÒÔ¼°ÇĞ»»Layer
-    auto listener = EventListenerMouse::create ();
-    listener->onMouseDown = [this , bagkey , Skillkey , intimacykey , quitkey]( EventMouse* event ) {
-        Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
-        mousePos = this->convertToNodeSpace ( mousePos );
-        //CCLOG ( "X:%f,Y:%f" , event->getCursorX () , event->getCursorY () );
-        if (bagkey->getBoundingBox ().containsPoint ( mousePos )) {
-            // ÒÆ³ıµ±Ç°µÄLayer
-            std::string nowScene = SceneName;
-            this->removeFromParent ();
-            Director::getInstance ()->getRunningScene ()->addChild ( InventoryUI::create ( inventory , nowScene ) , 20 );
-        }
-        else if (Skillkey->getBoundingBox ().containsPoint ( mousePos )) {
-            std::string nowScene = SceneName;
-            this->removeFromParent ();
-            Director::getInstance ()->getRunningScene ()->addChild ( SkillTreeUI::create ( nowScene ) , 20 );
-        }
-        else if (intimacykey->getBoundingBox ().containsPoint ( mousePos )) {
-        }
-        else if (quitkey->getBoundingBox ().containsPoint ( mousePos )) {
-            std::string nowScene = SceneName;
-            this->removeFromParent ();
-            Director::getInstance ()->getRunningScene ()->addChild ( quitUI::create ( nowScene ) , 20 );
-        }
-        };
-    _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , this );
-}
-
-void intimacyUI::close () {
-    // ÉèÖÃ¼üÅÌ¼àÌıÆ÷  
-    auto listenerClose = EventListenerKeyboard::create ();
-    listenerClose->onKeyPressed = [this]( EventKeyboard::KeyCode keyCode , Event* event ) {
-        if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
-            this->removeFromParent ();
-        }
-        };
-    // ½«¼àÌıÆ÷Ìí¼Óµ½ÊÂ¼ş·Ö·¢Æ÷ÖĞ  
-    _eventDispatcher->addEventListenerWithSceneGraphPriority ( listenerClose , this );
-}
-
-bool intimacyUI::init ( std::string sceneName ) {
-    if (!Layer::init ()) {
+bool intimacyUI::init(std::string sceneName) {
+    if (!ClosableUI::init()) {
         return false;
     }
-    SceneName = sceneName;
-    NPC_RELATIONSHIP = npc_relationship;
-    backgroundcreate ();
-    Buttons_switching ();
-    close ();
+
+    m_sceneName = sceneName;
+    m_npcRelationship = npc_relationship;  // ä½¿ç”¨å…¨å±€å˜é‡
+
+    setupUI();
+    setupCharacterDisplay();
+    setupEscCloseListener();  // ä½¿ç”¨åŸºç±»çš„ESCå…³é—­åŠŸèƒ½
+
     return true;
 }
 
-intimacyUI* intimacyUI::create ( std::string sceneName ) {
-    intimacyUI* ret = new intimacyUI ();
-    if (ret && ret->init ( sceneName )) {
-        ret->autorelease ();
-        return ret;
+void intimacyUI::setupUI() {
+    auto theme = UITheme::getInstance();
+    auto config = UIConfig::getInstance();
+
+    // è·å–ç©å®¶ä½ç½®å¹¶è°ƒæ•´åæ ‡
+    Vec2 playerPos = player1->getPosition();
+    Vec2 adjustedPos = config->adjustCoordinate(m_sceneName, playerPos);
+    adjustedPos.y += 13;
+    // 1. åˆ›å»ºåŠé€æ˜é®ç½©
+    auto darkOverlay = DarkOverlay::create(m_sceneName);
+    this->addChild(darkOverlay, 0);
+
+    // 2. åˆ›å»ºèƒŒæ™¯é¢æ¿
+    auto background = SpriteBuilder()
+        .setTexture("UIresource/qinmidu/intimacyDisplay.png")
+        .setAutoScale(1.5f)
+        .setPosition(adjustedPos)
+        .setZOrder(1)
+        .setTag(101)
+        .addToParent(this)
+        .build();
+
+    // 3. åˆ›å»ºæ ‡ç­¾åˆ‡æ¢å™¨
+    auto tabSwitcher = TabSwitcher::create(m_sceneName, TabSwitcher::TabType::INTIMACY);
+    this->addChild(tabSwitcher, 2);
+
+  }
+
+void intimacyUI::setupCharacterDisplay() {
+    auto theme = UITheme::getInstance();
+    auto config = UIConfig::getInstance();
+    Size visibleSize = theme->getVisibleSize();
+
+    // è·å–è°ƒæ•´åçš„ä½ç½®
+    Vec2 playerPos = player1->getPosition();
+    Vec2 adjustedPos = config->adjustCoordinate(m_sceneName, playerPos);
+
+    // å®šä¹‰5ä¸ªè§’è‰²çš„ä¿¡æ¯
+    struct CharacterInfo {
+        std::string name;
+        std::string status;
+        float yOffset;
+    };
+
+    CharacterInfo characters[characternum] = {
+        {"Abigail", "Normal", 0.2215f},
+        {"Alex", "Normal", 0.1165f},
+        {"Elliott", "Normal", 0.0115f},
+        {"Penny", "Normal", -0.0935f},
+        {"Sam", "Normal", -0.1985f}
+    };
+
+    // æ˜¾ç¤ºæ¯ä¸ªè§’è‰²
+    for (int i = 0; i < characternum; i++) {
+        Vec2 photoPos = Vec2(
+            adjustedPos.x - visibleSize.width * 0.27f,
+            adjustedPos.y + visibleSize.height * characters[i].yOffset
+        );
+
+        Vec2 intimacyPos = Vec2(
+            adjustedPos.x - visibleSize.width * 0.09f,
+            adjustedPos.y + visibleSize.height * characters[i].yOffset
+        );
+
+        // åˆ›å»ºæ‚¬åœæ¡†
+        Vec2 framePos = Vec2(
+            adjustedPos.x,
+            adjustedPos.y + 280 - i * (120 * 1.0f + 12)
+        );
+
+        // åˆ›å»ºæ‚¬åœæ¡†
+        auto oneframe = SpriteBuilder()
+            .setTexture("UIresource/qinmidu/weixuanzhong.png")
+            .setAutoScale(1.56f)
+            .setPosition(framePos)
+            .setZOrder(2)
+            .setTag(i + 1)
+            .addToParent(this)
+            .build();
+
+        // æ·»åŠ é¼ æ ‡æ‚¬åœäº‹ä»¶ç›‘å¬å™¨
+        setupHoverListener(oneframe, i);
+
+        // æ˜¾ç¤ºè§’è‰²ä¿¡æ¯
+        displayCharacter(characters[i].name, characters[i].status, photoPos, intimacyPos);
     }
-    CC_SAFE_DELETE ( ret );
-    return nullptr;
 }
+
+void intimacyUI::displayCharacter(const std::string& name, const std::string& status,
+                                  const Vec2& photoPos, const Vec2& intimacyPos) {
+    auto theme = UITheme::getInstance();
+
+    // 1. æ˜¾ç¤ºè§’è‰²å¤´åƒ
+    std::string photoPath = "UIresource/qinmidu/" + name + ".png";
+    SpriteBuilder()
+        .setTexture(photoPath)
+        .setScale(1.2f)
+        .setPosition(photoPos)
+        .setZOrder(2)
+        .addToParent(this)
+        .build();
+
+    // 2. æ˜¾ç¤ºè§’è‰²åç§°
+    auto nameLabel = Label::createWithSystemFont(name, "fonts/Comic Sans MS.ttf", 35);
+    if (nameLabel) {
+        nameLabel->setTextColor(Color4B::BLACK);
+        nameLabel->setPosition(Vec2(photoPos.x + 100, photoPos.y));
+        this->addChild(nameLabel, 2);
+    }
+
+    // 3. æ˜¾ç¤ºäº²å¯†åº¦çˆ±å¿ƒ
+    displayIntimacyHearts(name, intimacyPos);
+}
+
+void intimacyUI::displayIntimacyHearts(const std::string& name, const Vec2& position) {
+    auto theme = UITheme::getInstance();
+    Size visibleSize = theme->getVisibleSize();
+
+    // è·å–å½“å‰è§’è‰²çš„äº²å¯†åº¦ç­‰çº§
+    int fullHearts = m_npcRelationship->getRelationship("player", name) / 10;
+    int emptyHearts = 10 - fullHearts;
+
+    // è®¡ç®—çˆ±å¿ƒæ˜¾ç¤ºçš„èµ·å§‹ä½ç½® - ç¡®ä¿æ‰€æœ‰è§’è‰²éƒ½ä½¿ç”¨ç›¸åŒçš„åŸºå‡†çº¿
+    float startX = position.x;
+    float baseY = position.y;  // ä½¿ç”¨ä¼ å…¥çš„åŸºå‡†Yåæ ‡ï¼Œä¸å†å—è§’è‰²yOffsetå½±å“
+
+    // æ˜¾ç¤º10é¢—çˆ±å¿ƒ
+    for (int i = 0; i < 10; i++) {
+        float heartX = startX + (i * 32.0f * 1600.0f / 884.0f / 1.5f);  // ä½¿ç”¨å¤‡ä»½æ–‡ä»¶ä¸­çš„ç²¾ç¡®é—´è·
+
+        if (fullHearts > 0) {
+            // æ˜¾ç¤ºæ»¡å¿ƒ
+            SpriteBuilder()
+                .setTexture("UIresource/qinmidu/fullheart.png")
+                .setScale(1.2f)
+                .setPosition(heartX, baseY)
+                .setZOrder(3)
+                .addToParent(this)
+                .build();
+            fullHearts--;
+        }
+        else if (emptyHearts > 0) {
+            // æ˜¾ç¤ºç©ºå¿ƒ
+            SpriteBuilder()
+                .setTexture("UIresource/qinmidu/emptyheart.png")
+                .setScale(1.2f)
+                .setPosition(heartX, baseY)
+                .setZOrder(3)
+                .addToParent(this)
+                .build();
+            emptyHearts--;
+        }
+    }
+
+    // æ˜¾ç¤ºæ˜¯å¦äº¤è°ˆæ ‡è®°
+    if (m_npcRelationship->getRelationship("player", name) != 0) {
+        SpriteBuilder()
+            .setTexture("UIresource/qinmidu/is.png")
+            .setAutoScale(0.026f)
+            .setPosition(Vec2(position.x + visibleSize.width * 0.374f, position.y - 27))
+            .setZOrder(3)
+            .addToParent(this)
+            .build();
+    }
+
+    // æ˜¾ç¤ºç¤¼ç‰©æ ‡è®°
+    int GiftTime = 0;
+    if (m_npcRelationship->NpcGiftTIme(name) > 0) {
+        if (m_npcRelationship->NpcGiftTIme(name) >= 2) {
+            GiftTime = 2;
+        }
+        else {
+            GiftTime = 1;
+        }
+        for (int i = 0; i < GiftTime; i++) {
+            SpriteBuilder()
+                .setTexture("UIresource/qinmidu/is.png")
+                .setAutoScale(0.026f)
+                .setPosition(Vec2(position.x + visibleSize.width * 0.271f + i * 50.0f, position.y - 27))
+                .setZOrder(3)
+                .addToParent(this)
+                .build();
+        }
+    }
+}
+
+void intimacyUI::setupHoverListener(cocos2d::Sprite* oneframe, int characterIndex) {
+    auto listener = EventListenerMouse::create();
+    listener->onMouseMove = [this, oneframe](EventMouse* event) {
+        Vec2 mousePos = Vec2(event->getCursorX(), event->getCursorY());
+        mousePos = this->convertToNodeSpace(mousePos);
+        if (oneframe->getBoundingBox().containsPoint(mousePos))
+            oneframe->setTexture("UIresource/qinmidu/xuanzhong.png");
+        else
+            oneframe->setTexture("UIresource/qinmidu/weixuanzhong.png");
+    };
+
+    listener->onMouseDown = [this, oneframe, characterIndex](EventMouse* event) {
+        std::vector<std::string> npcsName = {"Abigail", "Alex", "Elliott", "Penny", "Sam"};
+        std::string nowName = npcsName[characterIndex];
+
+        Vec2 mousePos = Vec2(event->getCursorX(), event->getCursorY());
+        mousePos = this->convertToNodeSpace(mousePos);
+        if (oneframe->getBoundingBox().containsPoint(mousePos) &&
+            m_npcRelationship->getRelationship("player", nowName) >= 70) {
+            std::string nowScene = m_sceneName;
+            this->removeFromParent();
+            Scene* currentScene = Director::getInstance()->getRunningScene();
+            currentScene->addChild(Marry::create(nowScene, nowName), 20);
+        }
+    };
+
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, oneframe);
+}
+
 

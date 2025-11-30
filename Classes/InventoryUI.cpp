@@ -1,399 +1,264 @@
-// InventoryUI.cpp  
-#include "InventoryUI.h"  
-#include "ui/CocosGUI.h"  
-#include "Item.h"  
-#include "AppDelegate.h"
-#include "quitUI.h"
+// InventoryUI.cpp - èƒŒåŒ…ç•Œé¢å®ç°ï¼ˆä½¿ç”¨å»ºé€ è€…æ¨¡å¼é‡æ„ï¼‰
+#include "InventoryUI.h"
+#include "ui/CocosGUI.h"
+#include "Item.h"
+#include "UI/Core/UITheme.h"
+#include "UI/Core/UIConfig.h"
+#include "UI/Builders/SpriteBuilder.h"
+#include "UI/Builders/LabelBuilder.h"
+#include "UI/Components/DarkOverlay.h"
+#include "UI/Components/TabSwitcher.h"
 
 USING_NS_CC;
 
-
-static void problemLoading ( const char* filename )
-{
-    printf ( "Error while loading: %s\n" , filename );
-    printf ( "Depending on how you compiled you might have to add 'Resources/' in front of filenames in CreateCharacterScene.cpp\n" );
+InventoryUI* InventoryUI::create(Inventory* inventory, std::string sceneName) {
+    InventoryUI* ret = new InventoryUI();
+    if (ret && ret->init(inventory, sceneName)) {
+        ret->autorelease();
+        return ret;
+    }
+    CC_SAFE_DELETE(ret);
+    return nullptr;
 }
 
-void InventoryUI::updateCoordinate ( float &x , float &y ) {
-    Vec2 position = player1->getPosition ();
-    float  Leftboundary = -10000.0f , rightboundary = 10000.0f , upperboundary = 10000.0f , lowerboundary = 10000.0f;
-    if (SceneName == "Town") {
-        Leftboundary = -170.0f;
-        rightboundary = 1773.0f;
-        upperboundary = 1498.0f;
-        lowerboundary = -222.0f;
-    }
-    else if (SceneName == "Cave") {
-        Leftboundary = 786.0f;
-        rightboundary = 817.0f;
-        upperboundary = 808.0f;
-        lowerboundary = 460.0f;
-    }
-    else if (SceneName == "Beach") {
-        Leftboundary = -315.0f;
-        rightboundary = 20000.0f;
-        upperboundary = 920.0f;
-        lowerboundary = 360.0f;
-    }
-    else if (SceneName == "Forest") {
-        Leftboundary = -600.0f;
-        rightboundary = 2197.0f;
-        upperboundary = 2200.0f;
-        lowerboundary = -850.0f;
-    }
-    else if (SceneName == "farm") {
-        Leftboundary = 637.0f;
-        rightboundary = 960.0f;
-        upperboundary = 777.0f;
-        lowerboundary = 500.0f;
-    }
-    else if (SceneName == "Barn") {
-        Leftboundary = 805.0f;
-        rightboundary = 805.0f;
-        upperboundary = 569.0f;
-        lowerboundary = 569.0f;
-    }
-    else if (SceneName == "Myhouse") {
-        Leftboundary = 800.0f;
-        rightboundary = 800.0f;
-        upperboundary = 580.0f;
-        lowerboundary = 580.0f;
-    }
-    if (x <= Leftboundary) {
-        x = Leftboundary;
-    }
-    else if (x >= rightboundary) {
-        x = rightboundary;
-    }
-    else {
-        x = position.x;
-    }
-
-    if (y >= upperboundary) {
-        y = upperboundary;
-    }
-    else if (y <= lowerboundary) {
-        y = lowerboundary;
-    }
-    else {
-        y = position.y;
-    }
-    CCLOG ( "%f  %f" , x , y );
-}
-
-void InventoryUI::backgroundcreate(){
-    Vec2 position = player1->getPosition ();
-    float currentx = position.x , currenty = position.y;
-    updateCoordinate ( currentx , currenty );   
-    // ´´½¨Ò»¸ö°ëÍ¸Ã÷µÄºÚÉ«ÕÚÕÖ
-    auto visibleSize = Director::getInstance ()->getVisibleSize ();
-    auto darkLayer = cocos2d::LayerColor::create ( cocos2d::Color4B ( 0 , 0 , 0 , 120 ) , 5 * visibleSize.width , 5 * visibleSize.height );  // ºÚÉ«£¬Í¸Ã÷¶ÈÎª120
-    darkLayer->setPosition ( Vec2 ( currentx , currenty ) - visibleSize );// ÉèÖÃÕÚÕÖ²ãµÄÎ»ÖÃ
-    this->addChild ( darkLayer , 0 );
-    auto bag = Sprite::create ( "UIresource/beibao/newbag2.png" );
-    bag->setTag ( 101 );
-    if (bag == nullptr)
-    {
-        problemLoading ( "'newbag2.png'" );
-    }
-    else
-    {
-        // »ñÈ¡Ô­Ê¼Í¼Æ¬µÄ¿í¸ß
-        float originalWidth = bag->getContentSize ().width;
-        float originalHeight = bag->getContentSize ().height;
-        // ¸ù¾İÆÁÄ»¿í¶ÈºÍÍ¼Æ¬Ô­Ê¼¿í¸ß¼ÆËã±ÈÀı
-        float scaleX = visibleSize.width / originalWidth;
-        float scaleY = visibleSize.height / originalHeight;
-        // Ñ¡Ôñ×îĞ¡µÄËõ·Å±ÈÀı£¬ÒÔ±£Ö¤Í¼Æ¬ÍêÈ«ÏÔÊ¾ÔÚÆÁÄ»ÉÏÇÒ²»±äĞÎ
-        float scale = std::min ( scaleX , scaleY );
-        bag->setScale ( scale / 1.5 );
-        bag->setPosition ( Vec2 ( currentx , currenty ) );
-        this->addChild ( bag , 0 );
-    }
-
-    //ÈËÎïĞÎÏó
-    auto CharacterDisplay = Sprite::create ( "character1/player_down3.png" );
-    if (CharacterDisplay == nullptr)
-    {
-        problemLoading ( "'character1/player_down3.png'" );
-    }
-    else
-    {
-        float originalWidth = CharacterDisplay->getContentSize ().width;
-        float originalHeight = CharacterDisplay->getContentSize ().height;
-        float scaleX = visibleSize.width / originalWidth;
-        float scaleY = visibleSize.height / originalHeight;
-        float scale = std::min ( scaleX , scaleY );
-        CharacterDisplay->setScale ( scale / 7.5 );
-        CharacterDisplay->setPosition ( Vec2 ( currentx - visibleSize.width * 0.2 , currenty - visibleSize.height * 0.12 ) );
-        this->addChild ( CharacterDisplay , 2 );
-    }
-    auto NameDisplay = Label::createWithTTF ( protagonistName , "fonts/Marker Felt.ttf" , 45 );
-    NameDisplay->setTextColor ( Color4B::BLACK );
-    NameDisplay->setPosition ( Vec2 ( currentx + visibleSize.width * 0.1 , currenty - visibleSize.height * 0.07 ) );
-    this->addChild ( NameDisplay , 4 );
-
-    auto FarmNameDisplay = Label::createWithTTF ( FarmName , "fonts/Marker Felt.ttf" , 45 );
-    FarmNameDisplay->setTextColor ( Color4B::BLACK );
-    FarmNameDisplay->setPosition ( Vec2 ( currentx + visibleSize.width * 0.1 , currenty - visibleSize.height * 0.15 ) );
-    this->addChild ( FarmNameDisplay , 4 );
-}
-
-void InventoryUI::Itemblock ( Inventory* inventory ) {
-    Vec2 position = player1->getPosition ();
-    float currentx = position.x , currenty = position.y;
-    updateCoordinate ( currentx , currenty );
-    auto visibleSize = Director::getInstance ()->getVisibleSize ();
-    Vec2 origin = Director::getInstance ()->getVisibleOrigin ();
-    _inventory = inventory;
-    _selectedSlot = 1; // Ä¬ÈÏÑ¡ÖĞµÚÒ»¸ö²ÛÎ»  
-
-
-    // ³õÊ¼»¯ÎïÆ·²Û Sprite 
-    for (int m = 0; m < 3; m++)
-    {
-        for (int i = 0; i < kRowSize; ++i) {
-            auto slot = Sprite::create ( "UIresource/beibao/itemblock.png" );
-            auto bag = getChildByTag ( 101 );
-            // »ñÈ¡Ô­Ê¼Í¼Æ¬µÄ¿í¸ß
-            float originalWidth = slot->getContentSize ().width;
-            float originalHeight = slot->getContentSize ().height;
-            // ¸ù¾İÆÁÄ»¿í¶ÈºÍÍ¼Æ¬Ô­Ê¼¿í¸ß¼ÆËã±ÈÀı
-            float scaleX = visibleSize.width / originalWidth;
-            float scaleY = visibleSize.height / originalHeight;
-            // Ñ¡Ôñ×îĞ¡µÄËõ·Å±ÈÀı£¬ÒÔ±£Ö¤Í¼Æ¬ÍêÈ«ÏÔÊ¾ÔÚÆÁÄ»ÉÏÇÒ²»±äĞÎ
-            float scale = std::min ( scaleX , scaleY );
-            slot->setScale ( scale / 16.5 );
-            float bagWidth = bag->getContentSize ().width;
-            float bagHeight = bag->getContentSize ().height;
-            slot->setPosition ( currentx - bagWidth * 0.545 + (originalWidth * scale / 16.5 + 5) * i , currenty + bagHeight * 1.73 / 3.643 - m * (originalHeight * scale / 16.5 + 10) ); // ¼ÆËã²ÛÎ»Î»ÖÃ  
-            slot->setTag ( i + 1 ); // ÉèÖÃ²ÛÎ»µÄ±êÇ©  
-            this->addChild ( slot , 2 );
-
-            _itemSlots.pushBack ( slot );
-
-        }
-    }
-}
-
-bool InventoryUI::init ( Inventory* inventory , std::string sceneName ) {
-    if (!Layer::init ()) {
+bool InventoryUI::init(Inventory* inventory, std::string sceneName) {
+    if (!ClosableUI::init()) {
         return false;
     }
 
-    SceneName = sceneName;
+    _inventory = inventory;
+    m_sceneName = sceneName;
+    _selectedSlot = 1;
 
-    backgroundcreate ();
-
-    Buttons_switching ();
-
-    Itemblock ( inventory );
-
-    auto visibleSize = Director::getInstance ()->getVisibleSize ();
-
-    updateDisplay (); // ¸üĞÂÏÔÊ¾ÄÚÈİ  
+    setupUI();
+    setupItemSlots();
+    setupEscCloseListener();  // ä½¿ç”¨åŸºç±»çš„ESCå…³é—­åŠŸèƒ½
+    updateDisplay(); // æ›´æ–°ç‰©å“æ˜¾ç¤º
 
     return true;
 }
 
-void InventoryUI::Buttons_switching () {
-    Vec2 position = player1->getPosition ();
-    float currentx = position.x , currenty = position.y;
-    updateCoordinate ( currentx , currenty );
-    auto visibleSize = Director::getInstance ()->getVisibleSize ();
-    //Í¼±êÏÔÊ¾
-    auto bagkey = Sprite::create ( "UIresource/beibao/bagkey.png" );
-    auto Skillkey = Sprite::create ( "UIresource/beibao/Skillkey.png" );
-    auto intimacykey = Sprite::create ( "UIresource/beibao/intimacykey.png" );
-    auto quitkey = Sprite::create ( "UIresource/beibao/quit.png" );
-    if (bagkey == nullptr)
-    {
-        problemLoading ( "'bagkey.png'" );
-    }
-    else
-    {
-        // »ñÈ¡Ô­Ê¼Í¼Æ¬µÄ¿í¸ß
-        float originalWidth = bagkey->getContentSize ().width;
-        float originalHeight = bagkey->getContentSize ().height;
-        // ¸ù¾İÆÁÄ»¿í¶ÈºÍÍ¼Æ¬Ô­Ê¼¿í¸ß¼ÆËã±ÈÀı
-        float scaleX = visibleSize.width / originalWidth;
-        float scaleY = visibleSize.height / originalHeight;
-        // Ñ¡Ôñ×îĞ¡µÄËõ·Å±ÈÀı£¬ÒÔ±£Ö¤Í¼Æ¬ÍêÈ«ÏÔÊ¾ÔÚÆÁÄ»ÉÏÇÒ²»±äĞÎ
-        float scale = std::min ( scaleX , scaleY );
-        bagkey->setScale ( scale / 16.5 );
-        bagkey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.25 , currenty + visibleSize.height * 0.305 ) );//0.305ÊÇÑ¡ÖĞÊ±Î»ÖÃ
-        Skillkey->setScale ( scale / 16.5 );
-        Skillkey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.19 , currenty + visibleSize.height * 0.315 ) );//0.315ÊÇÎ´Ñ¡ÖĞÊ±Î»ÖÃ
-        intimacykey->setScale ( scale / 16.5 );
-        intimacykey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.13 , currenty + visibleSize.height * 0.315 ) );
-        quitkey->setScale ( scale / 16.5 );
-        quitkey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.07 , currenty + visibleSize.height * 0.315 ) );
-        this->addChild ( bagkey , 2 );
-        this->addChild ( Skillkey , 2 );
-        this->addChild ( intimacykey , 2 );
-        this->addChild ( quitkey , 2 );
-    }
+void InventoryUI::setupUI() {
+    auto theme = UITheme::getInstance();
+    auto config = UIConfig::getInstance();
 
-    //¶¯»­ÒÔ¼°ÇĞ»»Layer
-    auto listener = EventListenerMouse::create ();
-    listener->onMouseDown = [this, bagkey, Skillkey,intimacykey , quitkey]( EventMouse* event ) {
-        Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
-        mousePos = this->convertToNodeSpace ( mousePos );
-        //CCLOG ( "X:%f,Y:%f" , event->getCursorX () , event->getCursorY () );
-        if (bagkey->getBoundingBox ().containsPoint ( mousePos )) {
-        }
-        else if (Skillkey->getBoundingBox ().containsPoint ( mousePos )) {
-            std::string nowScene = SceneName;
-            this->removeFromParent ();
-            Director::getInstance ()->getRunningScene ()->addChild ( SkillTreeUI::create ( nowScene ) , 20 );
-        }
-        else if (intimacykey->getBoundingBox ().containsPoint ( mousePos )) {
-            // ÒÆ³ıµ±Ç°µÄLayer
-            std::string nowScene = SceneName;
-            this->removeFromParent ();
-            Director::getInstance ()->getRunningScene ()->addChild ( intimacyUI::create ( nowScene ) , 20 );
-        }
-        else if (quitkey->getBoundingBox ().containsPoint ( mousePos )) {
-            std::string nowScene = SceneName;
-            this->removeFromParent ();
-            Director::getInstance ()->getRunningScene ()->addChild ( quitUI::create ( nowScene ) , 20 );
-        }
-        };
-    _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , this );
+    // è·å–ç©å®¶ä½ç½®å¹¶è°ƒæ•´åæ ‡
+    Vec2 playerPos = player1->getPosition();
+    Vec2 adjustedPos = config->adjustCoordinate(m_sceneName, playerPos);
+
+    // 1. åˆ›å»ºåŠé€æ˜é®ç½© - ä½¿ç”¨å¯å¤ç”¨ç»„ä»¶
+    auto darkOverlay = DarkOverlay::create(m_sceneName);
+    this->addChild(darkOverlay, 0);
+
+    // 2. åˆ›å»ºèƒŒæ™¯é¢æ¿ - ä½¿ç”¨SpriteBuilder
+    auto background = SpriteBuilder()
+        .setTexture(UIConfig::UIResources::BAG_BACKGROUND)
+        .setAutoScale(1.5f)
+        .setPosition(adjustedPos)
+        .setTag(101)
+        .addToParent(this)
+        .build();
+
+    // 3. åˆ›å»ºè§’è‰²æ˜¾ç¤º
+    auto characterDisplay = SpriteBuilder()
+        .setTexture("character1/player_down3.png")
+        .setAutoScale(7.5f)
+        .setPosition(adjustedPos.x - Director::getInstance()->getVisibleSize().width * 0.2f,
+                   adjustedPos.y - Director::getInstance()->getVisibleSize().height * 0.12f)
+        .setZOrder(2)
+        .addToParent(this)
+        .build();
+
+    // 4. åˆ›å»ºç©å®¶åç§°æ˜¾ç¤º
+    auto playerNameLabel = LabelBuilder()
+        .setText(protagonistName)
+        .setFont("fonts/Comic Sans MS.ttf", 45)
+        .setColor(Color3B::BLACK)
+        .setPosition(adjustedPos.x + Director::getInstance()->getVisibleSize().width * 0.1f,
+                   adjustedPos.y - Director::getInstance()->getVisibleSize().height * 0.07f)
+        .setZOrder(4)
+        .addToParent(this)
+        .build();
+
+    // 5. åˆ›å»ºå†œåœºåç§°æ˜¾ç¤º
+    auto farmNameLabel = LabelBuilder()
+        .setText(FarmName)
+        .setFont("fonts/Comic Sans MS.ttf", 45)
+        .setColor(Color3B::BLACK)
+        .setPosition(adjustedPos.x + Director::getInstance()->getVisibleSize().width * 0.1f,
+                   adjustedPos.y - Director::getInstance()->getVisibleSize().height * 0.15f)
+        .setZOrder(4)
+        .addToParent(this)
+        .build();
+
+    // 6. åˆ›å»ºç‰©å“ä¿¡æ¯æ˜¾ç¤º
+    _itemLabel = LabelBuilder()
+        .setText("No item selected.")
+        .setFont("fonts/Comic Sans MS.ttf", 20)
+        .setColor(Color3B::BLACK)
+        .setPosition(adjustedPos.x, adjustedPos.y - Director::getInstance()->getVisibleSize().height * 0.3f)
+        .setZOrder(5)
+        .addToParent(this)
+        .build();
+
+    // 7. åˆ›å»ºæ ‡ç­¾åˆ‡æ¢å™¨
+    auto tabSwitcher = TabSwitcher::create(m_sceneName, TabSwitcher::TabType::INVENTORY);
+    this->addChild(tabSwitcher, 2);
 }
 
-InventoryUI* InventoryUI::create ( Inventory* inventory , std::string sceneName ) {
-    InventoryUI* ret = new InventoryUI ();
-    if (ret && ret->init ( inventory , sceneName )) {
-        ret->autorelease ();
-        return ret;
+void InventoryUI::setupItemSlots() {
+    auto theme = UITheme::getInstance();
+    auto config = UIConfig::getInstance();
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+
+    // è·å–ç©å®¶ä½ç½®å¹¶è°ƒæ•´åæ ‡
+    Vec2 playerPos = player1->getPosition();
+    Vec2 adjustedPos = config->adjustCoordinate(m_sceneName, playerPos);
+
+    // æ¸…ç©ºç°æœ‰ç‰©å“æ§½
+    _itemSlots.clear();
+
+    // è·å–èƒŒæ™¯é¢æ¿ç”¨äºå®šä½
+    auto bag = getChildByTag(101);
+    if (!bag) return;
+
+    // åˆ›å»ºç‰©å“æ ¼å­ Sprite (3è¡Œ x kRowSizeåˆ—)
+    for (int m = 0; m < 3; m++) {
+        for (int i = 0; i < kRowSize; i++) {
+            float originalWidth = 64;
+            float originalHeight = 64;
+            float scaleX = visibleSize.width / originalWidth;
+            float scaleY = visibleSize.height / originalHeight;
+            float scale = std::min(scaleX, scaleY) / 16.5f;
+
+            float bagWidth = bag->getContentSize().width;
+            float bagHeight = bag->getContentSize().height;
+
+            Vec2 slotPos = Vec2(
+                adjustedPos.x - bagWidth * 0.545f + (originalWidth * scale + 5) * i,
+                adjustedPos.y + bagHeight * 1.73f / 3.643f - m * (originalHeight * scale + 10)
+            );
+
+            auto slot = SpriteBuilder()
+                .setTexture(UIConfig::UIResources::ITEM_BLOCK)
+                .setScale(scale)
+                .setPosition(slotPos)
+                .setTag(m * kRowSize + i)
+                .setZOrder(2)
+                .addToParent(this)
+                .build();
+
+            _itemSlots.pushBack(slot);
+        }
     }
-    CC_SAFE_DELETE ( ret );
-    return nullptr;
 }
 
-void InventoryUI::updateDisplay () {
+void InventoryUI::updateDisplay() {
     if (!_inventory) {
-        CCLOG ( "Warning: _inventory is nullptr" );
-        return; // ÍË³ö·½·¨  
+        CCLOG("Warning: _inventory is nullptr");
+        return;
     }
 
     for (int m = 0; m < 3; m++) {
-        // »ñÈ¡µ±Ç°Ñ¡ÔñµÄÎïÆ·µÄ²ÛÎ»  
         for (int i = 0; i < kRowSize; ++i) {
             int serial_number = i + m * 12;
-            auto slot = _itemSlots.at ( serial_number );
-            slot->setVisible ( true ); // È·±£ÏÔÊ¾ËùÓĞ²ÛÎ»  
+            auto slot = _itemSlots.at(serial_number);
+            if (!slot) continue;
 
-            // »ñÈ¡²ÛÎ»ÎïÆ·  
-            auto item = _inventory->GetItemAt ( serial_number + 1 ); // »ñÈ¡ÌØ¶¨²ÛÎ»µÄÎïÆ·£¬×¢Òâ²ÛÎ»´Ó1¿ªÊ¼ 
+            slot->setVisible(true);
 
-            // »ñÈ¡ÎïÆ·ÊıÁ¿   
-            int itemCount = _inventory->GetItemCountAt ( serial_number + 1 ); // »ñÈ¡¸Ã²ÛÎ»µÄÎïÆ·ÊıÁ¿  
+            auto item = _inventory->GetItemAt(serial_number + 1);
+            int itemCount = _inventory->GetItemCountAt(serial_number + 1);
 
             if (item) {
-                CCLOG ( "Item in slot %d: %s" , serial_number + 1 , item->GetName ().c_str () );
-            }
-            else {
-                CCLOG ( "No item in slot %d" , serial_number + 1 );
+                CCLOG("Item in slot %d: %s", serial_number + 1, item->GetName().c_str());
+            } else {
+                CCLOG("No item in slot %d", serial_number + 1);
             }
 
-            // Èç¹ûĞèÒª»ñÈ¡ÌØ¶¨²ÛÎ»µÄÎïÆ·£¬Ê¹ÓÃ GetItemAt(int position) ¶¨ÒåĞÂº¯Êı  
-
-            // ¸üĞÂ²ÛÎ»ÊÓ¾õ±íÏÖ  
             if (item) {
-                // Çå³ıÖ®Ç°µÄ×Ó½Úµã  
-                slot->removeAllChildren ();
+                slot->removeAllChildren();
 
-                // Í¼Æ¬Â·¾¶  
-                auto itemSprite = Sprite::create ( item->initial_pic );
+                auto itemSprite = SpriteBuilder()
+                    .setTexture(item->initial_pic)
+                    .setPosition(slot->getContentSize() / 2)
+                    .setScale(0.7f)
+                    .setZOrder(3)
+                    .addToParent(slot)
+                    .build();
+
                 if (itemSprite) {
-                    itemSprite->setPosition ( slot->getContentSize () / 2 );
-                    itemSprite->setScale ( 0.7f );
-                    slot->addChild ( itemSprite , 3 );
-                    CCLOG ( "Loading item sprite: %s" , item->initial_pic.c_str () );
-                }
-                else {
-                    CCLOG ( "Error loading item sprite: %s" , item->initial_pic.c_str () );
+                    CCLOG("Loading item sprite: %s", item->initial_pic.c_str());
+                } else {
+                    CCLOG("Error loading item sprite: %s", item->initial_pic.c_str());
                 }
 
-                // ¸ù¾İ item ÀïµÄÊıÁ¿À´ÉèÖÃÊıÁ¿±êÇ©£¨Èç¹ûĞèÒª£©¡£  
-                // ¿ÉÒÔÔÚÕâÀï´´½¨Ò»¸ö Label ÏÔÊ¾ÊıÁ¿  
-                auto countLabel = static_cast<Label*>(slot->getChildByTag ( 200 + serial_number )); // Ê¹ÓÃ²ÛÎ»µÄ±êÇ©Éú³ÉÊıÁ¿±êÇ©µÄÎ¨Ò»ID  
+                auto countLabel = static_cast<Label*>(slot->getChildByTag(200 + serial_number));
                 if (!countLabel) {
-                    // Èç¹û±êÇ©²»´æÔÚ£¬´´½¨ĞÂµÄ±êÇ©  
-                    countLabel = Label::createWithSystemFont ( std::to_string ( itemCount ) , "fonts/Comic Sans MS.ttf" , 20 );
-                    countLabel->setTextColor ( Color4B ( 255 , 153 , 0 , 255 ) );
-                    countLabel->setPosition ( slot->getContentSize ().width * 0.8 , slot->getContentSize ().height * 0.2 ); // ÉèÖÃÎ»ÖÃÔÚ²ÛÎ»ÓÒÏÂ·½  
-                    countLabel->setTag ( 200 + serial_number ); // ÉèÖÃ±êÇ©  
-                    slot->addChild ( countLabel , 4 ); // Ìí¼Óµ½²ã¼¶ÖĞ  
+                    countLabel = LabelBuilder()
+                        .setText(std::to_string(itemCount))
+                        .setFont("fonts/Comic Sans MS.ttf", 20)
+                        .setColor(Color3B(255, 153, 0))
+                        .setPosition(slot->getContentSize().width * 0.8, slot->getContentSize().height * 0.2)
+                        .setTag(200 + serial_number)
+                        .setZOrder(4)
+                        .addToParent(slot)
+                        .build();
+                } else {
+                    countLabel->setString(std::to_string(itemCount));
                 }
-                else {
-                    // Èç¹û±êÇ©´æÔÚ£¬¸üĞÂÊıÁ¿  
-                    countLabel->setString ( std::to_string ( itemCount ) );
-                }
 
+                auto listener = EventListenerMouse::create();
 
-                // Ìí¼Ó´¥ÃşÊÂ¼ş  
-                auto listener = EventListenerMouse::create ();
-
-                // Êó±êÒÆ¶¯ÊÂ¼ş
-                listener->onMouseMove = [this , slot , itemSprite , countLabel]( EventMouse* event ) {
-                    Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
-                    mousePos = this->convertToNodeSpace ( mousePos );
-                    if (slot && slot->getBoundingBox ().containsPoint ( mousePos )) {
-                        itemSprite->setScale ( 1.1f );
-                        countLabel->setScale ( 1.5f );
+                listener->onMouseMove = [this, slot, itemSprite, countLabel](EventMouse* event) {
+                    Vec2 mousePos = Vec2(event->getCursorX(), event->getCursorY());
+                    mousePos = this->convertToNodeSpace(mousePos);
+                    if (slot && slot->getBoundingBox().containsPoint(mousePos)) {
+                        itemSprite->setScale(1.1f);
+                        countLabel->setScale(1.5f);
+                    } else if (slot && itemSprite != currentItemSprite) {
+                        itemSprite->setScale(0.7f);
+                        countLabel->setScale(1.0f);
                     }
-                    else if (slot && itemSprite != currentItemSprite) {
-                        itemSprite->setScale ( 0.7f ); // »Ö¸´Ô­´óĞ¡
-                        countLabel->setScale ( 1.0f );
-                    }
-                    };
+                };
 
-                // Ìí¼ÓÊó±ê°´ÏÂÊÂ¼ş  
-                listener->onMouseDown = [this , slot , itemSprite, serial_number]( EventMouse* event ) {
-                    Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
-                    mousePos = this->convertToNodeSpace ( mousePos );
+                listener->onMouseDown = [this, slot, itemSprite, serial_number](EventMouse* event) {
+                    Vec2 mousePos = Vec2(event->getCursorX(), event->getCursorY());
+                    mousePos = this->convertToNodeSpace(mousePos);
 
-                    // ¼ì²éÊó±êÊÇ·ñµã»÷ÁË slot  
-                    if (slot->getBoundingBox ().containsPoint ( mousePos )) {
+                    if (slot->getBoundingBox().containsPoint(mousePos)) {
                         if (!isClick) {
-                            currentItemSprite = itemSprite; // ¼ÇÂ¼µ±Ç°Ñ¡ÔñµÄÎïÆ·
+                            currentItemSprite = itemSprite;
                             _selectedSlot = serial_number + 1;
-                            CCLOG ( "_selectedSlot:%d" , _selectedSlot );
-                        }
-                        else {
+                            CCLOG("_selectedSlot:%d", _selectedSlot);
+                        } else {
                             currentItemSprite = nullptr;
                         }
                         isClick = !isClick;
                     }
-                    };
+                };
 
-                _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , itemSprite );
-            }
-            else {
-                slot->removeAllChildren (); // Çå¿Õ²ÛÎ»  
+                _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, itemSprite);
+            } else {
+                slot->removeAllChildren();
 
-                // Çå³ıÊıÁ¿±êÇ©  
-                auto countLabel = static_cast<Label*>(slot->getChildByTag ( 200 + i ));
+                auto countLabel = static_cast<Label*>(slot->getChildByTag(200 + i));
                 if (countLabel) {
-                    countLabel->removeFromParent (); // ÒÆ³ıÊıÁ¿±êÇ©  
+                    countLabel->removeFromParent();
                 }
             }
         }
     }
 
-    // ¸üĞÂÎïÆ·ĞÅÏ¢±êÇ©£¨ÓÃÓÚµ÷ÊÔ£©  
-    if (_itemLabel) { // ¼ì²é _itemLabel ÊÇ·ñÎª nullptr  
-        if (auto selectedItem = _inventory->GetSelectedItem ()) {
-            _itemLabel->setString ( "Selected: " + selectedItem->GetName () );
+    // æ›´æ–°ç‰©å“æ§½ä¿¡æ¯æ ‡ç­¾ï¼ˆå¦‚æœå­˜åœ¨çš„è¯ï¼‰
+    if (_itemLabel) {
+        if (auto selectedItem = _inventory->GetSelectedItem()) {
+            _itemLabel->setString("Selected: " + selectedItem->GetName());
+        } else {
+            _itemLabel->setString("No item selected.");
         }
-        else {
-            _itemLabel->setString ( "No item selected." );
-        }
-    }
-    else {
-        CCLOG ( "Warning: _itemLabel is nullptr" );
+    } else {
+        CCLOG("Warning: _itemLabel is nullptr");
     }
 }
+

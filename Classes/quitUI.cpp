@@ -1,254 +1,85 @@
-#include "ui/CocosGUI.h"  
+// quitUI.cpp - é€€å‡ºç•Œé¢å®žçŽ°ï¼ˆä½¿ç”¨å»ºé€ è€…æ¨¡å¼é‡æž„ï¼‰
 #include "quitUI.h"
+#include "ui/CocosGUI.h"
+#include "UI/Core/UITheme.h"
+#include "UI/Core/UIConfig.h"
+#include "UI/Builders/SpriteBuilder.h"
+#include "UI/Components/DarkOverlay.h"
+#include "UI/Components/TabSwitcher.h"
 
 USING_NS_CC;
 
-static void problemLoading ( const char* filename )
-{
-    printf ( "Error while loading: %s\n" , filename );
-    printf ( "Depending on how you compiled you might have to add 'Resources/' in front of filenames in CreateCharacterScene.cpp\n" );
+quitUI* quitUI::create(std::string sceneName) {
+    quitUI* ret = new quitUI();
+    if (ret && ret->init(sceneName)) {
+        ret->autorelease();
+        return ret;
+    }
+    CC_SAFE_DELETE(ret);
+    return nullptr;
 }
 
-void quitUI::updateCoordinate ( float& x , float& y ) {
-    Vec2 position = player1->getPosition ();
-    float  Leftboundary = -10000.0f , rightboundary = 10000.0f , upperboundary = 10000.0f , lowerboundary = 10000.0f;
-    if (SceneName == "Town") {
-        Leftboundary = -170.0f;
-        rightboundary = 1773.0f;
-        upperboundary = 1498.0f;
-        lowerboundary = -222.0f;
-    }
-    else if (SceneName == "Cave") {
-        Leftboundary = 786.0f;
-        rightboundary = 817.0f;
-        upperboundary = 808.0f;
-        lowerboundary = 460.0f;
-    }
-    else if (SceneName == "Beach") {
-        Leftboundary = -315.0f;
-        rightboundary = 20000.0f;
-        upperboundary = 920.0f;
-        lowerboundary = 360.0f;
-    }
-    else if (SceneName == "Forest") {
-        Leftboundary = -600.0f;
-        rightboundary = 2197.0f;
-        upperboundary = 2200.0f;
-        lowerboundary = -850.0f;
-    }
-    else if (SceneName == "farm") {
-        Leftboundary = 637.0f;
-        rightboundary = 960.0f;
-        upperboundary = 777.0f;
-        lowerboundary = 500.0f;
-    }
-    else if (SceneName == "Barn") {
-        Leftboundary = 805.0f;
-        rightboundary = 805.0f;
-        upperboundary = 569.0f;
-        lowerboundary = 569.0f;
-    }
-    else if (SceneName == "Myhouse") {
-        Leftboundary = 800.0f;
-        rightboundary = 800.0f;
-        upperboundary = 580.0f;
-        lowerboundary = 580.0f;
-    }
-    if (x <= Leftboundary) {
-        x = Leftboundary;
-    }
-    else if (x >= rightboundary) {
-        x = rightboundary;
-    }
-    else {
-        x = position.x;
-    }
-
-    if (y >= upperboundary) {
-        y = upperboundary;
-    }
-    else if (y <= lowerboundary) {
-        y = lowerboundary;
-    }
-    else {
-        y = position.y;
-    }
-}
-
-void quitUI::backgroundcreate () {
-    Vec2 position = player1->getPosition ();
-    float currentx = position.x , currenty = position.y;
-    updateCoordinate ( currentx , currenty );
-    auto visibleSize = Director::getInstance ()->getVisibleSize ();
-    // ´´½¨Ò»¸ö°ëÍ¸Ã÷µÄºÚÉ«ÕÚÕÖ
-    auto darkLayer = cocos2d::LayerColor::create ( cocos2d::Color4B ( 0 , 0 , 0 , 120 ) , 10 * visibleSize.width , 5 * visibleSize.height );  // ºÚÉ«£¬Í¸Ã÷¶ÈÎª120
-    darkLayer->setPosition ( Vec2 ( currentx , currenty ) - visibleSize );// ÉèÖÃÕÚÕÖ²ãµÄÎ»ÖÃ
-    this->addChild ( darkLayer , 0 );
-    //´ó¿ò¼Ü
-    auto quitFace = Sprite::create ( "UIresource/SkillTree/background.png" );
-    if (quitFace == nullptr)
-    {
-        problemLoading ( "'background.png'" );
-    }
-    else
-    {
-        // »ñÈ¡Ô­Ê¼Í¼Æ¬µÄ¿í¸ß
-        float originalWidth = quitFace->getContentSize ().width;
-        float originalHeight = quitFace->getContentSize ().height;
-        // ¸ù¾ÝÆÁÄ»¿í¶ÈºÍÍ¼Æ¬Ô­Ê¼¿í¸ß¼ÆËã±ÈÀý
-        float scaleX = visibleSize.width / originalWidth;
-        float scaleY = visibleSize.height / originalHeight;
-        // Ñ¡Ôñ×îÐ¡µÄËõ·Å±ÈÀý£¬ÒÔ±£Ö¤Í¼Æ¬ÍêÈ«ÏÔÊ¾ÔÚÆÁÄ»ÉÏÇÒ²»±äÐÎ
-        float scale = std::min ( scaleX , scaleY );
-        quitFace->setScale ( scale / 1.5 );
-        quitFace->setPosition ( Vec2 ( currentx , currenty ) );
-
-        this->addChild ( quitFace , 1 );
-    }
-}
-
-void quitUI::Buttons_switching () {
-    Vec2 position = player1->getPosition ();
-    float currentx = position.x , currenty = position.y;
-    updateCoordinate ( currentx , currenty );
-    auto visibleSize = Director::getInstance ()->getVisibleSize ();
-    //Í¼±êÏÔÊ¾
-    auto bagkey = Sprite::create ( "UIresource/beibao/bagkey.png" );
-    auto Skillkey = Sprite::create ( "UIresource/beibao/Skillkey.png" );
-    auto intimacykey = Sprite::create ( "UIresource/beibao/intimacykey.png" );
-    auto quitkey = Sprite::create ( "UIresource/beibao/quit.png" );
-    if (bagkey == nullptr)
-    {
-        problemLoading ( "'bagkey.png'" );
-    }
-    else
-    {
-        // »ñÈ¡Ô­Ê¼Í¼Æ¬µÄ¿í¸ß
-        float originalWidth = bagkey->getContentSize ().width;
-        float originalHeight = bagkey->getContentSize ().height;
-        // ¸ù¾ÝÆÁÄ»¿í¶ÈºÍÍ¼Æ¬Ô­Ê¼¿í¸ß¼ÆËã±ÈÀý
-        float scaleX = visibleSize.width / originalWidth;
-        float scaleY = visibleSize.height / originalHeight;
-        // Ñ¡Ôñ×îÐ¡µÄËõ·Å±ÈÀý£¬ÒÔ±£Ö¤Í¼Æ¬ÍêÈ«ÏÔÊ¾ÔÚÆÁÄ»ÉÏÇÒ²»±äÐÎ
-        float scale = std::min ( scaleX , scaleY );
-        bagkey->setScale ( scale / 16.5 );
-        bagkey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.25 , currenty + visibleSize.height * 0.315 ) );//0.305ÊÇÑ¡ÖÐÊ±Î»ÖÃ
-        Skillkey->setScale ( scale / 16.5 );
-        Skillkey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.19 , currenty + visibleSize.height * 0.315 ) );//0.315ÊÇÎ´Ñ¡ÖÐÊ±Î»ÖÃ
-        intimacykey->setScale ( scale / 16.5 );
-        intimacykey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.13 , currenty + visibleSize.height * 0.315 ) );
-        quitkey->setScale ( scale / 16.5 );
-        quitkey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.07 , currenty + visibleSize.height * 0.305 ) );
-        this->addChild ( bagkey , 2 );
-        this->addChild ( Skillkey , 2 );
-        this->addChild ( intimacykey , 2 );
-        this->addChild ( quitkey , 2 );
-    }
-
-    //¶¯»­ÒÔ¼°ÇÐ»»Layer
-    auto listener = EventListenerMouse::create ();
-    listener->onMouseDown = [this , bagkey , Skillkey , intimacykey , quitkey]( EventMouse* event ) {
-        Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
-        mousePos = this->convertToNodeSpace ( mousePos );
-        //CCLOG ( "X:%f,Y:%f" , event->getCursorX () , event->getCursorY () );
-        if (bagkey->getBoundingBox ().containsPoint ( mousePos )) {
-            // ÒÆ³ýµ±Ç°µÄLayer
-            std::string nowScene = SceneName;
-            this->removeFromParent ();
-            Director::getInstance ()->getRunningScene ()->addChild ( InventoryUI::create ( inventory , nowScene ) , 20 );
-        }
-        else if (Skillkey->getBoundingBox ().containsPoint ( mousePos )) {
-            std::string nowScene = SceneName;
-            this->removeFromParent ();
-            Director::getInstance ()->getRunningScene ()->addChild ( SkillTreeUI::create ( nowScene ) , 20 );
-        }
-        else if (intimacykey->getBoundingBox ().containsPoint ( mousePos )) {
-            std::string nowScene = SceneName;
-            this->removeFromParent ();
-            Director::getInstance ()->getRunningScene ()->addChild ( intimacyUI::create ( nowScene ) , 20 );
-        }
-        else if (quitkey->getBoundingBox ().containsPoint ( mousePos )) {
-        }
-        };
-    _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , this );
-}
-
-void quitUI::quitAndsetting () {
-    Vec2 position = player1->getPosition ();
-    float currentx = position.x , currenty = position.y;
-    updateCoordinate ( currentx , currenty );
-    auto visibleSize = Director::getInstance ()->getVisibleSize ();
-    auto quit = Sprite::create ( "UIresource/quit.png" );
-    if (quit == nullptr)
-    {
-        problemLoading ( "'quit.png'" );
-    }
-    else
-    {
-        // »ñÈ¡Ô­Ê¼Í¼Æ¬µÄ¿í¸ß
-        float originalWidth = quit->getContentSize ().width;
-        float originalHeight = quit->getContentSize ().height;
-        // ¸ù¾ÝÆÁÄ»¿í¶ÈºÍÍ¼Æ¬Ô­Ê¼¿í¸ß¼ÆËã±ÈÀý
-        float scaleX = visibleSize.width / originalWidth;
-        float scaleY = visibleSize.height / originalHeight;
-        // Ñ¡Ôñ×îÐ¡µÄËõ·Å±ÈÀý£¬ÒÔ±£Ö¤Í¼Æ¬ÍêÈ«ÏÔÊ¾ÔÚÆÁÄ»ÉÏÇÒ²»±äÐÎ
-        float scale = std::min ( scaleX , scaleY );
-        quit->setScale ( scale / 5.5 );
-        quit->setPosition ( Vec2 ( currentx , currenty ) );
-
-        this->addChild ( quit , 1 );
-
-        auto listener = EventListenerMouse::create ();
-        listener->onMouseMove = [this , quit , scale]( EventMouse* event ) {
-            Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
-            mousePos = this->convertToNodeSpace ( mousePos );
-            if (quit->getBoundingBox ().containsPoint ( mousePos )) {
-                quit->setScale ( scale / 5.5 * 1.2f );
-            }
-            else
-                quit->setScale ( scale / 5.5 );
-            };
-        listener->onMouseDown = [this , quit]( EventMouse* event ) {
-            Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
-            mousePos = this->convertToNodeSpace ( mousePos );
-            if (quit->getBoundingBox ().containsPoint ( mousePos )) {
-                Director::getInstance ()->end ();
-            }
-            };
-        _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , quit );
-    }
-}
-
-void quitUI::close () {
-    // ÉèÖÃ¼üÅÌ¼àÌýÆ÷  
-    auto listenerClose = EventListenerKeyboard::create ();
-    listenerClose->onKeyPressed = [this]( EventKeyboard::KeyCode keyCode , Event* event ) {
-        if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
-            this->removeFromParent ();
-        }
-        };
-    // ½«¼àÌýÆ÷Ìí¼Óµ½ÊÂ¼þ·Ö·¢Æ÷ÖÐ  
-    _eventDispatcher->addEventListenerWithSceneGraphPriority ( listenerClose , this );
-}
-
-bool quitUI::init ( std::string sceneName ) {
-    if (!Layer::init ()) {
+bool quitUI::init(std::string sceneName) {
+    if (!ClosableUI::init()) {
         return false;
     }
-    SceneName = sceneName;
-    backgroundcreate ();
-    quitAndsetting ();
-    Buttons_switching ();
-    close ();
+
+    m_sceneName = sceneName;
+
+    // è®¾ç½®UI
+    setupUI();
+    setupQuitButton();
+    setupEscCloseListener();  // ä½¿ç”¨åŸºç±»çš„ESCå…³é—­åŠŸèƒ½
+
     return true;
 }
 
-quitUI* quitUI::create ( std::string sceneName ) {
-    quitUI* ret = new quitUI ();
-    if (ret && ret->init ( sceneName )) {
-        ret->autorelease ();
-        return ret;
-    }
-    CC_SAFE_DELETE ( ret );
-    return nullptr;
+void quitUI::setupUI() {
+    auto theme = UITheme::getInstance();
+    auto config = UIConfig::getInstance();
+
+    // èŽ·å–çŽ©å®¶ä½ç½®å¹¶è°ƒæ•´åæ ‡
+    Vec2 playerPos = player1->getPosition();
+    Vec2 adjustedPos = config->adjustCoordinate(m_sceneName, playerPos);
+
+    // 1. åˆ›å»ºåŠé€æ˜Žé®ç½© - ä½¿ç”¨å¯å¤ç”¨ç»„ä»¶ï¼Œæ›¿ä»£åŽŸæ¥30è¡Œä»£ç 
+    auto darkOverlay = DarkOverlay::create(m_sceneName);
+    this->addChild(darkOverlay, 0);
+
+    // 2. åˆ›å»ºèƒŒæ™¯é¢æ¿ - ä½¿ç”¨SpriteBuilder
+    auto background = SpriteBuilder()
+        .setTexture(UIConfig::UIResources::SKILL_BACKGROUND)
+        .setAutoScale(1.5f)  // æ›¿ä»£åŽŸæ¥çš„ scale/1.5
+        .setPosition(adjustedPos)
+        .setZOrder(1)
+        .addToParent(this)
+        .build();
+
+    // 3. åˆ›å»ºæ ‡ç­¾åˆ‡æ¢å™¨ - ä½¿ç”¨å¯å¤ç”¨ç»„ä»¶ï¼Œæ›¿ä»£åŽŸæ¥60è¡Œä»£ç 
+    auto tabSwitcher = TabSwitcher::create(m_sceneName, TabSwitcher::TabType::QUIT);
+    this->addChild(tabSwitcher, 2);
 }
+
+void quitUI::setupQuitButton() {
+    auto theme = UITheme::getInstance();
+    auto config = UIConfig::getInstance();
+
+    // èŽ·å–è°ƒæ•´åŽçš„ä½ç½®
+    Vec2 playerPos = player1->getPosition();
+    Vec2 adjustedPos = config->adjustCoordinate(m_sceneName, playerPos);
+
+    // åˆ›å»ºé€€å‡ºæŒ‰é’® - ä½¿ç”¨SpriteBuilderå’Œæ‚¬åœæ•ˆæžœï¼Œæ›¿ä»£åŽŸæ¥40è¡Œä»£ç 
+    auto quitButton = SpriteBuilder()
+        .setTexture(UIConfig::UIResources::QUIT_IMAGE)
+        .setAdaptiveScale(0.18f, 0.18f)  // è‡ªé€‚åº”ç¼©æ”¾æ›¿ä»£ scale/5.5
+        .setPosition(adjustedPos)
+        .setZOrder(1)
+        .setHoverEffect(1.2f)  // è‡ªåŠ¨æ‚¬åœæ•ˆæžœ
+        .setClickCallback([](Sprite*) {
+            // ç‚¹å‡»é€€å‡º
+            Director::getInstance()->end();
+        })
+        .addToParent(this)
+        .build();
+}
+

@@ -1,38 +1,28 @@
-// InventoryUI.h  
-#pragma once  
-#include "cocos2d.h"  
-#include "Inventory.h"  
+// InventoryUI.h - 背包界面（使用建造者模式重构）
+#pragma once
+#include "cocos2d.h"
+#include "Inventory.h"
 #include "AppDelegate.h"
-#include "intimacyUI.h"
-#include "SkillTreeUI.h"
+#include "UI/ClosableUI.h"
 
-class InventoryUI : public cocos2d::Layer {
+class InventoryUI : public ClosableUI {
 public:
-    virtual bool init ( Inventory* inventory , std::string sceneName );
+    virtual bool init(Inventory* inventory, std::string sceneName);
+    static InventoryUI* create(Inventory* inventory, std::string sceneName);
 
-    static InventoryUI* create ( Inventory* inventory , std::string sceneName );
+    void updateDisplay(); // 更新物品显示
 
-    void backgroundcreate ();
-
-    void Itemblock ( Inventory* inventory );
-
-    void updateDisplay (); // ������ʾ����  
-
-    void Buttons_switching ();
-
-    void updateCoordinate ( float &x , float &y );
 private:
-    Inventory* _inventory; // ָ�� Inventory ʵ����ָ��  
+    // UI设置方法 - 使用建造者模式重构
+    void setupUI();
+    void setupItemSlots();
 
-    cocos2d::Label* _itemLabel;  // ��ʾ��Ʒ��Ϣ�ı�ǩ 
-
-    cocos2d::Vector<cocos2d::Sprite*> _itemSlots; // �洢��Ʒ�۵� Sprite  
-
-    int _selectedSlot; // ��ǰѡ�еĲ�λ 
-
-    bool isClick = false;  // ��־����ʾ�Ƿ񱻵��
-
-    Sprite* currentItemSprite = nullptr; // ��ʶ��ǰѡ�����Ʒ
-
-    std::string SceneName;
+private:
+    Inventory* _inventory; // 背包实例指针
+    cocos2d::Vector<cocos2d::Sprite*> _itemSlots; // 存储物品槽的Sprite
+    int _selectedSlot; // 当前选中的槽位
+    std::string m_sceneName; // 场景名称
+    cocos2d::Label* _itemLabel; // 显示物品信息的标签
+    bool isClick = false; // 标志位，表示是否被点击过
+    cocos2d::Sprite* currentItemSprite = nullptr; // 标识当前选中的物品
 };

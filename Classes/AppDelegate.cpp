@@ -3,9 +3,9 @@
 
  http://www.cocos2d-x.org
 
- ÔÊĞíÈÎºÎÈËÃâ·ÑÊ¹ÓÃ¸ÃÈí¼ş£¬°üÀ¨ĞŞ¸Ä¡¢ºÏ²¢¡¢·¢²¼¡¢·Ö·¢¡¢ÔÙĞí¿ÉÒÔ¼°ÏúÊÛ¸ÃÈí¼şµÄ¸±±¾£¬Ç°ÌáÊÇËùÓĞ¸±±¾»òÕßÖØÒª²¿·Ö¶¼±ØĞë°üº¬±¾°æÈ¨ÉùÃ÷ºÍĞí¿ÉÉùÃ÷¡£
+ ï¿½ï¿½ï¿½ï¿½ï¿½Îºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ã¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ş¸Ä¡ï¿½ï¿½Ï²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½Û¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
- ¸ÃÈí¼ş°´"Ô­Ñù"Ìá¹©£¬²»¸½´øÈÎºÎĞÎÊ½µÄ±£Ö¤£¬°üÀ¨µ«²»ÏŞÓÚ¶ÔÊÊÏúĞÔ¡¢ÌØ¶¨ÓÃÍ¾ÊÊÓÃĞÔºÍ²»ÇÖÈ¨µÄ±£Ö¤¡£ÔÚÈÎºÎÇé¿öÏÂ£¬×÷Õß»ò°æÈ¨³ÖÓĞÕß¾ù²»¶ÔÒòÊ¹ÓÃ¸ÃÈí¼ş»òÓë¸ÃÈí¼şÏà¹ØµÄÈÎºÎË÷Åâ¡¢Ëğº¦»òÆäËûÔğÈÎ³Ğµ£ÔğÈÎ£¬ÎŞÂÛÊÇºÏÍ¬¡¢ÇÖÈ¨ĞĞÎª»òÆäËû·½Ê½¡£
+ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"Ô­ï¿½ï¿½"ï¿½á¹©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îºï¿½ï¿½ï¿½Ê½ï¿½Ä±ï¿½Ö¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¡ï¿½ï¿½Ø¶ï¿½ï¿½ï¿½Í¾ï¿½ï¿½ï¿½ï¿½ï¿½ÔºÍ²ï¿½ï¿½ï¿½È¨ï¿½Ä±ï¿½Ö¤ï¿½ï¿½ï¿½ï¿½ï¿½Îºï¿½ï¿½ï¿½ï¿½ï¿½Â£ï¿½ï¿½ï¿½ï¿½ß»ï¿½ï¿½È¨ï¿½ï¿½ï¿½ï¿½ï¿½ß¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ã¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½ï¿½Îºï¿½ï¿½ï¿½ï¿½â¡¢ï¿½ğº¦»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î³Ğµï¿½ï¿½ï¿½ï¿½Î£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Çºï¿½Í¬ï¿½ï¿½ï¿½ï¿½È¨ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½
  ****************************************************************************/
 
 #include "AppDelegate.h"
@@ -16,18 +16,25 @@
 //#include "supermarket.h"
 #include "CreateCharacterUI.h"
 #include "EnergySystem.h"
+#include "Flyweight/FlyweightFactory.h"
+#include "Flyweight/CropFlyweight.h"
+#include "Flyweight/CropExtrinsicState.h"
+#include "Flyweight/TreeFlyweight.h"
+#include "Flyweight/TreeExtrinsicState.h"
+#include "Flyweight/OreFlyweight.h"
+#include "Flyweight/OreExtrinsicState.h"
 
-// #define USE_AUDIO_ENGINE 1   // Èç¹ûĞèÒªÊ¹ÓÃÒôÆµÒıÇæ£¬¿ÉÒÔÈ¡Ïû×¢ÊÍÕâÒ»ĞĞ
+// #define USE_AUDIO_ENGINE 1   // ï¿½ï¿½ï¿½ï¿½ï¿½ÒªÊ¹ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½æ£¬ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½×¢ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
 
 #if USE_AUDIO_ENGINE
-#include "audio/include/AudioEngine.h"  // Èç¹ûÆôÓÃÁËÒôÆµÒıÇæ£¬ÔòÒıÈëÒôÆµÒıÇæµÄÍ·ÎÄ¼ş
-// using namespace cocos2d::experimental;  // Ê¹ÓÃÒôÆµÒıÇæµÄÃüÃû¿Õ¼ä
+#include "audio/include/AudioEngine.h"  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½æ£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½Ä¼ï¿½
+// using namespace cocos2d::experimental;  // Ê¹ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¼ï¿½
 #endif
 
-USING_NS_CC;  // Ê¹ÓÃcocos2dµÄÃüÃû¿Õ¼ä
+USING_NS_CC;  // Ê¹ï¿½ï¿½cocos2dï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¼ï¿½
 
-/******************************** È«¾Ö±äÁ¿ÉùÃ÷Çø ****************************************/
-// ÔÚ´ËÎÄ¼şÖĞ¶¨Òå²¢³õÊ¼»¯È«¾Ö±äÁ¿
+/******************************** È«ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ****************************************/
+// ï¿½Ú´ï¿½ï¿½Ä¼ï¿½ï¿½Ğ¶ï¿½ï¿½å²¢ï¿½ï¿½Ê¼ï¿½ï¿½È«ï¿½Ö±ï¿½ï¿½ï¿½
 int remainingTime = 10800;
 int day = 1;
 int GoldAmount = 4000;
@@ -59,7 +66,7 @@ std::map<std::pair<std::string , Vec2>, bool> W_lastplace;
 std::string protagonistName = "player";
 std::string FarmName = "An ordinary farm";
 
-// È«¾ÖÖ¸Õë±äÁ¿¶¨Òå
+// È«ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 Player* player1 = nullptr;
 mini_bag* miniBag = nullptr;
 Timesystem* TimeUI = nullptr;
@@ -72,40 +79,40 @@ std::vector<std::pair<Rect , bool>> barn_space;
 std::vector<Livestock*> livestocks;
 SkillTree* skill_tree = new SkillTree ();
 
-// ´´½¨ÈÎÎñ¹ÜÀíÆ÷
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 TaskManagement* taskManager = new TaskManagement();
 /****************************************************************************************/
 
 
 AppDelegate::AppDelegate() {
-    // ¹¹Ôìº¯Êı£ºAppDelegate¹¹ÔìÊ±»áµ÷ÓÃ
+    // ï¿½ï¿½ï¿½ìº¯ï¿½ï¿½ï¿½ï¿½AppDelegateï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½
 }
 
 AppDelegate::~AppDelegate() {
-    // Îö¹¹º¯Êı£º³ÌĞò½áÊøÊ±»áµ÷ÓÃ
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½
 #if USE_AUDIO_ENGINE
-    AudioEngine::end();  // Èç¹ûÊ¹ÓÃÁËÒôÆµÒıÇæ£¬Í£Ö¹ÒôÆµÒıÇæ
+    AudioEngine::end();  // ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½æ£¬Í£Ö¹ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½
 #endif
 }
 
-// ³õÊ¼»¯ OpenGL ÉÏÏÂÎÄÊôĞÔ
+// ï¿½ï¿½Ê¼ï¿½ï¿½ OpenGL ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void AppDelegate::initGLContextAttrs() {
-    // ÉèÖÃOpenGLÉÏÏÂÎÄµÄÊôĞÔ£ººì¡¢ÂÌ¡¢À¶¡¢Í¸Ã÷Í¨µÀµÄÎ»Éî£¬Éî¶È¡¢Ä£°åºÍ¶àÖØ²ÉÑù
-    GLContextAttrs glContextAttrs = { 8, 8, 8, 8, 24, 8, 0 };  // ÉèÖÃ OpenGL ÉÏÏÂÎÄµÄÑÕÉ«ºÍÉî¶È»º³åµÈÊôĞÔ
+    // ï¿½ï¿½ï¿½ï¿½OpenGLï¿½ï¿½ï¿½ï¿½ï¿½Äµï¿½ï¿½ï¿½ï¿½Ô£ï¿½ï¿½ì¡¢ï¿½Ì¡ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½Î»ï¿½î£¬ï¿½ï¿½È¡ï¿½Ä£ï¿½ï¿½Í¶ï¿½ï¿½Ø²ï¿½ï¿½ï¿½
+    GLContextAttrs glContextAttrs = { 8, 8, 8, 8, 24, 8, 0 };  // ï¿½ï¿½ï¿½ï¿½ OpenGL ï¿½ï¿½ï¿½ï¿½ï¿½Äµï¿½ï¿½ï¿½É«ï¿½ï¿½ï¿½ï¿½È»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-    GLView::setGLContextAttrs(glContextAttrs);  // ½«ÉèÖÃµÄÉÏÏÂÎÄÊôĞÔÓ¦ÓÃµ½ GLView
+    GLView::setGLContextAttrs(glContextAttrs);  // ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½Ãµï¿½ GLView
 }
 
-// Èç¹ûÏëÍ¨¹ı°ü¹ÜÀíÆ÷°²×°¸ü¶à°ü£¬²»ÒªĞŞ¸Ä»òÉ¾³ıÕâ¸öº¯Êı
+// ï¿½ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Ş¸Ä»ï¿½É¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 static int register_all_packages() {
-    return 0;  // ±êÖ¾Î»£¬ÓÃÓÚ°ü¹ÜÀíÆ÷
+    return 0;  // ï¿½ï¿½Ö¾Î»ï¿½ï¿½ï¿½ï¿½ï¿½Ú°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 }
 
-// Ó¦ÓÃÆô¶¯Íê³Éºóµ÷ÓÃ
+// Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éºï¿½ï¿½ï¿½ï¿½
 bool AppDelegate::applicationDidFinishLaunching() {
-    // ³õÊ¼»¯ Director£¨µ¼ÑİÀà£¬ÓÃÓÚ¹ÜÀí³¡¾°ºÍ»æÖÆ£©
-    auto director = Director::getInstance();  // »ñÈ¡ Director ÊµÀı
-    auto glview = director->getOpenGLView();  // »ñÈ¡ OpenGL ÊÓÍ¼
+    // ï¿½ï¿½Ê¼ï¿½ï¿½ Directorï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½à£¬ï¿½ï¿½ï¿½Ú¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í»ï¿½ï¿½Æ£ï¿½
+    auto director = Director::getInstance();  // ï¿½ï¿½È¡ Director Êµï¿½ï¿½
+    auto glview = director->getOpenGLView();  // ï¿½ï¿½È¡ OpenGL ï¿½ï¿½Í¼
     
     if (!glview) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
@@ -116,33 +123,33 @@ bool AppDelegate::applicationDidFinishLaunching() {
         director->setOpenGLView(glview);
     }
 
-    // ´ò¿ª FPS ÏÔÊ¾
-    director->setDisplayStats(true);  // ÏÔÊ¾Ö¡ÂÊÍ³¼ÆĞÅÏ¢
+    // ï¿½ï¿½ FPS ï¿½ï¿½Ê¾
+    director->setDisplayStats(true);  // ï¿½ï¿½Ê¾Ö¡ï¿½ï¿½Í³ï¿½ï¿½ï¿½ï¿½Ï¢
 
-    // ÉèÖÃÖ¡ÂÊ¡£Ä¬ÈÏÖµÎª 1.0/60£¬¼´ 60 FPS
-    director->setAnimationInterval(1.0f / 60);  // ÉèÖÃ¶¯»­Ö¡ÂÊÎª 60 FPS
+    // ï¿½ï¿½ï¿½ï¿½Ö¡ï¿½Ê¡ï¿½Ä¬ï¿½ï¿½ÖµÎª 1.0/60ï¿½ï¿½ï¿½ï¿½ 60 FPS
+    director->setAnimationInterval(1.0f / 60);  // ï¿½ï¿½ï¿½Ã¶ï¿½ï¿½ï¿½Ö¡ï¿½ï¿½Îª 60 FPS
 
-    // ÉèÖÃÉè¼Æ·Ö±æÂÊ
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ·Ö±ï¿½ï¿½ï¿½
     glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::NO_BORDER);
     director->setContentScaleFactor(1.0f);
 
-    register_all_packages();  // ×¢²áËùÓĞµÄ°ü
+    register_all_packages();  // ×¢ï¿½ï¿½ï¿½ï¿½ï¿½ĞµÄ°ï¿½
 
     runScene(director);
 
     // set the background music and continuously play it.
     auto backgroundAudioID = AudioEngine::play2d ( "MUSIC/01 - Stardew Valley Overture.mp3" , true );
 
-    return true;  // ·µ»Ø³É¹¦
+    return true;  // ï¿½ï¿½ï¿½Ø³É¹ï¿½
 }
 
-// ÇĞ»»³¡¾°µÄº¯Êı
+// ï¿½Ğ»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äºï¿½ï¿½ï¿½
 void AppDelegate::runScene(cocos2d::Director* director) {
     Initialize ();
     
-    // »ñÈ¡µ±Ç°ÊÓÍ¼µÄ¿É¼û´óĞ¡ºÍÔ­µãÎ»ÖÃ
-    auto visibleSize = Director::getInstance()->getVisibleSize();  // »ñÈ¡ÆÁÄ»¿ÉÊÓÇøÓòµÄ´óĞ¡
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();  // »ñÈ¡ÆÁÄ»Ô­µãµÄÎ»ÖÃ£¨×óÏÂ½Ç£©
+    // ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½ï¿½Í¼ï¿½Ä¿É¼ï¿½ï¿½ï¿½Ğ¡ï¿½ï¿½Ô­ï¿½ï¿½Î»ï¿½ï¿½
+    auto visibleSize = Director::getInstance()->getVisibleSize();  // ï¿½ï¿½È¡ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½Ğ¡
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();  // ï¿½ï¿½È¡ï¿½ï¿½Ä»Ô­ï¿½ï¿½ï¿½Î»ï¿½Ã£ï¿½ï¿½ï¿½ï¿½Â½Ç£ï¿½
   
 
     std::pair<std::string , Vec2> key = { "initiation",Vec2 ( 350,350 ) };
@@ -150,90 +157,118 @@ void AppDelegate::runScene(cocos2d::Director* director) {
     key = { "seedshop",Vec2 ( 230,470 ) };
     T_lastplace.insert(std::make_pair(key, false));
 
-    // ÔËĞĞÅ©³¡
+    // ï¿½ï¿½ï¿½ï¿½Å©ï¿½ï¿½
     //auto farm = farm::create ();
     //director->runWithScene ( farm );
 
-    //ÔËĞĞº£Ì²³¡¾°
+    //ï¿½ï¿½ï¿½Ğºï¿½Ì²ï¿½ï¿½ï¿½ï¿½
     // auto beach = Beach::create ();
     // director->runWithScene ( beach );
 
-    // ÔËĞĞ¼ÒµÄ³¡¾°
-   /*  auto test = Myhouse::create();
-     director->runWithScene(test); */
+     //ï¿½ï¿½ï¿½Ğ¼ÒµÄ³ï¿½ï¿½ï¿½
+     //auto test = Myhouse::create();
+     //director->runWithScene(test); 
 
-    // ÔËĞĞĞ¡ÕòµÄ³¡¾°
+    // ï¿½ï¿½ï¿½ï¿½Ğ¡ï¿½ï¿½Ä³ï¿½ï¿½ï¿½
      //auto test = Town::create ();
      //director->runWithScene(test);
 
-    // ÔËĞĞÉÌµêµÄ³¡¾°
+    // ï¿½ï¿½ï¿½ï¿½ï¿½Ìµï¿½Ä³ï¿½ï¿½ï¿½
     //auto test = supermarket::create();
     //director->runWithScene(test);
 
-    // ÔËĞĞCave
+    // ï¿½ï¿½ï¿½ï¿½Cave
      //auto test = Cave::create();
      //director->runWithScene(test);
 
-    // ÔËĞĞBeach
+    // ï¿½ï¿½ï¿½ï¿½Beach
     // auto test = Beach::create();
     // director->runWithScene(test);
     
-    // ÔËĞĞÉ­ÁÖ
+    // ï¿½ï¿½ï¿½ï¿½É­ï¿½ï¿½
     /* auto test = Forest::create();
      director->runWithScene(test);*/
 
-     // ÔËĞĞĞóÅï
+     // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
      // auto test = Barn::create();
      // director->runWithScene(test);
 
-    //¿ª¾ÖUIÔËĞĞ
-    director->runWithScene ( BeginScene::create () );
-    //´´½¨ÈËÎï½çÃæÔËĞĞ
-    // director->runWithScene ( CreateCharacter::create () );
+    //ï¿½ï¿½ï¿½ï¿½UIï¿½ï¿½ï¿½ï¿½
+    //director->runWithScene ( BeginScene::create () );
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    director->runWithScene ( CreateCharacter::create () );
 }
 
 void AppDelegate::Initialize () {
-    // ³õÊ¼»¯ObserverÏµÍ³
-    // ÉèÖÃ³õÊ¼ÌåÁ¦Öµ
+    // åˆå§‹åŒ–äº«å…ƒå·¥å‚ - é¢„åŠ è½½æ‰€æœ‰äº«å…ƒå¯¹è±¡
+    FlyweightFactory::getInstance()->preloadAll();
+
+    // åˆå§‹åŒ–Observerç³»ç»Ÿ
+    // è®¾ç½®åˆå§‹èƒ½é‡å€¼
     EnergySystem::getInstance()->setEnergy(strength);
     EnergySystem::getInstance()->setMaxEnergy(100);
 
-    // ³õÊ¼»¯´æ´¢×÷ÎïĞÅÏ¢µÄÊı×é
+    // åˆå§‹åŒ–å­˜å‚¨å†œä½œç‰©ä¿¡æ¯çš„å®¹å™¨
     cropbasicinformation.insert({ "Wheat_Seeds", wheat });
     cropbasicinformation.insert({ "Corn_Seeds", corn });
     cropbasicinformation.insert({ "Potato_Seeds", potato });
     cropbasicinformation.insert({ "Pumpkin_Seeds", pumpkin });
     cropbasicinformation.insert({ "Blueberry_Seeds", blueberry });
 
-    // ³õÊ¼»¯±¦Ê¯ĞÅÏ¢
-    Ore Ruby("Ruby", "Ore/Ruby1.png", "Ore/Ruby2.png", 3, 3, Vec2(350, 500));                   // ºì±¦Ê¯
-    Ore_information.push_back(Ruby.GetOreCopy());
-    Ruby.position = Vec2(950, 750);
-    Ore_information.push_back(Ruby.GetOreCopy());
+    // è·å–äº«å…ƒå·¥å‚ - ç”¨äºåˆ›å»ºæ ‘æœ¨å’ŒçŸ¿çŸ³
+    auto factory = FlyweightFactory::getInstance();
 
-    Ore Amethyst("Amethyst", "Ore/Amethyst1.png", "Ore/Amethyst2.png", 5, 5, Vec2(800, 250));   // ×Ï±¦Ê¯
-    Ore_information.push_back(Amethyst.GetOreCopy());
-    Amethyst.position = Vec2(750, 850);
-    Ore_information.push_back(Amethyst.GetOreCopy());
+    // åˆå§‹åŒ–çŸ¿çŸ³ä¿¡æ¯ - ä½¿ç”¨äº«å…ƒæ¨¡å¼
+    auto rubyFlyweight = factory->getOreFlyweight("Ruby");
+    auto amethystFlyweight = factory->getOreFlyweight("Amethyst");
+    auto emeraldFlyweight = factory->getOreFlyweight("Emerald");
 
-    Ore Emerald("Emerald", "Ore/Emerald1.png", "Ore/Emerald2.png", 5, 5, Vec2(900, 150));       // ÂÌ±¦Ê¯
-    Ore_information.push_back(Emerald.GetOreCopy());
-    Emerald.position = Vec2(1250, 350);
-    Ore_information.push_back(Emerald.GetOreCopy());
+    if (rubyFlyweight) {
+        auto rubyState1 = new OreExtrinsicState(rubyFlyweight, Vec2(350, 500), true, 0);
+        Ore_information.push_back(std::make_shared<Ore>(rubyFlyweight, rubyState1));
 
-    // ³õÊ¼»¯Ê÷Ä¾ĞÅÏ¢
-    Tree tree("tree", "Tree/tree1.png", "Tree/tree2.png", "Tree/tree3.png", 15, 5, Vec2(50, 950));
-    Tree_information.push_back(tree.GetTreeCopy());
-    tree.position = Vec2(-400, 700);
-    Tree_information.push_back(tree.GetTreeCopy());
-    tree.position = Vec2(800, 1250);
-    Tree_information.push_back(tree.GetTreeCopy());
-    tree.position = Vec2(900, 1650);
-    Tree_information.push_back(tree.GetTreeCopy());
-    tree.position = Vec2(1300, 1550);
-    Tree_information.push_back(tree.GetTreeCopy());
+        auto rubyState2 = new OreExtrinsicState(rubyFlyweight, Vec2(950, 750), true, 0);
+        Ore_information.push_back(std::make_shared<Ore>(rubyFlyweight, rubyState2));
+    }
 
-    // ³õÊ¼»¯Ğ¡Õò¸÷µØÖ·×ø±ê
+    if (amethystFlyweight) {
+        auto amethystState1 = new OreExtrinsicState(amethystFlyweight, Vec2(800, 250), true, 0);
+        Ore_information.push_back(std::make_shared<Ore>(amethystFlyweight, amethystState1));
+
+        auto amethystState2 = new OreExtrinsicState(amethystFlyweight, Vec2(750, 850), true, 0);
+        Ore_information.push_back(std::make_shared<Ore>(amethystFlyweight, amethystState2));
+    }
+
+    if (emeraldFlyweight) {
+        auto emeraldState1 = new OreExtrinsicState(emeraldFlyweight, Vec2(900, 150), true, 0);
+        Ore_information.push_back(std::make_shared<Ore>(emeraldFlyweight, emeraldState1));
+
+        auto emeraldState2 = new OreExtrinsicState(emeraldFlyweight, Vec2(1250, 350), true, 0);
+        Ore_information.push_back(std::make_shared<Ore>(emeraldFlyweight, emeraldState2));
+    }
+
+    // åˆå§‹åŒ–æ ‘æœ¨ä¿¡æ¯ - ä½¿ç”¨äº«å…ƒæ¨¡å¼
+    auto treeFlyweight = factory->getTreeFlyweight("tree");
+
+    if (treeFlyweight) {
+        // åˆ›å»º5æ£µæ ‘ï¼Œæ¯æ£µæ ‘æœ‰ä¸åŒçš„ä½ç½®ï¼ˆå¤–éƒ¨çŠ¶æ€ï¼‰
+        auto state1 = new TreeExtrinsicState(treeFlyweight, Vec2(50, 950), true, 0);
+        Tree_information.push_back(std::make_shared<Tree>(treeFlyweight, state1));
+
+        auto state2 = new TreeExtrinsicState(treeFlyweight, Vec2(-400, 700), true, 0);
+        Tree_information.push_back(std::make_shared<Tree>(treeFlyweight, state2));
+
+        auto state3 = new TreeExtrinsicState(treeFlyweight, Vec2(800, 1250), true, 0);
+        Tree_information.push_back(std::make_shared<Tree>(treeFlyweight, state3));
+
+        auto state4 = new TreeExtrinsicState(treeFlyweight, Vec2(900, 1650), true, 0);
+        Tree_information.push_back(std::make_shared<Tree>(treeFlyweight, state4));
+
+        auto state5 = new TreeExtrinsicState(treeFlyweight, Vec2(1300, 1550), true, 0);
+        Tree_information.push_back(std::make_shared<Tree>(treeFlyweight, state5));
+    }
+
+    // åˆå§‹åŒ–å°é•‡åœ°å€é“¾è¡¨
     std::pair<std::string , Vec2> key = { "initiation",Vec2 (-840,-340) };
     T_lastplace.insert ( std::make_pair ( key , true ) );
     key = { "seedshop",Vec2 ( 230,470 ) };
@@ -243,7 +278,7 @@ void AppDelegate::Initialize () {
     key = { "beach",Vec2(500, -750) };
     T_lastplace.insert(std::make_pair(key, false));
 
-    // ³õÊ¼»¯Å©³¡¸÷µØÖ·×ø±ê
+    // åˆå§‹åŒ–å†œåœºæœ€è¿‘åœ°å€é“¾è¡¨
     key = { "initiation",Vec2(70, 920) };
     F_lastplace.insert(std::make_pair(key, true));
     key = { "myhouse",Vec2(70, 920) };
@@ -255,7 +290,7 @@ void AppDelegate::Initialize () {
     key = { "cave",Vec2(635, 1185) };
     F_lastplace.insert(std::make_pair(key, false));
 
-    // ³õÊ¼»¯É­ÁÖ¸÷µØÖ·×ø±ê
+    // åˆå§‹åŒ–æ£®æ—å„ä¸ªåœ°å€é“¾è¡¨
     key = { "initiation",Vec2(1150,2650) };
     W_lastplace.insert(std::make_pair(key, true));
     key = { "town",Vec2(2600, 1900) };
@@ -263,47 +298,47 @@ void AppDelegate::Initialize () {
     key = { "farm",Vec2(1150, 2650) };
     W_lastplace.insert(std::make_pair(key, false));
 
-    // ´´½¨ÈÎÎñ  
+    // æ·»åŠ ä»»åŠ¡
     TaskManagement::Task task1 (
         "Fetch the Amethyst" ,
         TaskManagement::NPC_TASK ,
-        "Retrieve the Amethyst for Abigail." , // ÏêÏ¸ËµÃ÷  
-        "Spring" , // ³õÊ¼ÈÕÆÚ  
-        "Summer"  // ½ØÖÁÈÕÆÚ  
+        "Retrieve the Amethyst for Abigail." , // è¯¦ç»†è¯´æ˜
+        "Spring" , // å¼€å§‹å­£èŠ‚
+        "Summer"  // ç»“æŸå­£èŠ‚
     );
-    task1.npcName = "Abigail"; // ·¢²¼ÈÎÎñµÄ NPC Ãû×Ö  
-    task1.requiredItems.push_back ( Bean_Starter ); // ĞèÒªµÄÎïÆ·  
-    task1.rewardCoins = 500; // ½±Àø½ğ±Ò  
-    task1.relationshipPoints = 10; // NPC ºÃ¸Ğ¶È  
+    task1.npcName = "Abigail"; // è®¾ç½®ç›¸å…³ NPC åç§°
+    task1.requiredItems.push_back ( Bean_Starter ); // éœ€è¦çš„ç‰©å“
+    task1.rewardCoins = 500; // å¥–åŠ±é‡‘é’±
+    task1.relationshipPoints = 10; // NPC å¥½æ„Ÿåº¦  
 
     TaskManagement::Task task2 (
         "Collect Emerald" ,
         TaskManagement::SYSTEM_TASK ,
-        "Collect an Emerald for system tasks." , // ÏêÏ¸ËµÃ÷  
-        "Summer" , // ³õÊ¼ÈÕÆÚ  
-        "Autumn"  // ½ØÖÁÈÕÆÚ  
+        "Collect an Emerald for system tasks." , // ï¿½ï¿½Ï¸Ëµï¿½ï¿½  
+        "Summer" , // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½  
+        "Autumn"  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  
     );
-    task2.requiredItems.push_back ( emerald ); // ĞèÒªµÄÎïÆ·  
-    task2.rewardCoins = 30; // ½±Àø½ğ±Ò  
+    task2.requiredItems.push_back ( emerald ); // ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Æ·  
+    task2.rewardCoins = 30; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  
 
     TaskManagement::Task task3 (
         "Festival Gathering" ,
         TaskManagement::FESTIVAL_TASK ,
-        "Join the festival and collect special items." , // ÏêÏ¸ËµÃ÷  
-        "Winter" , // ³õÊ¼ÈÕÆÚ  
-        "Summer"  // ½ØÖÁÈÕÆÚ  
+        "Join the festival and collect special items." , // ï¿½ï¿½Ï¸Ëµï¿½ï¿½  
+        "Winter" , // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½  
+        "Summer"  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  
     );
-    task3.specialRewards.push_back ( Gold_Hoe );   // ÌØÊâ½±Àø  
-    task3.relationshipPoints = 5; // ÓëËùÓĞÈËµÄºÃ¸Ğ¶È  
+    task3.specialRewards.push_back ( Gold_Hoe );   // ï¿½ï¿½ï¿½â½±ï¿½ï¿½  
+    task3.relationshipPoints = 5; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ËµÄºÃ¸Ğ¶ï¿½  
 
-    // ½«ÈÎÎñÌí¼Óµ½ÈÎÎñ¹ÜÀíÆ÷  
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  
     taskManager->createTask ( task1 );
     taskManager->createTask ( task2 );
     taskManager->createTask ( task3 );
 
     // taskManager->AddAcceptTask ( task1 );
 
-    //³õÊ¼»¯BarnÄÚ¿É·ÅÖÃ¼ÒĞó¾ØÕó
+    //ï¿½ï¿½Ê¼ï¿½ï¿½Barnï¿½Ú¿É·ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     barn_space.push_back(std::make_pair(Rect(685.714294, 213.333328, 114.285713, 106.666664), false));
     barn_space.push_back(std::make_pair(Rect(800.000000, 213.333328, 114.285713, 106.666664), false));
     barn_space.push_back(std::make_pair(Rect(914.285706, 213.333328, 114.285713, 106.666664), false));
@@ -317,28 +352,28 @@ void AppDelegate::Initialize () {
     barn_space.push_back(std::make_pair(Rect(914.285706, 640.000000, 114.285713, 106.666664), false));
     barn_space.push_back(std::make_pair(Rect(1142.857178, 640.000000, 114.285713, 106.666664), false));
 
-    // ³õÊ¼»¯¼¾½Ú
+    // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     season.insert ( { "Spring", 1 } );
     season.insert ( { "Summer", 2 } );
     season.insert ( { "Autumn", 3 } );
     season.insert ( { "Winter", 4 } );
 
-    // ´´½¨ÈÎÎñ  
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  
     //TaskManagement::Task task1 ( "Fetch the Amethyst" , TaskManagement::NPC_TASK );
-    //task1.npcName = "Abigail"; // ·¢²¼ÈÎÎñµÄ NPC Ãû×Ö  
-    //task1.requiredItems.push_back ( amethyst ); // ĞèÒªµÄÎïÆ·  
-    //task1.rewardCoins = 500; // ½±Àø½ğ±Ò  
-    //task1.relationshipPoints = 10; // NPC ºÃ¸Ğ¶È  
+    //task1.npcName = "Abigail"; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ NPC ï¿½ï¿½ï¿½ï¿½  
+    //task1.requiredItems.push_back ( amethyst ); // ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Æ·  
+    //task1.rewardCoins = 500; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  
+    //task1.relationshipPoints = 10; // NPC ï¿½Ã¸Ğ¶ï¿½  
 
     //TaskManagement::Task task2 ( "Collect Emerald" , TaskManagement::SYSTEM_TASK );
-    //task2.requiredItems.push_back ( emerald ); // ĞèÒªµÄÎïÆ·  
-    //task2.rewardCoins = 30; // ½±Àø½ğ±Ò  
+    //task2.requiredItems.push_back ( emerald ); // ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Æ·  
+    //task2.rewardCoins = 30; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  
 
     //TaskManagement::Task task3 ( "Festival Gathering" , TaskManagement::FESTIVAL_TASK );
-    //task3.specialRewards.push_back ( Gold_Hoe );   // ÌØÊâ½±Àø  
-    //task3.relationshipPoints = 5; // ÓëËùÓĞÈËµÄºÃ¸Ğ¶È  
+    //task3.specialRewards.push_back ( Gold_Hoe );   // ï¿½ï¿½ï¿½â½±ï¿½ï¿½  
+    //task3.relationshipPoints = 5; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ËµÄºÃ¸Ğ¶ï¿½  
 
-    //// ½«ÈÎÎñÌí¼Óµ½ÈÎÎñ¹ÜÀíÆ÷  
+    //// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  
     //taskManager->createTask ( task1 );
     //taskManager->createTask ( task2 );
     //taskManager->createTask ( task3 );
@@ -346,20 +381,20 @@ void AppDelegate::Initialize () {
 
 
 
-// µ±Ó¦ÓÃ³ÌĞò½øÈëºóÌ¨Ê±µ÷ÓÃ
+// ï¿½ï¿½Ó¦ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨Ê±ï¿½ï¿½ï¿½ï¿½
 void AppDelegate::applicationDidEnterBackground() {
-    Director::getInstance()->stopAnimation();  // Í£Ö¹¶¯»­
+    Director::getInstance()->stopAnimation();  // Í£Ö¹ï¿½ï¿½ï¿½ï¿½
 
 #if USE_AUDIO_ENGINE
-    AudioEngine::pauseAll();  // ÔİÍ£ËùÓĞÒôÆµ£¨Èç¹ûÆôÓÃÁËÒôÆµÒıÇæ£©
+    AudioEngine::pauseAll();  // ï¿½ï¿½Í£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½æ£©
 #endif
 }
 
-// µ±Ó¦ÓÃ³ÌĞòÖØĞÂ½øÈëÇ°Ì¨Ê±µ÷ÓÃ
+// ï¿½ï¿½Ó¦ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â½ï¿½ï¿½ï¿½Ç°Ì¨Ê±ï¿½ï¿½ï¿½ï¿½
 void AppDelegate::applicationWillEnterForeground() {
-    Director::getInstance()->startAnimation();  // »Ö¸´¶¯»­
+    Director::getInstance()->startAnimation();  // ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½
 
 #if USE_AUDIO_ENGINE
-    AudioEngine::resumeAll();  // »Ö¸´ËùÓĞÒôÆµ£¨Èç¹ûÆôÓÃÁËÒôÆµÒıÇæ£©
+    AudioEngine::resumeAll();  // ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½æ£©
 #endif
 }

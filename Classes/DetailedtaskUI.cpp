@@ -1,208 +1,217 @@
-#include "ui/CocosGUI.h"  
+// DetailedtaskUI.cpp - è¯¦ç»†ä»»åŠ¡ç•Œé¢å®žçŽ°
 #include "DetailedtaskUI.h"
 #include "mailBoxUI.h"
+#include "ui/CocosGUI.h"
+#include "UI/Core/UITheme.h"
+#include "UI/Core/UIConfig.h"
+#include "UI/Builders/SpriteBuilder.h"
+#include "UI/Builders/LabelBuilder.h"
+#include "UI/Builders/ButtonBuilder.h"
+#include "UI/Components/DarkOverlay.h"
+
+extern Player* player1;
+extern TaskManagement* taskManager;
 
 USING_NS_CC;
 
-static void problemLoading ( const char* filename )
-{
-    printf ( "Error while loading: %s\n" , filename );
-    printf ( "Depending on how you compiled you might have to add 'Resources/' in front of filenames in CreateCharacterScene.cpp\n" );
+static void problemLoading(const char* filename) {
+    printf("Error while loading: %s\n", filename);
+    printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames\n");
 }
 
-void DetailedtaskUI::updateCoordinate ( float& x , float& y ) {
-    Vec2 position = player1->getPosition ();
-    float  Leftboundary = -10000.0f , rightboundary = 10000.0f , upperboundary = 10000.0f , lowerboundary = 10000.0f;
-    Leftboundary = 637.0f;
-    rightboundary = 960.0f;
-    upperboundary = 777.0f;
-    lowerboundary = 500.0f;
-    if (x <= Leftboundary) {
-        x = Leftboundary;
-    }
-    else if (x >= rightboundary) {
-        x = rightboundary;
-    }
-    else {
-        x = position.x;
-    }
-
-    if (y >= upperboundary) {
-        y = upperboundary;
-    }
-    else if (y <= lowerboundary) {
-        y = lowerboundary;
-    }
-    else {
-        y = position.y;
-    }
-}
-
-void DetailedtaskUI::backgroundcreate () {
-    Vec2 position = player1->getPosition ();
-    float currentx = position.x , currenty = position.y;
-    updateCoordinate ( currentx , currenty );
-    auto visibleSize = Director::getInstance ()->getVisibleSize ();
-    // ´´½¨Ò»¸ö°ëÍ¸Ã÷µÄºÚÉ«ÕÚÕÖ
-    auto darkLayer = cocos2d::LayerColor::create ( cocos2d::Color4B ( 0 , 0 , 0 , 120 ) , 10 * visibleSize.width , 5 * visibleSize.height );  // ºÚÉ«£¬Í¸Ã÷¶ÈÎª120
-    darkLayer->setPosition ( Vec2 ( currentx , currenty ) - visibleSize  );// ÉèÖÃÕÚÕÖ²ãµÄÎ»ÖÃ
-    this->addChild ( darkLayer , 0 );
-    //´ó¿ò¼Ü
-    auto mail = Sprite::create ( "UIresource/xinxiang/renwu2.png" );
-    if (mail == nullptr)
-    {
-        problemLoading ( "'renwu2.png'" );
-    }
-    else
-    {
-        // »ñÈ¡Ô­Ê¼Í¼Æ¬µÄ¿í¸ß
-        float originalWidth = mail->getContentSize ().width;
-        float originalHeight = mail->getContentSize ().height;
-        // ¸ù¾ÝÆÁÄ»¿í¶ÈºÍÍ¼Æ¬Ô­Ê¼¿í¸ß¼ÆËã±ÈÀý
-        float scaleX = visibleSize.width / originalWidth;
-        float scaleY = visibleSize.height / originalHeight;
-        // Ñ¡Ôñ×îÐ¡µÄËõ·Å±ÈÀý£¬ÒÔ±£Ö¤Í¼Æ¬ÍêÈ«ÏÔÊ¾ÔÚÆÁÄ»ÉÏÇÒ²»±äÐÎ
-        float scale = std::min ( scaleX , scaleY );
-        mail->setScale ( scale );
-        mail->setPosition ( Vec2 ( currentx , currenty ) );
-
-        this->addChild ( mail , 1 );
-    }
-}
-
-void DetailedtaskUI::close () {
-    Vec2 position = player1->getPosition ();
-    float currentx = position.x , currenty = position.y;
-    updateCoordinate ( currentx , currenty );
-    auto visibleSize = Director::getInstance ()->getVisibleSize ();
-    auto closeIcon = Sprite::create ( "npc/bacha.png" );
-    if (closeIcon == nullptr)
-    {
-        problemLoading ( "'npc/bacha.png'" );
-    }
-    else
-    {
-        float originalWidth = closeIcon->getContentSize ().width;
-        float originalHeight = closeIcon->getContentSize ().height;
-        float scaleX = visibleSize.width / originalWidth;
-        float scaleY = visibleSize.height / originalHeight;
-        float scale = std::min ( scaleX , scaleY );
-        closeIcon->setScale ( scale / 20.5 );
-        closeIcon->setPosition ( Vec2 ( currentx + visibleSize.width * 0.45 , currenty + visibleSize.height * 0.4 ) );
-
-        this->addChild ( closeIcon , 1 );
-        auto listener = EventListenerMouse::create ();
-        listener->onMouseMove = [this , closeIcon , scale]( EventMouse* event ) {
-            Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
-            mousePos = this->convertToNodeSpace ( mousePos );
-            if (closeIcon->getBoundingBox ().containsPoint ( mousePos ))
-            {
-                closeIcon->setScale ( scale / 20.5 * 1.2 );
-            }
-            else
-                closeIcon->setScale ( scale / 20.5 );
-            };
-
-        listener->onMouseDown = [this , closeIcon]( EventMouse* event ) {
-            Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
-            mousePos = this->convertToNodeSpace ( mousePos );
-            CCLOG ( "%f %f" , mousePos.x , mousePos.y );
-            if (closeIcon->getBoundingBox ().containsPoint ( mousePos )) {
-                this->removeFromParent ();
-                Scene* currentScene = Director::getInstance ()->getRunningScene ();
-                currentScene->addChild ( mailBoxUI::create () , 20 );
-            }
-            };
-        _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , closeIcon );
-    }
-}
-
-void DetailedtaskUI::displayTask ( TaskManagement::Task task ) {
-    Vec2 position = player1->getPosition ();
-    float currentx = position.x , currenty = position.y;
-    updateCoordinate ( currentx , currenty );
-
-    // ´´½¨Ò»¸ö×Ö·û´®ÒÔ´æ´¢ËùÓÐÈÎÎñµÄÐÅÏ¢  
-    std::string allTasksInfo;
-
-    // ¸ñÊ½»¯ÈÎÎñÐÅÏ¢  
-    std::string taskInfo = "------------------------\n";
-    taskInfo += "Task Name: " + task.name + "\n";
-    taskInfo += "Task Type: " + std::to_string ( task.type ) + "\n";
-    if (task.type == TaskManagement::NPC_TASK) {
-        taskInfo += "Release NPC: " + task.npcName + "\n";
-    }
-    taskInfo += "Reward coins: " + std::to_string ( task.rewardCoins ) + "\n";
-    taskInfo += "Enhance favorability: " + std::to_string ( task.relationshipPoints ) + "\n";
-    taskInfo += "------------------------\n";
-
-    allTasksInfo += taskInfo; // ½«Ã¿¸öÈÎÎñÐÅÏ¢Ìí¼Óµ½×Ü×Ö·û´®ÖÐ  
-
-    // ´´½¨±êÇ©À´ÏÔÊ¾ÈÎÎñÐÅÏ¢  
-    auto taskMessage = Label::createWithSystemFont ( allTasksInfo , "fonts/Comic Sans MS.ttf" , 80 );
-    taskMessage->setTextColor ( Color4B::BLACK );
-
-    // ÉèÖÃ±êÇ©µÄÎ»ÖÃ  
-    Vec2 visibleSize = Director::getInstance ()->getVisibleSize ();
-    taskMessage->setPosition ( Vec2 ( currentx , currenty ) );
-
-    // ½«±êÇ©Ìí¼Óµ½LayerÖÐ  
-    this->addChild ( taskMessage , 2 );
-
-    //È·¶¨½ÓÊÜÈÎÎñ
-    auto OK = ui::Button::create ( "UIresource/create/OK.png" , "UIresource/create/OK.png" );
-    float originalWidth = OK->getContentSize ().width;
-    float originalHeight = OK->getContentSize ().height;
-    float scaleX = visibleSize.x / originalWidth;
-    float scaleY = visibleSize.y / originalHeight;
-    float scale = std::min ( scaleX , scaleY );
-    OK->setScale ( scale / 8 );
-
-    auto listener = EventListenerMouse::create ();
-    listener->onMouseMove = [this , OK , scale]( EventMouse* event ) {
-        Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
-        mousePos = this->convertToNodeSpace ( mousePos );
-        if (OK->getBoundingBox ().containsPoint ( mousePos )) {
-            OK->setScale ( scale / 8 * 1.2f );
-        }
-        else
-            OK->setScale ( scale / 8 );
-        };
-
-    listener->onMouseDown = [this , OK , task]( EventMouse* event ) {
-        Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
-        mousePos = this->convertToNodeSpace ( mousePos );
-        if (OK->getBoundingBox ().containsPoint ( mousePos )) {
-            taskManager->AddAcceptTask ( task );
-            taskManager->DeleteAcceptTask ( task );
-            this->removeFromParent ();
-            Scene* currentScene = Director::getInstance ()->getRunningScene ();
-            currentScene->addChild ( mailBoxUI::create () , 20 );
-        }
-        };
-    _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , OK );
-
-    OK->setPosition ( Vec2 ( currentx + visibleSize.x * 0.4 , currenty - visibleSize.y * 0.23 ) );
-    this->addChild ( OK , 2 );
-}
-
-bool DetailedtaskUI::init ( TaskManagement::Task task ) {
-    if (!Layer::init ()) {
-        return false;
-    }
-    backgroundcreate ();
-    displayTask ( task );
-    close ();
-    return true;
-}
-
-DetailedtaskUI* DetailedtaskUI::create ( TaskManagement::Task task ) {
-    DetailedtaskUI* ret = new DetailedtaskUI ();
-    if (ret && ret->init (task )) {
-        ret->autorelease ();
+DetailedtaskUI* DetailedtaskUI::create(TaskManagement::Task task) {
+    DetailedtaskUI* ret = new DetailedtaskUI();
+    if (ret && ret->init(task)) {
+        ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE ( ret );
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
+bool DetailedtaskUI::init(TaskManagement::Task task) {
+    if (!ClosableUI::init()) {
+        return false;
+    }
+
+    // åˆå§‹åŒ–å±å¹•å’Œä½ç½®ä¿¡æ¯
+    auto theme = UITheme::getInstance();
+    auto config = UIConfig::getInstance();
+    m_visibleSize = theme->getVisibleSize();
+
+    Vec2 playerPos = player1->getPosition();
+    // è®¾ç½®åœºæ™¯åç§°ï¼Œå¯ä»¥æ ¹æ®ä»»åŠ¡ç±»åž‹è°ƒæ•´
+    m_sceneName = "farm"; // é»˜è®¤åœºæ™¯ï¼Œå¯ä»¥æ ¹æ®éœ€è¦ä¿®æ”¹
+    m_adjustedPosition = config->adjustCoordinate(m_sceneName, playerPos);
+
+    setupUI(task);
+
+    return true;
+}
+
+void DetailedtaskUI::setupUI(TaskManagement::Task task) {
+    // 1. åˆ›å»ºåŠé€æ˜Žé®ç½©
+    auto darkOverlay = DarkOverlay::create(m_sceneName);
+    this->addChild(darkOverlay, 0);
+
+    // 2. åˆ›å»ºä¸»è¦UIç»„ä»¶
+    createBackground();
+    displayTask(task);
+    createAcceptButton(task);
+    createCloseButton();
+
+    // 3. è®¾ç½®äº‹ä»¶ç›‘å¬å™¨
+    setupEventListeners();
+}
+
+void DetailedtaskUI::createBackground() {
+    m_background = SpriteBuilder()
+        .setTexture("UIresource/xinxiang/renwu2.png")
+        .setAutoScale(1.0f)  // ä½¿ç”¨åŽŸå§‹å¤§å°ï¼Œé€‚é…å±å¹•
+        .setPosition(m_adjustedPosition)
+        .setZOrder(1)
+        .setTag(101)
+        .addToParent(this)
+        .build();
+
+    if (!m_background) {
+        problemLoading("'renwu2.png'");
+    }
+}
+
+void DetailedtaskUI::displayTask(TaskManagement::Task task) {
+    // æž„å»ºä»»åŠ¡ä¿¡æ¯å­—ç¬¦ä¸²
+    std::string taskInfo = "------------------------\n";
+    taskInfo += "Task Name: " + task.name + "\n";
+    taskInfo += "Task Type: " + std::to_string(task.type) + "\n";
+
+    // å¦‚æžœæ˜¯NPCä»»åŠ¡ï¼Œæ˜¾ç¤ºNPCåç§°
+    if (task.type == TaskManagement::NPC_TASK) {
+        taskInfo += "Release NPC: " + task.npcName + "\n";
+    }
+
+    taskInfo += "Reward coins: " + std::to_string(task.rewardCoins) + "\n";
+    taskInfo += "Enhance favorability: " + std::to_string(task.relationshipPoints) + "\n";
+    taskInfo += "------------------------";
+
+    // åˆ›å»ºä»»åŠ¡ä¿¡æ¯æ ‡ç­¾
+    m_taskInfoLabel = LabelBuilder()
+        .setText(taskInfo)
+        .setFont("fonts/Comic Sans MS.ttf", 80)
+        .setColor(Color3B::BLACK)
+        .setPosition(m_adjustedPosition)
+        .setZOrder(2)
+        .setTag(102)
+        .addToParent(this)
+        .build();
+}
+
+void DetailedtaskUI::createAcceptButton(TaskManagement::Task task) {
+    // ä½¿ç”¨ButtonBuilderåˆ›å»ºæŽ¥å—ä»»åŠ¡æŒ‰é’®
+    m_acceptButton = ButtonBuilder()
+        .setNormalTexture(UIConfig::UIResources::OK_BUTTON_NORMAL)
+        .setPressedTexture(UIConfig::UIResources::OK_BUTTON_PRESSED)
+        .setAutoScale(8.0f)
+        .setPosition(m_adjustedPosition.x + m_visibleSize.width * 0.4f,
+                    m_adjustedPosition.y - m_visibleSize.height * 0.23f)
+        .setZOrder(2)
+        .setTag(104)
+        .setClickCallback([this, task](Ref* sender) {
+            onAcceptClicked(task);
+        })
+        .setHoverEffect(1.2f)
+        .addToParent(this)
+        .build();
+}
+
+void DetailedtaskUI::createCloseButton() {
+    m_closeButton = SpriteBuilder()
+        .setTexture("npc/bacha.png")
+        .setAutoScale(20.5f)
+        .setPosition(m_adjustedPosition.x + m_visibleSize.width * 0.45f,
+                    m_adjustedPosition.y + m_visibleSize.height * 0.4f)
+        .setZOrder(1)
+        .setTag(103)
+        .addToParent(this)
+        .build();
+
+    if (!m_closeButton) {
+        problemLoading("'npc/bacha.png'");
+    }
+}
+
+void DetailedtaskUI::setupEventListeners() {
+    // é¼ æ ‡äº‹ä»¶ç›‘å¬å™¨
+    auto mouseListener = EventListenerMouse::create();
+
+    mouseListener->onMouseMove = CC_CALLBACK_1(DetailedtaskUI::onMouseMove, this);
+    mouseListener->onMouseDown = CC_CALLBACK_1(DetailedtaskUI::onMouseDown, this);
+
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
+
+    // ä½¿ç”¨åŸºç±»çš„ESCå…³é—­åŠŸèƒ½
+    setupEscCloseListener();
+}
+
+void DetailedtaskUI::onMouseMove(EventMouse* event) {
+    Vec2 mousePosition = Vec2(event->getCursorX(), event->getCursorY());
+    mousePosition = this->convertToNodeSpace(mousePosition);
+
+    // æ£€æŸ¥å…³é—­æŒ‰é’®æ‚¬åœæ•ˆæžœ
+    if (m_closeButton && m_closeButton->getBoundingBox().containsPoint(mousePosition)) {
+        auto theme = UITheme::getInstance();
+        float scale = theme->getVisibleSize().width / m_closeButton->getContentSize().width / 20.5f;
+        m_closeButton->setScale(scale * 1.2f);  // æ”¾å¤§æ•ˆæžœ
+    } else if (m_closeButton) {
+        auto theme = UITheme::getInstance();
+        float scale = theme->getVisibleSize().width / m_closeButton->getContentSize().width / 20.5f;
+        m_closeButton->setScale(scale);  // æ¢å¤åŽŸå§‹å¤§å°
+    }
+
+    // æ³¨æ„ï¼šButtonBuilderå·²ç»å¤„ç†äº†æŽ¥å—æŒ‰é’®çš„æ‚¬åœæ•ˆæžœï¼Œè¿™é‡Œä¸éœ€è¦é¢å¤–å¤„ç†
+}
+
+void DetailedtaskUI::onMouseDown(EventMouse* event) {
+    Vec2 mousePosition = Vec2(event->getCursorX(), event->getCursorY());
+    mousePosition = this->convertToNodeSpace(mousePosition);
+
+    // æ£€æŸ¥å…³é—­æŒ‰é’®ç‚¹å‡»
+    if (m_closeButton && m_closeButton->getBoundingBox().containsPoint(mousePosition)) {
+        onCloseClicked();
+        return;
+    }
+
+    // æ³¨æ„ï¼šButtonBuilderå·²ç»å¤„ç†äº†æŽ¥å—æŒ‰é’®çš„ç‚¹å‡»äº‹ä»¶ï¼Œè¿™é‡Œä¸éœ€è¦é¢å¤–å¤„ç†
+}
+
+void DetailedtaskUI::onCloseClicked() {
+    this->removeFromParent();
+
+    // æ‰“å¼€é‚®ä»¶ç®±ç•Œé¢
+    auto currentScene = Director::getInstance()->getRunningScene();
+    if (currentScene) {
+        auto mailBox = mailBoxUI::create();
+        if (mailBox) {
+            currentScene->addChild(mailBox, 20);
+        }
+    }
+}
+
+void DetailedtaskUI::onAcceptClicked(TaskManagement::Task task) {
+    // æ·»åŠ ä»»åŠ¡åˆ°æŽ¥å—åˆ—è¡¨
+    if (taskManager) {
+        taskManager->AddAcceptTask(task);
+        taskManager->DeleteAcceptTask(task);
+    }
+
+    this->removeFromParent();
+
+    // æ‰“å¼€é‚®ä»¶ç®±ç•Œé¢
+    auto currentScene = Director::getInstance()->getRunningScene();
+    if (currentScene) {
+        auto mailBox = mailBoxUI::create();
+        if (mailBox) {
+            currentScene->addChild(mailBox, 20);
+        }
+    }
+}

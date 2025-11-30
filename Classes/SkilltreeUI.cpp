@@ -1,269 +1,139 @@
-// SkilltreeUI.cpp  
-#include "ui/CocosGUI.h"  
+// SkilltreeUI.cpp - æŠ€èƒ½æ ‘ç•Œé¢å®žçŽ°ï¼ˆä½¿ç”¨å»ºé€ è€…æ¨¡å¼é‡æž„ï¼‰
 #include "SkillTreeUI.h"
+#include "ui/CocosGUI.h"
+#include "UI/Core/UITheme.h"
+#include "UI/Core/UIConfig.h"
+#include "UI/Builders/SpriteBuilder.h"
+#include "UI/Components/DarkOverlay.h"
+#include "UI/Components/TabSwitcher.h"
 #include "quitUI.h"
 
 const int characternum = 5;
 
 USING_NS_CC;
 
-static void problemLoading ( const char* filename )
-{
-    printf ( "Error while loading: %s\n" , filename );
-    printf ( "Depending on how you compiled you might have to add 'Resources/' in front of filenames in CreateCharacterScene.cpp\n" );
+SkillTreeUI* SkillTreeUI::create(std::string sceneName) {
+    SkillTreeUI* ret = new SkillTreeUI();
+    if (ret && ret->init(sceneName)) {
+        ret->autorelease();
+        return ret;
+    }
+    CC_SAFE_DELETE(ret);
+    return nullptr;
 }
 
-void SkillTreeUI::updateCoordinate ( float& x , float& y ) {
-    Vec2 position = player1->getPosition ();
-    float  Leftboundary = -10000.0f , rightboundary = 10000.0f , upperboundary = 10000.0f , lowerboundary = 10000.0f;
-    if (SceneName == "Town") {
-        Leftboundary = -170.0f;
-        rightboundary = 1773.0f;
-        upperboundary = 1498.0f;
-        lowerboundary = -222.0f;
-    }
-    else if (SceneName == "Cave") {
-        Leftboundary = 786.0f;
-        rightboundary = 817.0f;
-        upperboundary = 808.0f;
-        lowerboundary = 460.0f;
-    }
-    else if (SceneName == "Beach") {
-        Leftboundary = -315.0f;
-        rightboundary = 20000.0f;
-        upperboundary = 920.0f;
-        lowerboundary = 360.0f;
-    }
-    else if (SceneName == "Forest") {
-        Leftboundary = -600.0f;
-        rightboundary = 2197.0f;
-        upperboundary = 2200.0f;
-        lowerboundary = -850.0f;
-    }
-    else if (SceneName == "farm") {
-        Leftboundary = 637.0f;
-        rightboundary = 960.0f;
-        upperboundary = 777.0f;
-        lowerboundary = 500.0f;
-    }
-    else if (SceneName == "Barn") {
-        Leftboundary = 805.0f;
-        rightboundary = 805.0f;
-        upperboundary = 569.0f;
-        lowerboundary = 569.0f;
-    }
-    else if (SceneName == "Myhouse") {
-        Leftboundary = 800.0f;
-        rightboundary = 800.0f;
-        upperboundary = 580.0f;
-        lowerboundary = 580.0f;
-    }
-    if (x <= Leftboundary) {
-        x = Leftboundary;
-    }
-    else if (x >= rightboundary) {
-        x = rightboundary;
-    }
-    else {
-        x = position.x;
-    }
-
-    if (y >= upperboundary) {
-        y = upperboundary;
-    }
-    else if (y <= lowerboundary) {
-        y = lowerboundary;
-    }
-    else {
-        y = position.y;
-    }
-}
-
-void SkillTreeUI::backgroundcreate () {
-    Vec2 position = player1->getPosition ();
-    float currentx = position.x , currenty = position.y;
-    updateCoordinate ( currentx , currenty );
-    auto visibleSize = Director::getInstance ()->getVisibleSize ();
-    // ´´½¨Ò»¸ö°ëÍ¸Ã÷µÄºÚÉ«ÕÚÕÖ
-    auto darkLayer = cocos2d::LayerColor::create ( cocos2d::Color4B ( 0 , 0 , 0 , 120 ) , 10 * visibleSize.width , 5 * visibleSize.height );  // ºÚÉ«£¬Í¸Ã÷¶ÈÎª120
-    darkLayer->setPosition ( Vec2 ( currentx , currenty ) - visibleSize  );// ÉèÖÃÕÚÕÖ²ãµÄÎ»ÖÃ
-    this->addChild ( darkLayer , 0 );
-    //´ó¿ò¼Ü
-    auto IntimacyFace = Sprite::create ( "UIresource/SkillTree/background1.png" );
-    IntimacyFace->setTag ( 101 );
-    if (IntimacyFace == nullptr)
-    {
-        problemLoading ( "'background.png'" );
-    }
-    else
-    {
-        // »ñÈ¡Ô­Ê¼Í¼Æ¬µÄ¿í¸ß
-        float originalWidth = IntimacyFace->getContentSize ().width;
-        float originalHeight = IntimacyFace->getContentSize ().height;
-        // ¸ù¾ÝÆÁÄ»¿í¶ÈºÍÍ¼Æ¬Ô­Ê¼¿í¸ß¼ÆËã±ÈÀý
-        float scaleX = visibleSize.width / originalWidth;
-        float scaleY = visibleSize.height / originalHeight;
-        // Ñ¡Ôñ×îÐ¡µÄËõ·Å±ÈÀý£¬ÒÔ±£Ö¤Í¼Æ¬ÍêÈ«ÏÔÊ¾ÔÚÆÁÄ»ÉÏÇÒ²»±äÐÎ
-        float scale = std::min ( scaleX , scaleY );
-        IntimacyFace->setScale ( scale / 1.5 );
-        IntimacyFace->setPosition ( Vec2 ( currentx , currenty ) );
-
-        this->addChild ( IntimacyFace , 1 );
-    }
-    SkillDisplay ( 0 , Vec2 ( currentx - visibleSize.width * 0.18 , currenty + visibleSize.height * 0.18 ) , 60 );
-    SkillDisplay ( 1 , Vec2 ( currentx - visibleSize.width * 0.18 , currenty + visibleSize.height * 0.09 ) , 60 );
-    SkillDisplay ( 2 , Vec2 ( currentx - visibleSize.width * 0.18 , currenty + visibleSize.height * 0.00 ) , 60 );
-    SkillDisplay ( 3 , Vec2 ( currentx - visibleSize.width * 0.18 , currenty - visibleSize.height * 0.09 ) , 60 );
-    SkillDisplay ( 4 , Vec2 ( currentx - visibleSize.width * 0.18 , currenty - visibleSize.height * 0.18 ) , 60 );
-}
-
-void SkillTreeUI::SkillDisplay ( int whichSkill , Vec2 Pos , float gap ) {
-    int fullSkill_num = (*skill_tree)(whichSkill);
-    int emptyheart_num = 10 - fullSkill_num;
-    auto visibleSize = Director::getInstance ()->getVisibleSize ();
-    for (int i = 0; i < 10; i++) {
-        if (i == 4 || i == 9 || i == 5) {
-            gap += 85.0f;
-        }
-        else
-            gap += 60.0f;
-        if (fullSkill_num > 0)
-        {
-            auto fullHeart = Sprite::create ( "UIresource/SkillTree/fullSkill1.png" );
-            if (i == 4 || i == 9)
-                fullHeart->setTexture ( "UIresource/SkillTree/fullSkill2.png" );
-            if (fullHeart == nullptr)
-            {
-                problemLoading ( "'fullSkill1.png'" );
-            }
-            else
-            {
-                fullHeart->setScale ( 1.5f );
-                fullHeart->setPosition ( Vec2 ( Pos.x + gap , Pos.y ) );
-                this->addChild ( fullHeart , 3 );
-            }
-            fullSkill_num--;
-            continue;
-        }
-        if (emptyheart_num > 0)
-        {
-            auto emptySkill = Sprite::create ( "UIresource/SkillTree/emptySkill1.png" );
-            if (i == 4 || i == 9)
-                emptySkill->setTexture ( "UIresource/SkillTree/emptySkill2.png" );
-            if (emptySkill == nullptr)
-            {
-                problemLoading ( "'emptySkill1.png'" );
-            }
-            else
-            {
-                emptySkill->setScale ( 1.5f );
-                emptySkill->setPosition ( Vec2 ( Pos.x + gap , Pos.y ) );
-                this->addChild ( emptySkill , 3 );
-            }
-            emptyheart_num--;
-            continue;
-        }
-    }
-}
-
-void SkillTreeUI::Buttons_switching () {
-    Vec2 position = player1->getPosition ();
-    float currentx = position.x , currenty = position.y;
-    updateCoordinate ( currentx , currenty );
-    auto visibleSize = Director::getInstance ()->getVisibleSize ();
-    //Í¼±êÏÔÊ¾
-    auto bagkey = Sprite::create ( "UIresource/beibao/bagkey.png" );
-    auto Skillkey = Sprite::create ( "UIresource/beibao/Skillkey.png" );
-    auto intimacykey = Sprite::create ( "UIresource/beibao/intimacykey.png" );
-    auto quitkey = Sprite::create ( "UIresource/beibao/quit.png" );
-    if (bagkey == nullptr)
-    {
-        problemLoading ( "'bagkey.png'" );
-    }
-    else
-    {
-        // »ñÈ¡Ô­Ê¼Í¼Æ¬µÄ¿í¸ß
-        float originalWidth = bagkey->getContentSize ().width;
-        float originalHeight = bagkey->getContentSize ().height;
-        // ¸ù¾ÝÆÁÄ»¿í¶ÈºÍÍ¼Æ¬Ô­Ê¼¿í¸ß¼ÆËã±ÈÀý
-        float scaleX = visibleSize.width / originalWidth;
-        float scaleY = visibleSize.height / originalHeight;
-        // Ñ¡Ôñ×îÐ¡µÄËõ·Å±ÈÀý£¬ÒÔ±£Ö¤Í¼Æ¬ÍêÈ«ÏÔÊ¾ÔÚÆÁÄ»ÉÏÇÒ²»±äÐÎ
-        float scale = std::min ( scaleX , scaleY );
-        bagkey->setScale ( scale / 16.5 );
-        bagkey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.25 , currenty + visibleSize.height * 0.315 ) );//0.305ÊÇÑ¡ÖÐÊ±Î»ÖÃ
-        Skillkey->setScale ( scale / 16.5 );
-        Skillkey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.19 , currenty + visibleSize.height * 0.305 ) );//0.315ÊÇÎ´Ñ¡ÖÐÊ±Î»ÖÃ
-        intimacykey->setScale ( scale / 16.5 );
-        intimacykey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.13 , currenty + visibleSize.height * 0.315 ) );
-        quitkey->setScale ( scale / 16.5 );
-        quitkey->setPosition ( Vec2 ( currentx - visibleSize.width * 0.07 , currenty + visibleSize.height * 0.315 ) );
-        this->addChild ( bagkey , 2 );
-        this->addChild ( Skillkey , 2 );
-        this->addChild ( intimacykey , 2 );
-        this->addChild ( quitkey , 2 );
-    }
-
-    //¶¯»­ÒÔ¼°ÇÐ»»Layer
-    auto listener = EventListenerMouse::create ();
-    listener->onMouseDown = [this , bagkey , Skillkey , intimacykey ,quitkey]( EventMouse* event ) {
-        Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
-        mousePos = this->convertToNodeSpace ( mousePos );
-        //CCLOG ( "X:%f,Y:%f" , event->getCursorX () , event->getCursorY () );
-        if (bagkey->getBoundingBox ().containsPoint ( mousePos )) {
-            // ÒÆ³ýµ±Ç°µÄLayer
-            std::string nowScene = SceneName;
-            this->removeFromParent ();
-            Director::getInstance ()->getRunningScene ()->addChild ( InventoryUI::create ( inventory , nowScene ) , 20 );
-        }
-        else if (Skillkey->getBoundingBox ().containsPoint ( mousePos )) {
-
-        }
-        else if (intimacykey->getBoundingBox ().containsPoint ( mousePos )) {
-            std::string nowScene = SceneName;
-            this->removeFromParent ();
-            Director::getInstance ()->getRunningScene ()->addChild ( intimacyUI::create ( nowScene ) , 20 );
-        }
-        else if (quitkey->getBoundingBox ().containsPoint ( mousePos )) {
-            std::string nowScene = SceneName;
-            this->removeFromParent ();
-            Director::getInstance ()->getRunningScene ()->addChild ( quitUI::create ( nowScene ) , 20 );
-        }
-        };
-    _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , this );
-}
-
-void SkillTreeUI::close () {
-    // ÉèÖÃ¼üÅÌ¼àÌýÆ÷  
-    auto listenerClose = EventListenerKeyboard::create ();
-    listenerClose->onKeyPressed = [this]( EventKeyboard::KeyCode keyCode , Event* event ) {
-        if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE) {
-            this->removeFromParent ();
-        }
-        };
-    // ½«¼àÌýÆ÷Ìí¼Óµ½ÊÂ¼þ·Ö·¢Æ÷ÖÐ  
-    _eventDispatcher->addEventListenerWithSceneGraphPriority ( listenerClose , this );
-}
-
-bool SkillTreeUI::init ( std::string sceneName ) {
-    if (!Layer::init ()) {
+bool SkillTreeUI::init(std::string sceneName) {
+    if (!ClosableUI::init()) {
         return false;
     }
-    SceneName = sceneName;
-    backgroundcreate ();
 
-    Buttons_switching ();
-    close ();
+    m_sceneName = sceneName;
+
+    setupUI();
+    setupSkillDisplay();
+    setupEscCloseListener();  // ä½¿ç”¨åŸºç±»çš„ESCå…³é—­åŠŸèƒ½
+
     return true;
 }
 
-SkillTreeUI* SkillTreeUI::create ( std::string sceneName ) {
-    SkillTreeUI* ret = new SkillTreeUI ();
-    if (ret && ret->init ( sceneName )) {
-        ret->autorelease ();
-        return ret;
+void SkillTreeUI::setupUI() {
+    auto theme = UITheme::getInstance();
+    auto config = UIConfig::getInstance();
+
+    // èŽ·å–çŽ©å®¶ä½ç½®å¹¶è°ƒæ•´åæ ‡
+    Vec2 playerPos = player1->getPosition();
+    Vec2 adjustedPos = config->adjustCoordinate(m_sceneName, playerPos);
+
+    // 1. åˆ›å»ºåŠé€æ˜Žé®ç½© - ä½¿ç”¨å¯å¤ç”¨ç»„ä»¶
+    auto darkOverlay = DarkOverlay::create(m_sceneName);
+    this->addChild(darkOverlay, 0);
+
+    // 2. åˆ›å»ºèƒŒæ™¯é¢æ¿ - ä½¿ç”¨SpriteBuilder
+    auto background = SpriteBuilder()
+        .setTexture(UIConfig::UIResources::SKILL_BACKGROUND1)
+        .setAutoScale(1.5f)  // æ›¿ä»£åŽŸæ¥çš„ scale/1.5
+        .setPosition(adjustedPos)
+        .setZOrder(1)
+        .setTag(101)
+        .addToParent(this)
+        .build();
+
+    // 3. åˆ›å»ºæ ‡ç­¾åˆ‡æ¢å™¨ - ä½¿ç”¨å¯å¤ç”¨ç»„ä»¶
+    auto tabSwitcher = TabSwitcher::create(m_sceneName, TabSwitcher::TabType::SKILL_TREE);
+    this->addChild(tabSwitcher, 2);
+}
+
+void SkillTreeUI::setupSkillDisplay() {
+    auto theme = UITheme::getInstance();
+    auto config = UIConfig::getInstance();
+    Size visibleSize = theme->getVisibleSize();
+
+    // èŽ·å–è°ƒæ•´åŽçš„ä½ç½®
+    Vec2 playerPos = player1->getPosition();
+    Vec2 adjustedPos = config->adjustCoordinate(m_sceneName, playerPos);
+
+    // æ˜¾ç¤º5è¡ŒæŠ€èƒ½ï¼ˆfarming, mining, foraging, fishing, combatï¼‰
+    displaySkillRow(0, Vec2(adjustedPos.x - visibleSize.width * 0.18f,
+                            adjustedPos.y + visibleSize.height * 0.18f), 60);
+    displaySkillRow(1, Vec2(adjustedPos.x - visibleSize.width * 0.18f,
+                            adjustedPos.y + visibleSize.height * 0.09f), 60);
+    displaySkillRow(2, Vec2(adjustedPos.x - visibleSize.width * 0.18f,
+                            adjustedPos.y + visibleSize.height * 0.00f), 60);
+    displaySkillRow(3, Vec2(adjustedPos.x - visibleSize.width * 0.18f,
+                            adjustedPos.y - visibleSize.height * 0.09f), 60);
+    displaySkillRow(4, Vec2(adjustedPos.x - visibleSize.width * 0.18f,
+                            adjustedPos.y - visibleSize.height * 0.18f), 60);
+}
+
+void SkillTreeUI::displaySkillRow(int whichSkill, const Vec2& position, float gap) {
+    int fullSkillNum = (*skill_tree)(whichSkill);
+    int emptySkillNum = 10 - fullSkillNum;
+
+    float currentGap = gap;
+
+    // æ˜¾ç¤º10ä¸ªæŠ€èƒ½å›¾æ ‡
+    for (int i = 0; i < 10; i++) {
+        // åœ¨ç¬¬5å’Œç¬¬10ä¸ªä½ç½®å¢žåŠ é¢å¤–é—´è·
+        if (i == 4 || i == 9 || i == 5) {
+            currentGap += 85.0f;
+        } else {
+            currentGap += 60.0f;
+        }
+
+        // ç¡®å®šä½¿ç”¨å“ªç§çº¹ç†
+        bool isSpecialIcon = (i == 4 || i == 9);
+
+        if (fullSkillNum > 0) {
+            // æ˜¾ç¤ºæ»¡æŠ€èƒ½å›¾æ ‡
+            const char* texture = isSpecialIcon ?
+                UIConfig::UIResources::FULL_SKILL2 :
+                UIConfig::UIResources::FULL_SKILL1;
+
+            SpriteBuilder()
+                .setTexture(texture)
+                .setScale(1.5f)
+                .setPosition(position.x + currentGap, position.y)
+                .setZOrder(3)
+                .addToParent(this)
+                .build();
+
+            fullSkillNum--;
+        } else if (emptySkillNum > 0) {
+            // æ˜¾ç¤ºç©ºæŠ€èƒ½å›¾æ ‡
+            const char* texture = isSpecialIcon ?
+                UIConfig::UIResources::EMPTY_SKILL2 :
+                UIConfig::UIResources::EMPTY_SKILL1;
+
+            SpriteBuilder()
+                .setTexture(texture)
+                .setScale(1.5f)
+                .setPosition(position.x + currentGap, position.y)
+                .setZOrder(3)
+                .addToParent(this)
+                .build();
+
+            emptySkillNum--;
+        }
     }
-    CC_SAFE_DELETE ( ret );
-    return nullptr;
 }
 

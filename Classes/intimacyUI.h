@@ -1,34 +1,24 @@
-//intimacyUI.h
-//人物亲密度界面
 #pragma once
-#include "cocos2d.h"  
-#include "NpcRelationship.h"  
+// intimacyUI.h - 浜插瘑搴︾晫闈紙浣跨敤寤洪�犺�呮ā寮忛噸鏋勶級
+#include "cocos2d.h"
+#include "NpcRelationship.h"
 #include "AppDelegate.h"
-#include "InventoryUI.h"
-#include <NPC.h>
-#include "SkillTreeUI.h"
+#include "NPC.h"
+#include "UI/ClosableUI.h"
 
-class intimacyUI : public cocos2d::Layer {
+class intimacyUI : public ClosableUI {
 public:
-    virtual bool init ( std::string sceneName );
+    virtual bool init(std::string sceneName);
+    static intimacyUI* create(std::string sceneName);
 
-    static intimacyUI* create ( std::string sceneName );
+private:
+    void setupUI();
+    void setupCharacterDisplay();
+    void displayCharacter(const std::string& name, const std::string& status,
+                         const cocos2d::Vec2& photoPos, const cocos2d::Vec2& intimacyPos);
+    void displayIntimacyHearts(const std::string& name, const cocos2d::Vec2& position);
+    void setupHoverListener(cocos2d::Sprite* oneframe, int characterIndex);
 
-    void backgroundcreate ();
-
-    void Buttons_switching ();
-
-    void close ();
-
-    void updateCoordinate ( float& x , float& y );
-
-    void characterInfo ( const string& name , const string& status , Vec2 Pos_photo);
-
-    void intimacyDisplay ( const string& name , Vec2 Pos );
-
-private:  
-    std::string SceneName;
-
-    NpcRelationship* NPC_RELATIONSHIP;
+    std::string m_sceneName;
+    NpcRelationship* m_npcRelationship;
 };
-                            

@@ -224,9 +224,9 @@ void mini_bag::updateDisplay () {
 }
 
 // Observer�ӿ�ʵ��
-void mini_bag::onInventoryStateChanged() {
+void mini_bag::onInventoryStateChanged () {
     // ����״̬�仯ʱ�Զ�������ʾ
-    this->updateDisplay();
+    this->updateDisplay ();
 }
 
 
@@ -262,9 +262,9 @@ std::shared_ptr<Item> mini_bag::getSelectedItem () {
 }
 
 // 析构函数实现
-mini_bag::~mini_bag() {
+mini_bag::~mini_bag () {
     // 从背包系统中移除自己作为观察者
     if (_inventory != nullptr) {
-        _inventory->removeObserver(this);
+        _inventory->removeObserver ( this );
     }
 }

@@ -1,291 +1,275 @@
-#include "ui/CocosGUI.h"  
+// DailyRecordUI.cpp - æ¯æ—¥è®°å½•ç•Œé¢å®ç°ï¼ˆä½¿ç”¨å»ºé€ è€…æ¨¡å¼é‡æ„ï¼‰
 #include "DailyRecordUI.h"
 #include "DetailedtaskUI.h"
+#include "ui/CocosGUI.h"
+#include "UI/Core/UITheme.h"
+#include "UI/Core/UIConfig.h"
+#include "UI/Builders/SpriteBuilder.h"
+#include "UI/Builders/LabelBuilder.h"
+#include "UI/Components/DarkOverlay.h"
+
+extern Player* player1;
+extern TaskManagement* taskManager;
 
 USING_NS_CC;
 
-static void problemLoading ( const char* filename )
-{
-    printf ( "Error while loading: %s\n" , filename );
-    printf ( "Depending on how you compiled you might have to add 'Resources/' in front of filenames in CreateCharacterScene.cpp\n" );
-}
-
-void DailyRecordUI::updateCoordinate ( float& x , float& y ) {
-    Vec2 position = player1->getPosition ();
-    float  Leftboundary = -10000.0f , rightboundary = 10000.0f , upperboundary = 10000.0f , lowerboundary = -10000.0f;
-    if (SceneName == "Town") {
-        Leftboundary = -170.0f;
-        rightboundary = 1773.0f;
-        upperboundary = 1498.0f;
-        lowerboundary = -222.0f;
-    }
-    else if (SceneName == "Cave") {
-        Leftboundary = 786.0f;
-        rightboundary = 817.0f;
-        upperboundary = 808.0f;
-        lowerboundary = 460.0f;
-    }
-    else if (SceneName == "Beach") {
-        Leftboundary = -315.0f;
-        rightboundary = 20000.0f;
-        upperboundary = 920.0f;
-        lowerboundary = 360.0f;
-    }
-    else if (SceneName == "Forest") {
-        Leftboundary = -600.0f;
-        rightboundary = 2197.0f;
-        upperboundary = 2200.0f;
-        lowerboundary = -850.0f;
-    }
-    else if (SceneName == "farm") {
-        Leftboundary = 637.0f;
-        rightboundary = 960.0f;
-        upperboundary = 777.0f;
-        lowerboundary = 500.0f;
-    }
-    else if (SceneName == "Barn") {
-        Leftboundary = 805.0f;
-        rightboundary = 805.0f;
-        upperboundary = 569.0f;
-        lowerboundary = 569.0f;
-    }
-    else if (SceneName == "Myhouse") {
-        Leftboundary = 800.0f;
-        rightboundary = 800.0f;
-        upperboundary = 580.0f;
-        lowerboundary = 580.0f;
-    }
-    else if (SceneName == "supermarket") {
-        Leftboundary = 743.0f;
-        rightboundary = 1773.0f;
-        upperboundary = -82.0f;
-        lowerboundary = -82.0f;
-    }
-    if (x <= Leftboundary) {
-        x = Leftboundary;
-    }
-    else if (x >= rightboundary) {
-        x = rightboundary;
-    }
-    else {
-        x = position.x;
-    }
-
-    if (y >= upperboundary) {
-        y = upperboundary;
-    }
-    else if (y <= lowerboundary) {
-        y = lowerboundary;
-    }
-    else {
-        y = position.y;
-    }
-    CCLOG ( "%f %f" , x , y );
-}
-
-void DailyRecordUI::backgroundcreate () {
-    Vec2 position = player1->getPosition ();
-    float currentx = position.x , currenty = position.y;
-    updateCoordinate ( currentx , currenty );
-    auto visibleSize = Director::getInstance ()->getVisibleSize ();
-    // ´´½¨Ò»¸ö°ëÍ¸Ã÷µÄºÚÉ«ÕÚÕÖ
-    auto darkLayer = cocos2d::LayerColor::create ( cocos2d::Color4B ( 0 , 0 , 0 , 120 ) , 10 * visibleSize.width , 5 * visibleSize.height );  // ºÚÉ«£¬Í¸Ã÷¶ÈÎª120
-    darkLayer->setPosition ( Vec2 ( currentx , currenty ) - visibleSize  );// ÉèÖÃÕÚÕÖ²ãµÄÎ»ÖÃ
-    this->addChild ( darkLayer , 0 );
-    //´ó¿ò¼Ü
-    auto daily_record = Sprite::create ( "UIresource/rizhi/DailyRecord.png" );
-    if (daily_record == nullptr)
-    {
-        problemLoading ( "'DailyRecord.png'" );
-    }
-    else
-    {
-        // »ñÈ¡Ô­Ê¼Í¼Æ¬µÄ¿í¸ß
-        float originalWidth = daily_record->getContentSize ().width;
-        float originalHeight = daily_record->getContentSize ().height;
-        // ¸ù¾İÆÁÄ»¿í¶ÈºÍÍ¼Æ¬Ô­Ê¼¿í¸ß¼ÆËã±ÈÀı
-        float scaleX = visibleSize.width / originalWidth;
-        float scaleY = visibleSize.height / originalHeight;
-        // Ñ¡Ôñ×îĞ¡µÄËõ·Å±ÈÀı£¬ÒÔ±£Ö¤Í¼Æ¬ÍêÈ«ÏÔÊ¾ÔÚÆÁÄ»ÉÏÇÒ²»±äĞÎ
-        float scale = std::min ( scaleX , scaleY );
-        daily_record->setScale ( scale * 0.8 );
-        daily_record->setPosition ( Vec2 ( currentx , currenty ) );
-
-        this->addChild ( daily_record , 1 );
-    }
-}
-
-void DailyRecordUI::taskDisplay ( TaskManagement& taskManager ) {
-    Vec2 position = player1->getPosition ();
-    float currentx = position.x , currenty = position.y;
-    updateCoordinate ( currentx , currenty );
-    auto visibleSize = Director::getInstance ()->getVisibleSize ();
-    //´´½¨ ScrollView
-    auto scrollView = cocos2d::ui::ScrollView::create ();
-    scrollView->setDirection ( cocos2d::ui::ScrollView::Direction::VERTICAL ); // ÉèÖÃÎª´¹Ö±¹ö¶¯
-    scrollView->setContentSize ( Size ( 1630 , 600 ) ); // ÉèÖÃScrollView ¿í¶È£¬¸ß¶È
-    scrollView->setPosition ( Vec2 ( currentx - visibleSize.width * 0.589 , currenty - visibleSize.height * 0.2 ) ); // ÉèÖÃÎ»ÖÃ
-    scrollView->setBounceEnabled ( true ); // ÆôÓÃµ¯ĞÔĞ§¹û
-    scrollView->setScrollBarEnabled ( false );    // ½ûÓÃ´¹Ö±ºÍË®Æ½»¬¶¯Ìõ
-
-    // ¼ÆËã×Ü¸ß¶È  
-    float totalItemHeight = 0;
-    const int itemCount = 5; // ÈÎÎñÊıÁ¿  
-    const float itemHeight = 500; // Ã¿¸ö¸ß¶È  
-    totalItemHeight = itemCount * itemHeight; // ¼ÆËã×Ü¸ß¶È  
-
-    // ÉèÖÃÄÚ²¿ÈİÆ÷µÄ´óĞ¡  
-    scrollView->setInnerContainerSize ( Size ( 1630 , totalItemHeight ) ); // ÉèÖÃÄÚ²¿ÈİÆ÷µÄ´óĞ¡
-
-    // ¼àÌıÊó±ê¹öÂÖÊÂ¼ş
-    auto listener = cocos2d::EventListenerMouse::create ();
-    listener->onMouseScroll = [scrollView]( cocos2d::EventMouse* event ) {
-        // »ñÈ¡Êó±ê¹öÂÖµÄÆ«ÒÆÁ¿  
-        float scrollDelta = event->getScrollY ();
-
-        // »ñÈ¡µ±Ç°µÄ innerContainer  
-        auto innerContainer = scrollView->getInnerContainer ();
-
-        // ¼ÆËãĞÂµÄ Y Î»ÖÃ  
-        float currentPosY = innerContainer->getPositionY ();
-        float newPosY = currentPosY + scrollDelta * 100; // µ÷ÕûÁéÃô¶È  
-
-        // ÏŞÖÆ¹ö¶¯µÄÉÏÏÂ±ß½ç  
-        float lowerLimit = scrollView->getContentSize ().height - innerContainer->getContentSize ().height;
-        float upperLimit = -1400;
-
-        //CCLOG ( "currentPosY: %f, newPosY: %f, lowerLimit: %f, upperLimit: %f" , currentPosY , newPosY , lowerLimit , upperLimit );
-
-        // Ê¹ÓÃ std::max ºÍ std::min È·±£ newPosY ÔÚ±ß½çÄÚ  
-        newPosY = std::max ( newPosY , lowerLimit );
-        newPosY = std::min ( newPosY , upperLimit );
-
-        // ÉèÖÃĞÂµÄÎ»ÖÃ  
-        innerContainer->setPositionY ( newPosY );
-
-        };
-    // ½«¼àÌıÆ÷Ìí¼Óµ½ÊÂ¼ş·Ö·¢Æ÷
-    _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , this );
-
-    float offsetY = 0;  // ÓÃÀ´´æ´¢ÈÎÎñ¼äµÄ×İÏò¼ä¾à
-    // »ñÈ¡ËùÓĞÈÎÎñ  
-    std::vector<TaskManagement::Task> tasks = taskManager.returnAcceptTasks ();
-
-    // ´´½¨Ò»¸ö×Ö·û´®ÒÔ´æ´¢ËùÓĞÈÎÎñµÄĞÅÏ¢  
-    std::string allTasksInfo;
-    for (const auto& task : tasks) {
-        //Ìí¼Ó¿ò
-        auto taskframe = Sprite::create ( "UIresource/SkillTree/background.png" );
-        taskframe->setScale ( 1.2f , 0.4f );
-        taskframe->setPosition ( Vec2 ( visibleSize.width * 0.6 , 539 + visibleSize.height * 1.4 - offsetY ) );
-        scrollView->addChild ( taskframe , 2 );
-
-        // ¸ñÊ½»¯ÈÎÎñĞÅÏ¢  
-        std::string taskInfo = "Task_Name: " + task.name;
-        // ´´½¨±êÇ©À´ÏÔÊ¾ÈÎÎñĞÅÏ¢  
-        auto taskMessage = Label::createWithSystemFont ( taskInfo , "fonts/Comic Sans MS.ttf" , 50 );
-        taskMessage->setAnchorPoint ( Vec2 ( 0 , 0.5 ) );
-        taskMessage->setTextColor ( Color4B::BLACK );
-
-        // ÉèÖÃ±êÇ©µÄÎ»ÖÃ  
-        Vec2 visibleSize = Director::getInstance ()->getVisibleSize ();
-        taskMessage->setPosition ( Vec2 ( visibleSize.x * 0.35 , 539 + visibleSize.y * 1.4 - offsetY ) );
-
-        scrollView->addChild ( taskMessage , 2 );
-        auto listener = EventListenerMouse::create ();
-
-        listener->onMouseMove = [this , taskframe , scrollView , currenty , currentx]( EventMouse* event ) {
-
-            Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
-
-            mousePos = this->convertToNodeSpace ( mousePos );
-            Vec2 scrollViewPos = scrollView->getPosition ();
-
-            Vec2 innerContainerPos = scrollView->getInnerContainer ()->getPosition ();
-            Rect itemBoundingBox = taskframe->getBoundingBox ();
-
-            float adjustedPosY = itemBoundingBox.getMinY () + innerContainerPos.y;
-            float adjustedPosX = itemBoundingBox.getMinX () + innerContainerPos.x;
-            if (mousePos.x >= adjustedPosX - 950 + currentx&& mousePos.x <= adjustedPosX + itemBoundingBox.size.width - 950 + currentx&&
-            mousePos.y >= adjustedPosY + currenty - 250 && mousePos.y <= currenty + adjustedPosY + itemBoundingBox.size.height - 250) {
-                taskframe->setTexture ( "UIresource/xinxiang/xuanzhong.png" );
-            }
-            else {
-                taskframe->setTexture ( "UIresource/SkillTree/background.png" );
-            }
-            };
-
-        _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , taskframe );
-
-        // ¸üĞÂÏÂÒ»¸öÉÌÆ·µÄÎ»ÖÃÆ«ÒÆÁ¿
-        offsetY += 350;  // Ã¿¸öÈÎÎñ¼äµÄµÄ¼ä¾à
-    }
-    // ½«¹ö¶¯ÊÓÍ¼Ìí¼Óµ½LayerÖĞ
-    this->addChild ( scrollView , 5 );
-}
-
-void DailyRecordUI::close () {
-    Vec2 position = player1->getPosition ();
-    float currentx = position.x , currenty = position.y;
-    updateCoordinate ( currentx , currenty );
-    auto visibleSize = Director::getInstance ()->getVisibleSize ();
-    auto closeIcon = Sprite::create ( "npc/bacha.png" );
-    if (closeIcon == nullptr)
-    {
-        problemLoading ( "'npc/bacha.png'" );
-    }
-    else
-    {
-        float originalWidth = closeIcon->getContentSize ().width;
-        float originalHeight = closeIcon->getContentSize ().height;
-        float scaleX = visibleSize.width / originalWidth;
-        float scaleY = visibleSize.height / originalHeight;
-        float scale = std::min ( scaleX , scaleY );
-        closeIcon->setScale ( scale / 20.5 );
-        closeIcon->setPosition ( Vec2 ( currentx + visibleSize.width * 0.45 , currenty + visibleSize.height * 0.4 ) );
-
-        this->addChild ( closeIcon , 1 );
-        auto listener = EventListenerMouse::create ();
-        listener->onMouseMove = [this , closeIcon , scale]( EventMouse* event ) {
-            Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
-            mousePos = this->convertToNodeSpace ( mousePos );
-            if (closeIcon->getBoundingBox ().containsPoint ( mousePos ))
-            {
-                closeIcon->setScale ( scale / 20.5 * 1.2 );
-            }
-            else
-                closeIcon->setScale ( scale / 20.5 );
-            };
-        listener->onMouseDown = [this , closeIcon]( EventMouse* event ) {
-            Vec2 mousePos = Vec2 ( event->getCursorX () , event->getCursorY () );
-            mousePos = this->convertToNodeSpace ( mousePos );
-            CCLOG ( "%f %f" , mousePos.x , mousePos.y );
-            if (closeIcon->getBoundingBox ().containsPoint ( mousePos )) {
-                this->removeFromParent ();
-            }
-            };
-        _eventDispatcher->addEventListenerWithSceneGraphPriority ( listener , closeIcon );
-    }
-}
-
-bool DailyRecordUI::init ( std::string sceneName ) {
-    if (!Layer::init ()) {
-        return false;
-    }
-    SceneName = sceneName;
-    backgroundcreate ();
-    taskDisplay ( *taskManager );
-    close ();
-    return true;
-}
-
-DailyRecordUI* DailyRecordUI::create ( std::string sceneName ) {
-    DailyRecordUI* ret = new DailyRecordUI ();
-    if (ret && ret->init (sceneName )) {
-        ret->autorelease ();
+DailyRecordUI* DailyRecordUI::create(std::string sceneName) {
+    DailyRecordUI* ret = new DailyRecordUI();
+    if (ret && ret->init(sceneName)) {
+        ret->autorelease();
         return ret;
     }
-    CC_SAFE_DELETE ( ret );
+    CC_SAFE_DELETE(ret);
     return nullptr;
 }
 
+bool DailyRecordUI::init(std::string sceneName) {
+    if (!ClosableUI::init()) {
+        return false;
+    }
+
+    m_sceneName = sceneName;
+    m_taskManager = taskManager;
+
+    // åˆå§‹åŒ–å±å¹•å’Œä½ç½®ä¿¡æ¯
+    auto theme = UITheme::getInstance();
+    auto config = UIConfig::getInstance();
+    m_visibleSize = theme->getVisibleSize();
+
+    Vec2 playerPos = player1->getPosition();
+    m_adjustedPosition = config->adjustCoordinate(m_sceneName, playerPos);
+
+    setupUI();
+
+    return true;
+}
+
+void DailyRecordUI::setupUI() {
+    // 1. åˆ›å»ºåŠé€æ˜é®ç½©
+    auto darkOverlay = DarkOverlay::create(m_sceneName);
+    this->addChild(darkOverlay, 0);
+
+    // 2. åˆ›å»ºä¸»è¦UIç»„ä»¶
+    createBackground();
+    createTaskScrollView();
+    createCloseButton();
+
+    // 3. è®¾ç½®äº‹ä»¶ç›‘å¬å™¨
+    setupEventListeners();
+}
+
+void DailyRecordUI::createBackground() {
+    m_background = SpriteBuilder()
+        .setTexture("UIresource/rizhi/DailyRecord.png")
+        .setAutoScale(1.25f)
+        .setPosition(m_adjustedPosition)
+        .setZOrder(1)
+        .setTag(101)
+        .addToParent(this)
+        .build();
+}
+
+void DailyRecordUI::createTaskScrollView() {
+    // åˆ›å»ºæ»šåŠ¨è§†å›¾
+    m_scrollView = ui::ScrollView::create();
+    m_scrollView->setDirection(ui::ScrollView::Direction::VERTICAL);
+    m_scrollView->setContentSize(Size(1630, 600));
+    m_scrollView->setPosition(Vec2(
+        m_adjustedPosition.x - m_visibleSize.width * 0.589f,
+        m_adjustedPosition.y - m_visibleSize.height * 0.2f
+    ));
+    m_scrollView->setBounceEnabled(true);
+    m_scrollView->setScrollBarEnabled(false);
+    m_scrollView->setTag(102);
+
+    // è·å–å·²æ¥å—çš„ä»»åŠ¡
+    std::vector<TaskManagement::Task> tasks = m_taskManager->returnAcceptTasks();
+
+    // æ¸…ç©ºç°æœ‰ä»»åŠ¡æ¡†æ¶
+    m_taskFrames.clear();
+
+    // è®¡ç®—æ€»é«˜åº¦
+    const int itemCount = tasks.size();
+    const float itemHeight = 500;
+    float totalItemHeight = itemCount * itemHeight;
+
+    // è®¾ç½®å†…éƒ¨å®¹å™¨å¤§å°
+    m_scrollView->setInnerContainerSize(Size(1630, totalItemHeight));
+
+    // åˆ›å»ºä»»åŠ¡é¡¹
+    float offsetY = 0;
+    for (const auto& task : tasks) {
+        createTaskItem(task, offsetY);
+    }
+
+    this->addChild(m_scrollView, 5);
+}
+
+void DailyRecordUI::createTaskItem(const TaskManagement::Task& task, float& offsetY) {
+    // åˆ›å»ºä»»åŠ¡æ¡†æ¶
+    auto taskFrame = SpriteBuilder()
+        .setTexture("UIresource/SkillTree/background.png")
+        .setScale(1.2f, 0.4f)
+        .setPosition(Vec2(m_visibleSize.width * 0.6f, 539 + m_visibleSize.height * 1.4f - offsetY))
+        .setZOrder(2)
+        .setTag(200 + static_cast<int>(m_taskFrames.size()))
+        .addToParent(m_scrollView)
+        .build();
+
+    m_taskFrames.push_back(taskFrame);
+
+    // åˆ›å»ºä»»åŠ¡ä¿¡æ¯æ ‡ç­¾
+    std::string taskInfo = "Task_Name: " + task.name;
+
+    auto taskMessage = LabelBuilder()
+        .setText(taskInfo)
+        .setFont("fonts/Comic Sans MS.ttf", 50)
+        .setColor(Color3B::BLACK)
+        .setAnchorPoint(Vec2(0, 0.5))
+        .setPosition(Vec2(m_visibleSize.width * 0.35f, 539 + m_visibleSize.height * 1.4f - offsetY))
+        .setZOrder(2)
+        .addToParent(m_scrollView)
+        .build();
+
+    // è®¾ç½®ä»»åŠ¡é¡¹äº¤äº’
+    setupTaskItemInteraction(taskFrame, task);
+
+    // æ›´æ–°åç§»é‡
+    offsetY += 350;
+}
+
+void DailyRecordUI::setupTaskItemInteraction(Sprite* taskFrame, const TaskManagement::Task& task) {
+    auto listener = EventListenerMouse::create();
+
+    listener->onMouseMove = [this, taskFrame](EventMouse* event) {
+        Vec2 mousePos = Vec2(event->getCursorX(), event->getCursorY());
+        mousePos = this->convertToNodeSpace(mousePos);
+
+        Vec2 scrollViewPos = m_scrollView->getPosition();
+        Vec2 innerContainerPos = m_scrollView->getInnerContainer()->getPosition();
+
+        // è®¡ç®—è°ƒæ•´åçš„è¾¹ç•Œæ¡†
+        Rect itemBoundingBox = taskFrame->getBoundingBox();
+        float adjustedPosY = itemBoundingBox.getMinY() + innerContainerPos.y;
+        float adjustedPosX = itemBoundingBox.getMinX() + innerContainerPos.x;
+
+        // æ£€æŸ¥é¼ æ ‡æ˜¯å¦æ‚¬åœåœ¨ä»»åŠ¡é¡¹ä¸Š
+        if (mousePos.x >= adjustedPosX - 950 + m_adjustedPosition.x &&
+            mousePos.x <= adjustedPosX + itemBoundingBox.size.width - 950 + m_adjustedPosition.x &&
+            mousePos.y >= adjustedPosY + m_adjustedPosition.y - 250 &&
+            mousePos.y <= m_adjustedPosition.y + adjustedPosY + itemBoundingBox.size.height - 250) {
+
+            taskFrame->setTexture("UIresource/xinxiang/xuanzhong.png");
+        } else {
+            taskFrame->setTexture("UIresource/SkillTree/background.png");
+        }
+    };
+
+    listener->onMouseDown = [this, task, taskFrame](EventMouse* event) {
+        Vec2 mousePos = Vec2(event->getCursorX(), event->getCursorY());
+        mousePos = this->convertToNodeSpace(mousePos);
+
+        Vec2 scrollViewPos = m_scrollView->getPosition();
+        Vec2 innerContainerPos = m_scrollView->getInnerContainer()->getPosition();
+
+        Rect itemBoundingBox = taskFrame->getBoundingBox();
+        float adjustedPosY = itemBoundingBox.getMinY() + innerContainerPos.y;
+        float adjustedPosX = itemBoundingBox.getMinX() + innerContainerPos.x;
+
+        // æ£€æŸ¥æ˜¯å¦ç‚¹å‡»äº†ä»»åŠ¡é¡¹
+        if (mousePos.x >= adjustedPosX - 950 + m_adjustedPosition.x &&
+            mousePos.x <= adjustedPosX + itemBoundingBox.size.width - 950 + m_adjustedPosition.x &&
+            mousePos.y >= adjustedPosY + m_adjustedPosition.y - 250 &&
+            mousePos.y <= m_adjustedPosition.y + adjustedPosY + itemBoundingBox.size.height - 250) {
+
+            onTaskItemClicked(task);
+        }
+    };
+
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, taskFrame);
+}
+
+void DailyRecordUI::createCloseButton() {
+    m_closeButton = SpriteBuilder()
+        .setTexture("npc/bacha.png")
+        .setAutoScale(20.5f)
+        .setPosition(m_adjustedPosition.x + m_visibleSize.width * 0.45f,
+                    m_adjustedPosition.y + m_visibleSize.height * 0.4f)
+        .setZOrder(1)
+        .setTag(103)
+        .addToParent(this)
+        .build();
+}
+
+void DailyRecordUI::setupEventListeners() {
+    // é¼ æ ‡äº‹ä»¶ç›‘å¬å™¨
+    auto mouseListener = EventListenerMouse::create();
+
+    mouseListener->onMouseMove = CC_CALLBACK_1(DailyRecordUI::onMouseMove, this);
+    mouseListener->onMouseDown = CC_CALLBACK_1(DailyRecordUI::onMouseDown, this);
+
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
+
+    // æ»šåŠ¨äº‹ä»¶ç›‘å¬å™¨
+    auto scrollListener = EventListenerMouse::create();
+    scrollListener->onMouseScroll = [this](EventMouse* event) {
+        float scrollDelta = event->getScrollY();
+        auto innerContainer = m_scrollView->getInnerContainer();
+        float currentPosY = innerContainer->getPositionY();
+        float newPosY = currentPosY + scrollDelta * 100;
+
+        // è®¡ç®—è¾¹ç•Œé™åˆ¶
+        float lowerLimit = m_scrollView->getContentSize().height - innerContainer->getContentSize().height;
+        float upperLimit = -1400;
+
+        // é™åˆ¶æ–°ä½ç½®åœ¨è¾¹ç•ŒèŒƒå›´å†…
+        newPosY = std::max(newPosY, lowerLimit);
+        newPosY = std::min(newPosY, upperLimit);
+
+        // è®¾ç½®æ–°ä½ç½®
+        innerContainer->setPositionY(newPosY);
+    };
+
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(scrollListener, this);
+
+    // ä½¿ç”¨åŸºç±»çš„ESCå…³é—­åŠŸèƒ½
+    setupEscCloseListener();
+}
+
+void DailyRecordUI::onMouseMove(EventMouse* event) {
+    Vec2 mousePosition = Vec2(event->getCursorX(), event->getCursorY());
+    mousePosition = this->convertToNodeSpace(mousePosition);
+
+    // æ£€æŸ¥å…³é—­æŒ‰é’®æ‚¬åœæ•ˆæœ
+    if (m_closeButton && m_closeButton->getBoundingBox().containsPoint(mousePosition)) {
+        auto theme = UITheme::getInstance();
+        float scale = theme->getVisibleSize().width / m_closeButton->getContentSize().width / 20.5f;
+        m_closeButton->setScale(scale * 1.2f);  // æ”¾å¤§æ•ˆæœ
+    } else if (m_closeButton) {
+        auto theme = UITheme::getInstance();
+        float scale = theme->getVisibleSize().width / m_closeButton->getContentSize().width / 20.5f;
+        m_closeButton->setScale(scale);  // æ¢å¤åŸå§‹å¤§å°
+    }
+}
+
+void DailyRecordUI::onMouseDown(EventMouse* event) {
+    Vec2 mousePosition = Vec2(event->getCursorX(), event->getCursorY());
+    mousePosition = this->convertToNodeSpace(mousePosition);
+
+    // æ£€æŸ¥å…³é—­æŒ‰é’®ç‚¹å‡»
+    if (m_closeButton && m_closeButton->getBoundingBox().containsPoint(mousePosition)) {
+        onCloseClicked();
+    }
+}
+
+void DailyRecordUI::onCloseClicked() {
+    this->removeFromParent();
+}
+
+void DailyRecordUI::onTaskItemClicked(const TaskManagement::Task& task) {
+    // æ‰“å¼€è¯¦ç»†ä»»åŠ¡ç•Œé¢
+    auto detailedTaskUI = DetailedtaskUI::create(task);
+    if (detailedTaskUI) {
+        Director::getInstance()->getRunningScene()->addChild(detailedTaskUI, 10);
+    }
+}

@@ -1,24 +1,18 @@
+// mailBoxUI.h - 邮箱界面（使用建造者模式重构）
 #pragma once
-//mailBoxUI.h
-//������ȡ����
-#include "cocos2d.h"  
+#include "cocos2d.h"
+#include "TaskManagement.h"
 #include "AppDelegate.h"
 
-class mailBoxUI: public cocos2d::Layer {
+class mailBoxUI : public cocos2d::Layer {
 public:
-    virtual bool init ();
-
-    static mailBoxUI* create ();
+    virtual bool init();
+    static mailBoxUI* create();
 
 private:
+    // UI设置方法 - 使用建造者模式重构
+    void backgroundcreate();
+    void close();
+    void taskDisplay(TaskManagement& taskManager);
 
-    void displayAllTasks ( TaskManagement& taskManager );
-
-    void close ();
-
-    void backgroundcreate ();
-
-    void updateCoordinate ( float& x , float& y );
-
-    void taskDisplay ( TaskManagement& taskManager );
 };
