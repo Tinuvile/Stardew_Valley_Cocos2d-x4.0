@@ -7,7 +7,7 @@
 #include "farm.h"
 #include "physics/CCPhysicsWorld.h"
 #include "ui/CocosGUI.h"
-#include "InputManager.h"
+#include "../Core/InputManager.h"
 #include "../Commands/SceneInteractionCommand.h"
 #include "../Commands/UICommand.h"
 

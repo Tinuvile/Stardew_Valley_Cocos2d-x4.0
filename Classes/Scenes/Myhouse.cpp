@@ -185,10 +185,12 @@ void Myhouse::setupInputCommands()
         []() { 
             // 执行睡觉逻辑
             extern bool IsNextDay;
+            extern bool IsSleep;
             extern int day;
             extern std::string Season;
             
             IsNextDay = true;
+            IsSleep = true;
             day++;
             frombed = true;
             

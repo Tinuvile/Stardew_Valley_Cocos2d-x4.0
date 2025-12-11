@@ -62,8 +62,6 @@ private:
 
     cocos2d::Menu* menu;
 
-    bool isEnterKeyPressed = false;
-    
     // Command Pattern相关的成员变量
     std::vector<std::shared_ptr<KeyCommand>> boundCommands;
     

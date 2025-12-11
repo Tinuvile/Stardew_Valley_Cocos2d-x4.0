@@ -520,18 +520,7 @@ void supermarket::checkPlayerPosition()
         // 玩家进入目标区域
         opendoor->setVisible(true);
         opendoor->setPosition(playerPos.x + 110, playerPos.y + 30);
-
-
-        if (isEnterKeyPressed) {
-            // 打印调试信息，检查 Enter 键的状态
-            CCLOG("Player in target area, isEnterKeyPressed: %d", isEnterKeyPressed);
-            // 调用场景切换逻辑
-            player1->removeFromParent();
-            auto nextscene = Town::create();
-            Director::getInstance()->replaceScene(nextscene);
-          
-        }
-
+        // 场景切换完全交由Command处理
     }
     else {
         opendoor->setVisible(false);
@@ -578,11 +567,12 @@ void supermarket::setupInputCommands()
         []() -> Scene* { return Town::create(); },
         [this]() -> bool {
             Vec2 playerPos = player1->getPosition();
-            return Region_Out.containsPoint(playerPos) && isEnterKeyPressed;
+            return Region_Out.containsPoint(playerPos);
         },
         [this]() {
             player1->removeFromParent();
-        }
+        },
+        "Town"
     );
 
     // Bind commands to input manager
@@ -596,40 +586,6 @@ void supermarket::setupInputCommands()
     inputManager->bindPressCommand(EventKeyboard::KeyCode::KEY_ENTER, sceneTransitionPtr);
     inputManager->bindPressCommand(EventKeyboard::KeyCode::KEY_KP_ENTER, sceneTransitionPtr);
     boundCommands.push_back(sceneTransitionPtr);
-
-    // Additional ENTER key tracking for conditional logic
-    class EnterKeyTracker : public KeyCommand {
-    private:
-        bool* keyPressed;
-    public:
-        EnterKeyTracker(bool* pressed) : keyPressed(pressed) {}
-        void execute() override { *keyPressed = true; }
-        void undo() override {
-            // Empty implementation - tracking commands don't need undo
-        }
-    };
-
-    class EnterKeyReleaser : public KeyCommand {
-    private:
-        bool* keyPressed;
-    public:
-        EnterKeyReleaser(bool* pressed) : keyPressed(pressed) {}
-        void execute() override { *keyPressed = false; }
-        void undo() override {
-            // Empty implementation - tracking commands don't need undo
-        }
-    };
-
-    auto enterTracker = std::make_shared<EnterKeyTracker>(&isEnterKeyPressed);
-    auto enterReleaser = std::make_shared<EnterKeyReleaser>(&isEnterKeyPressed);
-    
-    inputManager->bindPressCommand(EventKeyboard::KeyCode::KEY_ENTER, enterTracker);
-    inputManager->bindPressCommand(EventKeyboard::KeyCode::KEY_KP_ENTER, enterTracker);
-    inputManager->bindReleaseCommand(EventKeyboard::KeyCode::KEY_ENTER, enterReleaser);
-    inputManager->bindReleaseCommand(EventKeyboard::KeyCode::KEY_KP_ENTER, enterReleaser);
-    
-    boundCommands.push_back(enterTracker);
-    boundCommands.push_back(enterReleaser);
 }
 
 void supermarket::cleanupInputCommands()
