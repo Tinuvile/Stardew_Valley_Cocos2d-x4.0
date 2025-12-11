@@ -290,16 +290,6 @@ void Barn::checkPlayerPosition()
 
     }
 
-    // 是否进入农场
-    if (Out_Barn.containsPoint(playerPos)) {
-        if (isEnterKeyPressed) {
-            player1->removeFromParent();
-            auto NextSence = farm::create();
-            Director::getInstance()->replaceScene(NextSence);
-        }
-    }
-
-
     // 碰撞检测逻辑已移到Player类的updateMovementPermissions方法中
     // 通过setCollisionContext设置碰撞点即可
     // 碰撞权限会在Player的player1_move()中自动更新

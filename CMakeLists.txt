@@ -111,7 +111,6 @@ list(APPEND GAME_SOURCE
      Classes/Scenes/farm.cpp
      Classes/Scenes/Forest.cpp
      Classes/Scenes/HelloWorldScene.cpp
-     Classes/Scenes/InputTestScene.cpp
      Classes/Scenes/Myhouse.cpp
      Classes/Scenes/supermarket.cpp
      Classes/Scenes/Town.cpp
@@ -186,7 +185,6 @@ list(APPEND GAME_HEADER
      Classes/Scenes/farm.h
      Classes/Scenes/Forest.h
      Classes/Scenes/HelloWorldScene.h
-     Classes/Scenes/InputTestScene.h
      Classes/Scenes/Myhouse.h
      Classes/Scenes/supermarket.h
      Classes/Scenes/Town.h

@@ -3,13 +3,13 @@
 
 #include "cocos2d.h"
 #include "../Entities/Player.h"
-#include "AppDelegate.h"
+#include "../Core/AppDelegate.h"
 #include "physics/CCPhysicsWorld.h"
 #include "ui/CocosGUI.h"
 #include "../Systems/Inventory.h"
 #include "../Items/Generaltem.h"
 #include "../Commands/KeyCommand.h"
-#include "InputManager.h"
+#include "../Core/InputManager.h"
 #include "../Commands/SceneInteractionCommand.h"
 #include "../Commands/UICommand.h"
 
@@ -49,8 +49,6 @@ private:
     cocos2d::MenuItemImage* closeItem;
 
     cocos2d::Menu* menu;
-
-    bool  isEnterKeyPressed = false;
 
     Inventory* StoreItem;
 

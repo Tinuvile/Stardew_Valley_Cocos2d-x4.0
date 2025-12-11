@@ -18,7 +18,6 @@
 #include "../Systems/EnergySystem.h"
 #include "../Systems/GameInteractionFacade.h"
 #include "InputManager.h"
-#include "../Scenes/InputTestScene.h"
 #include "../Items/Generaltem.h"  // 引入flyweight物品系统
 
 // #define USE_AUDIO_ENGINE 1   // 如果需要使用音频引擎，可以取消注释这一行
@@ -181,10 +180,6 @@ void AppDelegate::runScene(cocos2d::Director* director) {
     // 运行小镇的场景
      //auto test = Town::create ();
      //director->runWithScene(test);
-
-    // 暂时运行输入测试场景来验证新的Command系统
-    //auto testScene = InputTestScene::createScene();
-    //director->runWithScene(testScene);
     
     // 运行商店的场景（原有代码，暂时注释）
     auto test = supermarket::create();
